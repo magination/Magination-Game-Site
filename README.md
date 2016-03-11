@@ -1,2 +1,4 @@
-# game
-Website for uploading and finding games
+# Magination Game
+Website for uploading and finding games for Magination
+
+MIT © Magination AS
