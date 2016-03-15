@@ -5,6 +5,9 @@ var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var babel = require('babelify');
+var nodemon = require('gulp-nodemon');
+
+
 
 function compile(watch) {
   	var bundler = watchify(browserify(
@@ -40,5 +43,16 @@ function watch() {
 
 gulp.task('build', function() { return compile(); });
 gulp.task('watch', function() { return watch(); });
+gulp.task('server', function () {
+  nodemon({
+    script: './server/server.js'
+  , ext: 'js html'
+  , env: { 'NODE_ENV': 'development' }
+  })
+})
 
-gulp.task('default', ['watch']);
+
+
+
+
+gulp.task('default', ['watch,server']);
