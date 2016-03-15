@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/imuble/maginationworkdraft/issues"
   },
-  "homepage": "https://github.com/imuble/maginationworkdraft#readme"
+  "homepage": "https://github.com/imuble/maginationworkdraft#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "flux": "^2.1.1"
+  }
 }
