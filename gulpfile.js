@@ -55,4 +55,4 @@ gulp.task('server', function () {
 
 
 
-gulp.task('default', ['watch,server']);
+gulp.task('default', ['watch','server']);
