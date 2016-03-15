@@ -1,7 +1,6 @@
 {
   "name": "magination",
   "version": "1.0.0",
-  "description": "",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,7 +16,21 @@
   },
   "homepage": "https://github.com/imuble/maginationworkdraft#readme",
   "dependencies": {
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
     "express": "^4.13.4",
-    "flux": "^2.1.1"
-  }
+    "flux": "^2.1.1",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.0.6",
+    "gulp-sourcemaps": "^1.6.0",
+    "node-jsx": "^0.13.3",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
+  },
+  "devDependencies": {},
+  "description": ""
 }

@@ -11,7 +11,7 @@ var nodemon = require('gulp-nodemon');
 
 function compile(watch) {
   	var bundler = watchify(browserify(
-  		'./app.js', { debug: true }
+  		'./src/js/app.js', { debug: true }
   	)
   	.transform(babel.configure({
   		presets: ['react']
