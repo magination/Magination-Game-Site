@@ -25,6 +25,7 @@
     "gulp-nodemon": "^2.0.6",
     "gulp-sourcemaps": "^1.6.0",
     "node-jsx": "^0.13.3",
+    "path": "^0.12.7",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "vinyl-buffer": "^1.0.0",
