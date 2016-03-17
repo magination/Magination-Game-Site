@@ -36,4 +36,4 @@ node_modules
 .DS_Store
 
 # WebStorm files
-.idea/workspace.xml
+.idea/
