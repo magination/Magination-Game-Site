@@ -27,7 +27,7 @@ var LoginForm = React.createClass({
 	render: function(){
 		return(
 			<div className="col-md-4 col-md-offset-4">
-				<form className="form-signin" onSubmit={this.onLoginClicked}>
+				<form className="form-signin" onSubmit={this._onSubmitForm}>
 		        	<h2 className="form-signin-heading">Please sign in</h2>
 		        	<label htmlFor="inputEmail" className="sr-only">Username/Email</label>
 		        	<input value={this.state.username} onChange={this.handleUsernameChange} type="text" id="inputEmail" className="form-control" placeholder="Username/Email" required autofocus/>
@@ -39,21 +39,21 @@ var LoginForm = React.createClass({
 	        </div>
 		);
 	},
-	onLoginClicked: function(e){
+	_onSubmitForm: function(e){
 		e.preventDefault();
 		$.ajax({
 			type: "POST",
 		   	url: urls.api.login,
-		   data: JSON.stringify({
+			data: JSON.stringify({
 		      username: this.state.username,
 		      password: this.state.password
 		   }),
 		   contentType: "application/json",
 		   dataType: "json",
-		   success: this.didRecieveData
+		   success: this._onRequestSuccess
 		});
 	},
-	didRecieveData: function(data){
+	_onRequestSuccess: function(data){
 		LoginAction.loginSuccess();
 		browserHistory.push('browse');
 
