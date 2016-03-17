@@ -7,12 +7,12 @@ var RegisterForm = React.createClass({
 				<form className="form-signin">
 		        	<h2 className="form-signin-heading">Register</h2>
 		        	<label htmlFor="inputEmail" className="sr-only">Username/Email</label>
-		        	<input type="text" id="inputUsername" className="form-control" placeholder="Email address" required autofocus/>
+		        	<input type="text" id="inputUsername" className="form-control" placeholder="Username/Email" required autofocus/>
 		        	<label htmlFor="inputPassword" className="sr-only">Password</label>
 		        	<input type="password" id="inputPassword" className="form-control" placeholder="Password" required/>
 		        	<label htmlFor="inputPassword" className="sr-only">Confirm Password</label>
-		        	<input type="password" id="inputConfirmPassword" className="form-control" placeholder="Password" required/>
-		        	<button className="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+		        	<input type="password" id="inputConfirmPassword" className="form-control" placeholder="Confirm Password" required/>
+		        	<button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
 		        </form>
 	        </div>	
 		);
