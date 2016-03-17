@@ -10,6 +10,7 @@ var NavigationStatelessElements = React.createClass({
 					<a className="navbar-brand" href="/">Magination</a>
 				</div>
 				<ul className="nav navbar-nav">
+					<li><Link to="upload">Upload Game</Link></li>
 					<li><Link to="browse">Browse Games</Link></li>
 				</ul>
 			</div>

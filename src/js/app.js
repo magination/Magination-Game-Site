@@ -11,6 +11,8 @@ var LoginStore = require('./stores/LoginStore');
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var LoginForm = require('./components/organisms/LoginForm.organism');
 var RegisterForm = require('./components/organisms/RegisterForm.organism');
+
+var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
 
 var reactApp = React.createClass({
@@ -31,6 +33,7 @@ ReactDOM.render((
 			<Route path="/" component={reactApp}>
 				<Route path="login" component={LoginForm}/>
 				<Route path="register" component={RegisterForm}/>
+				<Route path="upload" component={GameForm}/>
 				<Route path="browse" component={BrowseGames}/>
 			</Route>
 		</Router>)
