@@ -8,11 +8,11 @@ var BrowseGames = React.createClass({
 	},
 	render: function(){
 		return (
-			<div className="col-md-12">
-				<div>{this.props.title}</div>
-				<div>{this.props.description}</div>
-				<div>{this.props.owner}</div>
-			</div>
+			<ul className="list-inline">
+				<li className="list-group-item">{this.props.title}</li>
+				<li className="list-group-item">{this.props.description}</li>
+				<li className="list-group-item">{this.props.owner}</li>
+			</ul>
 		);
 	}
 });

@@ -17,7 +17,7 @@ var GameList = React.createClass({
     	});
 
 		return(
-			<ul className="list-group">{games}</ul>
+			<ul className="list-group col-md-6 col-md-offset-3">{games}</ul>
 		);
 	}
 });

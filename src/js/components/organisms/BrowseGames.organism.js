@@ -11,12 +11,10 @@ var BrowseGames = React.createClass({
 	],
 	componentWillMount: function(){
 		$.ajax({
-  			url: urls.api.games,
-  			type: 'GET',
-  			statusCode: {
-    			200: this.didRecieveData,
-    			404: function(){console.log(urls.api.games)}
-    		}
+			type: "GET",
+		   	url: urls.api.games,
+		   	dataType: "json",
+		   	success: this.didRecieveData
 		});
 	},
 	render: function(){

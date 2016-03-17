@@ -2,7 +2,9 @@ var restApiRoot = "http://localhost:8000/api/";
 var config = {
 	urls: {
 		api: {
-			games: restApiRoot+"games"
+			register: restApiRoot+"register",
+			games: restApiRoot+"games",
+			login: restApiRoot+"login"
 		}
 	}
 };
