@@ -2,10 +2,10 @@ var React = require('react');
 
 var Link = require('react-router').Link;
 var browserHistory = require('react-router').browserHistory;
-
 var LoginAction = require('../../actions/LoginAction');
+var URLS = require('../../config/config').urls;
 
-var urls = require('../../config/config').urls;
+var Cookie = require('react-cookie');
 
 var LoginForm = React.createClass({
 	getInitialState: function(){
@@ -43,7 +43,7 @@ var LoginForm = React.createClass({
 		e.preventDefault();
 		$.ajax({
 			type: "POST",
-		   	url: urls.api.login,
+		   	url: URLS.api.login,
 			data: JSON.stringify({
 		      username: this.state.username,
 		      password: this.state.password
@@ -54,9 +54,10 @@ var LoginForm = React.createClass({
 		});
 	},
 	_onRequestSuccess: function(data){
-		LoginAction.loginSuccess();
+		LoginAction.loginSuccess({
+			value: data.token
+		});
 		browserHistory.push('browse');
-
 	}
 });
 module.exports = LoginForm;

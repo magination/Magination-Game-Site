@@ -63,11 +63,18 @@ var RegisterForm = React.createClass({
 				email: this.state.email,
 		      	username: this.state.username,
 		      	password: this.state.password
-		   }),
-		   contentType: "application/json",
-		   dataType: "json",
-		   success: this._onRequestSuccess,
-		   error: function(err){console.log(err);}
+		   	}),
+		   	contentType: "application/json",
+		   	dataType: "json",
+		   	statusCode: {
+		   		409: function(){
+		   			alert("Bad Request");
+		   		},
+    			500: function() {
+      				alert( "Internal Server Error" );
+    			},
+    			200: this._onRequestSuccess
+  			}
 		});
 	},
 	_onRequestSuccess: function(data){

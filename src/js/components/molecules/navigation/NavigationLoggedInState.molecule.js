@@ -1,5 +1,7 @@
 var React = require('react');
 
+var LoginAction = require('../../../actions/LoginAction');
+
 var NavigationLoggedInState = React.createClass({
 	render: function(){
 		return(
@@ -13,11 +15,15 @@ var NavigationLoggedInState = React.createClass({
 			            <li role="separator" className="divider"></li>
 			            <li><a href="#">Separated link</a></li>
 			            <li role="separator" className="divider"></li>
-			            <li><a href="#">Logout</a></li>
+			            <li><a onClick={this._onLogoutClicked}>Logout</a></li>
 			        </ul>
 		        </li>
 			</ul>
 		)
+	},
+	_onLogoutClicked: function(){
+		console.log('Hei');
+		LoginAction.logoutSuccess();
 	}
 });
 
