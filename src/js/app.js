@@ -1,44 +1,35 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var TestStore = require('./stores/TestStore');
-var TestAction = require('./actions/TestAction');
+
+var Router = require('react-router').Router
+var Route = require('react-router').Route
+var Link = require('react-router').Link
+var browserHistory = require('react-router').browserHistory;
+
+var LoginStore = require('./stores/LoginStore');
+
+var Menu = require('./components/organisms/NavigationMenu.organism');
+var LoginForm = require('./components/organisms/LoginForm.organism');
+var RegisterForm = require('./components/organisms/RegisterForm.organism');
 
 var reactApp = React.createClass({
-	getInitialState: function(){
-		return {
-			text: "a",
-			updatedText: "b" 
-		};
-	},
-	didClickButton: function(){
-		console.log("button clieeek");
-		TestAction.test(this.state.text);
-	},
-	handleTextChange: function(e) {
-		this.setState({
-			text: e.target.value
-		});
-	},
-	componentDidMount: function(){
-		TestStore.addChangeListener(this.testCallback);
-	},
-	componentWillUnmount: function(){
-		TestStore.removeChangeListener(this.testCallback);
-	},
-
 	render: function(){
 		return(
-			<div><input type="text" onChange={this.handleTextChange} value={this.state.text}></input><p>{this.state.updatedText}</p><button onClick={this.didClickButton}>Do</button></div>
+			<div className="container">
+				<Menu></Menu>
+				<div className="row">{this.props.children}</div>
+			</div>
 		);
-	},
-	testCallback: function(){
-		console.log("testCalledback");
-		this.setState({
-			updatedText: TestStore.getFeedback()
-		});
 	}
 });
 
 var mountNode = document.getElementById('react-container');
 
-ReactDOM.render(React.createElement(reactApp), mountNode);
+ReactDOM.render((
+		<Router history={browserHistory}>
+			<Route path="/" component={reactApp}>
+				<Route path="login" component={LoginForm}/>
+				<Route path="register" component={RegisterForm}/>
+			</Route>
+		</Router>)
+	, mountNode);
