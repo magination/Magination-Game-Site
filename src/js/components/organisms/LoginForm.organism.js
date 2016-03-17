@@ -7,7 +7,7 @@ var LoginForm = React.createClass({
 				<form className="form-signin">
 		        	<h2 className="form-signin-heading">Please sign in</h2>
 		        	<label htmlFor="inputEmail" className="sr-only">Username/Email</label>
-		        	<input type="email" id="inputEmail" className="form-control" placeholder="Email address" required autofocus/>
+		        	<input type="text" id="inputEmail" className="form-control" placeholder="Username/Email" required autofocus/>
 		        	<label htmlFor="inputPassword" className="sr-only">Password</label>
 		        	<input type="password" id="inputPassword" className="form-control" placeholder="Password" required/>
 			        <Link to="register">Register</Link>
@@ -17,5 +17,4 @@ var LoginForm = React.createClass({
 		);
 	}
 });
-
 module.exports = LoginForm;

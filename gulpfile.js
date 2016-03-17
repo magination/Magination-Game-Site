@@ -41,8 +41,20 @@ function watch() {
   return compile(true);
 };
 
-gulp.task('build', function() { return compile(); });
-gulp.task('watch', function() { return watch(); });
+function movePublicElements(){
+    gulp.src('./src/js/public/')
+      .pipe(gulp.dest('./build'));
+};
+
+gulp.task('build', function() {
+  console.log('Moving public elements to build');
+  movePublicElements();
+  console.log('Compiling ReactApp');
+  return compile(false); 
+});
+gulp.task('watch', function() {
+ return watch(); 
+});
 gulp.task('server', function () {
   nodemon({
     script: './server/server.js'
@@ -50,9 +62,5 @@ gulp.task('server', function () {
   , env: { 'NODE_ENV': 'development' }
   })
 })
-
-
-
-
 
 gulp.task('default', ['watch','server']);
