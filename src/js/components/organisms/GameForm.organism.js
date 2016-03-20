@@ -60,7 +60,7 @@ var GameForm = React.createClass({
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: urls.api.games,
+            url: URLS.api.games,
             data: JSON.stringify({
                 owner: this.state.username,
                 title: this.state.gameName,

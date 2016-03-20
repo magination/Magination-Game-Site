@@ -8,6 +8,7 @@ var LoginActions = {
 			loginError();
 			return;
 		}
+		console.log(cookie);
 		Cookie.save(LoginConstants.COOKIE_TOKEN, cookie.value);
 		Dispatcher.dispatch({
 			actionType: LoginConstants.LOGIN_SUCCESS
