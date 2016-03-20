@@ -1,6 +1,7 @@
 var React = require('react');
 
-var urls = require('../../config/config').urls;
+var browserHistory = require('react-router').browserHistory;
+var URLS = require('../../config/config').urls;
 
 var RegisterForm = React.createClass({
 	getInitialState: function(){
@@ -58,7 +59,7 @@ var RegisterForm = React.createClass({
 
 		$.ajax({
 			type: "POST",
-		   	url: urls.api.users,
+		   	url: URLS.api.users,
 			data: JSON.stringify({
 				email: this.state.email,
 		      	username: this.state.username,
@@ -78,7 +79,7 @@ var RegisterForm = React.createClass({
 		});
 	},
 	_onRequestSuccess: function(data){
-		console.log(data);
+		browserHistory.push('browse');
 	}
 });
 

@@ -57,7 +57,9 @@ var LoginForm = React.createClass({
 		LoginAction.loginSuccess({
 			value: data.token
 		});
-		browserHistory.push('browse');
+		/* Happens in the dispatcher as default to browse
+			browserHistory.push('browse');
+		*/
 	}
 });
 module.exports = LoginForm;

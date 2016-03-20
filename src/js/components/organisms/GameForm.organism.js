@@ -1,21 +1,24 @@
 var React = require('react');
-var urls = require('../../config/config').urls;
+var URLS = require('../../config/config').urls;
+var browserHistory = require('react-router').browserHistory;
+var LoginStore = require('../../stores/LoginStore');
+var LoginAction = require('../../actions/LoginAction');
 
 var GameForm = React.createClass({
-    _onUsernameChanged: function(e){
-        this.setState({
-            username: e.target.value
-        });
+    getInitialState: function() {
+        return {
+            username : "",
+            gameName : "",
+            description : "",
+            message : "",
+            showMessage: false
+        };
     },
-    _onGameNameChanged: function(e){
-        this.setState({
-            gameName: e.target.value
-        });
-    },
-    _onDescriptionChanged: function(e){
-        this.setState({
-            description: e.target.value
-        });
+    componentWillMount: function(){/*Redirects to login if the user is not logged in*/
+        if(!LoginStore.getLoginState()){
+            LoginAction.setPostLoginRedirect('upload');
+            browserHistory.push('login');
+        }
     },
     render: function(){
         return(
@@ -37,14 +40,20 @@ var GameForm = React.createClass({
         </div>
         );
     },
-    getInitialState: function() {
-        return {
-            username : "",
-            gameName : "",
-            description : "",
-            message : "",
-            showMessage: false
-        };
+    _onUsernameChanged: function(e){
+        this.setState({
+            username: e.target.value
+        });
+    },
+    _onGameNameChanged: function(e){
+        this.setState({
+            gameName: e.target.value
+        });
+    },
+    _onDescriptionChanged: function(e){
+        this.setState({
+            description: e.target.value
+        });
     },
     _postGame: function(e) {
         console.log("owner: "+this.state.username+". title"+ this.state.gameName+" descr. "+this.state.description);

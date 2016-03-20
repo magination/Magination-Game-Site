@@ -24,6 +24,12 @@ var LoginActions = {
 		Dispatcher.dispatch({
 			actionType: LoginConstants.LOGOUT_SUCCESS
 		});
+	},
+	setPostLoginRedirect: function(path){
+		Dispatcher.dispatch({
+			actionType: LoginConstants.SET_POSTLOGINREDIRECTPATH,
+			path: path
+		});
 	}
 };
 
