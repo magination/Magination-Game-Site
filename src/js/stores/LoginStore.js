@@ -32,7 +32,7 @@ LoginStore.dispatchToken = Dispatcher.register(function(action) {
             _loginState = true;
             if(_postLoginRedirect != null){
                 browserHistory.push(_postLoginRedirect);
-                _postLoginRedirect = 'redirect';
+                _postLoginRedirect = 'browse';
             }
             LoginStore.emitChange();
             break;
