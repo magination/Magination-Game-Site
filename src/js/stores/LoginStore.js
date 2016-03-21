@@ -6,7 +6,6 @@ var browserHistory = require('react-router').browserHistory;
 var CHANGE_EVENT = 'change-login';
 
 var _loginState = false;
-var _postLoginRedirect = 'browse';
 
 var LoginStore = _.extend({}, EventEmitter.prototype, {
     getLoginState: function() {
@@ -30,10 +29,6 @@ LoginStore.dispatchToken = Dispatcher.register(function(action) {
     switch (action.actionType) {
         case LoginConstants.LOGIN_SUCCESS:
             _loginState = true;
-            if(_postLoginRedirect != null){
-                browserHistory.push(_postLoginRedirect);
-                _postLoginRedirect = 'browse';
-            }
             LoginStore.emitChange();
             break;
         case LoginConstants.LOGIN_ERROR:
@@ -43,10 +38,6 @@ LoginStore.dispatchToken = Dispatcher.register(function(action) {
         case LoginConstants.LOGOUT_SUCCESS:
             _loginState = false;
             LoginStore.emitChange();
-            break;
-        case LoginConstants.SET_POSTLOGINREDIRECTPATH:
-            _postLoginRedirect = action.path;
-            console.log(_postLoginRedirect);
             break;
     }
 });

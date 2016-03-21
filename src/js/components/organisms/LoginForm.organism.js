@@ -1,9 +1,9 @@
 var React = require('react');
 
 var Link = require('react-router').Link;
-var browserHistory = require('react-router').browserHistory;
 var LoginAction = require('../../actions/LoginAction');
 var URLS = require('../../config/config').urls;
+var NavigationAction = require('../../actions/NavigationAction');
 
 var Cookie = require('react-cookie');
 
@@ -57,9 +57,9 @@ var LoginForm = React.createClass({
 		LoginAction.loginSuccess({
 			value: data.token
 		});
-		/* Happens in the dispatcher as default to browse
-			browserHistory.push('browse');
-		*/
+		NavigationAction.navigate({
+			destination: 'browse'
+		});
 	}
 });
 module.exports = LoginForm;

@@ -8,7 +8,6 @@ var LoginActions = {
 			loginError();
 			return;
 		}
-		console.log(cookie);
 		Cookie.save(LoginConstants.COOKIE_TOKEN, cookie.value);
 		Dispatcher.dispatch({
 			actionType: LoginConstants.LOGIN_SUCCESS
@@ -26,12 +25,6 @@ var LoginActions = {
 			actionType: LoginConstants.LOGOUT_SUCCESS
 		});
 	},
-	setPostLoginRedirect: function(path){
-		Dispatcher.dispatch({
-			actionType: LoginConstants.SET_POSTLOGINREDIRECTPATH,
-			path: path
-		});
-	}
 };
 
 module.exports = LoginActions;

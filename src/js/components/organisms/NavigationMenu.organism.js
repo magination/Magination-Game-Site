@@ -1,6 +1,7 @@
 var React = require('react');
 
 var LoginStore = require('../../stores/LoginStore');
+var NavigationStore = require('../../stores/NavigationStore');
 
 var NavigationStatelessElements = require('../molecules/navigation/NavigationStatelessElements.molecule');
 var NavigationLoginState = require('../molecules/navigation/NavigationLoginState.molecule');

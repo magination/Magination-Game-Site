@@ -1,6 +1,5 @@
 var React = require('react');
-
-var browserHistory = require('react-router').browserHistory;
+var NavigationAction = require('../../actions/NavigationAction');
 var URLS = require('../../config/config').urls;
 
 var RegisterForm = React.createClass({
@@ -79,7 +78,9 @@ var RegisterForm = React.createClass({
 		});
 	},
 	_onRequestSuccess: function(data){
-		browserHistory.push('browse');
+		NavigationAction.navigate({
+			destination: 'login'
+		});
 	}
 });
 
