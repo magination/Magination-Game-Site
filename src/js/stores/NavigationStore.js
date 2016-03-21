@@ -12,7 +12,7 @@ var _navigationState = {
 
 var NavigationStore = _.extend({}, EventEmitter.prototype, {
     getNavigationState: function() {
-        return _loginState;
+        return _navigationState;
     },
     addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback);
