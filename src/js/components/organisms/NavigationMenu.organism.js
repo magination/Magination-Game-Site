@@ -1,7 +1,6 @@
 var React = require('react');
 
 var LoginStore = require('../../stores/LoginStore');
-var NavigationStore = require('../../stores/NavigationStore');
 
 var NavigationStatelessElements = require('../molecules/navigation/NavigationStatelessElements.molecule');
 var NavigationLoginState = require('../molecules/navigation/NavigationLoginState.molecule');
@@ -10,11 +9,14 @@ var NavigationLoggedInState = require('../molecules/navigation/NavigationLoggedI
 function getLoginState() {
   return LoginStore.getLoginState();
 }
+function getProfile() {
+	return LoginStore.getLoginProfile();
+}
 
 var Menu = React.createClass({
 	getInitialState: function(){
 		return {
-			isLoggedIn: getLoginState()
+			isLoggedIn: getLoginState(),
 		};
 	},
 	componentDidMount: function(){
@@ -26,7 +28,7 @@ var Menu = React.createClass({
 	render: function(){
 		var navigationStateElement;
 		if(this.state.isLoggedIn){
-			navigationStateElement = <NavigationLoggedInState />;
+			navigationStateElement = <NavigationLoggedInState email={getProfile().email}/>;
 		}
 		else {
 			navigationStateElement = <NavigationLoginState />;
@@ -48,6 +50,7 @@ var Menu = React.createClass({
 		this.setState({
 			isLoggedIn: getLoginState(),
 		});
+		//this.forceUpdate();
 
 	}
 });

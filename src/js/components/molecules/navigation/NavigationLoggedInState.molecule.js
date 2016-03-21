@@ -3,11 +3,26 @@ var React = require('react');
 var LoginAction = require('../../../actions/LoginAction');
 
 var NavigationLoggedInState = React.createClass({
+	getInitialState: function(){
+		return{
+			email: null
+		}
+	},
+	componentWillMount: function(){
+		this.setState({
+			email: this.props.email
+		});
+	},
+	componentWillReceiveProps: function(props){
+		this.setState({
+			email: props.email
+		});
+	},
 	render: function(){
 		return(
 			<ul className="nav navbar-nav navbar-right">
 				<li className="dropdown">
-          		<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span className="caret"></span></a>
+          		<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.state.email} <span className="caret"></span></a>
 	          		<ul className="dropdown-menu">
 			            <li><a href="#">Action</a></li>
 			            <li><a href="#">Another action</a></li>

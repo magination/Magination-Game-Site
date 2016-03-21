@@ -1,3 +1,5 @@
+/*DEPRECATED NOT USED!!!*/
+
 var Dispatcher = require('../dispatchers/Dispatcher');
 var NavigationConstants = require('../constants/NavigationConstants');
 var NavigationActions = {

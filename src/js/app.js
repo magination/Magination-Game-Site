@@ -11,6 +11,7 @@ var LoginStore = require('./stores/LoginStore');
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var LoginForm = require('./components/organisms/LoginForm.organism');
 var RegisterForm = require('./components/organisms/RegisterForm.organism');
+var StatusBar = require('./components/organisms/StatusBar.organism');
 
 var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
@@ -18,9 +19,12 @@ var BrowseGames = require('./components/organisms/BrowseGames.organism');
 var reactApp = React.createClass({
 	render: function(){
 		return(
-			<div className="container">
-				<Menu></Menu>
-				<div className="row">{this.props.children}</div>
+			<div>
+				<div className="container">
+					<StatusBar />
+					<Menu></Menu>
+					<div className="row">{this.props.children}</div>
+				</div>
 			</div>
 		);
 	}

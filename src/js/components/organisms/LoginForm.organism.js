@@ -1,10 +1,9 @@
 var React = require('react');
 
-var Link = require('react-router').Link;
 var LoginAction = require('../../actions/LoginAction');
+var LoginStore = require('../../stores/LoginStore');
 var URLS = require('../../config/config').urls;
-var NavigationAction = require('../../actions/NavigationAction');
-
+var browserHistory = require('react-router').browserHistory;
 var Cookie = require('react-cookie');
 
 var LoginForm = React.createClass({
@@ -33,7 +32,6 @@ var LoginForm = React.createClass({
 		        	<input value={this.state.username} onChange={this.handleUsernameChange} type="text" id="inputEmail" className="form-control" placeholder="Username/Email" required autofocus/>
 		        	<label htmlFor="inputPassword" className="sr-only">Password</label>
 		        	<input value={this.state.password} onChange={this.handlePasswordChange} type="password" id="inputPassword" className="form-control" placeholder="Password" required/>
-			        <Link to="register">Register</Link>
 		        	<button className="btn btn-lg btn-primary btn-block" type="submit">Login </button>
 		        </form>
 	        </div>
@@ -50,16 +48,27 @@ var LoginForm = React.createClass({
 		   }),
 		   contentType: "application/json",
 		   dataType: "json",
-		   success: this._onRequestSuccess
+		   success: this._onLoginRequestSuccess
 		});
 	},
-	_onRequestSuccess: function(data){
+	_onLoginRequestSuccess: function(data){
 		LoginAction.loginSuccess({
-			value: data.token
+			token: data.token
 		});
-		NavigationAction.navigate({
-			destination: 'browse'
+		$.ajax({
+			type: "GET",
+		   	url: URLS.api.users+"/Simen",
+		   	dataType: "json",
+		   	statusCode: {
+		   		200: this._onGetUserResponse
+		   	}
 		});
+	},
+	_onGetUserResponse: function(data){
+		LoginAction.setLoginProfile({
+			profile: data
+		});
+		browserHistory.push(LoginStore.getOnLoginRedirectDestination());
 	}
 });
 module.exports = LoginForm;

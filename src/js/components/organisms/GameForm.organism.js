@@ -3,7 +3,6 @@ var URLS = require('../../config/config').urls;
 var browserHistory = require('react-router').browserHistory;
 var LoginStore = require('../../stores/LoginStore');
 var LoginAction = require('../../actions/LoginAction');
-var NavigationAction = require('../../actions/NavigationAction');
 
 var GameForm = React.createClass({
     getInitialState: function() {
@@ -17,12 +16,10 @@ var GameForm = React.createClass({
     },
     componentWillMount: function(){ /*Redirects to login if the user is not logged in*/
         if(!LoginStore.getLoginState()){
-            NavigationAction.navigate({
-                destination: 'login'
-            });
-            NavigationAction.setNextRedirect({
+            LoginAction.setOnLoginRedirectDestination({
                 destination: 'upload'
             });
+            browserHistory.push('login');
         }
     },
     render: function(){

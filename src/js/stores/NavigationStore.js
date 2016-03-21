@@ -1,3 +1,5 @@
+/*DEPRECATED NOT USED1!!!*/
+
 var Dispatcher = require('../dispatchers/Dispatcher');
 var NavigationConstants = require('../constants/NavigationConstants');
 var EventEmitter = require('events').EventEmitter;
