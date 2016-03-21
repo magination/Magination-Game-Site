@@ -24,12 +24,12 @@ var NavigationLoggedInState = React.createClass({
 				<li className="dropdown">
           		<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.state.email} <span className="caret"></span></a>
 	          		<ul className="dropdown-menu">
-			            <li><a href="#">My Profile</a></li>
-			            <li><a href="#">My Games</a></li>
+			            <li><a href="#"><span className="glyphicon glyphicon-user"></span>  My Profile</a></li>
+			            <li><a href="#"><span className="glyphicon glyphicon-knight"></span>  My Games</a></li>
 			            <li role="separator" className="divider"></li>
-			            <li><a href="#">Settings</a></li>
+			            <li><a href="#"> <span className="glyphicon glyphicon-cog"></span>  Settings</a></li>
 			            <li role="separator" className="divider"></li>
-			            <li><a href="#" onClick={this._onLogoutClicked}>Logout</a></li>
+			            <li><a href="#" onClick={this._onLogoutClicked}><span className="glyphicon glyphicon-log-out"></span>  Log out</a></li>
 			        </ul>
 		        </li>
 			</ul>
