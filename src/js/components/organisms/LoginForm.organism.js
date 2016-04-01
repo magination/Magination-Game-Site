@@ -1,6 +1,7 @@
 var React = require('react');
 
 var LoginAction = require('../../actions/LoginAction');
+var FeedbackAction = require('../../actions/FeedbackAction');
 var LoginStore = require('../../stores/LoginStore');
 var URLS = require('../../config/config').urls;
 var browserHistory = require('react-router').browserHistory;
@@ -63,12 +64,13 @@ var LoginForm = React.createClass({
 		LoginAction.loginSuccess({
 			token: data.token
 		});
+		var token = 
 		$.ajax({
 			type: "GET",
 		   	url: URLS.api.users+"/"+data.id,
 		   	dataType: "json",
 		   	headers: {
-		        'Authorization': + data.token,
+		        'Authorization': data.token,
     		},
 		   	statusCode: {
 		   		200: this._onGetUserResponse,
@@ -82,6 +84,10 @@ var LoginForm = React.createClass({
 			profile: data
 		});
 		NavigationAction.navigateToPrevious();
+		FeedbackAction.displaySuccessMessage({
+			header: "Login Successful!",
+			message: "You are now logged in as " + data.email
+		});
 	},
 	_onBadTokenResponse: function(data){
 		alert('Error: see console');

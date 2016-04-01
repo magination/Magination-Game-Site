@@ -23,6 +23,17 @@ function pushDestination(destination){
         browserHistory.push(destination);
     }, 0);
 }
+function shouldOverride(){
+    var override = false;
+    NavigationConstants.OVERRIDE_REDIRECT_LIST.every(function(element){
+        if(_navigationState.previousPath.pathname.indexOf(element) > -1){
+            override = true;
+            return false;
+        }
+        return true;
+    });
+    return override;
+}
 
 var NavigationStore = _.extend({}, EventEmitter.prototype, {
     getNavigationState: function() {
@@ -46,19 +57,16 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
             NavigationStore.emitChange();
             break;
         case NavigationConstants.NAVIGATE_PREVIOUS:
-            if(_navigationState.previousPath != null){
-                var isOverridden = false;
-                NavigationConstants.OVERRIDE_REDIRECT_LIST.every(function(str){
-                    if(str == _navigationState.previousPath){
-                        pushDestination(NavigationConstants.DEFAULT_DESTINATION);
-                        isOverridden = true;
-                        return false;
-                    }
-                    return true;
-                });
-                if(!isOverridden){
+            if(_navigationState.previousPath != null){                
+                if(shouldOverride()){
+                    pushDestination(NavigationConstants.DEFAULT_DESTINATION);
+                }
+                else {
                     pushDestination(_navigationState.previousPath);
                 }
+            }
+            else {
+                pushDestination(NavigationConstants.DEFAULT_DESTINATION);
             }
             //NavigationStore.emitChange();
             break;

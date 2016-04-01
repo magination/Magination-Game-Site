@@ -8,7 +8,8 @@ var constants = {
 	DEFAULT_DESTINATION: 'browse',
 	OVERRIDE_REDIRECT_LIST: [
 		"login",
-		"register"
+		"register",
+		"confirmation"
 	]
 }
 module.exports = constants;

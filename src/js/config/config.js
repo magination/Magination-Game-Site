@@ -4,7 +4,8 @@ var config = {
 		api: {
 			users: restApiRoot+"users",
 			games: restApiRoot+"games",
-			login: restApiRoot+"login"
+			login: restApiRoot+"login",
+			confirmation: restApiRoot+"confirmation"
 		}
 	}
 };

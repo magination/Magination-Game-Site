@@ -13,13 +13,16 @@ var Menu = require('./components/organisms/NavigationMenu.organism');
 var LoginForm = require('./components/organisms/LoginForm.organism');
 var RegisterForm = require('./components/organisms/RegisterForm.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
+var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
 
 var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
 
 var reactApp = React.createClass({
-	componentDidMount: function(){
-
+	componentWillMount: function(){
+		NavigationAction.setCurrentPath({
+			destination: this.props.location
+		});
 	},
 	componentWillReceiveProps: function(nextProps){
 		var routeChanged = nextProps.location != this.props.location;
@@ -33,8 +36,8 @@ var reactApp = React.createClass({
 		return(
 			<div>
 				<div className="container">
-					<StatusBar />
 					<Menu></Menu>
+					<StatusBar />
 					<div className="row">{this.props.children}</div>
 				</div>
 			</div>
@@ -51,6 +54,8 @@ ReactDOM.render((
 				<Route path="register" component={RegisterForm}/>
 				<Route path="upload" component={GameForm}/>
 				<Route path="browse" component={BrowseGames}/>
+				<Route path="confirmation/:id" component={ConfirmEmail}/>
+				<Route path="*" component={BrowseGames}/>/*TODO make 404 component*/
 			</Route>
 		</Router>)
 	, mountNode);
