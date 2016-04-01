@@ -4,7 +4,12 @@ var LoginAction = require('../../actions/LoginAction');
 var LoginStore = require('../../stores/LoginStore');
 var URLS = require('../../config/config').urls;
 var browserHistory = require('react-router').browserHistory;
+var NavigationAction = require('../../actions/NavigationAction');
 var Cookie = require('react-cookie');
+
+function getLoginState(){
+	return LoginStore.getLoginState();
+}
 
 var LoginForm = React.createClass({
 	getInitialState: function(){
@@ -12,6 +17,9 @@ var LoginForm = React.createClass({
 			username: "",
 			password: ""
 		};
+	},
+	componentWillMount: function(){
+		
 	},
 	handleUsernameChange: function(e){
 		this.setState({
@@ -57,10 +65,15 @@ var LoginForm = React.createClass({
 		});
 		$.ajax({
 			type: "GET",
-		   	url: URLS.api.users+"/Simen",
+		   	url: URLS.api.users+"/"+data.id,
 		   	dataType: "json",
+		   	headers: {
+		        'Authorization': + data.token,
+    		},
 		   	statusCode: {
-		   		200: this._onGetUserResponse
+		   		200: this._onGetUserResponse,
+		   		401: this._onBadTokenResponse,
+		   		500: function(){alert("Server Error: see console");console.log(data)}
 		   	}
 		});
 	},
@@ -68,7 +81,11 @@ var LoginForm = React.createClass({
 		LoginAction.setLoginProfile({
 			profile: data
 		});
-		browserHistory.push(LoginStore.getOnLoginRedirectDestination());
+		NavigationAction.navigateToPrevious();
+	},
+	_onBadTokenResponse: function(data){
+		alert('Error: see console');
+		console.log(data);
 	}
 });
 module.exports = LoginForm;

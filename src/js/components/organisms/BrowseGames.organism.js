@@ -3,6 +3,7 @@ var React = require('react');
 var URLS = require('../../config/config').urls;
 
 var GameList = require('../molecules/browsegames/GameList.molecule');
+var SearchGames = require('../molecules/browsegames/SearchGames.molecule');
 
 var BrowseGames = React.createClass({
 	getInitialState: function(){
@@ -10,7 +11,7 @@ var BrowseGames = React.createClass({
 			games: []
 		}
 	},
-	componentWillMount: function(){
+	componentWillMount: function(){ 
 		$.ajax({
 			type: "GET",
 		   	url: URLS.api.games,
@@ -20,7 +21,8 @@ var BrowseGames = React.createClass({
 	},
 	render: function(){
 		return (
-			<div>
+			<div className="col-md-10 col-md-offset-1">
+				<SearchGames />
 				<GameList games={this.state.games}/>
 			</div>
 		);

@@ -1,5 +1,3 @@
-/*DEPRECATED NOT USED!!!*/
-
 var Dispatcher = require('../dispatchers/Dispatcher');
 var NavigationConstants = require('../constants/NavigationConstants');
 var NavigationActions = {
@@ -9,9 +7,14 @@ var NavigationActions = {
 			destination: data.destination
 		});
 	},
-	setNextRedirect: function(data){
+	navigateToPrevious: function(data){
 		Dispatcher.dispatch({
-			actionType: NavigationConstants.SET_NEXT_REDIRECT,
+			actionType: NavigationConstants.NAVIGATE_PREVIOUS,
+		});
+	},
+	setCurrentPath: function(data){
+		Dispatcher.dispatch({
+			actionType: NavigationConstants.SET_CURRENT_PATH,
 			destination: data.destination
 		});
 	}

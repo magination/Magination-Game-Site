@@ -27,8 +27,9 @@ var Menu = React.createClass({
 	},
 	render: function(){
 		var navigationStateElement;
-		if(this.state.isLoggedIn){
-			navigationStateElement = <NavigationLoggedInState email={getProfile().email}/>;
+		var profile = getProfile();
+		if(this.state.isLoggedIn && profile != null){
+			navigationStateElement = <NavigationLoggedInState email={profile.email}/>;
 		}
 		else {
 			navigationStateElement = <NavigationLoginState />;
@@ -36,7 +37,7 @@ var Menu = React.createClass({
 		
 		return (
 			<div>
-				<nav className="navbar navbar-default">
+				<nav className="navbar navbar-default navbar-fixed-top">
 					<div className="container-fluid">
 						<NavigationStatelessElements />
 						{navigationStateElement}

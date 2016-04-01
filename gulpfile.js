@@ -18,6 +18,7 @@ function compile(watch) {
   	})));
 
   function rebundle() {
+    movePublicElements();
     bundler.bundle()
       .on('error', function(err) { console.error(err); this.emit('end'); })
       .pipe(source('app.js'))
@@ -42,13 +43,11 @@ function watch() {
 };
 
 function movePublicElements(){
-    gulp.src('./src/js/public/')
+    gulp.src('./src/js/public/Draganddrop.js')
       .pipe(gulp.dest('./build'));
 };
 
 gulp.task('build', function() {
-  console.log('Moving public elements to build');
-  movePublicElements();
   console.log('Compiling ReactApp');
   return compile(false); 
 });

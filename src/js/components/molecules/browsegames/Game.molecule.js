@@ -8,11 +8,13 @@ var BrowseGames = React.createClass({
 	},
 	render: function(){
 		return (
-			<ul className="list-inline">
-				<li className="list-group-item">{this.props.title}</li>
-				<li className="list-group-item">{this.props.description}</li>
-				<li className="list-group-item">{this.props.owner}</li>
-			</ul>
+			<div>
+				<strong>Title: </strong>{this.props.title}
+				<br/>
+				<strong>Description: </strong>{this.props.description}
+				<br/>
+				<strong>Owner: </strong>{this.props.owner}
+			</div>
 		);
 	}
 });

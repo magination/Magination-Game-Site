@@ -29,7 +29,7 @@ var NavigationLoggedInState = React.createClass({
 			            <li role="separator" className="divider"></li>
 			            <li><a href="#"> <span className="glyphicon glyphicon-cog"></span>  Settings</a></li>
 			            <li role="separator" className="divider"></li>
-			            <li><a href="#" onClick={this._onLogoutClicked}><span className="glyphicon glyphicon-log-out"></span>  Log out</a></li>
+			            <li><a href="/" onClick={this._onLogoutClicked}><span className="glyphicon glyphicon-log-out"></span>  Log out</a></li>
 			        </ul>
 		        </li>
 			</ul>

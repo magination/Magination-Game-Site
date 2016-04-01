@@ -6,11 +6,9 @@ var browserHistory = require('react-router').browserHistory;
 var CHANGE_EVENT = 'change-login';
 
 var _loginState = false;
-var _profile = {
-    email: null
-};
+var _profile = null;
 var _loginRedirect = 'browse';
-
+ 
 var LoginStore = _.extend({}, EventEmitter.prototype, {
     getLoginState: function() {
         return _loginState;
