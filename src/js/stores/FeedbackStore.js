@@ -43,6 +43,12 @@ FeedbackStore.dispatchToken = Dispatcher.register(function(action) {
             };
             FeedbackStore.emitChange();
             break;
+        case FeedbackConstants.DISPLAY_WARNING:
+            _feedback.statusType = action.statusType;
+            _feedback.header = action.header;
+            _feedback.message = action.message;
+            FeedbackStore.emitChange();
+            break;
         case FeedbackConstants.DISPLAY_SERVER_ERROR:
             _feedback = {
                 statusType: "alert alert-danger fade in",

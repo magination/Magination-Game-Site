@@ -6,7 +6,7 @@ var URLS = require('../../config/config').urls;
 var FeedbackAction = require('../../actions/FeedbackAction');
 
 function getLastUrlId(){
-	var url = NavigationStore.getNavigationState().currentPath.pathname;
+	var url = NavigationStore.getNavigationState().currentPath;
 	/*returns the id(last element) from the current link*/
 	return url.split('/').slice(-1)[0];
 }

@@ -1,6 +1,6 @@
 var React = require('react');
 var URLS = require('../../config/config').urls;
-var browserHistory = require('react-router').browserHistory;
+var NavigationAction = require('../../actions/NavigationAction');
 var LoginStore = require('../../stores/LoginStore');
 var LoginAction = require('../../actions/LoginAction');
 var GameCreator = require('../molecules/GameCreator.molecule');
@@ -18,10 +18,9 @@ var GameForm = React.createClass({
     },
     componentWillMount: function(){ /*Redirects to login if the user is not logged in*/
         if(!LoginStore.getLoginState()){
-            LoginAction.setOnLoginRedirectDestination({
-                destination: 'upload'
+            NavigationAction.navigate({
+                destination: "/login"
             });
-            browserHistory.push('login');
         }
     },
     render: function(){
@@ -49,33 +48,25 @@ var GameForm = React.createClass({
         });
     },
     _postGame: function(e) {
-        console.log(getLoginProfile());
         e.preventDefault();
         $.ajax({
             type: "POST",
             url: URLS.api.games,
             data: JSON.stringify({
-                owner: getLoginProfile()._id,
                 title: this.state.title,
-                description: this.state.description
+                shortDescription: this.state.description,
+                mainDescription: this.state.description
             }),
+            headers: {
+                "Authorization": LoginStore.getToken()
+            },
             contentType: "application/json",
             dataType: "json",
-            success: this.didPost,
-            error: this.errorPosting
+            success: this.didPost
         });
     },
     didPost: function(){
-        this.setState({
-            title: "",
-            description: ""
-        })
-    },
-    errorPosting: function(data){
-        this.setState({
-            message : "Error!!!",
-            showMessage : true
-        })
+        alert("success");
     }
 });
 

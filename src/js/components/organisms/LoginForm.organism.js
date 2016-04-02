@@ -52,19 +52,21 @@ var LoginForm = React.createClass({
 			type: "POST",
 		   	url: URLS.api.login,
 			data: JSON.stringify({
-		      username: this.state.username,
-		      password: this.state.password
-		   }),
-		   contentType: "application/json",
-		   dataType: "json",
-		   success: this.onLoginRequestSuccess
+				username: this.state.username,
+				password: this.state.password
+			}),
+			contentType: "application/json",
+			dataType: "json",
+			statusCode: {
+				200: this.onLoginSuccessResponse,
+				401: this.onLoginUnauthorizedResponse
+		   }
 		});
 	},
-	onLoginRequestSuccess: function(data){
+	onLoginSuccessResponse: function(data){
 		LoginAction.loginSuccess({
 			token: data.token
 		});
-		var token = 
 		$.ajax({
 			type: "GET",
 		   	url: URLS.api.users+"/"+data.id,
@@ -73,13 +75,22 @@ var LoginForm = React.createClass({
 		        'Authorization': data.token,
     		},
 		   	statusCode: {
-		   		200: this.onGetUserResponse,
-		   		401: this.onBadTokenResponse,
+		   		200: this.onGetUserSuccessResponse,
+		   		401: this.onGetUserUnauthorizedResponse,
 		   		500: function(){alert("Server Error: see console");console.log(data)}
 		   	}
 		});
 	},
-	onGetUserResponse: function(data){
+	onLoginUnauthorizedResponse: function(data){
+		FeedbackAction.displayWarningMessage({
+			header: "Wrong credentials!",
+			message: "The username/password combination is not recognized"
+		});
+		this.setState({
+			password: ""
+		});
+	},
+	onGetUserSuccessResponse: function(data){
 		LoginAction.setLoginProfile({
 			profile: data
 		});
@@ -89,7 +100,7 @@ var LoginForm = React.createClass({
 			message: "You are now logged in as " + data.email
 		});
 	},
-	onBadTokenResponse: function(data){
+	onGetUserUnauthorizedResponse: function(data){
 		alert('Error: see console');
 		console.log(data);
 	}

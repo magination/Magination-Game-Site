@@ -7,14 +7,14 @@ var CHANGE_EVENT = 'change-login';
 
 var _loginState = false;
 var _profile = null;
-var _loginRedirect = 'browse';
+var _token = null;
  
 var LoginStore = _.extend({}, EventEmitter.prototype, {
+    getToken: function(){
+        return _token;
+    },
     getLoginState: function() {
         return _loginState;
-    },
-    getOnLoginRedirectDestination: function(){
-        return _loginRedirect;
     },
     getLoginProfile: function(){
         return _profile;
@@ -34,18 +34,13 @@ LoginStore.dispatchToken = Dispatcher.register(function(action) {
     switch (action.actionType) {
         case LoginConstants.LOGIN_SUCCESS:
             _loginState = true;
-            LoginStore.emitChange();
-            break;
-        case LoginConstants.LOGIN_ERROR:
-            _loginState = false;
+            _token = action.token;
             LoginStore.emitChange();
             break;
         case LoginConstants.LOGOUT_SUCCESS:
             _loginState = false;
+            _token = null;
             LoginStore.emitChange();
-            break;
-        case LoginConstants.SET_ON_LOGIN_REDIRECT:
-            _loginRedirect = action.destination;
             break;
         case LoginConstants.SET_PROFILE:
             _profile = action.profile;

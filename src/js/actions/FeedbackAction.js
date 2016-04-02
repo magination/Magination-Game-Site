@@ -6,7 +6,15 @@ var FeedbackActions = {
 		Dispatcher.dispatch({
 			actionType: FeedbackConstants.DISPLAY_MESSAGE,
 			message: data.message,
-			statusType: "alert alert-success",
+			statusType: "alert alert-success fade in",
+			header: data.header
+		});
+	},
+	displayWarningMessage: function(data){
+		Dispatcher.dispatch({
+			actionType: FeedbackConstants.DISPLAY_WARNING,
+			message: data.message,
+			statusType: "alert alert-warning fade in",
 			header: data.header
 		});
 	},

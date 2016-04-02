@@ -21,7 +21,7 @@ var BrowseGames = require('./components/organisms/BrowseGames.organism');
 var reactApp = React.createClass({
 	componentWillMount: function(){
 		NavigationAction.setCurrentPath({
-			destination: this.props.location
+			destination: this.props.location.pathname
 		});
 	},
 	componentWillReceiveProps: function(nextProps){

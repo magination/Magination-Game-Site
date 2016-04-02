@@ -31,7 +31,7 @@ function pushDestination(destination){
 function shouldOverrideForPreviousNavigation(){
     var override = false;
     NavigationConstants.OVERRIDE_REDIRECT_LIST.every(function(element){
-        if(_navigationState.previousPath.pathname.indexOf(element) > -1){
+        if(_navigationState.previousPath.indexOf(element) > -1){
             override = true;
             return false;
         }
@@ -62,7 +62,7 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
             NavigationStore.emitChange();
             break;
         case NavigationConstants.NAVIGATE_PREVIOUS:
-            if(_navigationState.previousPath != null){                
+            if(_navigationState.previousPath != null && _navigationState.previousPath != undefined){                
                 if(shouldOverrideForPreviousNavigation()){
                     pushDestination(NavigationConstants.DEFAULT_DESTINATION);
                 }
