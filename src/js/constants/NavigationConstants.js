@@ -5,10 +5,13 @@ var constants = {
 	NAVIGATE_PREVIOUS: 'navigate_previous',
 
 	DEFAULT_DESTINATION: 'browse',
-	OVERRIDE_REDIRECT_LIST: [
+	NOT_LOGGED_IN_EXCLUSIVE_PATHS: [
 		"login",
 		"register",
 		"confirmation"
+	],
+	LOGGED_IN_EXCLUSIVE_PATHS: [
+		"upload"
 	]
 }
 module.exports = constants;

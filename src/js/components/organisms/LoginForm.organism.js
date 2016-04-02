@@ -19,9 +19,6 @@ var LoginForm = React.createClass({
 			password: ""
 		};
 	},
-	componentWillMount: function(){
-		
-	},
 	handleUsernameChange: function(e){
 		this.setState({
 			username: e.target.value
@@ -38,7 +35,7 @@ var LoginForm = React.createClass({
 				<form className="form-signin" onSubmit={this.onSubmitForm}>
 		        	<h2 className="form-signin-heading">Please sign in</h2>
 		        	<label htmlFor="inputEmail" className="sr-only">Username/Email</label>
-		        	<input value={this.state.username} onChange={this.handleUsernameChange} type="text" id="inputEmail" className="form-control" placeholder="Username/Email" required autofocus/>
+		        	<input ref="usernameInput" value={this.state.username} onChange={this.handleUsernameChange} type="text" id="inputEmail" className="form-control" placeholder="Username/Email" required autofocus/>
 		        	<label htmlFor="inputPassword" className="sr-only">Password</label>
 		        	<input value={this.state.password} onChange={this.handlePasswordChange} type="password" id="inputPassword" className="form-control" placeholder="Password" required/>
 		        	<button className="btn btn-lg btn-primary btn-block" type="submit">Login </button>

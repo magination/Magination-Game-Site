@@ -31,7 +31,7 @@ var StatusBar = React.createClass({
 		)
 	},
 	onFeedbackChange: function(){
-		this.setState(getFeedback());	
+		this.setState(getFeedback());
 	}
 });
 

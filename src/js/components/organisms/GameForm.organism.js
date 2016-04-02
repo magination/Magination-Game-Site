@@ -16,25 +16,18 @@ var GameForm = React.createClass({
             description : ""
         };
     },
-    componentWillMount: function(){ /*Redirects to login if the user is not logged in*/
-        if(!LoginStore.getLoginState()){
-            NavigationAction.navigate({
-                destination: "/login"
-            });
-        }
-    },
     render: function(){
         return(
-        <div className="col-md-4 col-md-offset-4">
-            <h2 className="text-center form-uploadGame-heading">Upload game</h2>
-            <form className="form-signin" onSubmit={this._postGame}>
-                <label htmlFor="inputForTitle" className="sr-only">Enter a name for your game</label>
-                <input value={this.state.title} onChange={this._onTitleChanged} type="text" id="inputForTitle" className="form-control" placeholder="Game name" required/>
-                <label htmlFor="inputGameDescription" className="sr-only">Enter a description for your game</label>
-                <textarea value={this.state.description} onChange={this._onDescriptionChanged} type="text" id="inputGameDescription" className="form-control" placeholder="Game description" required/>
-                <button className="btn btn-lg btn-primary btn-block" type="submit">Upload game</button>
-            </form>
-        </div>
+            <div className="col-md-4 col-md-offset-4">
+                <h2 className="text-center form-uploadGame-heading">Upload game</h2>
+                <form className="form-signin" onSubmit={this._postGame}>
+                    <label htmlFor="inputForTitle" className="sr-only">Enter a name for your game</label>
+                    <input value={this.state.title} onChange={this._onTitleChanged} type="text" id="inputForTitle" className="form-control" placeholder="Game name" required/>
+                    <label htmlFor="inputGameDescription" className="sr-only">Enter a description for your game</label>
+                    <textarea value={this.state.description} onChange={this._onDescriptionChanged} type="text" id="inputGameDescription" className="form-control" placeholder="Game description" required/>
+                    <button className="btn btn-lg btn-primary btn-block" type="submit">Upload game</button>
+                </form>
+            </div>
         );
     },
     _onTitleChanged: function(e){
@@ -48,6 +41,7 @@ var GameForm = React.createClass({
         });
     },
     _postGame: function(e) {
+        alert("posted");
         e.preventDefault();
         $.ajax({
             type: "POST",

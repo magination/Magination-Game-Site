@@ -52,7 +52,6 @@ var Menu = React.createClass({
 			isLoggedIn: getLoginState(),
 		});
 		//this.forceUpdate();
-
 	}
 });
 

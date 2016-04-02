@@ -7,12 +7,30 @@ var _ = require("lodash");
 var browserHistory = require('react-router').browserHistory;
 var CHANGE_EVENT = 'change-login';
 
+var LoginStore = require('./LoginStore');
+
 var _navigationState = {
-    previousPath: null,
+    redirectPath: null,
     currentPath: null
 };
+function shouldRedirectToLogin(destination){
+    if(LoginStore.getLoginState()) {
+        return false;
+    }
 
+    var isPathLoginProtected = false;
+    NavigationConstants.LOGGED_IN_EXCLUSIVE_PATHS.every(function(element){
+        if(destination.indexOf(element) > -1){
+            isPathLoginProtected = true;
+            return false;
+        }
+        return true;
+    });
+
+    return isPathLoginProtected;
+}
 function pushDestination(destination){
+    
     /*
         setTimeout is used as an alternative to setImmediate (which is not directly supported by all browsers). 
         The dispatcher doesn't allow dispatching while a dispatch-event is in progress (due to data consistency
@@ -20,7 +38,13 @@ function pushDestination(destination){
         By using setTimeout, browserHistory.push() will happen in the next eventloop iteration.
     */
     setTimeout(function(){
-        browserHistory.push(destination);
+        if(shouldRedirectToLogin(destination)) {
+            _navigationState.redirectPath = destination;
+            browserHistory.push('/login');
+        }
+        else {
+            browserHistory.push(destination);
+        }
     }, 0);
 }
 
@@ -30,8 +54,8 @@ function pushDestination(destination){
 */
 function shouldOverrideForPreviousNavigation(){
     var override = false;
-    NavigationConstants.OVERRIDE_REDIRECT_LIST.every(function(element){
-        if(_navigationState.previousPath.indexOf(element) > -1){
+    NavigationConstants.NOT_LOGGED_IN_EXCLUSIVE_PATHS.every(function(element){
+        if(_navigationState.redirectPath.indexOf(element) > -1){
             override = true;
             return false;
         }
@@ -59,15 +83,15 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
     switch (action.actionType) {
         case NavigationConstants.NAVIGATE:
             pushDestination(action.destination);
-            NavigationStore.emitChange();
+            //NavigationStore.emitChange();
             break;
         case NavigationConstants.NAVIGATE_PREVIOUS:
-            if(_navigationState.previousPath != null && _navigationState.previousPath != undefined){                
+            if(_navigationState.redirectPath != null && _navigationState.redirectPath != undefined){                
                 if(shouldOverrideForPreviousNavigation()){
                     pushDestination(NavigationConstants.DEFAULT_DESTINATION);
                 }
                 else {
-                    pushDestination(_navigationState.previousPath);
+                    pushDestination(_navigationState.redirectPath);
                 }
             }
             else {
@@ -76,7 +100,7 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
             NavigationStore.emitChange();
             break;
         case NavigationConstants.SET_CURRENT_PATH:
-            _navigationState.previousPath = _navigationState.currentPath;
+            //_navigationState.redirectPath = _navigationState.currentPath;
             _navigationState.currentPath = action.destination;
             NavigationStore.emitChange();
             break;
