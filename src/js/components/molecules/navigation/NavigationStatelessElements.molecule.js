@@ -47,7 +47,6 @@ var NavigationStatelessElements = React.createClass({
 		);
 	},
 	onNavigationStateChange: function(){
-		console.log(NavigationStore.getNavigationState().currentPath);
 		this.setState({
 			activeDestination: NavigationStore.getNavigationState().currentPath
 		});

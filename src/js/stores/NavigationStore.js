@@ -40,11 +40,14 @@ function pushDestination(destination){
     setTimeout(function(){
         if(shouldRedirectToLogin(destination)) {
             _navigationState.redirectPath = destination;
+            _navigationState.currentPath = '/login';
             browserHistory.push('/login');
         }
         else {
+            _navigationState.currentPath = destination;
             browserHistory.push(destination);
         }
+        NavigationStore.emitChange();
     }, 0);
 }
 

@@ -24,14 +24,6 @@ var reactApp = React.createClass({
 			destination: this.props.location.pathname
 		});
 	},
-	componentWillReceiveProps: function(nextProps){
-		var routeChanged = nextProps.location != this.props.location;
-		if(routeChanged){
-			NavigationAction.setCurrentPath({
-			    destination: nextProps.location.pathname
-			});
-		}
-	},
 	render: function(){
 		return(
 			<div>
