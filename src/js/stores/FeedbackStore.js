@@ -43,6 +43,14 @@ FeedbackStore.dispatchToken = Dispatcher.register(function(action) {
             };
             FeedbackStore.emitChange();
             break;
+        case FeedbackConstants.DISPLAY_SERVER_ERROR:
+            _feedback = {
+                statusType: "alert alert-danger fade in",
+                header: "Server Error!",
+                message: "There was an error handling your request, please try again later."
+            };
+            FeedbackStore.emitChange();
+            break;
     }
 });
 

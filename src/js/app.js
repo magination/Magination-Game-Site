@@ -50,11 +50,11 @@ var mountNode = document.getElementById('react-container');
 ReactDOM.render((
 		<Router history={browserHistory}>
 			<Route path="/" component={reactApp}>
-				<Route path="login" component={LoginForm}/>
-				<Route path="register" component={RegisterForm}/>
-				<Route path="upload" component={GameForm}/>
-				<Route path="browse" component={BrowseGames}/>
-				<Route path="confirmation/:id" component={ConfirmEmail}/>
+				<Route path="/login" component={LoginForm}/>
+				<Route path="/register" component={RegisterForm}/>
+				<Route path="/upload" component={GameForm}/>
+				<Route path="/browse" component={BrowseGames}/>
+				<Route path="/confirmation/:id" component={ConfirmEmail}/>
 				<Route path="*" component={BrowseGames}/>/*TODO make 404 component*/
 			</Route>
 		</Router>)

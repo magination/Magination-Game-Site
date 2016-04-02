@@ -10,6 +10,11 @@ var FeedbackActions = {
 			header: data.header
 		});
 	},
+	displayInternalServerError: function(data){
+		Dispatcher.dispatch({
+			actionType: FeedbackConstants.DISPLAY_SERVER_ERROR
+		});
+	},
 	removeMessage: function(data){
 		Dispatcher.dispatch({
 			actionType: FeedbackConstants.REMOVE_MESSAGE

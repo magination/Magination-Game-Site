@@ -24,17 +24,13 @@ var StatusBar = React.createClass({
 	render: function(){
 		return (
 			<div className={this.state.statusType}>
+				<a className="close" data-dismiss="alert">&times;</a>
 				<strong>{this.state.header}</strong> {this.state.message}
 			</div>
 		)
 	},
 	onFeedbackChange: function(){
-		this.setState(getFeedback());
-		if(this.state.statusType != ""){
-			setInterval(function(){
-				FeedbackAction.removeMessage();
-			}, 3000);
-		}		
+		this.setState(getFeedback());	
 	}
 });
 
