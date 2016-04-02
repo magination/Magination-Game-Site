@@ -23,7 +23,7 @@ var ConfirmEmail = React.createClass({
 		   	url: URLS.api.confirmation +"/"+getLastUrlId(),
 		   	dataType: "json",
 		   	statusCode: {
-		   		200: function(){alert("Success!");},
+		   		200: this.onConfirmationSuccessResponse,
 		   		500: function(){alert("Server Error: see console");console.log(data)}
 		   	}
 		});
@@ -32,7 +32,13 @@ var ConfirmEmail = React.createClass({
 		return(
 			<div>{this.state.status}</div>
 		)
+	},
+	onConfirmationSuccessResponse: function(data){
+		this.setState({
+			status: "You are now logged in as " + 
+		});
 	}
+
 });
 
 module.exports = ConfirmEmail;

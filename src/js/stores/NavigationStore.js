@@ -14,7 +14,7 @@ var _navigationState = {
 
 function pushDestination(destination){
     /*
-        setTimeout is used as an easyfix. 
+        setTimeout is used as an alternative to setImmediate (which is not directly supported by all browsers). 
         The dispatcher doesn't allow dispatching while a dispatch-event is in progress (due to data consistency
         in stores).
         By using setTimeout, browserHistory.push() will happen in the next eventloop iteration.
@@ -23,7 +23,12 @@ function pushDestination(destination){
         browserHistory.push(destination);
     }, 0);
 }
-function shouldOverride(){
+
+/*
+    This function checks if the previous page is a page that should be accessible to logged in users. If it is for example register or confirmation, it should
+    be overridden. The list of overridden elements is located in NavigationConstants. Default is also located in NavigationConstants
+*/
+function shouldOverrideForPreviousNavigation(){
     var override = false;
     NavigationConstants.OVERRIDE_REDIRECT_LIST.every(function(element){
         if(_navigationState.previousPath.pathname.indexOf(element) > -1){
@@ -58,7 +63,7 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
             break;
         case NavigationConstants.NAVIGATE_PREVIOUS:
             if(_navigationState.previousPath != null){                
-                if(shouldOverride()){
+                if(shouldOverrideForPreviousNavigation()){
                     pushDestination(NavigationConstants.DEFAULT_DESTINATION);
                 }
                 else {
@@ -68,11 +73,12 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
             else {
                 pushDestination(NavigationConstants.DEFAULT_DESTINATION);
             }
-            //NavigationStore.emitChange();
+            NavigationStore.emitChange();
             break;
         case NavigationConstants.SET_CURRENT_PATH:
             _navigationState.previousPath = _navigationState.currentPath;
             _navigationState.currentPath = action.destination;
+            NavigationStore.emitChange();
             break;
     }
 });

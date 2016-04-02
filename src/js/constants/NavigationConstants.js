@@ -1,4 +1,3 @@
-/*DEPRECATED NOT USED*/
 
 var constants = {
 	SET_CURRENT_PATH: 'set_current_path',

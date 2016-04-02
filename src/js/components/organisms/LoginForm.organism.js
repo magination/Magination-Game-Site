@@ -35,7 +35,7 @@ var LoginForm = React.createClass({
 	render: function(){
 		return(
 			<div className="col-md-4 col-md-offset-4">
-				<form className="form-signin" onSubmit={this._onSubmitForm}>
+				<form className="form-signin" onSubmit={this.onSubmitForm}>
 		        	<h2 className="form-signin-heading">Please sign in</h2>
 		        	<label htmlFor="inputEmail" className="sr-only">Username/Email</label>
 		        	<input value={this.state.username} onChange={this.handleUsernameChange} type="text" id="inputEmail" className="form-control" placeholder="Username/Email" required autofocus/>
@@ -46,7 +46,7 @@ var LoginForm = React.createClass({
 	        </div>
 		);
 	},
-	_onSubmitForm: function(e){
+	onSubmitForm: function(e){
 		e.preventDefault();
 		$.ajax({
 			type: "POST",
@@ -57,10 +57,10 @@ var LoginForm = React.createClass({
 		   }),
 		   contentType: "application/json",
 		   dataType: "json",
-		   success: this._onLoginRequestSuccess
+		   success: this.onLoginRequestSuccess
 		});
 	},
-	_onLoginRequestSuccess: function(data){
+	onLoginRequestSuccess: function(data){
 		LoginAction.loginSuccess({
 			token: data.token
 		});
@@ -73,13 +73,13 @@ var LoginForm = React.createClass({
 		        'Authorization': data.token,
     		},
 		   	statusCode: {
-		   		200: this._onGetUserResponse,
-		   		401: this._onBadTokenResponse,
+		   		200: this.onGetUserResponse,
+		   		401: this.onBadTokenResponse,
 		   		500: function(){alert("Server Error: see console");console.log(data)}
 		   	}
 		});
 	},
-	_onGetUserResponse: function(data){
+	onGetUserResponse: function(data){
 		LoginAction.setLoginProfile({
 			profile: data
 		});
@@ -89,7 +89,7 @@ var LoginForm = React.createClass({
 			message: "You are now logged in as " + data.email
 		});
 	},
-	_onBadTokenResponse: function(data){
+	onBadTokenResponse: function(data){
 		alert('Error: see console');
 		console.log(data);
 	}
