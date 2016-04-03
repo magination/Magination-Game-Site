@@ -4,7 +4,7 @@ var constants = {
 	NAVIGATE: 'navigate',
 	NAVIGATE_PREVIOUS: 'navigate_previous',
 
-	DEFAULT_DESTINATION: 'browse',
+	DEFAULT_DESTINATION: '/browse',
 	NOT_LOGGED_IN_EXCLUSIVE_PATHS: [
 		"login",
 		"register",

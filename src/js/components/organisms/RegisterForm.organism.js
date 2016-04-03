@@ -79,7 +79,8 @@ var RegisterForm = React.createClass({
 	},
 	_onRequestSuccess: function(data){
 		NavigationAction.navigate({
-			destination: 'login'
+			destination: '/verificationsent',
+			data: {email: this.state.email}
 		});
 	}
 });

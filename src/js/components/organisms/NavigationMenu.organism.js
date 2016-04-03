@@ -51,7 +51,6 @@ var Menu = React.createClass({
 		this.setState({
 			isLoggedIn: getLoginState(),
 		});
-		//this.forceUpdate();
 	}
 });
 

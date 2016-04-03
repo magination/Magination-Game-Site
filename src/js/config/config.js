@@ -5,7 +5,8 @@ var config = {
 			users: restApiRoot+"users",
 			games: restApiRoot+"games",
 			login: restApiRoot+"login",
-			confirmation: restApiRoot+"confirmation"
+			confirmation: restApiRoot+"confirmation",
+			resendEmail: restApiRoot + "resendVerificationEmail"
 		}
 	}
 };

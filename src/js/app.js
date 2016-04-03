@@ -14,6 +14,7 @@ var LoginForm = require('./components/organisms/LoginForm.organism');
 var RegisterForm = require('./components/organisms/RegisterForm.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
 var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
+var VerificationSent = require('./components/organisms/VerificationSent.organism');
 
 var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
@@ -47,6 +48,7 @@ ReactDOM.render((
 				<Route path="/upload" component={GameForm}/>
 				<Route path="/browse" component={BrowseGames}/>
 				<Route path="/confirmation/:id" component={ConfirmEmail}/>
+				<Route path="/verificationsent" component={VerificationSent} />
 				<Route path="*" component={BrowseGames}/>/*TODO make 404 component*/
 			</Route>
 		</Router>)

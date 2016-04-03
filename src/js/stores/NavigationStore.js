@@ -11,7 +11,8 @@ var LoginStore = require('./LoginStore');
 
 var _navigationState = {
     redirectPath: null,
-    currentPath: null
+    currentPath: null,
+    data: null
 };
 function shouldRedirectToLogin(destination){
     if(LoginStore.getLoginState()) {
@@ -86,6 +87,7 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
     switch (action.actionType) {
         case NavigationConstants.NAVIGATE:
             pushDestination(action.destination);
+            _navigationState.data = action.navigationData;
             //NavigationStore.emitChange();
             break;
         case NavigationConstants.NAVIGATE_PREVIOUS:
@@ -100,7 +102,7 @@ NavigationStore.dispatchToken = Dispatcher.register(function(action) {
             else {
                 pushDestination(NavigationConstants.DEFAULT_DESTINATION);
             }
-            NavigationStore.emitChange();
+            //NavigationStore.emitChange();
             break;
         case NavigationConstants.SET_CURRENT_PATH:
             //_navigationState.redirectPath = _navigationState.currentPath;

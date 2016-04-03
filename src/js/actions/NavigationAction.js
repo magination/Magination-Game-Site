@@ -4,7 +4,8 @@ var NavigationActions = {
 	navigate: function(data){
 		Dispatcher.dispatch({
 			actionType: NavigationConstants.NAVIGATE,
-			destination: data.destination
+			destination: data.destination,
+			navigationData: data.data
 		});
 	},
 	navigateToPrevious: function(data){

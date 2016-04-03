@@ -14,7 +14,7 @@ function getLastUrlId(){
 var ConfirmEmail = React.createClass({
 	getInitialState: function(){
 		return {
-			status: "Processing"
+			status: this.props.initialText
 		};
 	},
 	componentWillMount: function(){
