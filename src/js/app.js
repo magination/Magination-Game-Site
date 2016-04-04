@@ -13,7 +13,6 @@ var RegisterForm = require('./components/organisms/RegisterForm.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
 var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
 var VerificationSent = require('./components/organisms/VerificationSent.organism');
-
 var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
 
@@ -21,6 +20,15 @@ var reactApp = React.createClass({
 	componentWillMount: function () {
 		NavigationAction.setCurrentPath({
 			destination: this.props.location.pathname
+		});
+	},
+	componentWillReceiveProps: function (nextProps) {
+		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.
+			Redundant action with NavigationAction.navigate()
+			Maybe figure a way to make react-router call NavigationAction.navigate() on back button press(?)
+		*/
+		NavigationAction.setCurrentPath({
+			destination: nextProps.location.pathname
 		});
 	},
 	render: function () {
