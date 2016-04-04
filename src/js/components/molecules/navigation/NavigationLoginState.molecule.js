@@ -6,41 +6,41 @@ var NavigationStore = require('../../../stores/NavigationStore');
 var links = [
 	{
 		id: 0,
-		displayText: "Login",
-		destination: "/login"
+		displayText: 'Login',
+		destination: '/login'
 	},
 	{
 		id: 1,
-		displayText: "Register",
-		destination: "/register"
+		displayText: 'Register',
+		destination: '/register'
 	}
 ];
 
 var NavigationLoginState = React.createClass({
-	getInitialState: function(){
+	getInitialState: function () {
 		return {
 			activeDestination: NavigationStore.getNavigationState().currentPath
 		};
 	},
-	componentDidMount: function() {
+	componentDidMount: function () {
 		NavigationStore.addChangeListener(this.onNavigationStateChange);
 	},
-	componentWillUnmount: function() {
+	componentWillUnmount: function () {
 		NavigationStore.removeChangeListener(this.onNavigationStateChange);
 	},
-	render: function(){
+	render: function () {
 		var component = this;
-		var notLoggedInLinks = links.map(function(link) {
-			var isActive = (link.destination == component.state.activeDestination);
-      		return <ListLinkElement isActive={isActive} key={link.id} displayText={link.displayText} destination={link.destination}/>
-    	});
-		return( 
-			<ul className="nav navbar-nav navbar-right">
+		var notLoggedInLinks = links.map(function (link) {
+			var isActive = (link.destination === component.state.activeDestination);
+			return <ListLinkElement isActive={isActive} key={link.id} displayText={link.displayText} destination={link.destination}/>;
+		});
+		return (
+			<ul className='nav navbar-nav navbar-right'>
 				{notLoggedInLinks}
 			</ul>
 		);
 	},
-	onNavigationStateChange: function() {
+	onNavigationStateChange: function () {
 		this.setState({
 			activeDestination: NavigationStore.getNavigationState().currentPath
 		});

@@ -1,24 +1,24 @@
 var React = require('react');
 
 var SearchGames = React.createClass({
-	getInitialState: function(){
+	getInitialState: function () {
 		return {
-			searchtext: ""
+			searchtext: ''
 		};
 	},
-	render: function(){
+	render: function () {
 		return (
 			<div>
-				<input onChange={this._searchChanged} value={this.state.searchtext} type="text" placeholder="Search"/>
+				<input onChange={this._searchChanged} value={this.state.searchtext} type='text' placeholder='Search'/>
 			</div>
-		)
+		);
 	},
-	_searchChanged: function(e){
+	_searchChanged: function (e) {
 		this.setState({
 			searchtext: e.target.value
 		});
 
-		/*TODO action search*/
+		/* TODO action search*/
 	}
 
 });

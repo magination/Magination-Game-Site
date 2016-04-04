@@ -7,20 +7,17 @@ var watchify = require('watchify');
 var babel = require('babelify');
 var nodemon = require('gulp-nodemon');
 
+function compile (watch) {
+  var bundler = watchify(browserify(
+      './src/js/app.js', { debug: true }
+  )
+  .transform(babel.configure({
+    presets: ['react']
+  })));
 
-
-function compile(watch) {
-  	var bundler = watchify(browserify(
-  		'./src/js/app.js', { debug: true }
-  	)
-  	.transform(babel.configure({
-  		presets: ['react']
-  	})));
-
-  function rebundle() {
-    movePublicElements();
+  function rebundle () {
     bundler.bundle()
-      .on('error', function(err) { console.error(err); this.emit('end'); })
+      .on('error', function (err) { console.error(err); this.emit('end'); })
       .pipe(source('app.js'))
       .pipe(buffer())
       .pipe(sourcemaps.init({ loadMaps: true }))

@@ -6,39 +6,39 @@ var NavigationStatelessElements = require('../molecules/navigation/NavigationSta
 var NavigationLoginState = require('../molecules/navigation/NavigationLoginState.molecule');
 var NavigationLoggedInState = require('../molecules/navigation/NavigationLoggedInState.molecule');
 
-function getLoginState() {
-  return LoginStore.getLoginState();
+function getLoginState () {
+	return LoginStore.getLoginState();
 }
-function getProfile() {
+function getProfile () {
 	return LoginStore.getLoginProfile();
 }
 
 var Menu = React.createClass({
-	getInitialState: function(){
+	getInitialState: function () {
 		return {
-			isLoggedIn: getLoginState(),
+			isLoggedIn: getLoginState()
 		};
 	},
-	componentDidMount: function(){
+	componentDidMount: function () {
 		LoginStore.addChangeListener(this.onLoginStateChanged);
 	},
-	componentWillUnmount: function(){
+	componentWillUnmount: function () {
 		LoginStore.removeChangeListener(this.onLoginStateChanged);
 	},
-	render: function(){
+	render: function () {
 		var navigationStateElement;
 		var profile = getProfile();
-		if(this.state.isLoggedIn && profile != null){
+		if (this.state.isLoggedIn && profile !== null) {
 			navigationStateElement = <NavigationLoggedInState email={profile.email}/>;
 		}
 		else {
 			navigationStateElement = <NavigationLoginState />;
 		}
-		
+
 		return (
 			<div>
-				<nav className="navbar navbar-default navbar-fixed-top">
-					<div className="container-fluid">
+				<nav className='navbar navbar-default navbar-fixed-top'>
+					<div className='container-fluid'>
 						<NavigationStatelessElements />
 						{navigationStateElement}
 					</div>
@@ -46,10 +46,9 @@ var Menu = React.createClass({
 			</div>
 		);
 	},
-	onLoginStateChanged: function(){
-
+	onLoginStateChanged: function () {
 		this.setState({
-			isLoggedIn: getLoginState(),
+			isLoggedIn: getLoginState()
 		});
 	}
 });

@@ -6,7 +6,7 @@ var BrowseGames = React.createClass({
 		description: React.PropTypes.string.isRequired,
 		owner: React.PropTypes.string.isRequired
 	},
-	render: function(){
+	render: function () {
 		return (
 			<div>
 				<strong>Title: </strong>{this.props.title}

@@ -6,12 +6,12 @@ var constants = {
 
 	DEFAULT_DESTINATION: '/browse',
 	NOT_LOGGED_IN_EXCLUSIVE_PATHS: [
-		"login",
-		"register",
-		"confirmation"
+		'login',
+		'register',
+		'confirmation'
 	],
 	LOGGED_IN_EXCLUSIVE_PATHS: [
-		"upload"
+		'upload'
 	]
-}
+};
 module.exports = constants;
