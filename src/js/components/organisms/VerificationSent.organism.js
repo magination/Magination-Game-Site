@@ -11,7 +11,7 @@ var VerificationSent = React.createClass({
 		);
 	},
 	onResendClick: function () {
-		if (NavigationStore.getNavigationState().data == undefined || NavigationStore.getNavigationState().data == null) {
+		if (NavigationStore.getNavigationState().data === undefined || NavigationStore.getNavigationState().data == null) {
 			alert('ERROR');
 		}
 		$.ajax({
