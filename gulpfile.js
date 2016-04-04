@@ -7,6 +7,8 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var babel = require('babelify');
 var nodemon = require('gulp-nodemon');
+var del = require('del');
+var browserSync = require('browser-sync');
 
 function compile (watch) {
   var bundler = watchify(browserify(
@@ -40,30 +42,44 @@ function watch() {
   return compile(true);
 };
 
-function movePublicElements(){
-    gulp.src('./src/js/public/Draganddrop.js')
-      .pipe(gulp.dest('./build'));
-};
+gulp.task('build', ['clean', 'lint'], function() {
+  return compile(false);
+});
 
-gulp.task('build', function() {
-  console.log('Compiling ReactApp');
-  return compile(false); 
-});
 gulp.task('watch', function() {
- return watch(); 
+	gulp.watch('src/**/*.js', ['build']);
+	gulp.watch('build/**', function () {
+  		setTimeout(function () {
+  			browserSync.reload();
+  		}, 1000);
+	});
 });
-gulp.task('server', function () {
+
+gulp.task('server', ['browserSync', 'build'], function () {
   nodemon({
     script: './server/server.js'
   , ext: 'js html'
   , env: { 'NODE_ENV': 'development' }
   })
 });
+
 gulp.task('lint', function () {
-    return gulp.src('./src/**')
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+	return gulp.src('./src/**')
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError());
 });
 
-gulp.task('default', ['watch','server']);
+gulp.task('clean', function () {
+	del.sync(['build/**', '!build']);
+});
+
+gulp.task('browserSync', function () {
+	browserSync({
+        proxy: {
+        	target: 'http://localhost:8080'
+        }
+    });
+});
+
+gulp.task('default', ['watch' ,'browserSync', 'build']);
