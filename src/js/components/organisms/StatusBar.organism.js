@@ -22,13 +22,18 @@ var StatusBar = React.createClass({
 		FeedbackStore.removeChangeListener(this.onFeedbackChange);
 	},
 	render: function(){
-		var xButton = (this.state.statusType != "")?<a className="close" data-dismiss="alert">&times;</a>:<a/>;
+		var xButton = (this.state.statusType != "")?<a onClick={this.onCloseFeedbackClick} className="close">&times;</a>:<a/>;
 		return (
 			<div className={this.state.statusType}>
 				{xButton}
 				<strong>{this.state.header}</strong> {this.state.message}
 			</div>
 		)
+	},
+	onCloseFeedbackClick: function(){
+		this.setState({
+			statusType: "hide"
+		});
 	},
 	onFeedbackChange: function(){
 		this.setState(getFeedback());
