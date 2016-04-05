@@ -10,44 +10,31 @@ var nodemon = require('gulp-nodemon');
 var del = require('del');
 var browserSync = require('browser-sync');
 
-function compile (watch) {
-  var bundler = watchify(browserify(
-      './src/js/app.js', { debug: true }
-  )
-  .transform(babel.configure({
-    presets: ['react']
-  })));
+function compile () {
+	var bundler = browserify(
+		'./src/js/app.js'
+	)
+	.transform(babel.configure({
+		presets: ['react']
+	}));
 
-  function rebundle () {
-    bundler.bundle()
-      .on('error', function (err) { console.error(err); this.emit('end'); })
-      .pipe(source('app.js'))
-      .pipe(buffer())
-      .pipe(sourcemaps.init({ loadMaps: true }))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./build'));
-  }
-
-  if (watch) {
-    bundler.on('update', function() {
-      console.log('-> bundling...');
-      rebundle();
-    });
-  }
-
-  rebundle();
+	bundler.bundle()
+		.on('error', function (err) { console.error(err); this.emit('end'); })
+		.pipe(source('app.js'))
+		.pipe(buffer())
+		.pipe(sourcemaps.init({ loadMaps: true }))
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest('./build'));
+	return;
 }
 
-function watch() {
-  return compile(true);
-};
-
-gulp.task('build', ['clean', 'lint'], function() {
-  return compile(false);
+gulp.task('build', ['lint'], function() {
+	console.log('building');
+	return compile();
 });
 
 gulp.task('watch', function() {
-	gulp.watch('src/**/*.js', ['build']);
+	//gulp.watch('src/**/*.js', ['build']);
 	gulp.watch('build/**', function () {
   		setTimeout(function () {
   			browserSync.reload();
@@ -55,12 +42,20 @@ gulp.task('watch', function() {
 	});
 });
 
-gulp.task('server', ['browserSync', 'build'], function () {
-  nodemon({
-    script: './server/server.js'
-  , ext: 'js html'
-  , env: { 'NODE_ENV': 'development' }
-  })
+gulp.task('server', ['clean'], function () {
+	compile();
+	nodemon({
+	    script: './server/server.js',
+		ext: 'js html',
+		ignore: ['build/**'],
+		env: { 'NODE_ENV': 'development' },
+		tasks: function (changedFiles) {
+			return ['build'];
+		}
+	}).on('restart', function () {
+		console.log('reloading');
+		browserSync.reload();
+	});
 });
 
 gulp.task('lint', function () {
@@ -82,4 +77,4 @@ gulp.task('browserSync', function () {
     });
 });
 
-gulp.task('default', ['watch' ,'browserSync', 'build']);
+gulp.task('default', ['watch', 'browserSync', 'server']);
