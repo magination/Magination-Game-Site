@@ -10,9 +10,9 @@ var nodemon = require('gulp-nodemon');
 var del = require('del');
 var browserSync = require('browser-sync');
 
-function compile () {
+function compile (src, dst) {
 	var bundler = browserify(
-		'./src/js/app.js'
+		src
 	)
 	.transform(babel.configure({
 		presets: ['react']
@@ -24,13 +24,13 @@ function compile () {
 		.pipe(buffer())
 		.pipe(sourcemaps.init({ loadMaps: true }))
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./build'));
+		.pipe(gulp.dest(dst));
 	return;
 }
 
 gulp.task('build', ['lint'], function() {
 	console.log('building');
-	return compile();
+	return compile('./src/js/RenderApp.js','./build');
 });
 
 gulp.task('watch', function() {
@@ -67,6 +67,10 @@ gulp.task('lint', function () {
 
 gulp.task('clean', function () {
 	del.sync(['build/**', '!build']);
+});
+
+gulp.task('test', function () {
+	compile('./src/js/App', './test');
 });
 
 gulp.task('browserSync', function () {
