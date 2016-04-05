@@ -14,11 +14,11 @@ var GameForm = React.createClass({
 			<div className='col-md-4 col-md-offset-4'>
 				<h2 className='text-center form-uploadGame-heading'>Upload game</h2>
 				<form className='form-signin' onSubmit={this.postGame}>
-				<label htmlFor='inputForTitle' className='sr-only'>Enter a name for your game</label>
-				<input value={this.state.title} onChange={this.onTitleChanged} type='text' id='inputForTitle' className='form-control' placeholder='Game name' required/>
-				<label htmlFor='inputGameDescription' className='sr-only'>Enter a description for your game</label>
-				<textarea value={this.state.description} onChange={this.onDescriptionChanged} type='text' id='inputGameDescription' className='form-control' placeholder='Game description' required/>
-				<button className='btn btn-lg btn-primary btn-block' type='submit'>Upload game</button>
+					<label htmlFor='inputForTitle' className='sr-only'>Enter a name for your game</label>
+					<input value={this.state.title} onChange={this.onTitleChanged} type='text' id='inputForTitle' className='form-control' placeholder='Game name' required/>
+					<label htmlFor='inputGameDescription' className='sr-only'>Enter a description for your game</label>
+					<textarea value={this.state.description} onChange={this.onDescriptionChanged} type='text' id='inputGameDescription' className='form-control' placeholder='Game description' required/>
+					<button className='btn btn-lg btn-primary btn-block' type='submit'>Upload game</button>
 				</form>
 			</div>
 		);
