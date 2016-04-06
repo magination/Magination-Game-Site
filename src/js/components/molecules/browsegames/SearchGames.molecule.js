@@ -5,14 +5,19 @@ var SearchGames = React.createClass({
 		return {
 			filter_title: '',
 			filter_author: '',
-			filter_singles: '',
-			filter_doubles: '',
-			filter_triples: ''
+			filter_singles: '0',
+			filter_doubles: '0',
+			filter_triples: '0',
+			feedbackClass: 'has-success'
 		};
 	},
 	render: function () {
+		var singlesClassName = ($.isNumeric(this.state.filter_singles)) ? 'input-group has-success' : 'input-group has-error';
+		var doublesClassName = ($.isNumeric(this.state.filter_doubles)) ? 'input-group has-success' : 'input-group has-error';
+		var triplesClassName = ($.isNumeric(this.state.filter_triples)) ? 'input-group has-success' : 'input-group has-error';
 		return (
 			<div>
+				<h2>Search Filters</h2>
 				<form onSubmit={this.onSubmit}>
 					<div className='form-group'>
 						<label htmlFor='searchtitle' >Title</label>
@@ -22,17 +27,17 @@ var SearchGames = React.createClass({
 						<label htmlFor='searchauthor'>Author</label>
 						<input id='searchauthor' className='form-control' onChange={this.authorSearchChanged} value={this.state.filter_author} type='text' placeholder='Author'/>
 					</div>
-					<div className='form-group has-feedback'>
+					<div className='form-group'>
 						<label className='control-label'>Minimum Amount of Pieces</label>
-						<div className='input-group'>
+						<div className={singlesClassName}>
 							<span className='input-group-addon'>1</span>
 							<input value={this.state.filter_singles} onChange={this.singlesFilterChanged} className='form-control' type='number'/>
 						</div>
-						<div className='input-group'>
+						<div className={doublesClassName}>
 							<span className='input-group-addon'>2</span>
 							<input value={this.state.filter_doubles} onChange={this.doublesFilterChanged} className='form-control' type='number'/>
 						</div>
-						<div className='input-group'>
+						<div className={triplesClassName}>
 							<span className='input-group-addon'>3</span>
 							<input value={this.state.filter_triples} onChange={this.triplesFilterChanged} className='form-control' type='number'/>
 						</div>
@@ -44,6 +49,11 @@ var SearchGames = React.createClass({
 	},
 	onSubmit: function (e) {
 		e.preventDefault();
+		if (!($.isNumeric(this.state.filter_singles) &&
+			$.isNumeric(this.state.filter_doubles) &&
+			$.isNumeric(this.state.filter_triples))) {
+			return;
+		}
 		this.props.didSubmit({
 			title: this.state.filter_title,
 			author: this.state.filter_author,
