@@ -30,15 +30,20 @@ var NavigationStatelessElements = React.createClass({
 		NavigationStore.removeChangeListener(this.onNavigationStateChange);
 	},
 	render: function () {
+		/* Checking if either of the element should render as active */
 		var component = this;
 		var staticLinks = links.map(function (link) {
 			var isActive = (link.destination === component.state.activeDestination);
 			return <ListLinkElement isActive={isActive} key={link.id} displayText={link.displayText} destination={link.destination}/>;
 		});
+		var imgStyle = {
+			'maxWidth': '100%',
+			'maxHeight': '100%'
+		};
 		return (
 			<div>
 				<div className='navbar-header'>
-					<a className='navbar-brand' href='/'>Magination</a>
+					<a className='navbar-brand' href='/'><img style={imgStyle} src='public/magination-logo.png' /></a>
 				</div>
 				<ul className='nav navbar-nav'>
 					{staticLinks}
