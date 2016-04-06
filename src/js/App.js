@@ -22,12 +22,10 @@ var App = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
-				<div className='container'>
-					<Menu></Menu>
-					<StatusBar />
-					<div className='row'>{this.props.children}</div>
-				</div>
+			<div className='container'>
+				<Menu></Menu>
+				<StatusBar />
+				<div className='row'>{this.props.children}</div>
 			</div>
 		);
 	}
