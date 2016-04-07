@@ -55,7 +55,12 @@ var BrowseGames = React.createClass({
 			<div className='col-md-12'>
 				<div className='col-md-9'>
 					<h2>Game List</h2>
-					<Griddle columns={['title', 'shortDescription', 'owner']} resultsPerPage='10' showFilter='true' results={this.state.games} columnMetadata={metaData}/>
+					<Griddle
+						columns={['title', 'shortDescription', 'owner']}
+						resultsPerPage='10' showFilter='true'
+						results={this.state.games}
+						columnMetadata={metaData}
+					/>
 				</div>
 				<div className='col-md-3'>
 					<SearchGames didSubmit={this.didSubmitSearchFilters}/>

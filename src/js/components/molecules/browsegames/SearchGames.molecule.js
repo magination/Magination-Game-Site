@@ -28,7 +28,7 @@ var SearchGames = React.createClass({
 						<input id='searchauthor' className='form-control' onChange={this.authorSearchChanged} value={this.state.filter_author} type='text' placeholder='Author'/>
 					</div>
 					<div className='form-group'>
-						<label className='control-label'>Minimum Amount of Pieces</label>
+						<label className='control-label'>Maximum Amount of Pieces</label>
 						<div className={singlesClassName}>
 							<span className='input-group-addon'>1</span>
 							<input value={this.state.filter_singles} onChange={this.singlesFilterChanged} className='form-control' type='number'/>
