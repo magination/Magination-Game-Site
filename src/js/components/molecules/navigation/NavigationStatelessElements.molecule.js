@@ -4,22 +4,21 @@ var NavigationStore = require('../../../stores/NavigationStore');
 
 var ListLinkElement = require('../../atoms/ListLinkElement.atom');
 
-var links = [
-	{
-		id: 0,
-		displayText: 'Upload Game',
-		destination: '/upload'
-	},
-	{
-		id: 1,
-		displayText: 'Browse Games',
-		destination: '/browse'
-	}
-];
-
 var NavigationStatelessElements = React.createClass({
 	getInitialState: function () {
 		return {
+			staticlinks: [
+				{
+					id: 0,
+					displayText: 'Upload Game',
+					destination: '/upload'
+				},
+				{
+					id: 1,
+					displayText: 'Browse Games',
+					destination: '/browse'
+				}
+			],
 			activeDestination: NavigationStore.getNavigationState().currentPath
 		};
 	},
@@ -32,7 +31,7 @@ var NavigationStatelessElements = React.createClass({
 	render: function () {
 		/* Checking if either of the element should render as active */
 		var component = this;
-		var staticLinks = links.map(function (link) {
+		var staticLinks = this.state.staticlinks.map(function (link) {
 			var isActive = (link.destination === component.state.activeDestination);
 			return <ListLinkElement isActive={isActive} key={link.id} displayText={link.displayText} destination={link.destination}/>;
 		});
