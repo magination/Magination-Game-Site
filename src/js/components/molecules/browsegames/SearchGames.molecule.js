@@ -1,5 +1,18 @@
 var React = require('react');
 
+var Button = require('react-bootstrap').Button;
+var Input = require('react-bootstrap').Input;
+
+function isNumericAndNotNegative (value) {
+	if (!$.isNumeric(value)) {
+		return false;
+	}
+	if (value < 0) {
+		return false;
+	}
+	return true;
+}
+
 var SearchGames = React.createClass({
 	getInitialState: function () {
 		return {
@@ -8,41 +21,22 @@ var SearchGames = React.createClass({
 			filter_singles: '0',
 			filter_doubles: '0',
 			filter_triples: '0',
-			feedbackClass: 'has-success'
+			singlesBsStyle: 'success',
+			doublesBsStyle: 'success',
+			triplesBsStyle: 'success'
 		};
 	},
 	render: function () {
-		var singlesClassName = ($.isNumeric(this.state.filter_singles)) ? 'input-group has-success' : 'input-group has-error';
-		var doublesClassName = ($.isNumeric(this.state.filter_doubles)) ? 'input-group has-success' : 'input-group has-error';
-		var triplesClassName = ($.isNumeric(this.state.filter_triples)) ? 'input-group has-success' : 'input-group has-error';
 		return (
 			<div>
 				<h2>Search Filters</h2>
 				<form onSubmit={this.onSubmit}>
-					<div className='form-group'>
-						<label htmlFor='searchtitle' >Title</label>
-						<input id='searchtitle' className='form-control' onChange={this.titleSearchChanged} value={this.state.filter_title} type='text' placeholder='Title'/>
-					</div>
-					<div className='form-group'>
-						<label htmlFor='searchauthor'>Author</label>
-						<input id='searchauthor' className='form-control' onChange={this.authorSearchChanged} value={this.state.filter_author} type='text' placeholder='Author'/>
-					</div>
-					<div className='form-group'>
-						<label className='control-label'>Maximum Amount of Pieces</label>
-						<div className={singlesClassName}>
-							<span className='input-group-addon'>1</span>
-							<input value={this.state.filter_singles} onChange={this.singlesFilterChanged} className='form-control' type='number'/>
-						</div>
-						<div className={doublesClassName}>
-							<span className='input-group-addon'>2</span>
-							<input value={this.state.filter_doubles} onChange={this.doublesFilterChanged} className='form-control' type='number'/>
-						</div>
-						<div className={triplesClassName}>
-							<span className='input-group-addon'>3</span>
-							<input value={this.state.filter_triples} onChange={this.triplesFilterChanged} className='form-control' type='number'/>
-						</div>
-					</div>
-					<button type='submit' className='btn btn-default'>Search</button>
+					<Input type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
+					<Input type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
+					<Input bsStyle={this.state.singlesBsStyle} type='number' label='Maximum Pieces' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1'></Input>
+					<Input bsStyle={this.state.doublesBsStyle} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore='2'></Input>
+					<Input bsStyle={this.state.triplesBsStyle} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore='3'></Input>
+					<Button type='submit'>Search</Button>
 				</form>
 			</div>
 		);
@@ -73,18 +67,34 @@ var SearchGames = React.createClass({
 		});
 	},
 	singlesFilterChanged: function (e) {
+		var style = 'success';
+		if (!isNumericAndNotNegative(e.target.value)) {
+			style = 'error';
+		}
 		this.setState({
-			filter_singles: e.target.value
+			filter_singles: e.target.value,
+			singlesBsStyle: style
 		});
 	},
+
 	doublesFilterChanged: function (e) {
+		var style = 'success';
+		if (!isNumericAndNotNegative(e.target.value)) {
+			style = 'error';
+		}
 		this.setState({
-			filter_doubles: e.target.value
+			filter_doubles: e.target.value,
+			doublesBsStyle: style
 		});
 	},
 	triplesFilterChanged: function (e) {
+		var style = 'success';
+		if (!isNumericAndNotNegative(e.target.value)) {
+			style = 'error';
+		}
 		this.setState({
-			filter_triples: e.target.value
+			filter_triples: e.target.value,
+			triplesBsStyle: style
 		});
 	}
 });
