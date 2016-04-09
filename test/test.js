@@ -28,7 +28,7 @@ describe('General', function () {
 		var routerComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'container')[0];
 		this.routerComponent = routerComponent;
 	});
-	it('React container must not be undefined, will mean it mounted', function () {
+	it('React container must not be undefined, means it mounted', function () {
 		assert(this.routerComponent !== undefined);
 	});
 });
@@ -49,8 +49,9 @@ describe('ListLinkElement(shallow)', function () {
 	before('Rendering Components', function () {
 	});
 	shallowRenderer.render(React.createElement(ListElement));
-	var LinkListElement = shallowRenderer.getRenderOutput();
+	var ListLinkElement = shallowRenderer.getRenderOutput();
 	it('ListLinkElement should be of type <li>, it is used in a listing environment', function () {
-		assert(LinkListElement.type === 'li');
+		assert(ListLinkElement.type === 'li');
+		console.log(ListLinkElement.props);
 	});
 });

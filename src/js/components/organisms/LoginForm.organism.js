@@ -5,6 +5,10 @@ var FeedbackAction = require('../../actions/FeedbackAction');
 var URLS = require('../../config/config').urls;
 var NavigationAction = require('../../actions/NavigationAction');
 
+var Input = require('react-bootstrap').Input;
+var Button = require('react-bootstrap').Button;
+var Col = require('react-bootstrap').Col;
+
 var LoginForm = React.createClass({
 	getInitialState: function () {
 		return {
@@ -12,27 +16,27 @@ var LoginForm = React.createClass({
 			password: ''
 		};
 	},
-	handleUsernameChange: function (e) {
+	onUsernameChange: function (e) {
 		this.setState({
 			username: e.target.value
 		});
 	},
-	handlePasswordChange: function (e) {
+	onPasswordChange: function (e) {
 		this.setState({
 			password: e.target.value
 		});
 	},
 	render: function () {
 		return (
-			<div className='col-md-4 col-md-offset-4'>
-				<form className='form-signin' onSubmit={this.onSubmitForm}>
-					<h2 className='form-signin-heading'>Please sign in</h2>
-					<label htmlFor='inputEmail' className='sr-only'>Username/Email</label>
-					<input ref='usernameInput' value={this.state.username} onChange={this.handleUsernameChange} type='text' id='inputEmail' className='form-control' placeholder='Username / Email' required autofocus/>
-					<label htmlFor='inputPassword' className='sr-only'>Password</label>
-					<input value={this.state.password} onChange={this.handlePasswordChange} type='password' id='inputPassword' className='form-control' placeholder='Password' required/>
-					<button className='btn btn-lg btn-primary btn-block' type='submit'>Login </button>
-				</form>
+			<div>
+				<Col md={4} mdOffset={4}>
+					<form className='form-signin' onSubmit={this.onSubmitForm}>
+						<h2 className='form-signin-heading'>Please sign in</h2>
+						<Input type='text' label='Username / Email' placeholder='Username / Email' onChange={this.onUsernameChange}/>
+						<Input type='password' label='Password' placeholder='Password' onChange={this.onPasswordChange}/>
+						<Button type='submit'>Log in</Button>
+					</form>
+				</Col>
 			</div>
 		);
 	},

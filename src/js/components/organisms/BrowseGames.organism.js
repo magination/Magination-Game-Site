@@ -5,6 +5,7 @@ var URLS = require('../../config/config').urls;
 
 var Griddle = require('griddle-react');
 var SearchGames = require('../molecules/browsegames/SearchGames.molecule');
+var Col = require('react-bootstrap').Col;
 
 var CustomTest = React.createClass({
 	render: function () {
@@ -52,19 +53,21 @@ var BrowseGames = React.createClass({
 	},
 	render: function () {
 		return (
-			<div className='col-md-12'>
-				<div className='col-md-9'>
-					<h2>Game List</h2>
-					<Griddle
-						columns={['title', 'shortDescription', 'owner']}
-						resultsPerPage='10' showFilter='true'
-						results={this.state.games}
-						columnMetadata={metaData}
-					/>
-				</div>
-				<div className='col-md-3'>
-					<SearchGames didSubmit={this.didSubmitSearchFilters}/>
-				</div>
+			<div>
+				<Col md={12}>
+					<Col md={9}>
+						<h2>Game List</h2>
+						<Griddle
+							columns={['title', 'shortDescription', 'owner']}
+							resultsPerPage='10' showFilter='true'
+							results={this.state.games}
+							columnMetadata={metaData}
+						/>
+					</Col>
+					<Col md={3}>
+						<SearchGames didSubmit={this.didSubmitSearchFilters}/>
+					</Col>
+				</Col>
 			</div>
 		);
 	},
