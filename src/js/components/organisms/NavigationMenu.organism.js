@@ -42,7 +42,7 @@ var Menu = React.createClass({
 				<Navbar fixedTop activeKey={this.state.activeKey}>
 					<Navbar.Header>
 						<Navbar.Brand>
-							<a href='/' ><img src='/public/magination-logo.png'/></a>
+							<a href='/' ><img src='/public/img/magination-logo.png'/></a>
 						</Navbar.Brand>
 					</Navbar.Header>
 					<Nav activeKey={this.state.currentActive}>
