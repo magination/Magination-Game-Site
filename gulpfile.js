@@ -36,9 +36,10 @@ gulp.task('build', ['lint'], function () {
 
 gulp.task('watch', function () {
 	gulp.watch('src/**/*.js', ['build']);
+	gulp.watch('src/img/**', ['moveDepencies']);
 });
 
-gulp.task('server', ['clean', 'build'], function () {
+gulp.task('server', ['clean', 'build', 'moveDepencies'], function () {
 	// compile('./src/js/RenderApp.js', './build');
 	nodemon({
 		script: './server/server.js',
@@ -64,6 +65,11 @@ gulp.task('clean', function () {
 gulp.task('test', function () {
 	/* test is not yet implemented */
 	// compile('./src/js/App', './test');
+});
+
+gulp.task('moveDepencies', function () {
+	return gulp.src('./src/img/**')
+		.pipe(gulp.dest('./build/img/'));
 });
 
 gulp.task('default', ['watch', 'server'], function () {

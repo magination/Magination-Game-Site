@@ -20,6 +20,11 @@ function getNavigationState () {
 	return NavigationStore.getNavigationState();
 }
 
+var imgStyle = {
+	'maxWidth': '100%',
+	'maxHeight': '100%'
+};
+
 var Menu = React.createClass({
 	getInitialState: function () {
 		return {
@@ -42,7 +47,7 @@ var Menu = React.createClass({
 				<Navbar fixedTop activeKey={this.state.activeKey}>
 					<Navbar.Header>
 						<Navbar.Brand>
-							<a href='/' ><img src='/public/img/magination-logo.png'/></a>
+							<a href='/' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>
 						</Navbar.Brand>
 					</Navbar.Header>
 					<Nav activeKey={this.state.currentActive}>
