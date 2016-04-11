@@ -31,6 +31,7 @@ var SearchGames = React.createClass({
 			<div>
 				<h2>Search Filters</h2>
 				<form onSubmit={this.onSubmit}>
+					<Input type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
 					<Input type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
 					<Input type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
 					<Input bsStyle={this.state.singlesBsStyle} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1' label='Maximum Pieces'></Input>
@@ -48,13 +49,25 @@ var SearchGames = React.createClass({
 			$.isNumeric(this.state.filter_triples))) {
 			return;
 		}
-		this.props.didSubmit({
-			title: this.state.filter_title,
-			author: this.state.filter_author,
-			singles: this.state.filter_singles,
-			doubles: this.state.filter_doubles,
-			triples: this.state.filter_triples
-		});
+
+		var search_filter = {};
+		if (this.state.filter_title !== '') {
+			search_filter['title'] = this.state.filter_title;
+		}
+		if (this.state.filter_author !== '') {
+			search_filter['author'] = this.state.filter_author;
+		}
+		if (this.state.filter_singles !== '' && this.state.filter_singles !== '0') {
+			search_filter['singles'] = this.state.filter_singles;
+		}
+		if (this.state.filter_doubles !== '' && this.state.filter_doubles !== '0') {
+			search_filter['doubles'] = this.state.filter_doubles;
+		}
+		if (this.state.filter_triples !== '' && this.state.filter_triples !== '0') {
+			search_filter['triple'] = this.state.filter_triples;
+		}
+
+		this.props.didSubmit(search_filter);
 	},
 	titleSearchChanged: function (e) {
 		this.setState({

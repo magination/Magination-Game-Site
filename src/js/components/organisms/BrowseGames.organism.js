@@ -72,7 +72,7 @@ var BrowseGames = React.createClass({
 		);
 	},
 	didSubmitSearchFilters: function (filter) {
-		console.log(filter);
+		console.log($.param(filter));
 		/* TODO: send request!*/
 	},
 	didRecieveData: function (data) {
