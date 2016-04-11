@@ -17,6 +17,7 @@ var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
 var VerificationSent = require('./components/organisms/VerificationSent.organism');
 var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
+var Game = require('./components/organisms/Game.organism');
 
 var ReactRouter = React.createClass({
 	render: function () {
@@ -30,7 +31,8 @@ var ReactRouter = React.createClass({
 						<Route path='/browse' component={BrowseGames} />
 						<Route path='/confirmation/:id' component={ConfirmEmail} />
 						<Route path='/verificationsent' component={VerificationSent} />
-						<Route path='*' component={BrowseGames} />/*TODO make 404 component*/
+						<Route path='/game/:id' component={Game} />
+						<Route path='*' component={BrowseGames} />
 					</Route>
 				</Router>
 			</div>

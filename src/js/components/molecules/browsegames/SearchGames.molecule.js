@@ -55,9 +55,9 @@ var SearchGames = React.createClass({
 			search_filter['title'] = this.state.filter_title;
 		}
 		if (this.state.filter_author !== '') {
-			search_filter['author'] = this.state.filter_author;
+			search_filter['owner'] = this.state.filter_author;
 		}
-		if (this.state.filter_singles !== '' && this.state.filter_singles !== '0') {
+		if (this.state.filter_singles !== '' && this.state.filter_singles > 0) {
 			search_filter['singles'] = this.state.filter_singles;
 		}
 		if (this.state.filter_doubles !== '' && this.state.filter_doubles !== '0') {
@@ -89,7 +89,6 @@ var SearchGames = React.createClass({
 			singlesBsStyle: style
 		});
 	},
-
 	doublesFilterChanged: function (e) {
 		var style = 'success';
 		if (!isNumericAndNotNegative(e.target.value)) {

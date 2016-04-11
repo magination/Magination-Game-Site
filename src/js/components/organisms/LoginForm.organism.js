@@ -17,8 +17,7 @@ var LoginForm = React.createClass({
 		};
 	},
 	componentDidMount: function () {
-		console.log(this.refs.usernameEntry.refs.input);
-		this.refs.usernameEntry;
+		this.refs.usernameEntry.refs.input.focus();
 	},
 	render: function () {
 		return (

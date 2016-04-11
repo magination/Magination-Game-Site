@@ -48,7 +48,9 @@ var BrowseGames = React.createClass({
 			type: 'GET',
 			url: URLS.api.games,
 			dataType: 'json',
-			success: this.didRecieveData /* TODO needs error handling*/
+			statusCode: {
+				200: this.didReceiveData
+			}
 		});
 	},
 	render: function () {
@@ -72,10 +74,17 @@ var BrowseGames = React.createClass({
 		);
 	},
 	didSubmitSearchFilters: function (filter) {
-		console.log($.param(filter));
-		/* TODO: send request!*/
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.games + '?' + $.param(filter),
+			dataType: 'json',
+			statusCode: {
+				200: this.didReceiveData
+			}
+		});
 	},
-	didRecieveData: function (data) {
+	didReceiveData: function (data) {
+		console.log(data);
 		this.setState({
 			games: data
 		});
