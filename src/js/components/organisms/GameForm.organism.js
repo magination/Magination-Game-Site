@@ -19,8 +19,8 @@ var GameForm = React.createClass({
 				<Col md={10} mdOffset={1}>
 					<h2 className='text-center form-uploadGame-heading'>Upload game</h2>
 					<form className='form-signin' onSubmit={this.postGame}>
-						<Input type='text' label='Title' placeholder='Title' onChange={this.onTitleChanged}/>
-						<Input type='textarea' label='Description' placeholder='How is your game played?' onChange={this.onDescriptionChanged}/>
+						<Input value={this.state.title} type='text' label='Title' placeholder='Title' onChange={this.onTitleChanged}/>
+						<Input value={this.state.description} type='textarea' label='Description' placeholder='How is your game played?' onChange={this.onDescriptionChanged}/>
 						<Button type='submit'>Upload</Button>
 					</form>
 				</Col>

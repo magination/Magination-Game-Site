@@ -26,6 +26,23 @@ var RegisterForm = React.createClass({
 			bsStylePasswordConfirm: 'error'
 		};
 	},
+	render: function () {
+		return (
+			<div>
+				<Col md={4} mdOffset={4}>
+					<form className='form-signin' onSubmit={this.onSubmitForm}>
+						<h2 className='form-signin-heading'>Register</h2>
+						<Input value={this.state.username} bsStyle={this.state.bsStyleUsername} label='Username' type='text' placeholder='Enter your username' onChange={this.onUsernameEntryChange} hasFeedback/>
+						<Input value={this.state.email} bsStyle={this.state.bsStyleEmail} label='Email' type='text' placeholder='Enter your email address' onChange={this.onEmailEntryChange} hasFeedback/>
+						<Input value={this.state.emailConfirm} bsStyle={this.state.bsStyleEmailConfirm} type='text' placeholder='Confirm your email address' onChange={this.onEmailConfirmEntryChange} hasFeedback/>
+						<Input value={this.state.password} bsStyle={this.state.bsStylePassword} type='password' label='Password' placeholder='Password' onChange={this.onPasswordEntryChange} hasFeedback/>
+						<Input value={this.state.passwordConfirm} bsStyle={this.state.bsStylePasswordConfirm} type='password' placeholder='Confirm Password' onChange={this.onPasswordConfirmEntryChange} hasFeedback/>
+						<Button type='submit'>Register</Button>
+					</form>
+				</Col>
+			</div>
+		);
+	},
 	onEmailEntryChange: function (e) {
 		/* TODO: CHECK IF EMAIL EXISTS (maybe on unfocus instead)*/
 		var successStatus = 'success';
@@ -77,23 +94,6 @@ var RegisterForm = React.createClass({
 			passwordConfirm: e.target.value,
 			bsStylePasswordConfirm: successStatus
 		});
-	},
-	render: function () {
-		return (
-			<div>
-				<Col md={4} mdOffset={4}>
-					<form className='form-signin' onSubmit={this.onSubmitForm}>
-						<h2 className='form-signin-heading'>Register</h2>
-						<Input bsStyle={this.state.bsStyleUsername} label='Username' type='text' placeholder='Enter your username' onChange={this.onUsernameEntryChange} hasFeedback/>
-						<Input bsStyle={this.state.bsStyleEmail} label='Email' type='text' placeholder='Enter your email address' onChange={this.onEmailEntryChange} hasFeedback/>
-						<Input bsStyle={this.state.bsStyleEmailConfirm} type='text' placeholder='Confirm your email address' onChange={this.onEmailConfirmEntryChange} hasFeedback/>
-						<Input bsStyle={this.state.bsStylePassword} type='password' label='Password' placeholder='Password' onChange={this.onPasswordEntryChange} hasFeedback/>
-						<Input bsStyle={this.state.bsStylePasswordConfirm} type='password' placeholder='Confirm Password' onChange={this.onPasswordConfirmEntryChange} hasFeedback/>
-						<Button type='submit'>Register</Button>
-					</form>
-				</Col>
-			</div>
-		);
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();

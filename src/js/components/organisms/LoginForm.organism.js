@@ -32,8 +32,8 @@ var LoginForm = React.createClass({
 				<Col md={4} mdOffset={4}>
 					<form className='form-signin' onSubmit={this.onSubmitForm}>
 						<h2 className='form-signin-heading'>Please sign in</h2>
-						<Input type='text' label='Username / Email' placeholder='Username / Email' onChange={this.onUsernameChange}/>
-						<Input type='password' label='Password' placeholder='Password' onChange={this.onPasswordChange}/>
+						<Input value={this.state.username} type='text' label='Username / Email' placeholder='Username / Email' onChange={this.onUsernameChange}/>
+						<Input value={this.state.password} type='password' label='Password' placeholder='Password' onChange={this.onPasswordChange}/>
 						<Button type='submit'>Log in</Button>
 					</form>
 				</Col>
@@ -53,7 +53,8 @@ var LoginForm = React.createClass({
 			dataType: 'json',
 			statusCode: {
 				200: this.onLoginSuccessResponse,
-				401: this.onLoginUnauthorizedResponse
+				401: this.onLoginUnauthorizedResponse,
+				404: this.onLoginNotFoundResponse
 			}
 		});
 	},
@@ -85,6 +86,12 @@ var LoginForm = React.createClass({
 		});
 		this.setState({
 			password: ''
+		});
+	},
+	onLoginNotFoundResponse: function (data) {
+		FeedbackAction.displayErrorMessage({
+			header: 'No connection!',
+			message: 'It seems you do not have a connection to the login server, are you sure you are connected to the internet?'
 		});
 	},
 	onGetUserSuccessResponse: function (data) {

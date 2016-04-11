@@ -32,11 +32,11 @@ var SearchGames = React.createClass({
 				<h2>Search Filters</h2>
 				<form onSubmit={this.onSubmit}>
 					<Input type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
-					<Input type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
-					<Input type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
-					<Input bsStyle={this.state.singlesBsStyle} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1' label='Maximum Pieces'></Input>
-					<Input bsStyle={this.state.doublesBsStyle} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore='2'></Input>
-					<Input bsStyle={this.state.triplesBsStyle} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore='3'></Input>
+					<Input value={this.state.filter_title} type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
+					<Input value={this.state.filter_author} type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
+					<Input value={this.state.filter_singles} bsStyle={this.state.singlesBsStyle} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1' label='Maximum Pieces'></Input>
+					<Input value={this.state.filter_doubles} bsStyle={this.state.doublesBsStyle} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore='2'></Input>
+					<Input value={this.state.filter_triples} bsStyle={this.state.triplesBsStyle} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore='3'></Input>
 					<Button type='submit'>Search</Button>
 				</form>
 			</div>
