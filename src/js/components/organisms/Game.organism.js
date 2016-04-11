@@ -1,11 +1,14 @@
 var React = require('react');
 
 var Media = require('react-bootstrap').Media;
+var Input = require('react-bootstrap').Input;
+var Button = require('react-bootstrap').Button;
 // var GameRating = require('GameRating');
 
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
+			game: this.props.game,
 			comments: [
 				{
 					username: 'Simo',
@@ -36,9 +39,26 @@ var Game = React.createClass({
 				<strong>Description: </strong>{this.props.description}
 				<strong>Author: </strong>{this.props.owner}
 				<h3>Comments</h3>
-				{comments}
+				<form onSubmit={this.onSubmitComment}>
+					<Input type='textarea' value={this.state.commentText} onChange={this.onCommentTextChange} />
+					<Button type='submit'>Comment</Button>
+				</form>
+				<Media.List>
+					<Media.ListItem>
+						{comments}
+					</Media.ListItem>
+				</Media.List>
 			</div>
 		);
+	},
+	onSubmitComment: function (e) {
+		e.preventDefault();
+		console.log(this.state.commentText);
+	},
+	onCommentTextChange: function (e) {
+		this.setState({
+			commentText: e.target.value
+		});
 	}
 });
 module.exports = Game;
