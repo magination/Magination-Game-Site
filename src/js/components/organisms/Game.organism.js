@@ -15,9 +15,11 @@ var Game = React.createClass({
 		};
 	},
 	render: function () {
+		var count = -1;
 		var comments = this.state.comments.map(function (comment) {
+			count++;
 			return (
-				<Media>
+				<Media key={count}>
 					<Media.Left>
 						<img width={64} height={64} src='/public/img/magination-logo.png' alt='Image'/>
 					</Media.Left>
@@ -33,6 +35,7 @@ var Game = React.createClass({
 				<strong>Title: </strong>{this.props.title}
 				<strong>Description: </strong>{this.props.description}
 				<strong>Author: </strong>{this.props.owner}
+				<h3>Comments</h3>
 				{comments}
 			</div>
 		);

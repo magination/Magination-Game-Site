@@ -26,13 +26,16 @@ var RegisterForm = React.createClass({
 			bsStylePasswordConfirm: 'error'
 		};
 	},
+	componentDidMount: function () {
+		this.refs.usernameEntry.refs.input.focus();
+	},
 	render: function () {
 		return (
 			<div>
 				<Col md={4} mdOffset={4}>
 					<form className='form-signin' onSubmit={this.onSubmitForm}>
 						<h2 className='form-signin-heading'>Register</h2>
-						<Input value={this.state.username} bsStyle={this.state.bsStyleUsername} label='Username' type='text' placeholder='Enter your username' onChange={this.onUsernameEntryChange} hasFeedback/>
+						<Input ref='usernameEntry' value={this.state.username} bsStyle={this.state.bsStyleUsername} label='Username' type='text' placeholder='Enter your username' onChange={this.onUsernameEntryChange} hasFeedback/>
 						<Input value={this.state.email} bsStyle={this.state.bsStyleEmail} label='Email' type='text' placeholder='Enter your email address' onChange={this.onEmailEntryChange} hasFeedback/>
 						<Input value={this.state.emailConfirm} bsStyle={this.state.bsStyleEmailConfirm} type='text' placeholder='Confirm your email address' onChange={this.onEmailConfirmEntryChange} hasFeedback/>
 						<Input value={this.state.password} bsStyle={this.state.bsStylePassword} type='password' label='Password' placeholder='Password' onChange={this.onPasswordEntryChange} hasFeedback/>

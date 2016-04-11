@@ -26,12 +26,15 @@ var SearchGames = React.createClass({
 			triplesBsStyle: 'success'
 		};
 	},
+	componentDidMount: function () {
+		this.refs.searchEntry.refs.input.focus();
+	},
 	render: function () {
 		return (
 			<div>
 				<h2>Search Filters</h2>
 				<form onSubmit={this.onSubmit}>
-					<Input type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
+					<Input ref='searchEntry' type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
 					<Input value={this.state.filter_title} type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
 					<Input value={this.state.filter_author} type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
 					<Input value={this.state.filter_singles} bsStyle={this.state.singlesBsStyle} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1' label='Maximum Pieces'></Input>
