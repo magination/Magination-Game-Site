@@ -33,6 +33,7 @@ FeedbackStore.dispatchToken = Dispatcher.register(function (action) {
 			header: action.header,
 			message: action.message
 		};
+		FeedbackStore.emitChange();
 		break;
 	case FeedbackConstants.REMOVE_MESSAGE:
 		_feedback = {
@@ -40,16 +41,19 @@ FeedbackStore.dispatchToken = Dispatcher.register(function (action) {
 			header: '',
 			message: ''
 		};
+		FeedbackStore.emitChange();
 		break;
 	case FeedbackConstants.DISPLAY_WARNING:
 		_feedback.statusType = action.statusType;
 		_feedback.header = action.header;
 		_feedback.message = action.message;
+		FeedbackStore.emitChange();
 		break;
 	case FeedbackConstants.DISPLAY_ERROR:
 		_feedback.statusType = action.statusType;
 		_feedback.header = action.header;
 		_feedback.message = action.message;
+		FeedbackStore.emitChange();
 		break;
 	case FeedbackConstants.DISPLAY_SERVER_ERROR:
 		_feedback = {
@@ -57,9 +61,9 @@ FeedbackStore.dispatchToken = Dispatcher.register(function (action) {
 			header: 'Server Error!',
 			message: 'There was an error handling your request, please try again later.'
 		};
+		FeedbackStore.emitChange();
 		break;
 	}
-	FeedbackStore.emitChange();
 });
 
 module.exports = FeedbackStore;

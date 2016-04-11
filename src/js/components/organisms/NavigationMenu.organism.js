@@ -44,7 +44,7 @@ var Menu = React.createClass({
 		var navigationStateElement = this.makeNavigationStatefulElement();
 		return (
 			<div>
-				<Navbar fixedTop activeKey={this.state.activeKey}>
+				<Navbar fixedTop activeKey={this.state.currentActive}>
 					<Navbar.Header>
 						<Navbar.Brand>
 							<a href='/' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>

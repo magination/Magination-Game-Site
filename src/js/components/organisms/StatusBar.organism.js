@@ -1,6 +1,7 @@
 var React = require('react');
 
 var FeedbackStore = require('../../stores/FeedbackStore');
+var FeedbackAction = require('../../actions/FeedbackAction');
 
 function getFeedback () {
 	return FeedbackStore.getFeedback();
@@ -30,9 +31,7 @@ var StatusBar = React.createClass({
 		);
 	},
 	onCloseFeedbackClick: function () {
-		this.setState({
-			statusType: 'hide'
-		});
+		FeedbackAction.removeMessage();
 	},
 	onFeedbackChange: function () {
 		this.setState(getFeedback());
