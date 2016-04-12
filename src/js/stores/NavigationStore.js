@@ -83,8 +83,8 @@ var NavigationStore = _.extend({}, EventEmitter.prototype, {
 NavigationStore.dispatchToken = Dispatcher.register(function (action) {
 	switch (action.actionType) {
 	case NavigationConstants.NAVIGATE:
-		pushDestination(action.destination);
 		_navigationState.data = action.navigationData;
+		pushDestination(action.destination);
 		// NavigationStore.emitChange();
 		break;
 	case NavigationConstants.NAVIGATE_PREVIOUS:

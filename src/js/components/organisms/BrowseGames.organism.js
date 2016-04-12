@@ -27,8 +27,10 @@ var TitleColumn = React.createClass({
 	},
 	didClick: function () {
 		NavigationAction.navigate({
-			destination: '/game/' + this.state.games[0]._id,
-			data: this.props.data
+			destination: '/game/' + this.props.rowData._id,
+			data: {
+				game: this.props.rowData
+			}
 		});
 	}
 });

@@ -9,20 +9,25 @@ var Button = require('react-bootstrap').Button;
 // var GameRating = require('GameRating');
 
 function shouldRequestGame () {
-	var data = NavigationStore.getNavigationState.data;
-	if (data === undefined) {
+	var data = NavigationStore.getNavigationState().data;
+	if (data === null || data === undefined) {
 		return true;
 	}
 	if (data.game === undefined) {
-
+		return true;
 	}
 	return false;
+}
+
+function getLastUrlId () {
+	var url = NavigationStore.getNavigationState().currentPath;
+	/* returns the id(last element) from the current link*/
+	return url.split('/').slice(-1)[0];
 }
 
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
-			game: null,
 			comments: [
 				{
 					username: 'Simo',
@@ -31,11 +36,11 @@ var Game = React.createClass({
 			]
 		};
 	},
-	componentWillMount: function () {
+	componentDidMount: function () {
 		if (shouldRequestGame()) {
 			$.ajax({
 				type: 'GET',
-				url: URLS.api.games + '/' + this.props.data,
+				url: URLS.api.games + '/' + getLastUrlId(),
 				dataType: 'json',
 				statusCode: {
 					200: this.onGetGameSuccessResponse,
@@ -49,22 +54,21 @@ var Game = React.createClass({
 		else {
 			/* shouldRequestGame checks if game is defined*/
 			this.setState({
-				game: NavigationStore.getNavigationState.data.game
+				game: NavigationStore.getNavigationState().data.game
+			});
+			$.ajax({
+				type: 'GET',
+				url: URLS.api.games + '/' + NavigationStore.getNavigationState().data.game._id + '/comments',
+				dataType: 'json',
+				statusCode: {
+					200: this.onGetCommentsSuccessResponse,
+					404: this.onGetCommentsNotFoundResponse,
+					500: function () {
+						alert('Server Error: see console');
+					}
+				}
 			});
 		}
-
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.games + '/' + this.state.game._id + '/comments',
-			dataType: 'json',
-			statusCode: {
-				200: this.onGetCommentsSuccessResponse,
-				404: this.onGetCommentsNotFoundResponse,
-				500: function () {
-					alert('Server Error: see console');
-				}
-			}
-		});
 	},
 	render: function () {
 		var count = -1;
