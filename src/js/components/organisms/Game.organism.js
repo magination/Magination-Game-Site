@@ -2,12 +2,9 @@ var React = require('react');
 
 var NavigationStore = require('../../stores/NavigationStore');
 var URLS = require('../../config/config.js').urls;
-var LoginStore = require('../../stores/LoginStore');
 
-var Media = require('react-bootstrap').Media;
-var Input = require('react-bootstrap').Input;
-var Button = require('react-bootstrap').Button;
-// var GameRating = require('GameRating');
+var Comments = require('../molecules/Comments.molecule');
+var RateGame = require('../molecules/browsegames/RateGame.molecule');
 
 function shouldRequestGame () {
 	var data = NavigationStore.getNavigationState().data;
@@ -29,15 +26,18 @@ function getLastUrlId () {
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
-			comments: [
-				{
-					username: 'Simo',
-					commentText: 'Dette er sykt bra jobba gutta!'
-				}
-			]
+			comments: [],
+			game: {
+				owner: {
+					username: ''
+				},
+				mainDescription: '',
+				title: 'Loading ...'
+			}
 		};
 	},
-	componentDidMount: function () {
+	componentWillMount: function () {
+		/* fetch game if it was linked to directly and not from the browse list*/
 		if (shouldRequestGame()) {
 			$.ajax({
 				type: 'GET',
@@ -57,93 +57,26 @@ var Game = React.createClass({
 			this.setState({
 				game: NavigationStore.getNavigationState().data.game
 			});
-			$.ajax({
-				type: 'GET',
-				url: URLS.api.games + '/' + NavigationStore.getNavigationState().data.game._id + '/comments',
-				dataType: 'json',
-				statusCode: {
-					200: this.onGetCommentsSuccessResponse,
-					404: this.onGetCommentsNotFoundResponse,
-					500: function () {
-						alert('Server Error: see console');
-					}
-				}
-			});
 		}
 	},
 	render: function () {
-		var count = -1;
-		var comments = this.state.comments.map(function (comment) {
-			count++;
-			return (
-				<Media key={count}>
-					<Media.Left>
-						<img width={64} height={64} src='/public/img/magination-logo.png' alt='Image'/>
-					</Media.Left>
-					<Media.Body>
-						<Media.Heading>{comment.username}</Media.Heading>
-						<p>{comment.commentText}</p>
-					</Media.Body>
-				</Media>
-			);
-		});
 		return (
 			<div>
-				<strong>Title: </strong>{this.props.title}
-				<strong>Description: </strong>{this.props.description}
-				<strong>Author: </strong>{this.props.owner}
-				<h3>Comments</h3>
-				<form onSubmit={this.onSubmitComment}>
-					<Input type='textarea' value={this.state.commentText} onChange={this.onCommentTextChange} />
-					<Button type='submit'>Comment</Button>
-				</form>
-				<Media.List>
-					<Media.ListItem>
-						{comments}
-					</Media.ListItem>
-				</Media.List>
+				<strong>Title: </strong>{this.state.game.title}
+				<strong>Description: </strong>{this.state.game.mainDescription}
+				<strong>Author: </strong>{this.state.game.owner.username}
+				<RateGame selectedImage='star' unselectedImage='star-empty' maxRating={5}/>
+				<Comments id={this.state.game._id} url={URLS.api.games}/>
 			</div>
 		);
 	},
-	onSubmitComment: function (e) {
-		e.preventDefault();
-		$.ajax({
-			type: 'POST',
-			url: URLS.api.games + '/' + this.state.game._id + '/comments',
-			data: JSON.stringify({
-				commentText: this.state.commentText
-			}),
-			headers: {
-				'Authorization': LoginStore.getToken()
-			},
-			contentType: 'application/json',
-			dataType: 'json',
-			statusCode: {
-				200: this.onCommentSubmitSuccessResponse,
-				401: alert('401'),
-				404: alert('404')
-			}
-		});
-	},
-	onCommentTextChange: function (e) {
-		this.setState({
-			commentText: e.target.value
-		});
-	},
 	onGetGameSuccessResponse: function (data) {
-		console.log(data);
 		this.setState({
 			game: data
 		});
 	},
 	onGetGameNotFoundResponse: function (data) {
-		console.log(data);
-	},
-	onGetCommentsSuccessResponse: function (data) {
-		console.log(data);
-	},
-	onCommentSubmitSuccessResponse: function (data) {
-		console.log(data);
 	}
 });
+
 module.exports = Game;

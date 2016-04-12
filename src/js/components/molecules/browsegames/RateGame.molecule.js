@@ -1,5 +1,5 @@
 var React = require('react');
-var RatingIcon = require('../../atoms/RatingIcon.js');
+var RatingIcon = require('../../atoms/RatingIcon');
 var Col = require('react-bootstrap').Col;
 
 var RateGame = React.createClass({
@@ -18,10 +18,27 @@ var RateGame = React.createClass({
 		var ratingIcons = [];
 		for (var i = 1; i <= this.props.maxRating; i++) {
 			if (this.props.isStatic) {
-				ratingIcons.push(<RatingIcon key={i} selectedImage={this.props.selectedImage} unselectedImage={this.props.unselectedImage} isSelected={this.state.rating > i - 1}/>);
+				ratingIcons.push(
+					<RatingIcon
+						key={i}
+						selectedImage={this.props.selectedImage}
+						unselectedImage={this.props.unselectedImage}
+						isSelected={this.state.rating > i - 1}
+					/>
+				);
 			}
 			else {
-				ratingIcons.push(<RatingIcon key={i} selectedImage={this.props.selectedImage} unselectedImage={this.props.unselectedImage} isSelected={this.state.rating > i - 1} onClick={this.onRatingClicked} onMouseOver={this.onIconHovered.bind(this, i)} onMouseLeave={this.onIconUnhovered}/>);
+				ratingIcons.push(
+					<RatingIcon
+						key={i}
+						selectedImage={this.props.selectedImage}
+						unselectedImage={this.props.unselectedImage}
+						isSelected={this.state.rating > i - 1}
+						onClick={this.onRatingClicked}
+						onMouseOver={this.onIconHovered.bind(this, i)}
+						onMouseLeave={this.onIconUnhovered}
+					/>
+				);
 			}
 		}
 		return (
