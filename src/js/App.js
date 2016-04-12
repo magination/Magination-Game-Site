@@ -1,6 +1,7 @@
 var React = require('react');
 
 var NavigationAction = require('./actions/NavigationAction');
+var LoginAction = require('./actions/LoginAction');
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
@@ -10,6 +11,7 @@ var App = React.createClass({
 		NavigationAction.setCurrentPath({
 			destination: this.props.location.pathname
 		});
+		LoginAction.checkAutoLogin();
 	},
 	componentWillReceiveProps: function (nextProps) {
 		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.

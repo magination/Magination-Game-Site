@@ -63,7 +63,9 @@ var LoginForm = React.createClass({
 	},
 	onLoginSuccessResponse: function (data) {
 		LoginAction.loginSuccess({
-			token: data.token
+			token: data.token,
+			tokenExpires: data.expiresIn,
+			id: data.id
 		});
 		$.ajax({
 			type: 'GET',
