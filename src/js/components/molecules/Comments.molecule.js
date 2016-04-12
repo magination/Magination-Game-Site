@@ -41,9 +41,10 @@ var Comments = React.createClass({
 	},
 	render: function () {
 		var count = 0;
+		var that = this;
 		var comments = this.state.comments.map(function (comment) {
 			count++;
-			return <Comment key={count} comment={comment} />;
+			return <Comment key={count} comment={comment} onDeleteSuccess={that.deleteIdFromState}/>;
 		});
 		return (
 			<div>
@@ -96,9 +97,20 @@ var Comments = React.createClass({
 		});
 	},
 	onCommentSubmitSuccessResponse: function (data) {
-		console.log(data);
 		this.setState({
 			comments: this.state.comments.concat([data])
+		});
+	},
+	deleteIdFromState: function (commentId) {
+		var newState = this.state.comments;
+		$.each(newState, function (i) {
+			if (newState[i]._id === commentId) {
+				newState.splice(i, 1);
+				return false;
+			}
+		});
+		this.setState({
+			comments: newState
 		});
 	}
 });

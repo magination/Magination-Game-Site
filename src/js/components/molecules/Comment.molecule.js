@@ -46,7 +46,7 @@ var Comment = React.createClass({
 					<img width={64} height={64} src='' alt='Profile Pic'/>
 				</Media.Left>
 				<Media.Body>
-					<Media.Heading>{this.state.comment.owner.username} <i>{this.state.comment.createdAt}</i></Media.Heading>
+					<Media.Heading>{this.state.comment.owner.username} <small><i>{getDateSmallFormat(this.state.comment.createdAt)}</i></small></Media.Heading>
 					{MediaBody}
 				</Media.Body>
 				{DeleteEditButton}
@@ -58,10 +58,10 @@ var Comment = React.createClass({
 			editingCommentText: e.target.value
 		});
 	},
-	onDeleteCommentClick: function (commentId) {
+	onDeleteCommentClick: function () {
 		$.ajax({
 			type: 'DELETE',
-			url: this.state.url + '/' + this.state.id + '/comments/' + commentId,
+			url: URLS.api.games + '/' + this.state.comment.game + '/comments/' + this.state.comment._id,
 			headers: {
 				'Authorization': LoginStore.getToken()
 			},
@@ -103,17 +103,7 @@ var Comment = React.createClass({
 		});
 	},
 	onDeleteSuccessResponse: function (data) {
-		console.log(data);
-		var newState = this.state.comments;
-		$.each(newState, function (i) {
-			if (newState[i]._id === data._id) {
-				newState.splice(i, 1);
-				return false;
-			}
-		});
-		this.setState({
-			comments: newState
-		});
+		this.props.onDeleteSuccess(data._id);
 	}
 });
 
@@ -125,6 +115,11 @@ function isThisUser (userId) {
 		return true;
 	}
 	return false;
+}
+
+function getDateSmallFormat (jsondate) {
+	var date = new Date(jsondate);
+	return date.getDate() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getFullYear() + ' - ' + (date.getHours() + 1) + ':' + (date.getMinutes() + 1);
 }
 
 module.exports = Comment;
