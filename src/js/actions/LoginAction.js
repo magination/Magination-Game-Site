@@ -18,7 +18,8 @@ var LoginActions = {
 		}
 		// console.log(data.tokenExpires);
 		// Cookie.save(LoginConstants.COOKIE_TOKEN, data.token, {expires: data.tokenExpires});
-		Cookie.save(LoginConstants.COOKIE_ID, data.id, {expires: data.tokenExpires});
+		// {expires: data.tokenExpires}
+		Cookie.save(LoginConstants.COOKIE_ID, data.id);
 
 		Dispatcher.dispatch({
 			actionType: LoginConstants.LOGIN_SUCCESS,

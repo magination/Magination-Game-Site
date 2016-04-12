@@ -47,7 +47,7 @@ var Comments = React.createClass({
 			return (
 				<Media key={count}>
 					<Media.Left>
-						<img width={64} height={64} src='/public/img/magination-logo.png' alt='Profile Pic'/>
+						<img width={64} height={64} src='' alt='Profile Pic'/>
 					</Media.Left>
 					<Media.Body>
 						<Media.Heading>{comment.owner.username}</Media.Heading>
@@ -63,7 +63,12 @@ var Comments = React.createClass({
 			<div>
 				<h3>Comments</h3>
 				<form onSubmit={this.onSubmitComment}>
-					<Input type='textarea' value={this.state.commentText} onChange={this.onCommentTextChange} />
+					<Input
+						type='text' value={this.state.commentText}
+						onChange={this.onCommentTextChange}
+						disabled={!LoginStore.getLoginState()}
+						placeholder={LoginStore.getLoginState() ? 'Write a comment' : 'You need to be logged in to comment'}
+					/>
 					<Button type='submit'>Comment</Button>
 				</form>
 				{comments}
@@ -72,6 +77,9 @@ var Comments = React.createClass({
 	},
 	onSubmitComment: function (e) {
 		e.preventDefault();
+		if (this.state.commentText === '') {
+			return;
+		}
 		$.ajax({
 			type: 'POST',
 			url: this.props.url + '/' + this.props.id + '/comments',
@@ -86,6 +94,9 @@ var Comments = React.createClass({
 			statusCode: {
 				201: this.onCommentSubmitSuccessResponse
 			}
+		});
+		this.setState({
+			commentText: ''
 		});
 	},
 	onCommentTextChange: function (e) {
@@ -125,6 +136,7 @@ var Comments = React.createClass({
 		});
 	},
 	onCommentSubmitSuccessResponse: function (data) {
+		console.log(data);
 		this.setState({
 			comments: this.state.comments.concat([data])
 		});
