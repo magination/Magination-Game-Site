@@ -27,7 +27,7 @@ var TitleColumn = React.createClass({
 	},
 	didClick: function () {
 		NavigationAction.navigate({
-			destination: '/game/' + data._id,
+			destination: '/game/' + this.state.games[0]._id,
 			data: this.props.data
 		});
 	}
