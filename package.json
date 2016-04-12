@@ -36,6 +36,7 @@
     "gulp-eslint": "^2.0.0",
     "gulp-nodemon": "^2.0.6",
     "gulp-sourcemaps": "^1.6.0",
+    "lodash": "^4.9.0",
     "mocha": "^2.4.5",
     "node-jsx": "^0.13.3",
     "path": "^0.12.7",
