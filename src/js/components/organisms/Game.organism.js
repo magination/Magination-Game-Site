@@ -2,6 +2,7 @@ var React = require('react');
 
 var NavigationStore = require('../../stores/NavigationStore');
 var URLS = require('../../config/config.js').urls;
+var LoginStore = require('../../stores/LoginStore');
 
 var Media = require('react-bootstrap').Media;
 var Input = require('react-bootstrap').Input;
@@ -106,7 +107,23 @@ var Game = React.createClass({
 	},
 	onSubmitComment: function (e) {
 		e.preventDefault();
-		console.log(this.state.commentText);
+		$.ajax({
+			type: 'POST',
+			url: URLS.api.games + '/' + this.state.game._id + '/comments',
+			data: JSON.stringify({
+				commentText: this.state.commentText
+			}),
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			contentType: 'application/json',
+			dataType: 'json',
+			statusCode: {
+				200: this.onCommentSubmitSuccessResponse,
+				401: alert('401'),
+				404: alert('404')
+			}
+		});
 	},
 	onCommentTextChange: function (e) {
 		this.setState({
@@ -115,12 +132,17 @@ var Game = React.createClass({
 	},
 	onGetGameSuccessResponse: function (data) {
 		console.log(data);
-		this.state.game = data;
+		this.setState({
+			game: data
+		});
 	},
 	onGetGameNotFoundResponse: function (data) {
 		console.log(data);
 	},
 	onGetCommentsSuccessResponse: function (data) {
+		console.log(data);
+	},
+	onCommentSubmitSuccessResponse: function (data) {
 		console.log(data);
 	}
 });
