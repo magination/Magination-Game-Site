@@ -1,14 +1,27 @@
 var React = require('react');
 
+var NavigationStore = require('../../stores/NavigationStore');
+
 var Media = require('react-bootstrap').Media;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 // var GameRating = require('GameRating');
 
+function shouldRequestGame () {
+	var data = NavigationStore.getNavigationState.data;
+	if (data === undefined) {
+		return true;
+	}
+	if (data.game === undefined) {
+
+	}
+	return false;
+}
+
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
-			game: this.props.game,
+			game: null,
 			comments: [
 				{
 					username: 'Simo',
@@ -16,6 +29,19 @@ var Game = React.createClass({
 				}
 			]
 		};
+	},
+	componentWillMount: function () {
+		if (shouldRequestGame()) {
+			/* request game*/
+		}
+		else {
+			/* shouldRequestGame checks if game is defined*/
+			this.setState({
+				game: NavigationStore.getNavigationState.data.game
+			});
+		}
+
+		/* GET COMMENTS*/
 	},
 	render: function () {
 		var count = -1;

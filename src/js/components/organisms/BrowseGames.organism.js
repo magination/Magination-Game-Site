@@ -3,18 +3,51 @@ var React = require('react');
 
 var URLS = require('../../config/config').urls;
 
+var NavigationAction = require('../../actions/NavigationAction');
+
 var Griddle = require('griddle-react');
 var SearchGames = require('../molecules/browsegames/SearchGames.molecule');
 var Col = require('react-bootstrap').Col;
 
-var CustomTest = React.createClass({
+var AuthorColumn = React.createClass({
 	render: function () {
 		return (
-			<span><a href='#' onClick={this.didClick}>{this.props.data.username}</a></span>
+			<Col md={12}><a href='#' onClick={this.didClick}>{this.props.data.username}</a></Col>
 		);
 	},
 	didClick: function () {
 		alert('navigate to ' + this.props.data.username);
+	}
+});
+var TitleColumn = React.createClass({
+	render: function () {
+		return (
+			<Col onClick={this.didClick} md={12}><a href='#'>{this.props.data}</a></Col>
+		);
+	},
+	didClick: function () {
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.games + '/' + this.props.data,
+			dataType: 'json',
+			statusCode: {
+				200: this.onGetGameSuccessResponse,
+				404: this.onGetGameNotFoundResponse,
+				500: function () {
+					alert('Server Error: see console');
+				}
+			}
+		});
+	},
+	onGetGameSuccessResponse: function (data) {
+		console.log(data);
+		NavigationAction.navigate({
+			destination: '/game/' + data._id,
+			data: data
+		});
+	},
+	onGetGameNotFoundResponse: function (data) {
+		console.log(data);
 	}
 });
 
@@ -22,18 +55,14 @@ var metaData = [
 	{
 		'columnName': 'title',
 		'displayName': 'Title',
+		'customComponent': TitleColumn,
 		'order': 1
-	},
-	{
-		'columnName': 'shortDescription',
-		'displayName': 'Description',
-		'order': 2
 	},
 	{
 		'columnName': 'owner',
 		'displayName': 'Author',
-		'customComponent': CustomTest,
-		'order': 3
+		'customComponent': AuthorColumn,
+		'order': 2
 	}
 ];
 
@@ -60,7 +89,7 @@ var BrowseGames = React.createClass({
 					<Col md={9}>
 						<h2>Game List</h2>
 						<Griddle
-							columns={['title', 'shortDescription', 'owner']}
+							columns={['title', 'owner']}
 							resultsPerPage='10' showFilter='true'
 							results={this.state.games}
 							columnMetadata={metaData}
@@ -84,7 +113,6 @@ var BrowseGames = React.createClass({
 		});
 	},
 	didReceiveData: function (data) {
-		console.log(data);
 		this.setState({
 			games: data
 		});

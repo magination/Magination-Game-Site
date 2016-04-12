@@ -1,6 +1,7 @@
 var React = require('react');
 
 var LoginStore = require('../../stores/LoginStore');
+var LoginAction = require('../../actions/LoginAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
 
@@ -73,6 +74,9 @@ var Menu = React.createClass({
 		this.setState({
 			currentActive: getNavigationState().currentPath
 		});
+	},
+	onLogoutClicked: function () {
+		LoginAction.logoutSuccess();
 	},
 	makeNavigationStatefulElement: function () {
 		var navigationStateElement;
