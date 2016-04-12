@@ -26,28 +26,10 @@ var TitleColumn = React.createClass({
 		);
 	},
 	didClick: function () {
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.games + '/' + this.props.data,
-			dataType: 'json',
-			statusCode: {
-				200: this.onGetGameSuccessResponse,
-				404: this.onGetGameNotFoundResponse,
-				500: function () {
-					alert('Server Error: see console');
-				}
-			}
-		});
-	},
-	onGetGameSuccessResponse: function (data) {
-		console.log(data);
 		NavigationAction.navigate({
 			destination: '/game/' + data._id,
-			data: data
+			data: this.props.data
 		});
-	},
-	onGetGameNotFoundResponse: function (data) {
-		console.log(data);
 	}
 });
 
