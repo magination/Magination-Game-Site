@@ -2,26 +2,9 @@ var React = require('react');
 
 var NavigationStore = require('../../stores/NavigationStore');
 var URLS = require('../../config/config.js').urls;
-
 var Comments = require('../molecules/Comments.molecule');
 var RateGame = require('../molecules/browsegames/RateGame.molecule');
-
-function shouldRequestGame () {
-	var data = NavigationStore.getNavigationState().data;
-	if (data === null || data === undefined) {
-		return true;
-	}
-	if (data.game === undefined) {
-		return true;
-	}
-	return false;
-}
-
-function getLastUrlId () {
-	var url = NavigationStore.getNavigationState().currentPath;
-	/* returns the id(last element) from the current link*/
-	return url.split('/').slice(-1)[0];
-}
+var EditableField = require('../molecules/EditableField.molecule');
 
 var Game = React.createClass({
 	getInitialState: function () {
@@ -33,7 +16,8 @@ var Game = React.createClass({
 				},
 				mainDescription: '',
 				title: 'Loading ...'
-			}
+			},
+			isEditing: false
 		};
 	},
 	componentWillMount: function () {
@@ -62,8 +46,22 @@ var Game = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<strong>Title: </strong>{this.state.game.title}
-				<strong>Description: </strong>{this.state.game.mainDescription}
+				<strong>Title</strong>
+				<EditableField
+					dataVariableName='title'
+					displayValue={this.state.game.title}
+					owner={this.state.game.owner._id}
+					onSuccessCallback={this.onGetGameSuccessResponse}
+				/>
+				<br/>
+				<strong>Description</strong>
+				<EditableField
+					dataVariableName='mainDescription'
+					displayValue={this.state.game.mainDescription}
+					owner={this.state.game.owner._id}
+					onSuccessCallback={this.onGetGameSuccessResponse}
+				/>
+				<br/>
 				<strong>Author: </strong>{this.state.game.owner.username}
 				<RateGame selectedImage='star' unselectedImage='star-empty' maxRating={5}/>
 				<Comments id={this.state.game._id} url={URLS.api.games}/>
@@ -78,5 +76,22 @@ var Game = React.createClass({
 	onGetGameNotFoundResponse: function (data) {
 	}
 });
+
+function shouldRequestGame () {
+	var data = NavigationStore.getNavigationState().data;
+	if (data === null || data === undefined) {
+		return true;
+	}
+	if (data.game === undefined) {
+		return true;
+	}
+	return false;
+}
+
+function getLastUrlId () {
+	var url = NavigationStore.getNavigationState().currentPath;
+	/* returns the id(last element) from the current link*/
+	return url.split('/').slice(-1)[0];
+}
 
 module.exports = Game;
