@@ -11,7 +11,8 @@ var constants = {
 		'confirmation'
 	],
 	LOGGED_IN_EXCLUSIVE_PATHS: [
-		'upload'
+		'upload',
+		'settings'
 	]
 };
 module.exports = constants;
