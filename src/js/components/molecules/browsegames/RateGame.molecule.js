@@ -1,11 +1,10 @@
 var React = require('react');
 var RatingIcon = require('../../atoms/RatingIcon');
-var Col = require('react-bootstrap').Col;
 
 var RateGame = React.createClass({
 	getInitialState () {
 		return {
-			rating: this.props.isStatic ? this.props.rating : 1
+			rating: this.props.isStatic ? this.props.rating : 3
 		};
 	},
 
@@ -34,23 +33,17 @@ var RateGame = React.createClass({
 						selectedImage={this.props.selectedImage}
 						unselectedImage={this.props.unselectedImage}
 						isSelected={this.state.rating > i - 1}
-						onClick={this.onRatingClicked}
+						onClick={this.props.onRatingClicked.bind(this, this.state.rating)}
 						onMouseOver={this.onIconHovered.bind(this, i)}
-						onMouseLeave={this.onIconUnhovered}
 					/>
 				);
 			}
 		}
 		return (
 			<div>
-				<Col md={4} mdOffset={5}>
-					{ratingIcons}
-				</Col>
+				{ratingIcons}
 			</div>
 		);
-	},
-	onRatingClicked: function () {
-		this.props.ratingSelected(this.state.rating);
 	}
 });
 module.exports = RateGame;
