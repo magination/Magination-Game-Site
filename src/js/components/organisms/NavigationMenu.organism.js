@@ -79,7 +79,6 @@ var Menu = React.createClass({
 		LoginAction.logoutSuccess();
 	},
 	onSettingsClicked: function () {
-		alert('clicked');
 		NavigationAction.navigate({
 			destination: '/settings'
 		});
