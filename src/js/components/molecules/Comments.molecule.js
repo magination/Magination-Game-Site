@@ -1,10 +1,10 @@
 var React = require('react');
 
-var Media = require('react-bootstrap').Media;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 
 var LoginStore = require('../../stores/LoginStore');
+var Comment = require('./Comment.molecule');
 
 var Comments = React.createClass({
 	getInitialState: function () {
@@ -44,20 +44,7 @@ var Comments = React.createClass({
 		var that = this;
 		var comments = this.state.comments.map(function (comment) {
 			count++;
-			return (
-				<Media key={count}>
-					<Media.Left>
-						<img width={64} height={64} src='' alt='Profile Pic'/>
-					</Media.Left>
-					<Media.Body>
-						<Media.Heading>{comment.owner.username}</Media.Heading>
-						<p>{comment.commentText}</p>
-					</Media.Body>
-					<Media.Right>
-						<a onClick={that.onDeleteCommentClick.bind(that, comment._id)}>&times;</a>
-					</Media.Right>
-				</Media>
-			);
+			return <Comment key={count} comment={comment} onDeleteSuccess={that.deleteIdFromState}/>;
 		});
 		return (
 			<div>
@@ -104,41 +91,26 @@ var Comments = React.createClass({
 			commentText: e.target.value
 		});
 	},
-	onDeleteCommentClick: function (commentId) {
-		$.ajax({
-			type: 'DELETE',
-			url: this.props.url + '/' + this.props.id + '/comments/' + commentId,
-			headers: {
-				'Authorization': LoginStore.getToken()
-			},
-			dataType: 'json',
-			statusCode: {
-				200: this.onDeleteSuccessResponse
-			}
-		});
-	},
-	onDeleteSuccessResponse: function (data) {
-		console.log(data);
-		var newState = this.state.comments;
-		$.each(newState, function (i) {
-			if (newState[i]._id === data._id) {
-				newState.splice(i, 1);
-				return false;
-			}
-		});
-		this.setState({
-			comments: newState
-		});
-	},
 	onGetCommentsSuccessResponse: function (data) {
 		this.setState({
 			comments: data.comments
 		});
 	},
 	onCommentSubmitSuccessResponse: function (data) {
-		console.log(data);
 		this.setState({
 			comments: this.state.comments.concat([data])
+		});
+	},
+	deleteIdFromState: function (commentId) {
+		var newState = this.state.comments;
+		$.each(newState, function (i) {
+			if (newState[i]._id === commentId) {
+				newState.splice(i, 1);
+				return false;
+			}
+		});
+		this.setState({
+			comments: newState
 		});
 	}
 });

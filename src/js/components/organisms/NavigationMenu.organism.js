@@ -95,7 +95,7 @@ var Menu = React.createClass({
 						<MenuItem divider />
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />
-						<MenuItem onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
+						<MenuItem href='/' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
 					</NavDropdown>
 				</Nav>;
 		}
