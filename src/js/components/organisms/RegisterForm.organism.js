@@ -101,7 +101,7 @@ var RegisterForm = React.createClass({
 	onSubmitForm: function (e) {
 		e.preventDefault();
 
-		console.log(e);
+		/* TODO: check fields*/
 
 		$.ajax({
 			type: 'POST',

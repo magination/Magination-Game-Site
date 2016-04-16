@@ -6,7 +6,8 @@ var config = {
 			games: restApiRoot + 'games',
 			login: restApiRoot + 'login',
 			confirmation: restApiRoot + 'confirmation',
-			resendEmail: restApiRoot + 'resendVerificationEmail'
+			resendEmail: restApiRoot + 'resendVerificationEmail',
+			forgotpassword: restApiRoot + 'login' + '/forgot'
 		}
 	}
 };

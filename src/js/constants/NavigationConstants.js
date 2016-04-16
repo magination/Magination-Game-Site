@@ -3,7 +3,9 @@ var constants = {
 	PATHS: {
 		browse: '/browse',
 		upload: '/upload',
-		register: '/register'
+		register: '/register',
+		forgotpassword: '/forgotpassword',
+		confirmforgotpassword: 'confirmforgotpassword/:id'
 	},
 	SET_CURRENT_PATH: 'set_current_path',
 	NAVIGATE: 'navigate',

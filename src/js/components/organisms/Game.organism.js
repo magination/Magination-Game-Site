@@ -82,7 +82,6 @@ var Game = React.createClass({
 		);
 	},
 	onGetGameSuccessResponse: function (data) {
-		console.log(data);
 		this.setState({
 			game: data
 		});
