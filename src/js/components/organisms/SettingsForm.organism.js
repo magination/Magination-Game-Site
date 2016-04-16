@@ -34,9 +34,9 @@ var Settings = React.createClass({
 					<form className='form-settings' onSubmit={this.updateUser}>
 						<h2 className='form-settings-heading'>Settings</h2>
 						<Input ref='emailInput' value={this.state.newEmail} type='text' label='Change email' placeholder='Enter new email' onChange={this.onEmailChanged}/>
-						<Input ref='newPasswordInput' value={this.state.newPassword} type='text' label='New password' placeholder='Enter new password' onChange={this.onNewPasswordChanged}/>
-						<Input ref='newPasswordConfirmInput' value={this.state.newPasswordConfirm} type='text' label='Confirm new password' placeholder='Confirm new password' onChange={this.onNewPasswordConfirmChanged}/>
-						<Input ref='oldPasswordInput' value={this.state.oldPassword} type='text' label='Old password' placeholder='Enter your old password' onChange={this.onOldPasswordChanged}/>
+						<Input ref='newPasswordInput' value={this.state.newPassword} type='password' label='New password' placeholder='Enter new password' onChange={this.onNewPasswordChanged}/>
+						<Input ref='newPasswordConfirmInput' value={this.state.newPasswordConfirm} type='password' label='Confirm new password' placeholder='Confirm new password' onChange={this.onNewPasswordConfirmChanged}/>
+						<Input ref='oldPasswordInput' value={this.state.oldPassword} type='password' label='Old password' placeholder='Enter your old password' onChange={this.onOldPasswordChanged}/>
 						<Button type='submit'>Submit changes</Button>
 					</form>
 				</Col>
@@ -69,14 +69,20 @@ var Settings = React.createClass({
 			this.requestLogin();
 		}
 		else if (!this.state.oldPassword) {
+			this.refs.oldPasswordInput.refs.input.focus();
 			FeedbackAction.displayWarningMessage({
-				header: 'Missing password',
+				header: 'Warning',
 				message: 'Please enter your current password to change credentials.'
 			});
 		}
 		else if (this.state.newPassword && this.state.newPassword !== this.state.newPasswordConfirm) {
+			this.setState({
+				newPassword: '',
+				newPasswordConfirm: ''
+			});
+			this.refs.newPasswordInput.refs.input.focus();
 			FeedbackAction.displayWarningMessage({
-				header: 'Password',
+				header: 'Error',
 				message: 'The passwords you entered does not match.'
 			});
 		}
@@ -85,6 +91,13 @@ var Settings = React.createClass({
 			var data = {};
 			if (this.state.originalEmail !== this.state.newEmail) data['email'] = this.state.newEmail;
 			if (this.state.newPassword.length > 0) data['password'] = this.state.newPassword;
+			if (!data.email && !data.password) {
+				FeedbackAction.displayWarningMessage({
+					header: 'Warning',
+					message: 'Nothing to update.'
+				});
+				return;
+			};
 			data['oldPassword'] = this.state.oldPassword;
 			$.ajax({
 				type: 'PUT',
@@ -97,21 +110,29 @@ var Settings = React.createClass({
 				dataType: 'json',
 				success: this.didUpdate,
 				statusCode: {
-					200: this.onRequestSuccess
+					200: this.onRequestSuccess,
+					401: this.onRequestInvalidPassword
 				}
 			});
 		}
 	},
 	didUpdate: function () {
 		FeedbackAction.displaySuccessMessage({
-			header: 'Updated',
-			message: 'Password updated.'
+			header: 'Success',
+			message: 'Credentials updated.'
 		});
 	},
 	requestLogin: function () {
 		FeedbackAction.displayErrorMessage({
-			header: 'Not logged in',
+			header: 'Error',
 			message: 'It seems you are not signed in, please sign in before attempting this action.'
+		});
+	},
+	onRequestInvalidPassword: function () {
+		this.refs.oldPasswordInput.refs.input.focus();
+		FeedbackAction.displayErrorMessage({
+			header: 'Error',
+			message: 'The old password is wrong.'
 		});
 	}
 });
