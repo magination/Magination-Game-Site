@@ -33,7 +33,7 @@ var RateGame = React.createClass({
 						selectedImage={this.props.selectedImage}
 						unselectedImage={this.props.unselectedImage}
 						isSelected={this.state.rating > i - 1}
-						onClick={this.props.onRatingClicked.bind(this, this.state.rating)}
+						onClick={() => this.props.onRatingClicked(this.state.rating)}
 						onMouseOver={this.onIconHovered.bind(this, i)}
 					/>
 				);
