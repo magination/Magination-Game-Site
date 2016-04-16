@@ -19,6 +19,7 @@ var Game = React.createClass({
 				mainDescription: '',
 				title: 'Loading ...'
 			},
+			rating: '',
 			isEditing: false
 		};
 	},
@@ -65,14 +66,20 @@ var Game = React.createClass({
 				/>
 				<br/>
 				<strong>Author: </strong>{this.state.game.owner.username}
-				<RateGame onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty' maxRating={5}/>
+				<br/>
+				<strong>Rating: </strong>{calculateRating(this.state.game.sumOfVotes, this.state.game.numberOfVotes)}
+				<br/>
+				<div>
+					<strong>Rate the game: </strong><RateGame onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty' maxRating={5}/>
+				</div>
 				<Comments id={this.state.game._id} url={URLS.api.games}/>
 			</div>
 		);
 	},
 	onGetGameSuccessResponse: function (data) {
 		this.setState({
-			game: data
+			game: data,
+			rating: calculateRating(data.sumOfVotes, data.numberOfVotes)
 		});
 	},
 	onGetGameNotFoundResponse: function (data) {
@@ -114,6 +121,13 @@ function getLastUrlId () {
 	var url = NavigationStore.getNavigationState().currentPath;
 	/* returns the id(last element) from the current link*/
 	return url.split('/').slice(-1)[0];
+}
+
+function calculateRating (sumOfVotes, numberOfVotes) {
+	if (!sumOfVotes > 0 || !numberOfVotes > 0) {
+		return 'Not rated';
+	}
+	return sumOfVotes / numberOfVotes;
 }
 
 module.exports = Game;
