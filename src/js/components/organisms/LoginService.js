@@ -56,7 +56,6 @@ var onLoginSuccessResponse = function (data) {
 };
 var LoginService = {
 	doLogin: function (username, password) {
-		console.log('1');
 		$.ajax({
 			type: 'POST',
 			url: URLS.api.login,
@@ -76,7 +75,6 @@ var LoginService = {
 	checkAutoLogin: function () {
 		var token = Cookie.load(LoginConstants.COOKIE_TOKEN);
 		if (token) {
-			console.log(token);
 			this.doLoginWithToken(token);
 		}
 	},
