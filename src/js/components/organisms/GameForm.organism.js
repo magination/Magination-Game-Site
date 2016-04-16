@@ -1,6 +1,7 @@
 var React = require('react');
 var URLS = require('../../config/config').urls;
 var LoginStore = require('../../stores/LoginStore');
+var FeedbackAction = require('../../actions/FeedbackAction');
 
 var Col = require('react-bootstrap').Col;
 var Input = require('react-bootstrap').Input;
@@ -38,7 +39,6 @@ var GameForm = React.createClass({
 		});
 	},
 	postGame: function (e) {
-		alert('posted');
 		e.preventDefault();
 		$.ajax({
 			type: 'POST',
@@ -57,7 +57,10 @@ var GameForm = React.createClass({
 		});
 	},
 	didPost: function () {
-		alert('success');
+		FeedbackAction.displaySuccessMessage({
+			header: 'Saved',
+			message: 'Game saved.'
+		});
 	}
 });
 

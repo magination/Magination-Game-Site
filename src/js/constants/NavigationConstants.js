@@ -15,7 +15,8 @@ var constants = {
 		'confirmation'
 	],
 	LOGGED_IN_EXCLUSIVE_PATHS: [
-		'upload'
+		'upload',
+		'settings'
 	],
 	isLegalDestination: function (loginState, destination) {
 		var isLegal = true;

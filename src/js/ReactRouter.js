@@ -18,6 +18,7 @@ var VerificationSent = require('./components/organisms/VerificationSent.organism
 var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
 var Game = require('./components/organisms/Game.organism');
+var SettingsForm = require('./components/organisms/SettingsForm.organism');
 
 var ReactRouter = React.createClass({
 	render: function () {
@@ -32,6 +33,7 @@ var ReactRouter = React.createClass({
 						<Route path='/confirmation/:id' component={ConfirmEmail} />
 						<Route path='/verificationsent' component={VerificationSent} />
 						<Route path='/game/:id' component={Game} />
+						<Route path='/settings' component={SettingsForm}/>
 						<Route path='*' component={BrowseGames} />
 					</Route>
 				</Router>

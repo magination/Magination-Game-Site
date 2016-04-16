@@ -2,6 +2,7 @@ var React = require('react');
 var LoginService = require('./LoginService');
 
 var NavigationAction = require('../../actions/NavigationAction');
+var LoginStore = require('../../stores/LoginStore');
 
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
@@ -33,9 +34,11 @@ var LoginForm = React.createClass({
 	},
 	onHide: function () {
 		this.close();
-		NavigationAction.navigate({
-			destination: '/browse'
-		});
+		if (!LoginStore.getLoginState()) {
+			NavigationAction.navigate({
+				destination: '/'
+			});
+		}
 	},
 	close: function () {
 		this.setState({ showModal: false });

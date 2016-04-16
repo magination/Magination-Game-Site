@@ -92,6 +92,11 @@ var Menu = React.createClass({
 	onLogoutClicked: function () {
 		LoginAction.logoutSuccess();
 	},
+	onSettingsClicked: function () {
+		NavigationAction.navigate({
+			destination: '/settings'
+		});
+	},
 	makeNavigationStatefulElement: function () {
 		var navigationStateElement;
 		if (this.state.isLoggedIn && getProfile() !== null) {
@@ -101,7 +106,7 @@ var Menu = React.createClass({
 						<MenuItem eventKey={'profile'}><Glyphicon glyph='user'/> My Profile</MenuItem>
 						<MenuItem eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
 						<MenuItem divider />
-						<MenuItem eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
+						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />
 						<MenuItem href='/' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
 					</NavDropdown>

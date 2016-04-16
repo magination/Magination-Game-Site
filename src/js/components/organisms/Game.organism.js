@@ -4,6 +4,8 @@ var NavigationStore = require('../../stores/NavigationStore');
 var URLS = require('../../config/config.js').urls;
 var Comments = require('../molecules/Comments.molecule');
 var EditableField = require('../molecules/EditableField.molecule');
+var FeedbackAction = require('../../actions/FeedbackAction');
+var LoginStore = require('../../stores/LoginStore');
 
 var Game = React.createClass({
 	getInitialState: function () {
@@ -63,6 +65,7 @@ var Game = React.createClass({
 				<br/>
 				<strong>Author: </strong>
 				<p>{this.state.game.owner.username}</p>
+				<RateGame onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty' maxRating={5}/>
 				<Comments id={this.state.game._id} url={URLS.api.games}/>
 			</div>
 		);
@@ -73,6 +76,26 @@ var Game = React.createClass({
 		});
 	},
 	onGetGameNotFoundResponse: function (data) {
+	},
+	onRatingClicked: function (rating) {
+		$.ajax({
+			type: 'PUT',
+			url: URLS.api.games + '/' + this.state.game._id + '/ratings',
+			data: JSON.stringify({
+				rating: rating
+			}),
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			contentType: 'application/json',
+			dataType: 'json',
+			success: function () {
+				FeedbackAction.displaySuccessMessage({
+					header: 'Rated',
+					message: 'Thank you for rating!'
+				});
+			}
+		});
 	}
 });
 
