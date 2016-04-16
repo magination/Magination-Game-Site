@@ -11,7 +11,6 @@ var LoginStore = require('../../stores/LoginStore');
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
-			comments: [],
 			game: {
 				owner: {
 					username: ''
@@ -19,7 +18,6 @@ var Game = React.createClass({
 				mainDescription: '',
 				title: 'Loading ...'
 			},
-			rating: '',
 			isEditing: false
 		};
 	},
@@ -84,9 +82,9 @@ var Game = React.createClass({
 		);
 	},
 	onGetGameSuccessResponse: function (data) {
+		console.log(data);
 		this.setState({
-			game: data,
-			rating: calculateRating(data.sumOfVotes, data.numberOfVotes)
+			game: data
 		});
 	},
 	onGetGameNotFoundResponse: function (data) {
