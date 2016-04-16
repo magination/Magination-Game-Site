@@ -21,8 +21,8 @@ var LoginForm = React.createClass({
 			<div>
 				<Modal ref='modal' show={this.state.showModal} onHide={this.onHide}>
 					<Modal.Body>
-						<form className='form-signin' onSubmit={this.onSubmitForm}>
-							<h2 className='form-signin-heading'>Please sign in</h2>
+						<form onSubmit={this.onSubmitForm}>
+							<h2>Please sign in</h2>
 							<Input value={this.state.username} type='text' label='Username / Email' placeholder='Username / Email' onChange={this.onUsernameChange}/>
 							<Input value={this.state.password} type='password' label='Password' placeholder='Password' onChange={this.onPasswordChange}/>
 							<Button type='submit'>Log in</Button>

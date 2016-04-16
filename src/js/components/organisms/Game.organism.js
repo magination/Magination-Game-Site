@@ -3,6 +3,7 @@ var React = require('react');
 var NavigationStore = require('../../stores/NavigationStore');
 var URLS = require('../../config/config.js').urls;
 var Comments = require('../molecules/Comments.molecule');
+var RateGame = require('../molecules/browsegames/RateGame.molecule');
 var EditableField = require('../molecules/EditableField.molecule');
 var FeedbackAction = require('../../actions/FeedbackAction');
 var LoginStore = require('../../stores/LoginStore');
@@ -44,6 +45,12 @@ var Game = React.createClass({
 				game: NavigationStore.getNavigationState().data.game
 			});
 		}
+	},
+	componentDidMount: function () {
+		LoginStore.addChangeListener(this.onLoginChange);
+	},
+	componentWillUnmount: function () {
+		LoginStore.removeChangeListener(this.onLoginChange);
 	},
 	render: function () {
 		return (
@@ -103,6 +110,9 @@ var Game = React.createClass({
 				});
 			}
 		});
+	},
+	onLoginChange: function () {
+		this.forceUpdate();
 	}
 });
 
