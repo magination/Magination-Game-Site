@@ -4,7 +4,11 @@ var LoginStore = require('../../stores/LoginStore');
 var LoginAction = require('../../actions/LoginAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
+var NavigationConstants = require('../../constants/NavigationConstants');
 
+var NavigationPaths = NavigationConstants.PATHS;
+
+var LoginForm = require('./LoginForm.organism');
 var Navbar = require('react-bootstrap').Navbar;
 var Nav = require('react-bootstrap').Nav;
 var MenuItem = require('react-bootstrap').MenuItem;
@@ -45,6 +49,7 @@ var Menu = React.createClass({
 		var navigationStateElement = this.makeNavigationStatefulElement();
 		return (
 			<div>
+				<LoginForm ref='loginModal'/>
 				<Navbar fixedTop activeKey={this.state.currentActive}>
 					<Navbar.Header>
 						<Navbar.Brand>
@@ -52,8 +57,8 @@ var Menu = React.createClass({
 						</Navbar.Brand>
 					</Navbar.Header>
 					<Nav activeKey={this.state.currentActive}>
-						<MenuItem eventKey={'/browse'} onClick={this.onNavigationClick.bind(this, '/browse')}>Browse</MenuItem>
-						<MenuItem eventKey={'/upload'} onClick={this.onNavigationClick.bind(this, '/upload')}>Upload</MenuItem>
+						<MenuItem eventKey={'/browse'} onClick={this.onNavigationClick.bind(this, NavigationPaths.browse)}>Browse</MenuItem>
+						<MenuItem eventKey={'/upload'} onClick={this.onNavigationClick.bind(this, NavigationPaths.upload)}>Upload</MenuItem>
 					</Nav>
 					{navigationStateElement}
 				</Navbar>
@@ -61,11 +66,20 @@ var Menu = React.createClass({
 		);
 	},
 	onNavigationClick: function (destination) {
+		if (!NavigationConstants.isLegalDestination(getLoginState(), destination)) {
+			this.refs.loginModal.open();
+		}
 		NavigationAction.navigate({
 			destination: destination
 		});
 	},
+	onLoginClick: function () {
+		this.refs.loginModal.open();
+	},
 	onLoginStateChanged: function () {
+		if (getLoginState()) {
+			this.refs.loginModal.close();
+		}
 		this.setState({
 			isLoggedIn: getLoginState()
 		});
@@ -96,8 +110,8 @@ var Menu = React.createClass({
 		else {
 			navigationStateElement =
 				<Nav pullRight activeKey={this.state.currentActive}>
-					<MenuItem eventKey={'/login'} onClick={this.onNavigationClick.bind(this, '/login')}>Log in</MenuItem>
-					<MenuItem eventKey={'/register'} onClick={this.onNavigationClick.bind(this, '/register')}>Register</MenuItem>
+					<MenuItem eventKey={'/login'} onClick={this.onLoginClick}>Log in</MenuItem>
+					<MenuItem eventKey={NavigationPaths.register} onClick={this.onNavigationClick.bind(this, NavigationPaths.register)}>Register</MenuItem>
 				</Nav>;
 		}
 		return navigationStateElement;

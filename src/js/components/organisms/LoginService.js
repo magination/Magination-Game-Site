@@ -1,5 +1,5 @@
 var LoginAction = require('../../actions/LoginAction');
-var NavigationAction = require('../../actions/NavigationAction');
+// var NavigationAction = require('../../actions/NavigationAction');
 var FeedbackAction = require('../../actions/FeedbackAction');
 var URLS = require('../../config/config').urls;
 var Cookie = require('react-cookie');
@@ -25,7 +25,7 @@ var onGetUserSuccessResponse = function (data) {
 	LoginAction.setLoginProfile({
 		profile: data
 	});
-	NavigationAction.navigateToPrevious();
+	// NavigationAction.navigateToPrevious();
 	FeedbackAction.displaySuccessMessage({
 		header: 'Login Successful!',
 		message: 'You are now logged in as ' + data.email
