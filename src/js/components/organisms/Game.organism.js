@@ -3,7 +3,6 @@ var React = require('react');
 var NavigationStore = require('../../stores/NavigationStore');
 var URLS = require('../../config/config.js').urls;
 var Comments = require('../molecules/Comments.molecule');
-var RateGame = require('../molecules/browsegames/RateGame.molecule');
 var EditableField = require('../molecules/EditableField.molecule');
 
 var Game = React.createClass({
@@ -62,8 +61,8 @@ var Game = React.createClass({
 					onSuccessCallback={this.onGetGameSuccessResponse}
 				/>
 				<br/>
-				<strong>Author: </strong>{this.state.game.owner.username}
-				<RateGame selectedImage='star' unselectedImage='star-empty' maxRating={5}/>
+				<strong>Author: </strong>
+				<p>{this.state.game.owner.username}</p>
 				<Comments id={this.state.game._id} url={URLS.api.games}/>
 			</div>
 		);
