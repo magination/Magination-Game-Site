@@ -19,7 +19,7 @@ var EditableField = React.createClass({
 		});
 	},
 	render: function () {
-		var editButton = (isThisUser(this.props.owner) ? <a onClick={this.onEditButtonClicked}>Edit</a> : '');
+		var editButton = (isThisUser(this.props.owner) ? <div><a href='#' onClick={this.onEditButtonClicked}><i>Edit</i></a></div> : '');
 		var valueComponent = (this.state.isEditing ? <form onSubmit={this.onFieldEditSubmit}><Input type='text' value={this.state.editValue} onChange={this.onEditValueChanged}/></form> : this.state.displayValue);
 		return (
 			<div>

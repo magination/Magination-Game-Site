@@ -22,18 +22,18 @@ var Comment = React.createClass({
 	},
 	render: function () {
 		var DeleteEditButton = <div />;
-		var MediaBody = <p>{this.state.comment.commentText}</p>;
+		var mediaBody = <p>{this.state.comment.commentText}</p>;
 		var replies = <div/>;
 		var replyForm = <div/>;
 		if (isThisUser(this.state.comment.owner._id)) {
 			DeleteEditButton =
 				<Media.Right>
-					<a onClick={this.onDeleteCommentClick}>&times;</a>
-					<a onClick={this.onEditClick}><i>Edit</i></a>
+					<a href='#' onClick={this.onDeleteCommentClick}><i>Delete</i></a>
+					<a href='#' onClick={this.onEditClick}><i>Edit</i></a>
 				</Media.Right>;
 		}
 		if (this.state.isEditingComment) {
-			MediaBody =
+			mediaBody =
 				<form onSubmit={this.onEditCommentSubmit}>
 					<Input
 						value={this.state.editingCommentText}
@@ -62,23 +62,23 @@ var Comment = React.createClass({
 		return (
 			<Media>
 				<Media.Left>
-					<img onClick={this.showChildComments} width={64} height={64} src='' alt='Profile Pic'/>
+					<img width={64} height={64} src='' alt='Profile Pic'/>
 				</Media.Left>
 				<Media.Body>
 					<Media.Heading>{this.state.comment.owner.username} <small><i>{getDateSmallFormat(this.state.comment.createdAt)}</i></small></Media.Heading>
-					{MediaBody}
+					{mediaBody}
 					{replyForm}
 					{replies}
 				</Media.Body>
 				<Media.Right>
 					{DeleteEditButton}
+					<a href='#' onClick={this.showChildComments}>Reply</a>
 				</Media.Right>
 			</Media>
 		);
 	},
 	onSubmitReplyComment: function (e) {
 		e.preventDefault();
-		console.log(this.state.replyCommentText);
 		$.ajax({
 			type: 'POST',
 			url: URLS.api.comments + '/' + this.state.comment._id,
@@ -95,7 +95,9 @@ var Comment = React.createClass({
 		});
 	},
 	onSubmitReplySuccessResponse: function (data) {
-		console.log(data);
+		this.setState({
+			comment: data
+		});
 	},
 	onReplyEntryChanged: function (e) {
 		this.setState({
@@ -104,7 +106,7 @@ var Comment = React.createClass({
 	},
 	showChildComments: function () {
 		this.setState({
-			isViewingReplies: true
+			isViewingReplies: !this.state.isViewingReplies
 		});
 	},
 	onEditValueChange: function (e) {
