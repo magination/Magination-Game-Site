@@ -119,7 +119,8 @@ var Settings = React.createClass({
 				dataType: 'json',
 				statusCode: {
 					200: this.onRequestSuccess,
-					401: this.onRequestInvalidPassword
+					401: this.onRequestInvalidPassword,
+					409: this.onRequestConflict
 				}
 			});
 		}
@@ -133,17 +134,23 @@ var Settings = React.createClass({
 			message: 'Credentials updated.'
 		});
 	},
-	requestLogin: function () {
-		FeedbackAction.displayErrorMessage({
-			header: 'Error',
-			message: 'It seems you are not signed in, please sign in before attempting this action.'
-		});
-	},
 	onRequestInvalidPassword: function () {
 		this.refs.oldPasswordInput.refs.input.focus();
 		FeedbackAction.displayErrorMessage({
 			header: 'Error',
 			message: 'The old password is wrong.'
+		});
+	},
+	onRequestConflict: function () {
+		FeedbackAction.displayErrorMessage({
+			header: 'Error',
+			message: 'That email is already in use.'
+		});
+	},
+	requestLogin: function () {
+		FeedbackAction.displayErrorMessage({
+			header: 'Error',
+			message: 'It seems you are not signed in, please sign in before attempting this action.'
 		});
 	}
 });
