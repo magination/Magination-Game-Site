@@ -31,8 +31,8 @@ var ReactRouter = React.createClass({
 					<Route path='/' component={App}>
 						<Route path='/login' component={LoginForm} />
 						<Route path='/register' component={RegisterForm} />
-						<Route path='/upload' component={GameForm} />
-						<Route path='/browse' component={BrowseGames} />
+						<Route path={PATHS.creategame} component={GameForm} />
+						<Route path={PATHS.discover} component={BrowseGames} />
 						<Route path='/confirmation/:id' component={ConfirmEmail} />
 						<Route path='/verificationsent' component={VerificationSent} />
 						<Route path='/game/:id' component={Game} />

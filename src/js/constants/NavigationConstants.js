@@ -1,8 +1,8 @@
 
 var constants = {
 	PATHS: {
-		browse: '/browse',
-		upload: '/upload',
+		discover: '/discover',
+		creategame: '/create',
 		register: '/register',
 		forgotpassword: '/forgotpassword',
 		confirmforgotpassword: 'confirmforgotpassword/:id',
@@ -12,13 +12,13 @@ var constants = {
 	NAVIGATE: 'navigate',
 	NAVIGATE_PREVIOUS: 'navigate_previous',
 
-	DEFAULT_DESTINATION: '/browse',
+	DEFAULT_DESTINATION: '/discover',
 	NOT_LOGGED_IN_EXCLUSIVE_PATHS: [
 		'register',
 		'confirmation'
 	],
 	LOGGED_IN_EXCLUSIVE_PATHS: [
-		'upload',
+		'create',
 		'settings'
 	],
 	isLegalDestination: function (loginState, destination) {
