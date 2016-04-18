@@ -13,6 +13,7 @@ var SearchGames = React.createClass({
 			filter_singles: '0',
 			filter_doubles: '0',
 			filter_triples: '0',
+			filter_general_search: '',
 			singlesBsStyle: 'success',
 			doublesBsStyle: 'success',
 			triplesBsStyle: 'success'
@@ -26,7 +27,7 @@ var SearchGames = React.createClass({
 			<div>
 				<h2>Search Filters</h2>
 				<form onSubmit={this.onSubmit}>
-					<Input ref='searchEntry' type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
+					<Input value={this.state.filter_general_search} ref='searchEntry' type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
 					<Input value={this.state.filter_title} type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
 					<Input value={this.state.filter_author} type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
 					<Input value={this.state.filter_singles} bsStyle={this.state.singlesBsStyle} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1' label='Maximum Pieces'></Input>
@@ -46,6 +47,9 @@ var SearchGames = React.createClass({
 		}
 
 		var search_filter = {};
+		if (this.state.filter_general_search !== '') {
+			search_filter['search'] = this.state.filter_general_search;
+		}
 		if (this.state.filter_title !== '') {
 			search_filter['title'] = this.state.filter_title;
 		}
@@ -55,14 +59,19 @@ var SearchGames = React.createClass({
 		if (this.state.filter_singles !== '' && this.state.filter_singles > 0) {
 			search_filter['singles'] = this.state.filter_singles;
 		}
-		if (this.state.filter_doubles !== '' && this.state.filter_doubles !== '0') {
+		if (this.state.filter_doubles !== '' && this.state.filter_doubles > 0) {
 			search_filter['doubles'] = this.state.filter_doubles;
 		}
-		if (this.state.filter_triples !== '' && this.state.filter_triples !== '0') {
+		if (this.state.filter_triples !== '' && this.state.filter_triples > 0) {
 			search_filter['triple'] = this.state.filter_triples;
 		}
 
 		this.props.didSubmit(search_filter);
+	},
+	tagSearchChange: function (e) {
+		this.setState({
+			filter_general_search: e.target.value
+		});
 	},
 	titleSearchChanged: function (e) {
 		this.setState({
