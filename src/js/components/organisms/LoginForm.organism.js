@@ -2,6 +2,8 @@ var React = require('react');
 var LoginService = require('./LoginService');
 
 var NavigationAction = require('../../actions/NavigationAction');
+var NavigationConstants = require('../../constants/NavigationConstants');
+var NavigationStore = require('../../stores/NavigationStore');
 var PATHS = require('../../constants/NavigationConstants').PATHS;
 var LoginStore = require('../../stores/LoginStore');
 
@@ -40,9 +42,18 @@ var LoginForm = React.createClass({
 	},
 	onHide: function () {
 		this.close();
-		if (!LoginStore.getLoginState()) {
+		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().currentPath)) {
+			return;
+		}
+		else if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().lastPath)) {
 			NavigationAction.navigate({
-				destination: '/'
+				destination: NavigationStore.getNavigationState().lastPath
+			});
+			return;
+		}
+		else {
+			NavigationAction.navigate({
+				destination: '/browse'
 			});
 		}
 	},
