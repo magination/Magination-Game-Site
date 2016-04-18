@@ -5,7 +5,8 @@ var constants = {
 		upload: '/upload',
 		register: '/register',
 		forgotpassword: '/forgotpassword',
-		confirmforgotpassword: 'confirmforgotpassword/:id'
+		confirmforgotpassword: 'confirmforgotpassword/:id',
+		game: '/game'
 	},
 	SET_CURRENT_PATH: 'set_current_path',
 	NAVIGATE: 'navigate',

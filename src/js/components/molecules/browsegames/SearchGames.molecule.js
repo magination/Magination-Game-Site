@@ -3,15 +3,7 @@ var React = require('react');
 var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
 
-function isNumericAndNotNegative (value) {
-	if (!$.isNumeric(value)) {
-		return false;
-	}
-	if (value < 0) {
-		return false;
-	}
-	return true;
-}
+var ValidatorService = require('../../../service/Validator.service');
 
 var SearchGames = React.createClass({
 	getInitialState: function () {
@@ -84,7 +76,7 @@ var SearchGames = React.createClass({
 	},
 	singlesFilterChanged: function (e) {
 		var style = 'success';
-		if (!isNumericAndNotNegative(e.target.value)) {
+		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
 			style = 'error';
 		}
 		this.setState({
@@ -94,7 +86,7 @@ var SearchGames = React.createClass({
 	},
 	doublesFilterChanged: function (e) {
 		var style = 'success';
-		if (!isNumericAndNotNegative(e.target.value)) {
+		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
 			style = 'error';
 		}
 		this.setState({
@@ -104,7 +96,7 @@ var SearchGames = React.createClass({
 	},
 	triplesFilterChanged: function (e) {
 		var style = 'success';
-		if (!isNumericAndNotNegative(e.target.value)) {
+		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
 			style = 'error';
 		}
 		this.setState({
