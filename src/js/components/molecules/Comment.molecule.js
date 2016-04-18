@@ -12,7 +12,8 @@ var Comment = React.createClass({
 			editingCommentText: this.props.comment.commentText,
 			comment: this.props.comment,
 			replyCommentText: '',
-			isViewingReplies: false
+			isViewingReplies: false,
+			childComments: []
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
@@ -45,7 +46,7 @@ var Comment = React.createClass({
 		}
 		if (this.state.isViewingReplies) {
 			var count = 0;
-			replies = this.state.comment.childComments.map(function (comment) {
+			replies = this.state.childComments.map(function (comment) {
 				count++;
 				return <Comment key={count} comment={comment}/>;
 			});
@@ -72,7 +73,7 @@ var Comment = React.createClass({
 				</Media.Body>
 				<Media.Right>
 					{DeleteEditButton}
-					<a href='#' onClick={this.showChildComments}>Reply</a>
+					<a href='#' onClick={this.onReplyButtonClicked}>Reply</a>
 				</Media.Right>
 			</Media>
 		);
@@ -94,9 +95,21 @@ var Comment = React.createClass({
 			}
 		});
 	},
+	onReplyButtonClicked: function () {
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.comments + '/' + this.state.comment._id,
+			dataType: 'json',
+			statusCode: {
+				200: this.showChildComments
+			}
+		});
+	},
 	onSubmitReplySuccessResponse: function (data) {
+		var currentChildComments = this.state.childComments;
+		currentChildComments.unshift(data);
 		this.setState({
-			comment: data
+			childComments: currentChildComments
 		});
 	},
 	onReplyEntryChanged: function (e) {
@@ -104,8 +117,10 @@ var Comment = React.createClass({
 			replyCommentText: e.target.value
 		});
 	},
-	showChildComments: function () {
+	showChildComments: function (data) {
+		console.log(data);
 		this.setState({
+			childComments: data.childComments,
 			isViewingReplies: !this.state.isViewingReplies
 		});
 	},
