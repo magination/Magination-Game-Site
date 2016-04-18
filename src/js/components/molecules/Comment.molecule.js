@@ -95,6 +95,7 @@ var Comment = React.createClass({
 		});
 	},
 	onSubmitReplySuccessResponse: function (data) {
+		console.log(data);
 		this.setState({
 			comment: data
 		});
