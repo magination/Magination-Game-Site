@@ -1,7 +1,7 @@
 var React = require('react');
 
 var NavigationStore = require('../../../stores/NavigationStore');
-
+var NavigationConstants = require('../../../constants/NavigationConstants');
 var ListLinkElement = require('../../atoms/ListLinkElement.atom');
 
 var NavigationStatelessElements = React.createClass({
@@ -11,12 +11,12 @@ var NavigationStatelessElements = React.createClass({
 				{
 					id: 0,
 					displayText: 'Upload Game',
-					destination: '/upload'
+					destination: NavigationConstants.PATHS.creategame
 				},
 				{
 					id: 1,
 					displayText: 'Browse Games',
-					destination: '/browse'
+					destination: NavigationConstants.PATHS.discover
 				}
 			],
 			activeDestination: NavigationStore.getNavigationState().currentPath

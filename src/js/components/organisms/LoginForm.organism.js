@@ -53,7 +53,7 @@ var LoginForm = React.createClass({
 		}
 		else {
 			NavigationAction.navigate({
-				destination: '/browse'
+				destination: NavigationConstants.PATHS.discover
 			});
 		}
 	},
