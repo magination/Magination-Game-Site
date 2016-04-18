@@ -7,6 +7,7 @@ var NavigationConstants = require('../../constants/NavigationConstants');
 var ValidatorService = require('../../service/Validator.service');
 
 var Col = require('react-bootstrap').Col;
+var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 
@@ -28,11 +29,20 @@ var GameForm = React.createClass({
 					<form className='form-signin' onSubmit={this.postGame}>
 						<Input value={this.state.title} type='text' label='Title' placeholder='Title' onChange={this.onTitleChanged}/>
 						<Input value={this.state.description} type='textarea' label='Description' placeholder='How is your game played?' onChange={this.onDescriptionChanged}/>
-						<strong>Required Pieces</strong>
-						<Input value={this.state.singles} type='number' placeholder='Singles' onChange={this.singlesChanged} addonBefore='1'></Input>
-						<Input value={this.state.doubles} type='number' placeholder='Doubles' onChange={this.doublesChanged} addonBefore='2'></Input>
-						<Input value={this.state.triples} type='number' placeholder='Triples' onChange={this.triplesChanged} addonBefore={<img width={20} height={20} src='/public/img/triples.png'/>}></Input>
-						<Button type='submit'>Upload</Button>
+						<Row>
+							<Col md={4}>
+								<strong>Required Pieces</strong>
+								<Input value={this.state.singles} type='number' placeholder='Singles' onChange={this.singlesChanged} addonBefore='1'></Input>
+								<Input value={this.state.doubles} type='number' placeholder='Doubles' onChange={this.doublesChanged} addonBefore='2'></Input>
+								<Input value={this.state.triples} type='number' placeholder='Triples' onChange={this.triplesChanged} addonBefore={<img width={20} height={20} src='/public/img/triples.png'/>}></Input>
+							</Col>
+							<Col md={8}></Col>
+						</Row>
+						<Row>
+							<Col md={12}>
+								<Button type='submit'>Upload</Button>
+							</Col>
+						</Row>
 					</form>
 				</Col>
 			</div>
