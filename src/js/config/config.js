@@ -7,7 +7,8 @@ var config = {
 			login: restApiRoot + 'login',
 			confirmation: restApiRoot + 'confirmation',
 			resendEmail: restApiRoot + 'resendVerificationEmail',
-			forgotpassword: restApiRoot + 'login' + '/forgot'
+			forgotpassword: restApiRoot + 'login' + '/forgot',
+			comments: restApiRoot + 'comments'
 		}
 	}
 };
