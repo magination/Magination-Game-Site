@@ -1,4 +1,4 @@
-var restApiRoot = 'http://localhost:8000/api/';
+var restApiRoot = 'https://localhost:8000/api/';
 var config = {
 	urls: {
 		api: {
@@ -6,7 +6,9 @@ var config = {
 			games: restApiRoot + 'games',
 			login: restApiRoot + 'login',
 			confirmation: restApiRoot + 'confirmation',
-			resendEmail: restApiRoot + 'resendVerificationEmail'
+			resendEmail: restApiRoot + 'resendVerificationEmail',
+			forgotpassword: restApiRoot + 'login' + '/forgot',
+			comments: restApiRoot + 'comments'
 		}
 	}
 };

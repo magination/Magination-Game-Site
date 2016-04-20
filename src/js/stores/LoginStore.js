@@ -34,7 +34,7 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 	case LoginConstants.LOGIN_SUCCESS:
 		_loginState = true;
 		_token = action.token;
-		LoginStore.emitChange();
+		// LoginStore.emitChange();
 		break;
 	case LoginConstants.LOGOUT_SUCCESS:
 		_loginState = false;

@@ -1,101 +1,90 @@
 var React = require('react');
+var LoginService = require('./LoginService');
 
-var LoginAction = require('../../actions/LoginAction');
-var FeedbackAction = require('../../actions/FeedbackAction');
-var URLS = require('../../config/config').urls;
 var NavigationAction = require('../../actions/NavigationAction');
+var NavigationConstants = require('../../constants/NavigationConstants');
+var NavigationStore = require('../../stores/NavigationStore');
+var PATHS = require('../../constants/NavigationConstants').PATHS;
+var LoginStore = require('../../stores/LoginStore');
+
+var Modal = require('react-bootstrap').Modal;
+var Input = require('react-bootstrap').Input;
+var Button = require('react-bootstrap').Button;
 
 var LoginForm = React.createClass({
 	getInitialState: function () {
 		return {
 			username: '',
-			password: ''
+			password: '',
+			showModal: false
 		};
 	},
-	handleUsernameChange: function (e) {
+	render: function () {
+		return (
+			<div>
+				<Modal ref='modal' show={this.state.showModal} onHide={this.onHide}>
+					<Modal.Header>
+						<Modal.Title>Please sign in</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+							<form onSubmit={this.onSubmitForm}>
+								<Input value={this.state.username} type='text' label='Username / Email' placeholder='Username / Email' onChange={this.onUsernameChange}/>
+								<Input value={this.state.password} type='password' label='Password' placeholder='Password' onChange={this.onPasswordChange}/>
+								<Button type='submit'>Log in</Button>
+							</form>
+					</Modal.Body>
+					<Modal.Footer>
+						<a href='#' onClick={this.onForgotPasswordClicked}>Forgot Password?</a>
+					</Modal.Footer>
+				</Modal>
+			</div>
+		);
+	},
+	onHide: function () {
+		this.close();
+		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().currentPath)) {
+			return;
+		}
+		else if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().lastPath)) {
+			NavigationAction.navigate({
+				destination: NavigationStore.getNavigationState().lastPath
+			});
+			return;
+		}
+		else {
+			NavigationAction.navigate({
+				destination: NavigationConstants.PATHS.discover
+			});
+		}
+	},
+	close: function () {
+		this.setState({ showModal: false });
+	},
+	open: function () {
+		this.setState({ showModal: true });
+	},
+	onUsernameChange: function (e) {
 		this.setState({
 			username: e.target.value
 		});
 	},
-	handlePasswordChange: function (e) {
+	onPasswordChange: function (e) {
 		this.setState({
 			password: e.target.value
 		});
 	},
-	render: function () {
-		return (
-			<div className='col-md-4 col-md-offset-4'>
-				<form className='form-signin' onSubmit={this.onSubmitForm}>
-					<h2 className='form-signin-heading'>Please sign in</h2>
-					<label htmlFor='inputEmail' className='sr-only'>Username/Email</label>
-					<input ref='usernameInput' value={this.state.username} onChange={this.handleUsernameChange} type='text' id='inputEmail' className='form-control' placeholder='Username / Email' required autofocus/>
-					<label htmlFor='inputPassword' className='sr-only'>Password</label>
-					<input value={this.state.password} onChange={this.handlePasswordChange} type='password' id='inputPassword' className='form-control' placeholder='Password' required/>
-					<button className='btn btn-lg btn-primary btn-block' type='submit'>Login </button>
-				</form>
-			</div>
-		);
+	onForgotPasswordClicked: function () {
+		this.close();
+		NavigationAction.navigate({
+			destination: PATHS.forgotpassword
+		});
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();
-		$.ajax({
-			type: 'POST',
-			url: URLS.api.login,
-			data: JSON.stringify({
-				username: this.state.username,
-				password: this.state.password
-			}),
-			contentType: 'application/json',
-			dataType: 'json',
-			statusCode: {
-				200: this.onLoginSuccessResponse,
-				401: this.onLoginUnauthorizedResponse
-			}
-		});
-	},
-	onLoginSuccessResponse: function (data) {
-		LoginAction.loginSuccess({
-			token: data.token
-		});
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.users + '/' + data.id,
-			dataType: 'json',
-			headers: {
-				'Authorization': data.token
-			},
-			statusCode: {
-				200: this.onGetUserSuccessResponse,
-				401: this.onGetUserUnauthorizedResponse,
-				500: function () {
-					alert('Server Error: see console');
-					console.log(data);
-				}
-			}
-		});
-	},
-	onLoginUnauthorizedResponse: function (data) {
-		FeedbackAction.displayWarningMessage({
-			header: 'Wrong credentials!',
-			message: 'The username/password combination is not recognized'
-		});
+		LoginService.doLogin(this.state.username, this.state.password);
 		this.setState({
 			password: ''
 		});
-	},
-	onGetUserSuccessResponse: function (data) {
-		LoginAction.setLoginProfile({
-			profile: data
-		});
-		NavigationAction.navigateToPrevious();
-		FeedbackAction.displaySuccessMessage({
-			header: 'Login Successful!',
-			message: 'You are now logged in as ' + data.email
-		});
-	},
-	onGetUserUnauthorizedResponse: function (data) {
-		alert('Error: see console');
-		console.log(data);
 	}
 });
 

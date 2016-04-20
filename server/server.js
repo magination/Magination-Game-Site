@@ -5,8 +5,7 @@ var app = express();
 
 app.use('/public', express.static(path.join(__dirname, '../build')));
 
-var possiblePaths = ['/', '/browse', '/login', '/upload', '/confirmation/:id'];
-app.get(possiblePaths, function (req, res) {
+app.get('*', function (req, res) {
 	res.sendFile('index.html', { root: path.join(__dirname, '../src') });
 });
 

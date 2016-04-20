@@ -1,25 +1,24 @@
 var React = require('react');
 
 var NavigationStore = require('../../../stores/NavigationStore');
-
+var NavigationConstants = require('../../../constants/NavigationConstants');
 var ListLinkElement = require('../../atoms/ListLinkElement.atom');
-
-var links = [
-	{
-		id: 0,
-		displayText: 'Upload Game',
-		destination: '/upload'
-	},
-	{
-		id: 1,
-		displayText: 'Browse Games',
-		destination: '/browse'
-	}
-];
 
 var NavigationStatelessElements = React.createClass({
 	getInitialState: function () {
 		return {
+			staticlinks: [
+				{
+					id: 0,
+					displayText: 'Upload Game',
+					destination: NavigationConstants.PATHS.creategame
+				},
+				{
+					id: 1,
+					displayText: 'Browse Games',
+					destination: NavigationConstants.PATHS.discover
+				}
+			],
 			activeDestination: NavigationStore.getNavigationState().currentPath
 		};
 	},
@@ -30,15 +29,20 @@ var NavigationStatelessElements = React.createClass({
 		NavigationStore.removeChangeListener(this.onNavigationStateChange);
 	},
 	render: function () {
+		/* Checking if either of the element should render as active */
 		var component = this;
-		var staticLinks = links.map(function (link) {
+		var staticLinks = this.state.staticlinks.map(function (link) {
 			var isActive = (link.destination === component.state.activeDestination);
 			return <ListLinkElement isActive={isActive} key={link.id} displayText={link.displayText} destination={link.destination}/>;
 		});
+		var imgStyle = {
+			'maxWidth': '100%',
+			'maxHeight': '100%'
+		};
 		return (
 			<div>
 				<div className='navbar-header'>
-					<a className='navbar-brand' href='/'>Magination</a>
+					<a className='navbar-brand' href='/'><img style={imgStyle} src='public/magination-logo.png' /></a>
 				</div>
 				<ul className='nav navbar-nav'>
 					{staticLinks}

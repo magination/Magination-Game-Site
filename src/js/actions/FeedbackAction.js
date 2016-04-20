@@ -18,6 +18,14 @@ var FeedbackActions = {
 			header: data.header
 		});
 	},
+	displayErrorMessage: function (data) {
+		Dispatcher.dispatch({
+			actionType: FeedbackConstants.DISPLAY_ERROR,
+			message: data.message,
+			statusType: 'alert alert-danger fade in',
+			header: data.header
+		});
+	},
 	displayInternalServerError: function (data) {
 		Dispatcher.dispatch({
 			actionType: FeedbackConstants.DISPLAY_SERVER_ERROR

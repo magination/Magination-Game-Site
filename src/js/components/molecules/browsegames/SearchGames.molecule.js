@@ -1,26 +1,118 @@
 var React = require('react');
 
+var Button = require('react-bootstrap').Button;
+var Input = require('react-bootstrap').Input;
+
+var ValidatorService = require('../../../service/Validator.service');
+
 var SearchGames = React.createClass({
 	getInitialState: function () {
 		return {
-			searchtext: ''
+			filter_title: '',
+			filter_author: '',
+			filter_singles: '0',
+			filter_doubles: '0',
+			filter_triples: '0',
+			filter_general_search: '',
+			singlesBsStyle: 'success',
+			doublesBsStyle: 'success',
+			triplesBsStyle: 'success'
 		};
+	},
+	componentDidMount: function () {
+		this.refs.searchEntry.refs.input.focus();
 	},
 	render: function () {
 		return (
 			<div>
-				<input onChange={this._searchChanged} value={this.state.searchtext} type='text' placeholder='Search'/>
+				<h2>Search Filters</h2>
+				<form onSubmit={this.onSubmit}>
+					<Input value={this.state.filter_general_search} ref='searchEntry' type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
+					<Input value={this.state.filter_title} type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
+					<Input value={this.state.filter_author} type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
+					<Input value={this.state.filter_singles} bsStyle={this.state.singlesBsStyle} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1' label='Maximum Pieces'></Input>
+					<Input value={this.state.filter_doubles} bsStyle={this.state.doublesBsStyle} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore='2'></Input>
+					<Input value={this.state.filter_triples} bsStyle={this.state.triplesBsStyle} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore='3'></Input>
+					<Button type='submit'>Search</Button>
+				</form>
 			</div>
 		);
 	},
-	_searchChanged: function (e) {
+	onSubmit: function (e) {
+		e.preventDefault();
+		if (!($.isNumeric(this.state.filter_singles) &&
+			$.isNumeric(this.state.filter_doubles) &&
+			$.isNumeric(this.state.filter_triples))) {
+			return;
+		}
+
+		var search_filter = {};
+		if (this.state.filter_general_search !== '') {
+			search_filter['search'] = this.state.filter_general_search;
+		}
+		if (this.state.filter_title !== '') {
+			search_filter['title'] = this.state.filter_title;
+		}
+		if (this.state.filter_author !== '') {
+			search_filter['owner'] = this.state.filter_author;
+		}
+		if (this.state.filter_singles !== '' && this.state.filter_singles > 0) {
+			search_filter['singles'] = this.state.filter_singles;
+		}
+		if (this.state.filter_doubles !== '' && this.state.filter_doubles > 0) {
+			search_filter['doubles'] = this.state.filter_doubles;
+		}
+		if (this.state.filter_triples !== '' && this.state.filter_triples > 0) {
+			search_filter['triple'] = this.state.filter_triples;
+		}
+
+		this.props.didSubmit(search_filter);
+	},
+	tagSearchChange: function (e) {
 		this.setState({
-			searchtext: e.target.value
+			filter_general_search: e.target.value
 		});
-
-		/* TODO action search*/
+	},
+	titleSearchChanged: function (e) {
+		this.setState({
+			filter_title: e.target.value
+		});
+	},
+	authorSearchChanged: function (e) {
+		this.setState({
+			filter_author: e.target.value
+		});
+	},
+	singlesFilterChanged: function (e) {
+		var style = 'success';
+		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
+			style = 'error';
+		}
+		this.setState({
+			filter_singles: e.target.value,
+			singlesBsStyle: style
+		});
+	},
+	doublesFilterChanged: function (e) {
+		var style = 'success';
+		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
+			style = 'error';
+		}
+		this.setState({
+			filter_doubles: e.target.value,
+			doublesBsStyle: style
+		});
+	},
+	triplesFilterChanged: function (e) {
+		var style = 'success';
+		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
+			style = 'error';
+		}
+		this.setState({
+			filter_triples: e.target.value,
+			triplesBsStyle: style
+		});
 	}
-
 });
 
 module.exports = SearchGames;

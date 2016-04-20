@@ -2,37 +2,36 @@ var React = require('react');
 
 var LoginAction = require('../../../actions/LoginAction');
 
+var NavDropdown = require('react-bootstrap').NavDropdown;
+var MenuItem = require('react-bootstrap').MenuItem;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+
 var NavigationLoggedInState = React.createClass({
 	getInitialState: function () {
 		return {
-			email: null
+			username: null
 		};
 	},
 	componentWillMount: function () {
 		this.setState({
-			email: this.props.email
+			username: this.props.email
 		});
 	},
 	componentWillReceiveProps: function (props) {
 		this.setState({
-			email: props.email
+			username: props.email
 		});
 	},
 	render: function () {
 		return (
-			<ul className='nav navbar-nav navbar-right'>
-				<li className='dropdown'>
-					<a href='#' className='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>{this.state.email} <span className='caret'></span></a>
-					<ul className='dropdown-menu'>
-						<li><a href='#'><span className='glyphicon glyphicon-user'></span>  My Profile</a></li>
-						<li><a href='#'><span className='glyphicon glyphicon-knight'></span>  My Games</a></li>
-						<li role='separator' className='divider'></li>
-						<li><a href='#'> <span className='glyphicon glyphicon-cog'></span>  Settings</a></li>
-						<li role='separator' className='divider'></li>
-						<li><a href='/' onClick={this.onLogoutClicked}><span className='glyphicon glyphicon-log-out'></span>  Log out</a></li>
-					</ul>
-				</li>
-			</ul>
+			<div>
+				<NavDropdown title={this.state.username} id='nav-dropdown'>
+					<MenuItem><Glyphicon glyph='user'/>My Profile</MenuItem>
+					<MenuItem><Glyphicon glyph='knight'/>My Games</MenuItem>
+					<MenuItem><Glyphicon glyph='cog'/>Settings</MenuItem>
+					<MenuItem onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/>Log out</MenuItem>
+				</NavDropdown>
+			</div>
 		);
 	},
 	onLogoutClicked: function () {

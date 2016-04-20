@@ -2,59 +2,106 @@ var React = require('react');
 var NavigationAction = require('../../actions/NavigationAction');
 var URLS = require('../../config/config').urls;
 
+var Col = require('react-bootstrap').Col;
+var Input = require('react-bootstrap').Input;
+var Button = require('react-bootstrap').Button;
+
+function isEmail (email) {
+	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	return regex.test(email);
+}
+
 var RegisterForm = React.createClass({
 	getInitialState: function () {
 		return {
 			username: '',
 			email: '',
+			emailConfirm: '',
 			password: '',
-			passwordConfirm: ''
+			passwordConfirm: '',
+			bsStyleUsername: 'error',
+			bsStyleEmail: 'error',
+			bsStyleEmailConfirm: 'error',
+			bsStylePassword: 'error',
+			bsStylePasswordConfirm: 'error'
 		};
 	},
-	handleEmailChange: function (e) {
-		this.setState({
-			email: e.target.value
-		});
-	},
-	handleUsernameChange: function (e) {
-		this.setState({
-			username: e.target.value
-		});
-	},
-	handlePasswordChange: function (e) {
-		this.setState({
-			password: e.target.value
-		});
-	},
-	handlePasswordConfirmChange: function (e) {
-		this.setState({
-			passwordConfirm: e.target.value
-		});
+	componentDidMount: function () {
+		this.refs.usernameEntry.refs.input.focus();
 	},
 	render: function () {
 		return (
-			<div className='col-md-4 col-md-offset-4'>
-				<form className='form-signin' onSubmit={this.onSubmitForm}>
-					<h2 className='form-signin-heading'>Register</h2>
-					<label htmlFor='inputEmail' className='sr-only'>Email</label>
-					<input value={this.state.email} onChange={this.handleEmailChange} type='email' id='inputUsername' className='form-control' placeholder='Email' required autofocus/>
-					<label htmlFor='inputEmail' className='sr-only'>Username</label>
-					<input value={this.state.username} onChange={this.handleUsernameChange} type='text' id='inputUsername' className='form-control' placeholder='Username' required autofocus/>
-					<label htmlFor='inputPassword' className='sr-only'>Password</label>
-					<input value={this.state.password} onChange={this.handlePasswordChange} type='password' id='inputPassword' className='form-control' placeholder='Password' required/>
-					<label htmlFor='inputPassword' className='sr-only'>Confirm Password</label>
-					<input value={this.state.passwordConfirm} onChange={this.handlePasswordConfirmChange} type='password' id='inputConfirmPassword' className='form-control' placeholder='Confirm Password' required/>
-					<button className='btn btn-lg btn-primary btn-block' type='submit'>Register</button>
-				</form>
+			<div>
+				<Col md={4} mdOffset={4}>
+					<form className='form-signin' onSubmit={this.onSubmitForm}>
+						<h2 className='form-signin-heading'>Register</h2>
+						<Input ref='usernameEntry' value={this.state.username} bsStyle={this.state.bsStyleUsername} label='Username' type='text' placeholder='Enter your username' onChange={this.onUsernameEntryChange} hasFeedback/>
+						<Input value={this.state.email} bsStyle={this.state.bsStyleEmail} label='Email' type='text' placeholder='Enter your email address' onChange={this.onEmailEntryChange} hasFeedback/>
+						<Input value={this.state.emailConfirm} bsStyle={this.state.bsStyleEmailConfirm} type='text' placeholder='Confirm your email address' onChange={this.onEmailConfirmEntryChange} hasFeedback/>
+						<Input value={this.state.password} bsStyle={this.state.bsStylePassword} type='password' label='Password' placeholder='Password' onChange={this.onPasswordEntryChange} hasFeedback/>
+						<Input value={this.state.passwordConfirm} bsStyle={this.state.bsStylePasswordConfirm} type='password' placeholder='Confirm Password' onChange={this.onPasswordConfirmEntryChange} hasFeedback/>
+						<Button type='submit'>Register</Button>
+					</form>
+				</Col>
 			</div>
 		);
+	},
+	onEmailEntryChange: function (e) {
+		/* TODO: CHECK IF EMAIL EXISTS (maybe on unfocus instead)*/
+		var successStatus = 'success';
+		if (!isEmail(e.target.value)) {
+			successStatus = 'error';
+		}
+		this.setState({
+			email: e.target.value,
+			bsStyleEmail: successStatus
+		});
+	},
+	onEmailConfirmEntryChange: function (e) {
+		var successStatus = 'error';
+		if (e.target.value === this.state.email) {
+			successStatus = 'success';
+		}
+		this.setState({
+			emailConfirm: e.target.value,
+			bsStyleEmailConfirm: successStatus
+		});
+	},
+	onUsernameEntryChange: function (e) {
+		/* TODO: CHECK IF USER EXISTS (maybe on unfocus instead)*/
+		var successStatus = 'error';
+		if (e.target.value !== '') {
+			successStatus = 'success';
+		}
+		this.setState({
+			username: e.target.value,
+			bsStyleUsername: successStatus
+		});
+	},
+	onPasswordEntryChange: function (e) {
+		var successStatus = 'error';
+		if (e.target.value !== '') {
+			successStatus = 'success';
+		}
+		this.setState({
+			password: e.target.value,
+			bsStylePassword: successStatus
+		});
+	},
+	onPasswordConfirmEntryChange: function (e) {
+		var successStatus = 'error';
+		if (e.target.value === this.state.password) {
+			successStatus = 'success';
+		}
+		this.setState({
+			passwordConfirm: e.target.value,
+			bsStylePasswordConfirm: successStatus
+		});
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();
 
-		if (this.state.password !== this.state.passwordConfirm) {
-			return;
-		}
+		/* TODO: check fields*/
 
 		$.ajax({
 			type: 'POST',
