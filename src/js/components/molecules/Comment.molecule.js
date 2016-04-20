@@ -10,10 +10,7 @@ var Comment = React.createClass({
 		return {
 			isEditingComment: false,
 			editingCommentText: this.props.comment.commentText,
-			comment: this.props.comment,
-			replyCommentText: '',
-			isViewingReplies: false,
-			childComments: []
+			comment: this.props.comment
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
@@ -24,8 +21,6 @@ var Comment = React.createClass({
 	render: function () {
 		var DeleteEditButton = <div />;
 		var mediaBody = <p>{this.state.comment.commentText}</p>;
-		var replies = <div/>;
-		var replyForm = <div/>;
 		if (isThisUser(this.state.comment.owner._id)) {
 			DeleteEditButton =
 				<Media.Right>
@@ -44,22 +39,6 @@ var Comment = React.createClass({
 					/>
 				</form>;
 		}
-		if (this.state.isViewingReplies) {
-			var count = 0;
-			replies = this.state.childComments.map(function (comment) {
-				count++;
-				return <Comment key={count} comment={comment}/>;
-			});
-			replyForm =
-				<Media>
-					<Media.Body>
-						<Media.Heading>Reply</Media.Heading>
-						<form onSubmit={this.onSubmitReplyComment}>
-							<Input type='text' onChange={this.onReplyEntryChanged}/>
-						</form>
-					</Media.Body>
-				</Media>;
-		}
 		return (
 			<Media>
 				<Media.Left>
@@ -68,60 +47,16 @@ var Comment = React.createClass({
 				<Media.Body>
 					<Media.Heading>{this.state.comment.owner.username} <small><i>{getDateSmallFormat(this.state.comment.createdAt)}</i></small></Media.Heading>
 					{mediaBody}
-					{replyForm}
-					{replies}
 				</Media.Body>
 				<Media.Right>
 					{DeleteEditButton}
-					<a href='#' onClick={this.onReplyButtonClicked}>Reply</a>
 				</Media.Right>
 			</Media>
 		);
 	},
-	onSubmitReplyComment: function (e) {
-		e.preventDefault();
-		$.ajax({
-			type: 'POST',
-			url: URLS.api.comments + '/' + this.state.comment._id,
-			headers: {
-				'Authorization': LoginStore.getToken()
-			},
-			data: {
-				commentText: this.state.replyCommentText
-			},
-			dataType: 'json',
-			statusCode: {
-				201: this.onSubmitReplySuccessResponse
-			}
-		});
-	},
-	onReplyButtonClicked: function () {
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.comments + '/' + this.state.comment._id,
-			dataType: 'json',
-			statusCode: {
-				200: this.showChildComments
-			}
-		});
-	},
-	onSubmitReplySuccessResponse: function (data) {
-		var currentChildComments = this.state.childComments;
-		currentChildComments.unshift(data);
-		this.setState({
-			childComments: currentChildComments
-		});
-	},
 	onReplyEntryChanged: function (e) {
 		this.setState({
 			replyCommentText: e.target.value
-		});
-	},
-	showChildComments: function (data) {
-		console.log(data);
-		this.setState({
-			childComments: data.childComments,
-			isViewingReplies: !this.state.isViewingReplies
 		});
 	},
 	onEditValueChange: function (e) {
