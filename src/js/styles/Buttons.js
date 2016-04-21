@@ -1,5 +1,5 @@
 var ButtonStyles = {
-	magination: {
+	Magination: {
 		backgroundColor: '#00A3E0',
 		color: 'white'
 	}

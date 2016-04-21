@@ -1,7 +1,7 @@
 var Colors = require('./Colors');
 
 var TextStyles = {
-	listHeader: {
+	blueHeader: {
 		color: Colors.blue
 	}
 };
