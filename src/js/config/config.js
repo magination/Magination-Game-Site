@@ -12,6 +12,7 @@ var config = {
 			comments: restApiRoot + 'comments'
 		},
 		img: {
+			listMarkerBlueSingle: imgRoot + 'blue-single-piece-marker.png',
 			favicon: imgRoot + 'favicon.ico',
 			pieceSingleBlue: imgRoot + 'magination-pieces/piece-blue-single.png',
 			pieceDoubleBlue: imgRoot + 'magination-pieces/piece-blue-double.png',
