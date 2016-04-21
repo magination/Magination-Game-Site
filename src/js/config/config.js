@@ -13,7 +13,9 @@ var config = {
 		},
 		img: {
 			favicon: imgRoot + 'favicon.ico',
-			pieceSingleBlue: imgRoot + 'magination-pieces/piece-blue-single'
+			pieceSingleBlue: imgRoot + 'magination-pieces/piece-blue-single.png',
+			pieceDoubleBlue: imgRoot + 'magination-pieces/piece-blue-double.png',
+			pieceTripleBlue: imgRoot + 'magination-pieces/piece-blue-triple.png'
 		}
 	}
 };
