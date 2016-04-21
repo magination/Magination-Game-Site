@@ -5,7 +5,9 @@ var FeedbackAction = require('../../actions/FeedbackAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationConstants = require('../../constants/NavigationConstants');
 var ValidatorService = require('../../service/Validator.service');
-
+var ImageNumberPair = require('../molecules/ImageNumberPair.molecule');
+var GameStore = require('../../stores/GameStore');
+var GameAction = require('../../actions/GameAction');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
@@ -13,13 +15,40 @@ var Button = require('react-bootstrap').Button;
 
 var GameForm = React.createClass({
 	getInitialState: function () {
-		return {
-			title: '',
-			description: '',
-			singles: '',
-			doubles: '',
-			triples: ''
-		};
+		if (GameStore.getGame()) {
+			return {
+				title: GameStore.getGame().title ? GameStore.getGame().title : '',
+				description: GameStore.getGame().description ? GameStore.getGame().description : '',
+				singles: GameStore.getGame().singles ? GameStore.getGame().singles : '0',
+				doubles: GameStore.getGame().doubles ? GameStore.getGame().doubles : '0',
+				triples: GameStore.getGame().triples ? GameStore.getGame().triples : '0'
+			};
+		}
+		else {
+			return {
+				title: '',
+				description: '',
+				singles: '0',
+				doubles: '0',
+				triples: '0'
+			};
+		}
+	},
+	componentWillMount () {
+		GameStore.addChangeListener(this.onGameStateChanged);
+	},
+	componentWillUnmount () {
+		GameStore.removeChangeListener(this.onGameStateChanged);
+	},
+	componentDidMount () {
+		if (GameStore.getGame()) {
+			/*
+			TODO: Confirm overwriting already stored game
+			 */
+		}
+		else {
+			GameAction.createNewGameLocally();
+		}
 	},
 	render: function () {
 		return (
@@ -31,10 +60,10 @@ var GameForm = React.createClass({
 						<Input value={this.state.description} type='textarea' label='Description' placeholder='How is your game played?' onChange={this.onDescriptionChanged}/>
 						<Row>
 							<Col md={4}>
-								<strong>Required Pieces</strong>
-								<Input value={this.state.singles} type='number' placeholder='Singles' onChange={this.singlesChanged} addonBefore='1'></Input>
-								<Input value={this.state.doubles} type='number' placeholder='Doubles' onChange={this.doublesChanged} addonBefore='2'></Input>
-								<Input value={this.state.triples} type='number' placeholder='Triples' onChange={this.triplesChanged} addonBefore={<img width={20} height={20} src='/public/img/triples.png'/>}></Input>
+								<strong>PIECES</strong>
+								<ImageNumberPair value={this.state.singles} src={URLS.img.pieceSingleBlue} placeholder='Singles' bindingProperty='singles'/>
+								<ImageNumberPair value={this.state.doubles} src={URLS.img.pieceDoubleBlue} placeholder='Doubles' bindingProperty='doubles'/>
+								<ImageNumberPair value={this.state.triples} src={URLS.img.pieceTripleBlue} placeholder='Triples' bindingProperty='triples'/>
 							</Col>
 							<Col md={8}></Col>
 						</Row>
@@ -83,6 +112,13 @@ var GameForm = React.createClass({
 	onDescriptionChanged: function (e) {
 		this.setState({
 			description: e.target.value
+		});
+	},
+	onGameStateChanged: function () {
+		this.setState({
+			singles: GameStore.getGame().singles,
+			doubles: GameStore.getGame().doubles,
+			triples: GameStore.getGame().triples
 		});
 	},
 	postGame: function (e) {

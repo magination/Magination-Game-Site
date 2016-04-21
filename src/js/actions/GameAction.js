@@ -1,7 +1,7 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var EditGameConstants = require('../constants/EditGameConstants');
 
-var LoginActions = {
+var GameAction = {
 	storeGameToServer: function (data) {
 		Dispatcher.dispatch({
 			actionType: EditGameConstants.STORE_GAME_TO_SERVER,
@@ -9,7 +9,6 @@ var LoginActions = {
 		});
 	},
 	updateCurrentGameLocally: function (data) {
-		console.log('Action. Propertyname: ' + data.propertyName + '. Propertyvalue: ' + data.propertyValue);
 		Dispatcher.dispatch({
 			actionType: EditGameConstants.UPDATE_GAME_LOCALLY,
 			propertyName: data.propertyName,
@@ -24,4 +23,4 @@ var LoginActions = {
 	}
 };
 
-module.exports = LoginActions;
+module.exports = GameAction;

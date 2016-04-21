@@ -22,11 +22,13 @@ var EditGameStore = _.extend({}, EventEmitter.prototype, {
 });
 
 EditGameStore.dispatchToken = Dispatcher.register(function (action) {
-	console.log('Dispatching action');
 	switch (action.actionType) {
 	case EditGameConstants.UPDATE_GAME_LOCALLY:
-		console.log('Game updated. Propertyname: ' + action.propertyName + '. Propertyvalue: ' + action.propertyValue);
-		_game.action.propertyName = action.propertyValue;
+		_game[action.propertyName.toString()] = action.propertyValue;
+		EditGameStore.emitChange();
+		break;
+	case EditGameConstants.CHANGE_GAME_LOCALLY:
+		_game = action.game;
 		EditGameStore.emitChange();
 		break;
 	}
