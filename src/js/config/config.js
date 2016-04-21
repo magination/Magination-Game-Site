@@ -16,7 +16,8 @@ var config = {
 			favicon: imgRoot + 'favicon.ico',
 			pieceSingleBlue: imgRoot + 'magination-pieces/piece-blue-single.png',
 			pieceDoubleBlue: imgRoot + 'magination-pieces/piece-blue-double.png',
-			pieceTripleBlue: imgRoot + 'magination-pieces/piece-blue-triple.png'
+			pieceTripleBlue: imgRoot + 'magination-pieces/piece-blue-triple.png',
+			peopleBlue: imgRoot + 'people.png'
 		}
 	}
 };
