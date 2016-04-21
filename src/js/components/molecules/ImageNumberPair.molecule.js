@@ -1,6 +1,6 @@
 var React = require('react');
 var Input = require('react-bootstrap').Input;
-var EditGameAction = require('../../actions/GameAction');
+var GameAction = require('../../actions/GameAction');
 var ValidatorService = require('../../service/Validator.service');
 var GameStore = require('../../stores/GameStore');
 
@@ -33,7 +33,7 @@ var ImageNumberPair = React.createClass({
 		this.setState({
 			value: newValue
 		});
-		EditGameAction.updateCurrentGameLocally({
+		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindingProperty,
 			propertyValue: newValue
 		});
