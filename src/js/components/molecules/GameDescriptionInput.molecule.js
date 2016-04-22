@@ -3,18 +3,16 @@ var Input = require('react-bootstrap').Input;
 var GameAction = require('../../actions/GameAction');
 var GameStore = require('../../stores/GameStore');
 
-var ImageNumberPair = React.createClass({
+var GameDescription = React.createClass({
 	getInitialState () {
 		if (GameStore.getGame()) {
 			return {
-				bindableBooleanProperty: GameStore.getGame()[this.props.bindableBooleanProperty],
 				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty],
-				lengthString: GameStore.getGame()[this.props.bindableTextProperty].length + '/' + this.props.maxLength
+				lengthString: GameStore.getGame()[this.props.bindableTextProperty] ? GameStore.getGame()[this.props.bindableTextProperty].length : 0 + '/' + this.props.maxLength
 			};
 		}
 		else {
 			return {
-				bindableBooleanProperty: false,
 				bindableTextProperty: '',
 				lengthString: 0 + '/' + this.props.maxLength
 			};
@@ -48,16 +46,14 @@ var ImageNumberPair = React.createClass({
 	onGameStateChanged: function () {
 		if (!GameStore.getGame()) {
 			this.setState({
-				bindableBooleanProperty: false,
 				bindableTextProperty: ''
 			});
 		}
 		else {
 			this.setState({
-				bindableBooleanProperty: GameStore.getGame()[this.props.bindableBooleanProperty],
 				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty]
 			});
 		}
 	}
 });
-module.exports = ImageNumberPair;
+module.exports = GameDescription;
