@@ -20,7 +20,8 @@ var Game = React.createClass({
 					singles: '',
 					doubles: '',
 					triples: ''
-				}
+				},
+				owner: {}
 			}
 		};
 	},

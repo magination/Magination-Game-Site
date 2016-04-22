@@ -12,6 +12,7 @@ var GameInformation = React.createClass({
 		game: React.PropTypes.any.isRequired
 	},
 	render: function () {
+		var rating = (this.props.game.numberOfVotes) ? (this.props.game.sumOfVotes / this.props.game.numberOfVotes) : 'No Rating';
 		return (
 			<div style={ContainerStyles.informationContainer}>
 				<Row>
@@ -20,21 +21,27 @@ var GameInformation = React.createClass({
 					</Col>
 				</Row>
 				<Row>
+					<h3 style={TextStyles.white}>by {this.props.game.owner.username}</h3>
+				</Row>
+				<Row>
 					<Col md={12} style={ContainerStyles.numberOfPlayersContainer}>
 						<h4 style={TextStyles.white}>{this.props.game.numberOfPlayers} Players</h4>
 					</Col>
 				</Row>
 				<Row>
-					<h4 style={TextStyles.white}><img width={50} height={25} src={imgUrls.pieceSingleWhite} alt='a'/> {this.props.game.pieces.singles}</h4>
+					<h4 style={TextStyles.white}><img height={25} width={25} src={imgUrls.starWhite}/>{rating}</h4>
 				</Row>
 				<Row>
-					<h4 style={TextStyles.white}><img width={50} height={25} src={imgUrls.pieceDoubleWhite} alt='a'/> {this.props.game.pieces.doubles}</h4>
+					<h4 style={TextStyles.white}><img width={50} height={19} src={imgUrls.pieceSingleWhiteNoPadding} alt='a'/>	{this.props.game.pieces.singles}</h4>
 				</Row>
 				<Row>
-					<h4 style={TextStyles.white}><img width={50} height={25} src={imgUrls.pieceTripleWhite} alt='a'/> {this.props.game.pieces.triples}</h4>
+					<h4 style={TextStyles.white}><img width={50} height={19} src={imgUrls.pieceDoubleWhiteNoPadding} alt='a'/>	{this.props.game.pieces.doubles}</h4>
 				</Row>
 				<Row>
-					<h5 style={TextStyles.white}>{(this.props.game.otherObjects) ? '+ Objects of choise' : 'No Other Objects'}</h5>
+					<h4 style={TextStyles.white}><img width={50} height={25} src={imgUrls.pieceTripleWhiteNoPadding} alt='a'/>	{this.props.game.pieces.triples}</h4>
+				</Row>
+				<Row>
+					<h5 style={TextStyles.white}>{(this.props.game.otherObjects) ? <a style={TextStyles.white} href='#'>+ Objects of choise</a> : 'No Other Objects'}</h5>
 				</Row>
 			</div>
 		);
