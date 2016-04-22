@@ -8,8 +8,6 @@ var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 
-var LineStyles = require('../../styles/Lines');
-
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
@@ -50,20 +48,20 @@ var Game = React.createClass({
 		return (
 			<div>
 				<Row>
-				<Col md={3} mdOffset={2}>
-					<GameInformation game={this.state.game}/>
-				</Col>
-				<Col md={9}>
-					<ImageCarousel />
-				</Col>
+					<Col md={4} mdOffset={1}>
+						<GameInformation game={this.state.game}/>
+					</Col>
+					<Col md={6}>
+						<ImageCarousel imageUrls={['lda', 'adaad', 'adad']}/>
+					</Col>
 				</Row>
-				<hr style={LineStyles.grayHr}/>
+				<hr />
 				<Row>
 					<Col md={8} mdOffset={2}>
 						<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 					</Col>
 				</Row>
-				<hr style={LineStyles.grayHr}/>
+				<hr />
 			</div>
 		);
 	},
