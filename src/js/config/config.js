@@ -9,7 +9,8 @@ var config = {
 			confirmation: restApiRoot + 'confirmation',
 			resendEmail: restApiRoot + 'resendVerificationEmail',
 			forgotpassword: restApiRoot + 'login' + '/forgot',
-			comments: restApiRoot + 'comments'
+			comments: restApiRoot + 'comments',
+			verifyEmail: restApiRoot + 'login/update'
 		},
 		img: {
 			listMarkerBlueSingle: imgRoot + 'blue-single-piece-marker.png',

@@ -3,6 +3,7 @@ var React = require('react');
 var URLS = require('../../config/config').urls;
 
 var NavigationStore = require('../../stores/NavigationStore');
+var FeedbackAction = require('../../actions/FeedbackAction');
 
 var VerificationSent = React.createClass({
 	render: function () {
@@ -23,9 +24,14 @@ var VerificationSent = React.createClass({
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
-				200: function () { alert(); },
-				401: this.onLoginUnauthorizedResponse
+				200: this.onEmailSent
 			}
+		});
+	},
+	onEmailSent: function () {
+		FeedbackAction.displaySuccessMessage({
+			header: 'Email sent',
+			message: 'Email was successfully sent to ' + NavigationStore.getNavigationState().data.email + '. You should receive the email within few minutes.'
 		});
 	}
 });
