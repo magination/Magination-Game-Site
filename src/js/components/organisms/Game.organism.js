@@ -5,6 +5,7 @@ var URLS = require('../../config/config.js').urls;
 var Reviews = require('../molecules/game/Reviews.molecule');
 var GameInformation = require('../molecules/game/GameInformation.molecule');
 var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
+var CustomList = require('../molecules/lists/CustomList.molecule');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 
@@ -12,6 +13,8 @@ var Game = React.createClass({
 	getInitialState: function () {
 		return {
 			game: {
+				rules: [],
+				alternativeRules: [],
 				reviews: [],
 				pieces: {
 					singles: '',
@@ -57,7 +60,15 @@ var Game = React.createClass({
 				</Row>
 				<hr />
 				<Row>
-					<Col md={8} mdOffset={2}>
+					<Col md={11} mdOffset={1}>
+						<CustomList title='Rules' listElements={this.state.game.rules}/>
+						<br />
+						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+					</Col>
+				</Row>
+				<hr />
+				<Row>
+					<Col md={10} mdOffset={1}>
 						<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 					</Col>
 				</Row>
