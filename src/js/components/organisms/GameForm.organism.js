@@ -23,9 +23,11 @@ var GameForm = React.createClass({
 				game: {
 					title: '',
 					description: '',
-					singles: '0',
-					doubles: '0',
-					triples: '0',
+					pieces: {
+						singles: '0',
+						doubles: '0',
+						triples: '0'
+					},
 					players: '0'
 				}
 			};
@@ -54,7 +56,7 @@ var GameForm = React.createClass({
 					<h3 className='text-center'>CREATE YOUR OWN GAME</h3>
 					<h5>Some text about that</h5>
 					<hr/>
-					<form className='form-game' onSubmit={this.postGame}>
+					<form className='form-game' onSubmit={this.submitGame}>
 						<Row>
 							<Col md={6}>
 								<Input value={this.state.game.title} type='text' placeholder='GAME TITLE' onChange={this.onTitleChanged}/>
@@ -72,21 +74,21 @@ var GameForm = React.createClass({
 						<Row>
 							<Col md={3}>
 								<h4>PIECES</h4>
-								<ImageNumberPair value={this.state.game.singles} src={URLS.img.pieceSingleBlue} placeholder='No. singles' bindingProperty='singles'/>
-								<ImageNumberPair value={this.state.game.doubles} src={URLS.img.pieceDoubleBlue} placeholder='No. doubles' bindingProperty='doubles'/>
-								<ImageNumberPair value={this.state.game.triples} src={URLS.img.pieceTripleBlue} placeholder='No. triples' bindingProperty='triples'/>
+								<ImageNumberPair value={this.state.game.pieces.singles} src={URLS.img.pieceSingleBlue} placeholder='No. singles' bindingCollection ='pieces' bindingProperty='singles'/>
+								<ImageNumberPair value={this.state.game.pieces.doubles} src={URLS.img.pieceDoubleBlue} placeholder='No. doubles' bindingCollection ='pieces' bindingProperty='doubles'/>
+								<ImageNumberPair value={this.state.game.pieces.triples} src={URLS.img.pieceTripleBlue} placeholder='No. triples' bindingCollection ='pieces' bindingProperty='triples'/>
 							</Col>
 						</Row>
 						<Row>
 							<Col md={8}>
-								<HideableInput description='Need other objects' bindableBooleanProperty='isNeedOtherObjects' bindableTextProperty='otherObjectsString' placeholder='Separate with ","' />
+								<HideableInput description='Need other objects' bindableTextProperty='otherObjects' placeholder='Separate with ","' />
 							</Col>
 						</Row>
 						<hr/>
 						<h4>DESCRIPTION</h4>
 						<Row>
 							<Col md={8}>
-								<GameDescriptionInput bindableTextProperty='gameDescription' placeholder='Describe your game!' maxLength={255} />
+								<GameDescriptionInput bindableTextProperty='shortDescription' placeholder='Describe your game!' maxLength={255} />
 							</Col>
 						</Row>
 						<Row>
@@ -99,9 +101,14 @@ var GameForm = React.createClass({
 			</div>
 		);
 	},
+	submitGame: function (e) {
+		e.preventDefault();
+		GameAction.storeGameToServer(GameStore.getGame());
+	},
 	onTitleChanged: function (e) {
-		this.setState({
-			title: e.target.value
+		GameAction.updateCurrentGameLocally({
+			propertyName: 'title',
+			propertyValue: e.target.value
 		});
 	},
 	onGameStateChanged: function () {

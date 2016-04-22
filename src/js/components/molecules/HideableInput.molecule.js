@@ -2,19 +2,18 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var GameAction = require('../../actions/GameAction');
 var GameStore = require('../../stores/GameStore');
-var Checkbox = require('../atoms/game/Checkbox.atom');
 
 var ImageNumberPair = React.createClass({
 	getInitialState () {
 		if (GameStore.getGame()) {
 			return {
-				bindableBooleanProperty: GameStore.getGame()[this.props.bindableBooleanProperty],
+				isInputEnabled: GameStore.getGame()[this.props.bindableTextProperty],
 				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty]
 			};
 		}
 		else {
 			return {
-				bindableBooleanProperty: false,
+				isInputEnabled: false,
 				bindableTextProperty: ''
 			};
 		}
@@ -28,10 +27,16 @@ var ImageNumberPair = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Checkbox checked={this.state.bindableBooleanProperty} description={this.props.description} bindingProperty={this.props.bindableBooleanProperty}/>
+				<input ref='checkbox' type='checkbox' onChange={this.onPropertyChanged} checked={this.props.checked} /> {this.props.description}
 				<Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} disabled={!this.state.bindableBooleanProperty}/>
 			</div>
 		);
+	},
+	onPropertyChanged: function (e) {
+		this.refs.checkbox.checked = e.target.checked;
+		this.setState({
+			isInputEnabled: e.target.checked
+		});
 	},
 	onTextChanged: function (e) {
 		GameAction.updateCurrentGameLocally({

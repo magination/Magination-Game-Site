@@ -27,14 +27,15 @@ var ImageNumberPair = React.createClass({
 
 	valueChanged: function (e) {
 		var newValue = e.target.value;
+		console.log(newValue);
+		console.log(!ValidatorService.isNumericAndNotNegative(newValue));
 		if (!ValidatorService.isNumericAndNotNegative(newValue)) {
 			newValue = 0;
 		}
-		this.setState({
-			value: newValue
-		});
+		console.log(newValue);
 		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindingProperty,
+			propertyCollection: this.props.bindingCollection,
 			propertyValue: newValue
 		});
 	},
@@ -45,9 +46,16 @@ var ImageNumberPair = React.createClass({
 			});
 		}
 		else {
-			this.setState({
-				value: GameStore.getGame()[this.props.bindingProperty]
-			});
+			if (this.props.bindingCollection) {
+				this.setState({
+					value: GameStore.getGame()[this.props.bindingCollection][this.props.bindingProperty]
+				});
+			}
+			else {
+				this.setState({
+					value: GameStore.getGame()[this.props.bindingProperty]
+				});
+			}
 		}
 	}
 });
