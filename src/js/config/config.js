@@ -14,6 +14,9 @@ var config = {
 		img: {
 			listMarkerBlueSingle: imgRoot + 'blue-single-piece-marker.png',
 			favicon: imgRoot + 'favicon.ico',
+			pieceSingleWhite: imgRoot + 'magination-pieces/piece-white-single.png',
+			pieceDoubleWhite: imgRoot + 'magination-pieces/piece-white-double.png',
+			pieceTripleWhite: imgRoot + 'magination-pieces/piece-white-triple.png',
 			pieceSingleBlue: imgRoot + 'magination-pieces/piece-blue-single.png',
 			pieceDoubleBlue: imgRoot + 'magination-pieces/piece-blue-double.png',
 			pieceTripleBlue: imgRoot + 'magination-pieces/piece-blue-triple.png',

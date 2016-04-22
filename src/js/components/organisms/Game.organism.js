@@ -14,7 +14,12 @@ var Game = React.createClass({
 	getInitialState: function () {
 		return {
 			game: {
-				reviews: []
+				reviews: [],
+				pieces: {
+					singles: '',
+					doubles: '',
+					triples: ''
+				}
 			}
 		};
 	},
@@ -46,7 +51,7 @@ var Game = React.createClass({
 			<div>
 				<Row>
 				<Col md={3} mdOffset={2}>
-					<GameInformation/>
+					<GameInformation game={this.state.game}/>
 				</Col>
 				<Col md={9}>
 					<ImageCarousel />
