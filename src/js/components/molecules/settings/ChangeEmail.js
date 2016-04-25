@@ -7,28 +7,28 @@ var URLS = require('../../../config/config').urls;
 var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
 var ValidatorService = require('../../../service/Validator.service');
+var ButtonStyle = require('../../../styles/Buttons');
 
 var ChangePassword = React.createClass({
 	getInitialState () {
 		return {
 			newEmail: '',
 			bsStyleNewEmail: 'error',
-			isOpen: false,
 			currentPassword: ''
 		};
 	},
 	render: function () {
 		return (
 			<div>
-				<Button onClick={ () => this.setState({ isOpen: !this.state.isOpen })}>
+				<Button onClick={this.onChangeEmailClicked} style={ButtonStyle.MaginationFill}>
 					Change email
 				</Button>
-				<Collapse in={this.state.isOpen}>
+				<Collapse in={this.props.isShow}>
 					<Well>
 						<div>
 							<form className='form-settings' onSubmit={this.storeChanges}>
 								<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordChanged}/>
-								<Input value={this.state.newEmail} bsStyle={this.state.bsStyleEmail} label='Email' type='text' placeholder='Enter new email address' onChange={this.onNewEmailEntryChange} hasFeedback/>
+								<Input value={this.state.newEmail} bsStyle={this.state.bsStyleEmail} label='New email' type='text' placeholder='Enter new email address' onChange={this.onNewEmailEntryChange} hasFeedback/>
 								<Button ref='submitButton' type='submit'>Save changes</Button>
 							</form>
 						</div>
@@ -36,6 +36,9 @@ var ChangePassword = React.createClass({
 				</Collapse>
 			</div>
 		);
+	},
+	onChangeEmailClicked: function (e) {
+		this.props.onExpandChanged(this.props.isShow ? '' : 'email');
 	},
 	onNewEmailEntryChange: function (e) {
 		successStatus = 'error';
