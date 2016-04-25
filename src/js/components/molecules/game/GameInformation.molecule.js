@@ -3,7 +3,7 @@ var ContainerStyles = require('../../../styles/Containers');
 
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
-var Glyphicon = require('react-bootstrap').Glyphicon;
+var Rating = require('../browsegames/RateGame.molecule');
 var TextStyles = require('../../../styles/Text');
 var imgUrls = require('../../../config/config').urls.img;
 
@@ -12,6 +12,7 @@ var GameInformation = React.createClass({
 		game: React.PropTypes.any.isRequired
 	},
 	render: function () {
+		console.log(this.props.game.numberOfVotes);
 		var rating = (this.props.game.numberOfVotes) ? (this.props.game.sumOfVotes / this.props.game.numberOfVotes) : 'No Rating';
 		return (
 			<div style={ContainerStyles.informationContainer}>
@@ -29,7 +30,7 @@ var GameInformation = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<h3 style={TextStyles.white}><Glyphicon style={{color: 'white'}} glyph='star' />{rating}</h3>
+					<h3 style={TextStyles.white}><Rating glyphStyle={TextStyles.white} maxRating='5' rating={rating} isStatic selectedImage='star' unselectedImage='star-empty' />{rating}</h3>
 				</Row>
 				<Row>
 					<h4 style={TextStyles.white}><img width={50} height={19} src={imgUrls.pieceSingleWhiteNoPadding} alt='a'/>	{this.props.game.pieces.singles}</h4>

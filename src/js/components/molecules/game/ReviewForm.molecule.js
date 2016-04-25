@@ -36,7 +36,7 @@ var ReviewForm = React.createClass({
 							</Modal.Header>
 							<Modal.Body>
 								<Input style={TextStyles.textArea} type='textarea' value={this.state.reviewText} placeholder='Review Text' onChange={this.onReviewTextChanged}/>
-								<Rating maxRating='5' onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty'/>
+								<Rating glyphStyle={ButtonStyles.RatingStar} maxRating='5' onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty'/>
 							</Modal.Body>
 							<Modal.Footer>
 								<Button type='button' onClick={this.onHide}>Cancel</Button>

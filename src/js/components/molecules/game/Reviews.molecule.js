@@ -87,6 +87,7 @@ var Reviews = React.createClass({
 			console.log('Got success from getReviews, but the data is malformed');
 			return;
 		}
+		data.reviews.reverse();
 		this.setState({
 			reviews: data.reviews
 		});
