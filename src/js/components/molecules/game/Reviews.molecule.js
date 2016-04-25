@@ -43,7 +43,7 @@ var Reviews = React.createClass({
 
 		var toIndex = fromIndex + 5;
 		var reviews = this.state.reviews.slice(fromIndex, toIndex).map(function (review) {
-			return <div><Review key={review._id} data={review}/><hr /></div>;
+			return <div key={review._id}><Review data={review}/><hr /></div>;
 		});
 		var reviewButtonNavigation = [];
 		for (var i = 0; i < numberOfButtons; i++) {
