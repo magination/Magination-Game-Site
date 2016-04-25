@@ -1,7 +1,12 @@
+var Colors = require('./Colors');
 var ButtonStyles = {
 	Magination: {
-		backgroundColor: '#00A3E0',
+		backgroundColor: Colors.blueDark,
 		color: 'white'
+	},
+	RatingStar: {
+		color: Colors.blue,
+		fontSize: '25'
 	}
 };
 

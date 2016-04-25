@@ -6,6 +6,10 @@ var TextStyles = {
 	},
 	white: {
 		color: 'white'
+	},
+	textArea: {
+		resize: 'none',
+		height: '220px'
 	}
 };
 

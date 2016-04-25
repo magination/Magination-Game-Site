@@ -5,21 +5,24 @@ var URLS = require('../../config/config.js').urls;
 var Reviews = require('../molecules/game/Reviews.molecule');
 var GameInformation = require('../molecules/game/GameInformation.molecule');
 var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
+var CustomList = require('../molecules/lists/CustomList.molecule');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
-
-var LineStyles = require('../../styles/Lines');
 
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
 			game: {
+				rules: [],
+				images: [],
+				alternativeRules: [],
 				reviews: [],
 				pieces: {
 					singles: '',
 					doubles: '',
 					triples: ''
-				}
+				},
+				owner: {}
 			}
 		};
 	},
@@ -50,20 +53,28 @@ var Game = React.createClass({
 		return (
 			<div>
 				<Row>
-				<Col md={3} mdOffset={2}>
-					<GameInformation game={this.state.game}/>
-				</Col>
-				<Col md={9}>
-					<ImageCarousel />
-				</Col>
+					<Col md={4} mdOffset={1}>
+						<GameInformation game={this.state.game}/>
+					</Col>
+					<Col md={6}>
+						<ImageCarousel imageUrls={this.state.game.images}/>
+					</Col>
 				</Row>
-				<hr style={LineStyles.grayHr}/>
+				<hr />
 				<Row>
-					<Col md={8} mdOffset={2}>
+					<Col md={11} mdOffset={1}>
+						<CustomList title='Rules' listElements={this.state.game.rules}/>
+						<br />
+						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+					</Col>
+				</Row>
+				<hr />
+				<Row>
+					<Col md={10} mdOffset={1}>
 						<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 					</Col>
 				</Row>
-				<hr style={LineStyles.grayHr}/>
+				<hr />
 			</div>
 		);
 	},
