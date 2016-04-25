@@ -5,25 +5,52 @@ var URLS = require('../../../config/config').urls;
 
 var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
+var Modal = require('react-bootstrap').Modal;
+var Rating = require('../browsegames/RateGame.molecule');
+
+var ButtonStyles = require('../../../styles/Buttons');
+var TextStyles = require('../../../styles/Text');
 
 var ReviewForm = React.createClass({
 	getInitialState: function () {
 		return {
-			rating: 2,
+			rating: 0,
 			reviewText: ''
 		};
+	},
+	onRatingClicked: function (rating) {
+		this.setState({
+			rating: rating
+		});
+	},
+	onHide: function () {
+		this.props.onHide();
 	},
 	render: function () {
 		return (
 			<div>
-				<form onSubmit={this.onSubmitReview}>
-					<Input type='text' value={this.state.reviewText} placeholder='Review Text' onChange={this.onReviewTextChanged}/>
-					<Button type='submit'>Submit</Button>
-				</form>
+					<Modal dialogClassName='custom-modal' show={this.props.show} onHide={this.onHide} animation={false}>
+						<form onSubmit={this.onSubmitReview}>
+							<Modal.Header>
+								<Modal.Title>Write a Review</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<Input style={TextStyles.textArea} type='textarea' value={this.state.reviewText} placeholder='Review Text' onChange={this.onReviewTextChanged}/>
+								<Rating maxRating='5' onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty'/>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button type='button' onClick={this.onHide}>Cancel</Button>
+								<Button style={ButtonStyles.Magination} type='submit'>Submit</Button>
+							</Modal.Footer>
+						</form>
+					</Modal>
 			</div>
 		);
 	},
 	onReviewTextChanged: function (e) {
+		if (e.targe.value.lenght > 5000) {
+			return;
+		}
 		this.setState({
 			reviewText: e.target.value
 		});

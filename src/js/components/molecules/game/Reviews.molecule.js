@@ -1,7 +1,6 @@
 var React = require('react');
 var Review = require('./Review.molecule.js');
 var Col = require('react-bootstrap').Col;
-var Collapse = require('react-bootstrap').Collapse;
 var ReviewForm = require('./ReviewForm.molecule');
 var ButtonStyle = require('../../../styles/Buttons');
 var Button = require('react-bootstrap').Button;
@@ -42,11 +41,7 @@ var Reviews = React.createClass({
 		return (
 			<div>
 				<h2 style={TextStyles.blueHeader}>Reviews</h2>
-				<Collapse in={this.state.isShowingReviewForm}>
-					<div>
-						<ReviewForm id={this.props.id}/>
-					</div>
-				</Collapse>
+				<ReviewForm id={this.props.id} show={this.state.isShowingReviewForm} onHide={this.onModalHide}/>
 				<Col md={8}>
 					{reviews}
 				</Col>
@@ -55,6 +50,11 @@ var Reviews = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onModalHide: function () {
+		this.setState({
+			isShowingReviewForm: false
+		});
 	},
 	onWriteReviewClicked: function () {
 		this.setState({

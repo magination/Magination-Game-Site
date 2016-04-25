@@ -22,7 +22,7 @@ var LoginForm = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Modal ref='modal' show={this.state.showModal} onHide={this.onHide}>
+				<Modal dialogClassName='custom-modal' ref='modal' show={this.state.showModal} onHide={this.onHide}>
 					<Modal.Header>
 						<Modal.Title>Please sign in</Modal.Title>
 					</Modal.Header>
