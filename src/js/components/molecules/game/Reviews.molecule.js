@@ -46,8 +46,10 @@ var Reviews = React.createClass({
 			return <div key={review._id}><Review data={review}/><hr /></div>;
 		});
 		var reviewButtonNavigation = [];
-		for (var i = 0; i < numberOfButtons; i++) {
-			reviewButtonNavigation.push(<Button key={i} onClick={this.onReviewNavigationClicked.bind(this, i)}>{i + 1}</Button>);
+		if (numberOfButtons > 1) {
+			for (var i = 0; i < numberOfButtons; i++) {
+				reviewButtonNavigation.push(<Button key={i} onClick={this.onReviewNavigationClicked.bind(this, i)}>{i + 1}</Button>);
+			}
 		}
 		return (
 			<div>

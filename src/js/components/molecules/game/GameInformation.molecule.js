@@ -12,7 +12,6 @@ var GameInformation = React.createClass({
 		game: React.PropTypes.any.isRequired
 	},
 	render: function () {
-		console.log(this.props.game.numberOfVotes);
 		var rating = (this.props.game.numberOfVotes) ? (this.props.game.sumOfVotes / this.props.game.numberOfVotes) : 'No Rating';
 		return (
 			<div style={ContainerStyles.informationContainer}>
