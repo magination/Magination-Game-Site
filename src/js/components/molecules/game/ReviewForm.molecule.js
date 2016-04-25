@@ -48,7 +48,7 @@ var ReviewForm = React.createClass({
 		);
 	},
 	onReviewTextChanged: function (e) {
-		if (e.targe.value.lenght > 5000) {
+		if (e.target.value.lenght > 5000) {
 			return;
 		}
 		this.setState({

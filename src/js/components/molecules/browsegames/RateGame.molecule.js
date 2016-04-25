@@ -8,7 +8,6 @@ var RateGame = React.createClass({
 			selectedRating: 0
 		};
 	},
-
 	onIconHovered (id) {
 		this.setState({
 			rating: id
