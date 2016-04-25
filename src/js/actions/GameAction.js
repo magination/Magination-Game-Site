@@ -4,9 +4,11 @@ var GameConstants = require('../constants/GameConstants');
 var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 var FeedbackAction = require('./FeedbackAction');
+var NavigationAction = require('./NavigationAction');
 
 var GameAction = {
 	storeGameToServer: function (data) {
+		console.log(data);
 		$.ajax({
 			type: 'POST',
 			url: URLS.api.games,
@@ -17,7 +19,7 @@ var GameAction = {
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
-				200: onGamePostedSuccess,
+				201: onGamePostedSuccess,
 				401: onPostGameUnauthorizedResponse,
 				500: function () {
 					alert('Server Error: see console');
@@ -45,9 +47,16 @@ var GameAction = {
 	}
 };
 var onGamePostedSuccess = function (data) {
-	Dispatcher.dispatch({
-		actionType: GameConstants.CHANGE_GAME_LOCALLY,
-		game: data.game
+	console.log(data);
+	FeedbackAction.displaySuccessMessage({
+		header: 'Success.',
+		message: 'Game uploaded!'
+	});
+	NavigationAction.navigate({
+		destination: '/game/' + data._id,
+		data: {
+			game: data
+		}
 	});
 };
 var onPostGameUnauthorizedResponse = function () {
