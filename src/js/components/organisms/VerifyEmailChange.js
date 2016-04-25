@@ -18,7 +18,7 @@ var VerifyEmailChange = React.createClass({
 			status: this.props.initialText
 		};
 	},
-	componentWillMount: function () {
+	componentDidMount: function () {
 		getLastUrlId();
 		$.ajax({
 			type: 'POST',
