@@ -14,6 +14,7 @@ var Game = React.createClass({
 		return {
 			game: {
 				rules: [],
+				images: [],
 				alternativeRules: [],
 				reviews: [],
 				pieces: {
@@ -56,7 +57,7 @@ var Game = React.createClass({
 						<GameInformation game={this.state.game}/>
 					</Col>
 					<Col md={6}>
-						<ImageCarousel imageUrls={['lda', 'adaad', 'adad']}/>
+						<ImageCarousel imageUrls={this.state.game.images}/>
 					</Col>
 				</Row>
 				<hr />

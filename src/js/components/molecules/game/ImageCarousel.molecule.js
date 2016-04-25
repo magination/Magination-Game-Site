@@ -18,7 +18,7 @@ var ImageCarousel = React.createClass({
 	render: function () {
 		var carouselItems = this.props.imageUrls.map(function (url) {
 			return <Carousel.Item key={url}>
-						<img style={{margin: 'auto', minHeight: '272', borderRadius: '5'}} width={500} height={500} alt='Could not find the image' src={url}/>
+						<img style={{margin: 'auto', minHeight: '272'}} width={500} height={500} alt='Could not find the image' src={url}/>
 					</Carousel.Item>;
 		});
 		return (

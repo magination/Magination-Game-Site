@@ -5,7 +5,6 @@ var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var TextStyles = require('../../../styles/Text');
-var ButtonStyles = require('../../../styles/Buttons');
 var imgUrls = require('../../../config/config').urls.img;
 
 var GameInformation = React.createClass({
@@ -30,7 +29,7 @@ var GameInformation = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<h3 style={TextStyles.white}><Glyphicon style={ButtonStyles.RatingStar} glyph='star' />{rating}</h3>
+					<h3 style={TextStyles.white}><Glyphicon style={{color: 'white'}} glyph='star' />{rating}</h3>
 				</Row>
 				<Row>
 					<h4 style={TextStyles.white}><img width={50} height={19} src={imgUrls.pieceSingleWhiteNoPadding} alt='a'/>	{this.props.game.pieces.singles}</h4>
