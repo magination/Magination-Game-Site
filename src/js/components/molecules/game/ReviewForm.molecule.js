@@ -64,9 +64,6 @@ var ReviewForm = React.createClass({
 		});
 	},
 	onDeleteClicked: function () {
-		if (!window.confirm('Dude are you fucking sure?')) {
-			return;
-		}
 		$.ajax({
 			type: 'DELETE',
 			url: URLS.api.games + '/' + this.props.id + '/reviews/' + this.props.oldReview._id,
