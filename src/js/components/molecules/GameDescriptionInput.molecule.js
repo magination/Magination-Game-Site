@@ -2,13 +2,14 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var GameAction = require('../../actions/GameAction');
 var GameStore = require('../../stores/GameStore');
+var TextStyle = require('../../styles/Text');
 
 var GameDescription = React.createClass({
 	getInitialState () {
 		if (GameStore.getGame()) {
 			return {
 				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty],
-				lengthString: GameStore.getGame()[this.props.bindableTextProperty] ? GameStore.getGame()[this.props.bindableTextProperty].length : 0 + '/' + this.props.maxLength
+				lengthString: GameStore.getGame()[this.props.bindableTextProperty] ? GameStore.getGame()[this.props.bindableTextProperty].length + '/' + this.props.maxLength : 0 + '/' + this.props.maxLength
 			};
 		}
 		else {
@@ -27,9 +28,9 @@ var GameDescription = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<h5>Short text from us</h5>
+				<h5>Describe your game briefly.</h5>
 				<Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} />
-				<h5>{this.state.lengthString} characters</h5>
+				<h5 style={TextStyle.alignRight}>{this.state.lengthString} characters</h5>
 			</div>
 		);
 	},
