@@ -7,6 +7,24 @@ var ContainerStyles = {
 	},
 	numberOfPlayersContainer: {
 		backgroundColor: Colors.blueLight
+	},
+	ruleList: {
+		leftIcon: {
+			color: Colors.blue,
+			display: 'inline-block',
+			verticalAlign: 'middle',
+			paddingRight: '5'
+		},
+		input: {
+			width: '50%',
+			display: 'inline-block'
+		},
+		rightIcon: {
+			color: Colors.blue,
+			display: 'inline-block',
+			verticalAlign: 'middle',
+			paddingLeft: '5'
+		}
 	}
 };
 
