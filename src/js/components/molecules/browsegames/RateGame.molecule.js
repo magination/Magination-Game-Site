@@ -4,8 +4,8 @@ var RatingIcon = require('../../atoms/RatingIcon');
 var RateGame = React.createClass({
 	getInitialState () {
 		return {
-			rating: this.props.isStatic ? this.props.rating : 0,
-			selectedRating: 0
+			rating: (this.props.rating) ? this.props.rating : 0,
+			selectedRating: (this.props.rating) ? this.props.rating : 0
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {

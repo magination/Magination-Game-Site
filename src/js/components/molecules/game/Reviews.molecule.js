@@ -1,4 +1,7 @@
 var React = require('react');
+
+var LoginStore = require('../../../stores/LoginStore');
+var Glyphicon = require('react-bootstrap').Glyphicon;
 var Review = require('./Review.molecule.js');
 var Col = require('react-bootstrap').Col;
 var ReviewForm = require('./ReviewForm.molecule');
@@ -17,25 +20,14 @@ var Reviews = React.createClass({
 		};
 	},
 	componentDidMount: function () {
-		if (this.props.id === undefined) {
-			return;
-		}
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.games + '/' + this.props.id + '/reviews',
-			contentType: 'application/json',
-			dataType: 'json',
-			success: this.onGetReviewsSuccess
-		});
+		LoginStore.addChangeListener(this.onLoginChanged);
+		this.doGetReviews(this.props.id);
 	},
 	componentWillReceiveProps: function (nextProps) {
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.games + '/' + nextProps.id + '/reviews',
-			contentType: 'application/json',
-			dataType: 'json',
-			success: this.onGetReviewsSuccess
-		});
+		this.doGetReviews(nextProps.id);
+	},
+	componentWillUnmount: function () {
+		LoginStore.removeChangeListener(this.onLoginChanged);
 	},
 	render: function () {
 		var fromIndex = (this.state.currentReviewPage * 5);
@@ -51,10 +43,20 @@ var Reviews = React.createClass({
 				reviewButtonNavigation.push(<Button key={i} onClick={this.onReviewNavigationClicked.bind(this, i)}>{i + 1}</Button>);
 			}
 		}
+		var ownReview = (this.state.ownReview) ? <Review data={this.state.ownReview}/> : <div></div>;
+		var editReviewButton = (this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.Magination}><Glyphicon glyph='pencil'/><strong> Edit Review</strong></Button> : <div/>;
+		var createNewReviewButton = (!this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.Magination}><Glyphicon glyph='pencil'/><strong> Write your own review</strong></Button> : <div/>;
 		return (
 			<div>
-				<h2 style={TextStyles.blueHeader}>Reviews</h2>
-				<ReviewForm id={this.props.id} show={this.state.isShowingReviewForm} onHide={this.onModalHide}/>
+				<Col md={8}>
+					{ownReview}
+				</Col>
+				<Col md={4}>
+					{editReviewButton}
+				</Col>
+				<Col md={12}>
+					<h2 style={TextStyles.blueHeader}>Reviews</h2>
+				</Col>
 				<Col md={8}>
 					{reviews}
 					<ButtonToolbar>
@@ -64,10 +66,33 @@ var Reviews = React.createClass({
 					</ButtonToolbar>
 				</Col>
 				<Col md={4}>
-					<Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.Magination}>Write your own review</Button>
+					{createNewReviewButton}
 				</Col>
+				<ReviewForm id={this.props.id} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>
 			</div>
 		);
+	},
+	doGetReviews: function (id) {
+		if (id === undefined) {
+			return;
+		}
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.games + '/' + id + '/reviews',
+			contentType: 'application/json',
+			dataType: 'json',
+			success: this.onGetReviewsSuccess
+		});
+		if (!LoginStore.getLoginState()) {
+			return;
+		}
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.games + '/' + id + '/reviews' + '?userId=' + LoginStore.getLoginProfile()._id,
+			contentType: 'application/json',
+			dataType: 'json',
+			success: this.onGetOwnReviewSuccess
+		});
 	},
 	onReviewNavigationClicked: function (i) {
 		this.setState({
@@ -84,6 +109,11 @@ var Reviews = React.createClass({
 			isShowingReviewForm: !this.state.isShowingReviewForm
 		});
 	},
+	onGetOwnReviewSuccess: function (data) {
+		this.setState({
+			ownReview: data
+		});
+	},
 	onGetReviewsSuccess: function (data) {
 		if (data.reviews === undefined) {
 			console.log('Got success from getReviews, but the data is malformed');
@@ -93,6 +123,9 @@ var Reviews = React.createClass({
 		this.setState({
 			reviews: data.reviews
 		});
+	},
+	onLoginChanged: function () {
+		this.doGetReviews(this.props.id);
 	}
 });
 

@@ -32,7 +32,7 @@ var LoginStore = _.extend({}, EventEmitter.prototype, {
 LoginStore.dispatchToken = Dispatcher.register(function (action) {
 	switch (action.actionType) {
 	case LoginConstants.LOGIN_SUCCESS:
-		_loginState = true;
+		// _loginState = true;
 		_token = action.token;
 		// LoginStore.emitChange();
 		break;
@@ -43,6 +43,7 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case LoginConstants.SET_PROFILE:
 		_profile = action.profile;
+		_loginState = true;
 		LoginStore.emitChange();
 		break;
 	}
