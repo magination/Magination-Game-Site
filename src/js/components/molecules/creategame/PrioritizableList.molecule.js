@@ -2,23 +2,34 @@ var React = require('react');
 var RowItem = require('./RowItem.molecule');
 var Button = require('react-bootstrap').Button;
 var ButtonStyle = require('../../../styles/Buttons');
+var GameAction = require('../../../actions/GameAction');
+var GameStore = require('../../../stores/GameStore');
 
 var PrioritizableList = React.createClass({
-	getInitialState () {
+	getInitialState: function () {
 		return {
 			items: []
 		};
+	},
+	componentWillMount () {
+		GameStore.addChangeListener(this.onGameStateChanged);
+	},
+	componentWillUnmount () {
+		GameStore.removeChangeListener(this.onGameStateChanged);
 	},
 	render: function () {
 		var rowItems = [];
 		for (var i = 0; i < this.state.items.length; i++) {
 			rowItems.push(
-				<RowItem key={i} hasUpButton={i !== 0}
+				<RowItem key={i}
+						hasUpButton={i !== 0}
 						hasDownButton={i !== this.state.items.length - 1}
 						value={this.state.items[i]}
-						onDeleteClicked={this.onDeleteClicked.bind(this, i)}
-						onUpClicked={this.onUpClicked.bind(this, i)}
-						onDownClicked={this.onDownClicked.bind(this, i)}
+						propertyCollection={this.props.propertyCollection}
+						bindableTextProperty={this.props.bindableTextProperty}
+						onUpClicked={this.onUpClicked}
+						onDownClicked={this.onDownClicked}
+						onDeleteClicked={this.onDeleteClicked}
 						placeholder={this.props.listItemPlaceholder}/>
 			);
 		}
@@ -29,41 +40,32 @@ var PrioritizableList = React.createClass({
 			</div>
 		);
 	},
-	onAddItemClicked: function () {
-		var newItems = this.state.items;
-		if (this.state.items[this.state.items.length - 1] === '') {
-			return;
-		}
-		newItems.push('');
+	onGameStateChanged: function () {
 		this.setState({
-			items: newItems
+			items: GameStore.getGame()[this.props.propertyCollection]
+		});
+	},
+	onAddItemClicked: function () {
+		GameAction.addNewRuleToLocalGame({
+			isOptional: this.props.isAlternativeRules
 		});
 	},
 	onDeleteClicked: function (pos) {
-		var oldItems = this.state.items;
-		oldItems.splice(pos, 1);
-		this.setState({
-			items: oldItems
+		GameAction.deleteRuleFromLocalGame({
+			position: pos,
+			isOptional: this.props.isAlternativeRules
 		});
 	},
 	onUpClicked: function (currentPosition) {
-		var newList = this.state.items;
-		var selectedItem = newList[currentPosition];
-		newList[currentPosition] = newList[currentPosition - 1];
-		newList[currentPosition - 1] = selectedItem;
-
-		this.setState({
-			items: newList
+		GameAction.changeRulePrioritizationLocally({
+			currentPosition: currentPosition,
+			isMovingUp: true
 		});
 	},
 	onDownClicked: function (currentPosition) {
-		var newList = this.state.items;
-		var selectedItem = newList[currentPosition];
-		newList[currentPosition] = newList[currentPosition + 1];
-		newList[currentPosition + 1] = selectedItem;
-
-		this.setState({
-			items: newList
+		GameAction.changeRulePrioritizationLocally({
+			currentPosition: currentPosition,
+			isMovingUp: false
 		});
 	}
 });
