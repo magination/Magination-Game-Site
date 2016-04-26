@@ -20,7 +20,7 @@ var ChangePassword = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Button onClick={this.onChangeEmailClicked} style={ButtonStyle.MaginationFill}>
+				<Button onClick={this.onChangeEmailClicked} style={ButtonStyle.MaginationFillParent}>
 					Change email
 				</Button>
 				<Collapse in={this.props.isShow}>
