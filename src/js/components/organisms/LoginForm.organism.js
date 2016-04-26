@@ -1,12 +1,11 @@
 var React = require('react');
-var LoginService = require('./LoginService');
 
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationConstants = require('../../constants/NavigationConstants');
 var NavigationStore = require('../../stores/NavigationStore');
 var PATHS = require('../../constants/NavigationConstants').PATHS;
 var LoginStore = require('../../stores/LoginStore');
-
+var LoginAction = require('../../actions/LoginAction');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
@@ -81,7 +80,7 @@ var LoginForm = React.createClass({
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();
-		LoginService.doLogin(this.state.username, this.state.password);
+		LoginAction.doLogin(this.state.username, this.state.password);
 		this.setState({
 			password: ''
 		});
