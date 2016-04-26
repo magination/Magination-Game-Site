@@ -34,7 +34,6 @@ var ImageNumberPair = React.createClass({
 	},
 	onVisibilityChanged: function (e) {
 		this.refs.checkbox.checked = e.target.checked;
-		console.log(e.target.checked);
 		this.setState({
 			isShowInput: e.target.checked
 		});
