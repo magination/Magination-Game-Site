@@ -105,11 +105,13 @@ var ReviewForm = React.createClass({
 		if (this.props.onDeleteSuccess) {
 			this.props.onDeleteSuccess(data);
 		}
+		this.onHide();
 	},
 	onPostReviewSuccess: function (data) {
 		if (this.props.onEditSuccess) {
 			this.props.onEditSuccess(data);
 		}
+		this.onHide();
 	}
 });
 

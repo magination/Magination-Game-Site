@@ -68,9 +68,19 @@ var Reviews = React.createClass({
 				<Col md={4}>
 					{createNewReviewButton}
 				</Col>
-				<ReviewForm id={this.props.id} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>
+				<ReviewForm id={this.props.id} onDeleteSuccess={this.onDeleteReviewSuccess} onEditSuccess={this.onEditReviewSuccess} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>
 			</div>
 		);
+	},
+	onEditReviewSuccess: function (ownReview) {
+		this.setState({
+			ownReview: ownReview
+		});
+	},
+	onDeleteReviewSuccess: function () {
+		this.setState({
+			ownReview: null
+		});
 	},
 	doGetReviews: function (id) {
 		if (id === undefined) {
@@ -119,14 +129,30 @@ var Reviews = React.createClass({
 			console.log('Got success from getReviews, but the data is malformed');
 			return;
 		}
-		data.reviews.reverse();
+		var reviews = removeOwnReview(data.reviews);
+		reviews.reverse();
 		this.setState({
-			reviews: data.reviews
+			reviews: reviews
 		});
 	},
 	onLoginChanged: function () {
 		this.doGetReviews(this.props.id);
 	}
 });
+
+function removeOwnReview (array) {
+	if (!array) {
+		return;
+	}
+	if (LoginStore.getLoginState()) {
+		for (var i = 0; i < array.length; i++) {
+			if (array[i].owner._id === LoginStore.getLoginProfile()._id) {
+				array.splice(i, 1);
+				return array;
+			}
+		}
+	}
+	return array;
+}
 
 module.exports = Reviews;
