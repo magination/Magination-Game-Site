@@ -3,7 +3,6 @@ var RatingIcon = require('../../atoms/RatingIcon');
 
 var RateGame = React.createClass({
 	getInitialState () {
-		console.log(this.props.rating);
 		return {
 			rating: this.props.isStatic ? this.props.rating : 0,
 			selectedRating: 0

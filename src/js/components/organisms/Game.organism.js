@@ -8,11 +8,13 @@ var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
 var CustomList = require('../molecules/lists/CustomList.molecule');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
+var TextStyles = require('../../styles/Text');
 
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
 			game: {
+				shortDescription: '',
 				rules: [],
 				images: [],
 				alternativeRules: [],
@@ -62,10 +64,16 @@ var Game = React.createClass({
 				</Row>
 				<hr />
 				<Row>
-					<Col md={11} mdOffset={1}>
+					<Col md={7} mdOffset={1}>
+						<h2 style={TextStyles.blueHeader}>Description</h2>
+						<h4>{this.state.game.shortDescription}</h4>
+						<br />
 						<CustomList title='Rules' listElements={this.state.game.rules}/>
 						<br />
 						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+					</Col>
+					<Col md={2} mdOffset={1}>
+						<div className='fb-share-button' data-href={NavigationStore.getNavigationState().currentPath} data-layout='button_count' data-mobile-iframe='true'></div>
 					</Col>
 				</Row>
 				<hr />

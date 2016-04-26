@@ -57,8 +57,6 @@ var ReviewForm = React.createClass({
 	},
 	onSubmitReview: function (e) {
 		e.preventDefault();
-		console.log(this.state.rating);
-		console.log(this.state.reviewText);
 		$.ajax({
 			type: 'POST',
 			url: URLS.api.games + '/' + this.props.id + '/reviews',
