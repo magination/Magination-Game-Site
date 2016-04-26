@@ -6,6 +6,7 @@ var Well = require('react-bootstrap').Well;
 var URLS = require('../../../config/config').urls;
 var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
+var ButtonStyle = require('../../../styles/Buttons');
 
 var ChangePassword = React.createClass({
 	getInitialState () {
@@ -13,17 +14,16 @@ var ChangePassword = React.createClass({
 			newPassword: '',
 			confirmedPassword: '',
 			currentPassword: '',
-			open: false,
 			bsStyleConfirmedPassword: 'error'
 		};
 	},
 	render: function () {
 		return (
 			<div>
-				<Button onClick={ () => this.setState({ open: !this.state.open })}>
+				<Button onClick={this.onChangePasswordClicked} style={ButtonStyle.MaginationFill}>
 					Change password
 				</Button>
-				<Collapse in={this.state.open}>
+				<Collapse in={this.props.isShow}>
 					<Well>
 						<div>
 							<form className='form-settings' onSubmit={this.storeChanges}>
@@ -37,6 +37,9 @@ var ChangePassword = React.createClass({
 				</Collapse>
 			</div>
 		);
+	},
+	onChangePasswordClicked: function (e) {
+		this.props.onExpandChanged(this.props.isShow ? '' : 'password');
 	},
 	onCurrentPasswordCHanged: function (e) {
 		this.setState({

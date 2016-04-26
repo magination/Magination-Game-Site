@@ -7,7 +7,7 @@ var ImageNumberPair = React.createClass({
 	getInitialState () {
 		if (GameStore.getGame()) {
 			return {
-				isInputEnabled: GameStore.getGame()[this.props.bindableTextProperty],
+				isShowInput: GameStore.getGame()[this.props.bindableTextProperty],
 				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty]
 			};
 		}
@@ -27,15 +27,16 @@ var ImageNumberPair = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<input ref='checkbox' type='checkbox' onChange={this.onPropertyChanged} checked={this.props.checked} /> {this.props.description}
-				<Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} disabled={!this.state.bindableBooleanProperty}/>
+				<input ref='checkbox' type='checkbox' onChange={this.onVisibilityChanged} checked={this.props.checked} /> {this.props.description}
+				{this.state.isShowInput ? <Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} /> : null}
 			</div>
 		);
 	},
-	onPropertyChanged: function (e) {
+	onVisibilityChanged: function (e) {
 		this.refs.checkbox.checked = e.target.checked;
+		console.log(e.target.checked);
 		this.setState({
-			isInputEnabled: e.target.checked
+			isShowInput: e.target.checked
 		});
 	},
 	onTextChanged: function (e) {

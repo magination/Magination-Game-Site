@@ -18,10 +18,10 @@ var ImageNumberPair = React.createClass({
 	},
 	render: function () {
 		return (
-		<div>
-			<Input value={this.state.value} type='number' placeholder={this.props.placeholder} onChange={this.valueChanged} addonBefore={<img width={40} height={20} src={this.props.src}/>}>
-			</Input>
-		</div>
+			<div>
+				<Input value={this.state.value} type='number' placeholder={this.props.placeholder} onChange={this.valueChanged} addonBefore={<img width={40} height={20} src={this.props.src}/>}>
+				</Input>
+			</div>
 		);
 	},
 
