@@ -11,6 +11,7 @@ var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Button = require('react-bootstrap').Button;
+var ShareGame = require('../molecules/game/ShareGame.molecule');
 var TextStyles = require('../../styles/Text');
 var ButtonStyles = require('../../styles/Buttons');
 
@@ -30,7 +31,8 @@ var Game = React.createClass({
 				},
 				owner: {}
 			},
-			gameInformationHeight: '0'
+			gameInformationHeight: '0',
+			shareGameIsShowing: false
 		};
 	},
 	componentWillMount: function () {
@@ -105,12 +107,16 @@ var Game = React.createClass({
 					</Col>
 				</Row>
 				<hr />
+				<ShareGame show={this.state.shareGameIsShowing}/>
 				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 				<hr />
 			</div>
 		);
 	},
 	onShareButtonClicked: function () {
+		this.setState({
+			shareGameIsShowing: true
+		});
 	},
 	onGetGameSuccessResponse: function (data) {
 		this.setState({

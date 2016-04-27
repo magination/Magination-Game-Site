@@ -36,7 +36,7 @@ var ReviewForm = React.createClass({
 		var deleteButton = (this.props.oldReview) ? <Button type='button' bsStyle='danger' onClick={this.onDeleteClicked}><strong>Delete</strong></Button> : <span/>;
 		return (
 			<div>
-				<Modal dialogClassName='custom-modal' show={this.props.show} onHide={this.onHide} animation={false}>
+				<Modal dialogClassName='custom-modal' show={this.props.show} onHide={this.onHide}>
 					<form onSubmit={this.onSubmitReview}>
 						<Modal.Header>
 							<Modal.Title>Write a Review</Modal.Title>
