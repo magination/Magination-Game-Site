@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var NavigationStore = require('../../stores/NavigationStore');
 var URLS = require('../../config/config.js').urls;
@@ -28,7 +29,8 @@ var Game = React.createClass({
 					triples: ''
 				},
 				owner: {}
-			}
+			},
+			gameInformationHeight: '0'
 		};
 	},
 	componentWillMount: function () {
@@ -54,25 +56,37 @@ var Game = React.createClass({
 			});
 		}
 	},
+	componentDidUpdate: function () {
+		var informationDivHeight = ReactDOM.findDOMNode(this.refs.gameinformation).offsetHeight;
+		if (informationDivHeight !== this.state.gameInformationHeight) {
+			this.setState({
+				gameInformationHeight: informationDivHeight
+			});
+		}
+	},
 	render: function () {
 		return (
 			<div>
 				<Row>
 					<Col md={4} mdOffset={1}>
-						<GameInformation game={this.state.game}/>
+						<GameInformation ref='gameinformation' game={this.state.game}/>
 					</Col>
-					<Col md={7}>
-						<ImageCarousel imageUrls={this.state.game.images}/>
+					<Col md={6}>
+						<ImageCarousel width={'100%'} height={this.state.gameInformationHeight} imageUrls={this.state.game.images}/>
+					</Col>
+					<Col md={1}>
 					</Col>
 				</Row>
 				<hr />
 				<Row>
-					<Col md={7} mdOffset={1}>
+					<Col md={6} mdOffset={1}>
 						<h2 style={TextStyles.blueHeader}>Description</h2>
 						<h4>{this.state.game.shortDescription}</h4>
 					</Col>
 					<Col md={4} style={{textAlign: 'right'}}>
-						<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+						<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+					</Col>
+					<Col md={1}>
 					</Col>
 				</Row>
 				<Row>
@@ -81,11 +95,13 @@ var Game = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<Col md={7} mdOffset={1}>
+					<Col md={6} mdOffset={1}>
 						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
 					</Col>
 					<Col md={4} style={{textAlign: 'right'}}>
 						<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
+					</Col>
+					<Col md={1}>
 					</Col>
 				</Row>
 				<hr />
@@ -93,6 +109,8 @@ var Game = React.createClass({
 				<hr />
 			</div>
 		);
+	},
+	onShareButtonClicked: function () {
 	},
 	onGetGameSuccessResponse: function (data) {
 		this.setState({
