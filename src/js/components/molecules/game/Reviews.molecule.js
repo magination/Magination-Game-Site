@@ -7,6 +7,7 @@ var Col = require('react-bootstrap').Col;
 var ReviewForm = require('./ReviewForm.molecule');
 var ButtonStyle = require('../../../styles/Buttons');
 var Button = require('react-bootstrap').Button;
+var Row = require('react-bootstrap').Row;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 var ButtonGroup = require('react-bootstrap').ButtonGroup;
 var TextStyles = require('../../../styles/Text');
@@ -48,26 +49,32 @@ var Reviews = React.createClass({
 		var createNewReviewButton = (!this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/><strong> Write your own review</strong></Button> : <div/>;
 		return (
 			<div>
-				<Col md={8} mdOffset={1}>
-					{ownReview}
-				</Col>
-				<Col md={3}>
-					{editReviewButton}
-				</Col>
-				<Col md={11} mdOffset={1}>
-					<h2 style={TextStyles.blueHeader}>Reviews</h2>
-				</Col>
-				<Col md={7} mdOffset={1}>
-					{reviews}
-					<ButtonToolbar>
-						<ButtonGroup>
-							{reviewButtonNavigation}
-						</ButtonGroup>
-					</ButtonToolbar>
-				</Col>
-				<Col md={4} style={{textAlign: 'right'}}>
-					{createNewReviewButton}
-				</Col>
+				<Row>
+					<Col md={7} mdOffset={1}>
+						{ownReview}
+					</Col>
+					<Col md={4}>
+						{editReviewButton}
+					</Col>
+				</Row>
+				<Row>
+					<Col md={11} mdOffset={1}>
+						<h2 style={TextStyles.blueHeader}>Reviews</h2>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={7} mdOffset={1}>
+						{reviews}
+						<ButtonToolbar>
+							<ButtonGroup>
+								{reviewButtonNavigation}
+							</ButtonGroup>
+						</ButtonToolbar>
+					</Col>
+					<Col md={4} style={{textAlign: 'right'}}>
+						{createNewReviewButton}
+					</Col>
+				</Row>
 				<ReviewForm id={this.props.id} onDeleteSuccess={this.onDeleteReviewSuccess} onEditSuccess={this.onEditReviewSuccess} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>
 			</div>
 		);

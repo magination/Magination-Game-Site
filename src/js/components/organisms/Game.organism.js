@@ -7,7 +7,7 @@ var GameInformation = require('../molecules/game/GameInformation.molecule');
 var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
 var CustomList = require('../molecules/lists/CustomList.molecule');
 var Col = require('react-bootstrap').Col;
-// var Row = require('react-bootstrap').Row;
+var Row = require('react-bootstrap').Row;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Button = require('react-bootstrap').Button;
 var TextStyles = require('../../styles/Text');
@@ -57,29 +57,37 @@ var Game = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Col md={4} mdOffset={1}>
-					<GameInformation game={this.state.game}/>
-				</Col>
-				<Col md={7}>
-					<ImageCarousel imageUrls={this.state.game.images}/>
-				</Col>
+				<Row>
+					<Col md={4} mdOffset={1}>
+						<GameInformation game={this.state.game}/>
+					</Col>
+					<Col md={7}>
+						<ImageCarousel imageUrls={this.state.game.images}/>
+					</Col>
+				</Row>
 				<hr />
-				<Col md={7} mdOffset={1}>
-					<h2 style={TextStyles.blueHeader}>Description</h2>
-					<h4>{this.state.game.shortDescription}</h4>
-				</Col>
-				<Col md={4} style={{textAlign: 'right'}}>
-					<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
-				</Col>
-				<Col md={11} mdOffset={1}>
-					<CustomList title='Rules' listElements={this.state.game.rules}/>
-				</Col>
-				<Col md={7} mdOffset={1}>
-					<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
-				</Col>
-				<Col md={4} style={{textAlign: 'right'}}>
-					<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
-				</Col>
+				<Row>
+					<Col md={7} mdOffset={1}>
+						<h2 style={TextStyles.blueHeader}>Description</h2>
+						<h4>{this.state.game.shortDescription}</h4>
+					</Col>
+					<Col md={4} style={{textAlign: 'right'}}>
+						<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={11} mdOffset={1}>
+						<CustomList title='Rules' listElements={this.state.game.rules}/>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={7} mdOffset={1}>
+						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+					</Col>
+					<Col md={4} style={{textAlign: 'right'}}>
+						<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
+					</Col>
+				</Row>
 				<hr />
 				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 				<hr />
