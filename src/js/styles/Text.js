@@ -7,9 +7,21 @@ var TextStyles = {
 	white: {
 		color: 'white'
 	},
+	blue: {
+		color: Colors.blue
+	},
 	textArea: {
 		resize: 'none',
 		height: '220px'
+	},
+	alignRight: {
+		textAlign: 'right'
+	},
+	glyphIcon: {
+		alignCenterBlue: {
+			textAlign: 'center',
+			color: Colors.blue
+		}
 	}
 };
 

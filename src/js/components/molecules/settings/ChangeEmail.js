@@ -8,6 +8,7 @@ var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
 var ValidatorService = require('../../../service/Validator.service');
 var ButtonStyle = require('../../../styles/Buttons');
+var ContainerStyle = require('../../../styles/Containers');
 
 var ChangePassword = React.createClass({
 	getInitialState () {
@@ -20,12 +21,12 @@ var ChangePassword = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Button onClick={this.onChangeEmailClicked} style={ButtonStyle.MaginationFill}>
+				<Button onClick={this.onChangeEmailClicked} style={ButtonStyle.MaginationFillParent}>
 					Change email
 				</Button>
-				<Collapse in={this.props.isShow}>
+				<Collapse in={this.props.isShow} style={ContainerStyle.collapse.parent}>
 					<Well>
-						<div>
+						<div style={ContainerStyle.collapse.child}>
 							<form className='form-settings' onSubmit={this.storeChanges}>
 								<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordChanged}/>
 								<Input value={this.state.newEmail} bsStyle={this.state.bsStyleEmail} label='New email' type='text' placeholder='Enter new email address' onChange={this.onNewEmailEntryChange} hasFeedback/>

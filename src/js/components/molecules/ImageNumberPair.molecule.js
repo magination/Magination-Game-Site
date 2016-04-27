@@ -10,10 +10,10 @@ var ImageNumberPair = React.createClass({
 			value: this.props.value
 		};
 	},
-	componentDidMount () {
+	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
 	},
-	componentWillUnmount () {
+	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
 	},
 	render: function () {
@@ -27,12 +27,9 @@ var ImageNumberPair = React.createClass({
 
 	valueChanged: function (e) {
 		var newValue = e.target.value;
-		console.log(newValue);
-		console.log(!ValidatorService.isNumericAndNotNegative(newValue));
 		if (!ValidatorService.isNumericAndNotNegative(newValue)) {
 			newValue = 0;
 		}
-		console.log(newValue);
 		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindingProperty,
 			propertyCollection: this.props.bindingCollection,

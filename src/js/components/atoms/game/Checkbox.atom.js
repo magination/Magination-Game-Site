@@ -3,35 +3,46 @@ var GameStore = require('../../../stores/GameStore');
 var GameAction = require('../../../actions/GameAction');
 
 var RatingIcon = React.createClass({
-	componentDidMount () {
+	getInitialState: function () {
+		if (GameStore.getGame() !== null) {
+			return {
+				isChecked: GameStore.getGame()[this.props.bindingProperty]
+			};
+		}
+		else {
+			return {
+				isChecked: false
+			};
+		}
+	},
+	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
 	},
-	componentWillUnmount () {
+	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
 	},
 	render: function () {
 		return (
 			<div>
-				<input ref='checkbox' type='checkbox' onChange={this.onPropertyChanged} checked={this.props.checked} /> {this.props.description}
+				<input ref='checkbox' type='checkbox' onChange={this.onPropertyChanged} checked={this.props.isChecked} /> {this.props.description}
 			</div>
 		);
 	},
 	onPropertyChanged: function (e) {
-		this.refs.checkbox.checked = e.target.checked;
 		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindingProperty,
 			propertyValue: e.target.checked
 		});
 	},
-	onGameStateChanged: function (e) {
+	onGameStateChanged: function () {
 		if (!GameStore.getGame()) {
 			this.setState({
-				value: false
+				isChecked: false
 			});
 		}
 		else {
 			this.setState({
-				value: GameStore.getGame()[this.props.bindingProperty]
+				isChecked: GameStore.getGame()[this.props.bindingProperty]
 			});
 		}
 	}
