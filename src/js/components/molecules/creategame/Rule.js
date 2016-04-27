@@ -6,7 +6,10 @@ var GameAction = require('../../../actions/GameAction');
 var TextStyle = require('../../../styles/Text');
 var ContainerStyle = require('../../../styles/Containers');
 
-var PrioritizableList = React.createClass({
+var Rule = React.createClass({
+	componentDidMount: function () {
+		this.props.onAdded(this.refs.input);
+	},
 	render: function () {
 		return (
 			<div>
@@ -15,7 +18,7 @@ var PrioritizableList = React.createClass({
 					<Row><Glyphicon style={TextStyle.glyphIcon.alignCenterBlue} glyph={this.props.hasDownButton ? 'glyphicon glyphicon-arrow-down' : ''} onClick={this.onDownClicked}/></Row>
 				</div>
 				<div style={ContainerStyle.ruleList.input}>
-					<Input value={this.props.value} type='text' onInput={this.onListItemChanged} placeholder={this.props.placeholder}/>
+					<Input ref='input' value={this.props.value} type='text' onInput={this.onListItemChanged} placeholder={this.props.placeholder}/>
 				</div>
 				<div style={ContainerStyle.ruleList.rightIcon}>
 					<Glyphicon style={TextStyle.glyphIcon.alignCenterBlue} glyph='glyphicon glyphicon-remove' onClick={this.onDeleteClicked}/>
@@ -31,22 +34,27 @@ var PrioritizableList = React.createClass({
 		});
 	},
 	onUpClicked: function () {
+		this.props.onMoveRule(this.props.id - 1);
 		GameAction.changeRulePrioritizationLocally({
 			currentPosition: this.props.id,
-			isMovingUp: true
+			isMovingUp: true,
+			isOptional: this.props.isAlternativeRule
 		});
 	},
 	onDownClicked: function () {
+		this.props.onMoveRule(this.props.id + 1);
 		GameAction.changeRulePrioritizationLocally({
 			currentPosition: this.props.id,
-			isMovingUp: false
+			isMovingUp: false,
+			isOptional: this.props.isAlternativeRule
 		});
 	},
 	onDeleteClicked: function () {
+		this.props.onDeleted();
 		GameAction.deleteRuleFromLocalGame({
 			position: this.props.id,
 			isOptional: this.props.isAlternativeRule
 		});
 	}
 });
-module.exports = PrioritizableList;
+module.exports = Rule;

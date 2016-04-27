@@ -3,7 +3,10 @@ var GameConstants = require('../constants/GameConstants');
 var EventEmitter = require('events').EventEmitter;
 var _ = require('lodash');
 var CHANGE_EVENT = 'change-game';
-
+var URLS = require('../config/config').urls;
+var LoginStore = require('../stores/LoginStore');
+var NavigationAction = require('../actions/NavigationAction');
+var FeedbackAction = require('../actions/FeedbackAction');
 var _game = null;
 
 var GameStore = _.extend({}, EventEmitter.prototype, {
@@ -35,6 +38,7 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		GameStore.emitChange();
 		break;
 	case GameConstants.STORE_GAME_TO_SERVER:
+		StoreGameToServer();
 		GameStore.emitChange();
 		break;
 	case GameConstants.ADD_NEW_RULE_TO_LOCAL_GAME:
@@ -55,6 +59,25 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	}
 });
+function StoreGameToServer () {
+	$.ajax({
+		type: 'POST',
+		url: URLS.api.games,
+		data: JSON.stringify(_game),
+		headers: {
+			'Authorization': LoginStore.getToken()
+		},
+		contentType: 'application/json',
+		dataType: 'json',
+		statusCode: {
+			201: onGamePostedSuccess,
+			401: onPostGameUnauthorizedResponse,
+			500: function () {
+				alert('Server Error: see console');
+			}
+		}
+	});
+};
 function CreateNewGame () {
 	_game = {
 		title: '',
@@ -133,5 +156,23 @@ function ChangeRulePrioritization (action) {
 		_game.rules = rules;
 	}
 };
-
+var onGamePostedSuccess = function (data) {
+	console.log(data);
+	FeedbackAction.displaySuccessMessage({
+		header: 'Success.',
+		message: 'Game uploaded!'
+	});
+	NavigationAction.navigate({
+		destination: '/game/' + data._id,
+		data: {
+			game: data
+		}
+	});
+};
+var onPostGameUnauthorizedResponse = function () {
+	FeedbackAction.displayWarningMessage({
+		header: 'Not signed in.',
+		message: 'Please sign in to upload a game.'
+	});
+};
 module.exports = GameStore;

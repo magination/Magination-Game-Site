@@ -38,9 +38,8 @@ var GameForm = React.createClass({
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
-					<h3 className='text-center' style={TextStyle.blue}>CREATE YOUR OWN GAME</h3>
-					<hr/>
-					<h5 style={TextStyle.blue}>Upload your game idea!</h5>
+					<h3 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h3>
+					<h5>Upload your game idea!</h5>
 					<hr/>
 					<form className='form-game' onSubmit={this.submitGame}>
 						<Row>
@@ -48,7 +47,7 @@ var GameForm = React.createClass({
 								<Input value={this.state.title} type='text' placeholder='GAME TITLE' onChange={this.onTitleChanged}/>
 							</Col>
 						</Row>
-						<h3 style={TextStyle.blue}>PLAYERS</h3>
+						<h3 style={TextStyle.blueHeader}>PLAYERS</h3>
 						<Row>
 							<Col md={3}>
 								<ImageNumberPair value={this.state.game ? this.state.game.numberOfPlayers : 0} src={URLS.img.peopleBlue} placeholder='No. players' bindingProperty='numberOfPlayers'/>
@@ -58,7 +57,7 @@ var GameForm = React.createClass({
 						<br/>
 						<Checkbox checked={false} description='Can be played in teams' bindingProperty='isPlayableInTeams'/>
 						<hr/>
-						<h3 style={TextStyle.blue}>PIECES</h3>
+						<h3 style={TextStyle.blueHeader}>PIECES</h3>
 						<Row>
 							<Col md={3}>
 								<ImageNumberPair value={this.state.game.pieces ? this.state.game.pieces.singles : 0} src={URLS.img.pieceSingleBlue} placeholder='No. singles' bindingCollection ='pieces' bindingProperty='singles'/>
@@ -72,21 +71,21 @@ var GameForm = React.createClass({
 							</Col>
 						</Row>
 						<hr/>
-						<h3 style={TextStyle.blue}>DESCRIPTION</h3>
+						<h3 style={TextStyle.blueHeader}>DESCRIPTION</h3>
 						<Row>
 							<Col md={8}>
 								<GameDescriptionInput bindableTextProperty='shortDescription' placeholder='Describe your game!' maxLength={255} />
 							</Col>
 						</Row>
 						<hr/>
-						<h3 style={TextStyle.blue}>RULES</h3>
+						<h3 style={TextStyle.blueHeader}>RULES</h3>
 						<Row>
 							<Col md={8}>
 								<RuleList propertyCollection='rules' listItemPlaceholder = 'Enter a rule' bindableTextProperty='rule' propertyCollection='rules'/>
 							</Col>
 						</Row>
 						<hr/>
-						<h3 style={TextStyle.blue}>Alternative rules</h3>
+						<h3 style={TextStyle.blueHeader}>Alternative rules</h3>
 						<Row>
 							<Col md={8}>
 								<AlternativeRuleList propertyCollection='alternativeRules' listItemPlaceholder = 'Enter a rule' bindableTextProperty='rule' propertyCollection='rules'/>
@@ -104,7 +103,7 @@ var GameForm = React.createClass({
 								<Button style={ButtonStyle.Game.gameButton(Colors.yellow)}>PREVIEW</Button>
 							</Col>
 							<Col md={2}>
-								<Button style={ButtonStyle.Game.gameButton(Colors.green)}>PUBLISH</Button>
+								<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onSubmitClicked}>PUBLISH</Button>
 							</Col>
 						</Row>
 						<hr/>
@@ -128,6 +127,9 @@ var GameForm = React.createClass({
 	},
 	onSaveClicked: function () {
 		console.log(GameStore.getGame());
+	},
+	onSubmitClicked: function () {
+		GameAction.storeGameToServer();
 	}
 });
 
