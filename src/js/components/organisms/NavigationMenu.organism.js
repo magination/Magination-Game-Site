@@ -66,7 +66,7 @@ var Menu = React.createClass({
 		);
 	},
 	onNavigationClick: function (destination) {
-		if (!NavigationConstants.isLegalDestination(getLoginState(), destination)) {
+		if (!NavigationConstants.isLegalDestination(getLoginState().isLoggedIn, destination)) {
 			this.refs.loginModal.open();
 		}
 		NavigationAction.navigate({
@@ -77,11 +77,11 @@ var Menu = React.createClass({
 		this.refs.loginModal.open();
 	},
 	onLoginStateChanged: function () {
-		if (getLoginState()) {
+		if (getLoginState().isLoggedIn) {
 			this.refs.loginModal.close();
 		}
 		this.setState({
-			isLoggedIn: getLoginState()
+			isLoggedIn: getLoginState().isLoggedIn
 		});
 	},
 	onNavigationStateChanged: function () {

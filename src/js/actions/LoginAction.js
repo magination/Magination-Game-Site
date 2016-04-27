@@ -8,6 +8,11 @@ var LoginAction = {
 	doLogin: function (username, password) {
 		LoginService.doLogin(username, password, this.loginSuccess);
 	},
+	requestLogin: function () {
+		Dispatcher.dispatch({
+			actionType: LoginConstants.LOGIN_REQUEST
+		});
+	},
 	checkAutoLogin: function () {
 		LoginService.checkAutoLogin();
 	},

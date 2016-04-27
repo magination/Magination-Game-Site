@@ -53,8 +53,8 @@ var Comments = React.createClass({
 					<Input
 						type='text' value={this.state.commentText}
 						onChange={this.onCommentTextChange}
-						disabled={!LoginStore.getLoginState()}
-						placeholder={LoginStore.getLoginState() ? 'Write a comment' : 'You need to be logged in to comment'}
+						disabled={!LoginStore.getLoginState().isLoggedIn}
+						placeholder={LoginStore.getLoginState().isLoggedIn ? 'Write a comment' : 'You need to be logged in to comment'}
 					/>
 					<Button type='submit'>Comment</Button>
 				</form>

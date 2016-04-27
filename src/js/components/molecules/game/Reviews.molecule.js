@@ -1,6 +1,7 @@
 var React = require('react');
 
 var LoginStore = require('../../../stores/LoginStore');
+var LoginAction = require('../../../actions/LoginAction');
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Review = require('./Review.molecule.js');
 var Col = require('react-bootstrap').Col;
@@ -50,11 +51,13 @@ var Reviews = React.createClass({
 		return (
 			<div>
 				<Row>
-					<Col md={7} mdOffset={1}>
+					<Col md={6} mdOffset={1}>
 						{ownReview}
 					</Col>
 					<Col md={4}>
 						{editReviewButton}
+					</Col>
+					<Col md={1}>
 					</Col>
 				</Row>
 				<Row>
@@ -63,7 +66,7 @@ var Reviews = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<Col md={7} mdOffset={1}>
+					<Col md={6} mdOffset={1}>
 						{reviews}
 						<ButtonToolbar>
 							<ButtonGroup>
@@ -73,6 +76,8 @@ var Reviews = React.createClass({
 					</Col>
 					<Col md={4} style={{textAlign: 'right'}}>
 						{createNewReviewButton}
+					</Col>
+					<Col md={1}>
 					</Col>
 				</Row>
 				<ReviewForm id={this.props.id} onDeleteSuccess={this.onDeleteReviewSuccess} onEditSuccess={this.onEditReviewSuccess} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>
@@ -100,7 +105,7 @@ var Reviews = React.createClass({
 			dataType: 'json',
 			success: this.onGetReviewsSuccess
 		});
-		if (!LoginStore.getLoginState()) {
+		if (!LoginStore.getLoginState().isLoggedIn) {
 			return;
 		}
 		$.ajax({
@@ -122,6 +127,10 @@ var Reviews = React.createClass({
 		});
 	},
 	onWriteReviewClicked: function () {
+		if (!LoginStore.getLoginState().isLoggedIn) {
+			LoginAction.requestLogin();
+			return;
+		}
 		this.setState({
 			isShowingReviewForm: !this.state.isShowingReviewForm
 		});
@@ -151,7 +160,7 @@ function removeOwnReview (array) {
 	if (!array) {
 		return;
 	}
-	if (LoginStore.getLoginState()) {
+	if (LoginStore.getLoginState().isLoggedIn) {
 		for (var i = 0; i < array.length; i++) {
 			if (array[i].owner._id === LoginStore.getLoginProfile()._id) {
 				array.splice(i, 1);

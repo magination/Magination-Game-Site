@@ -18,6 +18,12 @@ var LoginForm = React.createClass({
 			showModal: false
 		};
 	},
+	componentDidMount: function () {
+		LoginStore.addChangeListener(this.onLoginStateChanged);
+	},
+	componentWillUnmount: function () {
+		LoginStore.removeChangeListener(this.onLoginStateChanged);
+	},
 	render: function () {
 		return (
 			<div>
@@ -39,12 +45,17 @@ var LoginForm = React.createClass({
 			</div>
 		);
 	},
+	onLoginStateChanged: function () {
+		if (LoginStore.getLoginState().requestedLogin) {
+			this.open();
+		}
+	},
 	onHide: function () {
 		this.close();
-		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().currentPath)) {
+		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState().isLoggedIn, NavigationStore.getNavigationState().currentPath)) {
 			return;
 		}
-		else if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().lastPath)) {
+		else if (NavigationConstants.isLegalDestination(LoginStore.getLoginState().isLoggedIn, NavigationStore.getNavigationState().lastPath)) {
 			NavigationAction.navigate({
 				destination: NavigationStore.getNavigationState().lastPath
 			});

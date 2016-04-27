@@ -4,7 +4,10 @@ var EventEmitter = require('events').EventEmitter;
 var _ = require('lodash');
 var CHANGE_EVENT = 'change-login';
 
-var _loginState = false;
+var _loginState = {
+	isLoggedIn: false,
+	requestedLogin: false
+};
 var _profile = null;
 var _token = null;
 
@@ -37,13 +40,19 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 		// LoginStore.emitChange();
 		break;
 	case LoginConstants.LOGOUT_SUCCESS:
-		_loginState = false;
+		_loginState.isLoggedIn = false;
+		_loginState.requestedLogin = false;
 		_token = null;
 		LoginStore.emitChange();
 		break;
 	case LoginConstants.SET_PROFILE:
 		_profile = action.profile;
-		_loginState = true;
+		_loginState.isLoggedIn = true;
+		_loginState.requestedLogin = false;
+		LoginStore.emitChange();
+		break;
+	case LoginConstants.LOGIN_REQUEST:
+		_loginState.requestedLogin = true;
 		LoginStore.emitChange();
 		break;
 	}
