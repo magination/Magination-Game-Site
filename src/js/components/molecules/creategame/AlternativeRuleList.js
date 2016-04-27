@@ -5,7 +5,8 @@ var ButtonStyle = require('../../../styles/Buttons');
 var GameAction = require('../../../actions/GameAction');
 var GameStore = require('../../../stores/GameStore');
 
-var RuleList = React.createClass({
+var AlternativeRuleList = React.createClass({
+	listElements: [],
 	getInitialState: function () {
 		return {
 			rules: []
@@ -23,18 +24,18 @@ var RuleList = React.createClass({
 		GameStore.addChangeListener(this.onGameStateChanged);
 	},
 	render: function () {
-		var rowItems = [];
+		var list = [];
 		for (var i = 0; i < this.state.rules.length; i++) {
 			var position = i;
-			rowItems.push(
-				<div key={i}>
-					<Rule id={position} isAlternativeRule={true} placeholder='Enter a rule' value={this.state.rules[i]} hasUpButton={i !== 0} hasDownButton={i !== this.state.rules.length - 1}/>
+			list.push(
+				<div key={i} ref='listContainer'>
+					<Rule id={position} isAlternativeRule={true} onAdded={this.onRuleAdded} onDeleted={this.onRuleDeleted} onMoveRule={this.onMoveRule} placeholder='Enter an alternative rule' value={this.state.rules[i]} hasUpButton={i !== 0} hasDownButton={i !== this.state.rules.length - 1}/>
 				</div>
 			);
 		}
 		return (
 			<div>
-				{rowItems}
+				{list}
 				<Button onClick={this.onAddItemClicked} type='button' style={ButtonStyle.MaginationRule}>+ Add rule</Button>
 			</div>
 		);
@@ -48,6 +49,15 @@ var RuleList = React.createClass({
 		GameAction.addNewRuleToLocalGame({
 			isOptional: true
 		});
+	},
+	onMoveRule: function (newPos) {
+		this.listElements[newPos].refs.input.focus();
+	},
+	onRuleAdded: function (newRule) {
+		this.listElements.push(newRule);
+	},
+	onRuleDeleted: function () {
+		this.listElements.pop();
 	}
 });
-module.exports = RuleList;
+module.exports = AlternativeRuleList;
