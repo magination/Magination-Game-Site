@@ -44,20 +44,20 @@ var Reviews = React.createClass({
 			}
 		}
 		var ownReview = (this.state.ownReview) ? <Review data={this.state.ownReview}/> : <div></div>;
-		var editReviewButton = (this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.Magination}><Glyphicon glyph='pencil'/><strong> Edit Review</strong></Button> : <div/>;
-		var createNewReviewButton = (!this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.Magination}><Glyphicon glyph='pencil'/><strong> Write your own review</strong></Button> : <div/>;
+		var editReviewButton = (this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/><strong> Edit Review</strong></Button> : <div/>;
+		var createNewReviewButton = (!this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/><strong> Write your own review</strong></Button> : <div/>;
 		return (
 			<div>
-				<Col md={8}>
+				<Col md={8} mdOffset={1}>
 					{ownReview}
 				</Col>
-				<Col md={4}>
+				<Col md={3}>
 					{editReviewButton}
 				</Col>
-				<Col md={12}>
+				<Col md={11} mdOffset={1}>
 					<h2 style={TextStyles.blueHeader}>Reviews</h2>
 				</Col>
-				<Col md={8}>
+				<Col md={7} mdOffset={1}>
 					{reviews}
 					<ButtonToolbar>
 						<ButtonGroup>
@@ -65,7 +65,7 @@ var Reviews = React.createClass({
 						</ButtonGroup>
 					</ButtonToolbar>
 				</Col>
-				<Col md={4}>
+				<Col md={4} style={{textAlign: 'right'}}>
 					{createNewReviewButton}
 				</Col>
 				<ReviewForm id={this.props.id} onDeleteSuccess={this.onDeleteReviewSuccess} onEditSuccess={this.onEditReviewSuccess} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>

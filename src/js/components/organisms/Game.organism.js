@@ -7,8 +7,11 @@ var GameInformation = require('../molecules/game/GameInformation.molecule');
 var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
 var CustomList = require('../molecules/lists/CustomList.molecule');
 var Col = require('react-bootstrap').Col;
-var Row = require('react-bootstrap').Row;
+// var Row = require('react-bootstrap').Row;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+var Button = require('react-bootstrap').Button;
 var TextStyles = require('../../styles/Text');
+var ButtonStyles = require('../../styles/Buttons');
 
 var Game = React.createClass({
 	getInitialState: function () {
@@ -54,34 +57,31 @@ var Game = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Row>
-					<Col md={4} mdOffset={1}>
-						<GameInformation game={this.state.game}/>
-					</Col>
-					<Col md={6}>
-						<ImageCarousel imageUrls={this.state.game.images}/>
-					</Col>
-				</Row>
+				<Col md={4} mdOffset={1}>
+					<GameInformation game={this.state.game}/>
+				</Col>
+				<Col md={7}>
+					<ImageCarousel imageUrls={this.state.game.images}/>
+				</Col>
 				<hr />
-				<Row>
-					<Col md={7} mdOffset={1}>
-						<h2 style={TextStyles.blueHeader}>Description</h2>
-						<h4>{this.state.game.shortDescription}</h4>
-						<br />
-						<CustomList title='Rules' listElements={this.state.game.rules}/>
-						<br />
-						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
-					</Col>
-					<Col md={2} mdOffset={1}>
-						<div className='fb-share-button' data-href={NavigationStore.getNavigationState().currentPath} data-layout='button_count' data-mobile-iframe='true'></div>
-					</Col>
-				</Row>
+				<Col md={7} mdOffset={1}>
+					<h2 style={TextStyles.blueHeader}>Description</h2>
+					<h4>{this.state.game.shortDescription}</h4>
+				</Col>
+				<Col md={4} style={{textAlign: 'right'}}>
+					<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+				</Col>
+				<Col md={11} mdOffset={1}>
+					<CustomList title='Rules' listElements={this.state.game.rules}/>
+				</Col>
+				<Col md={7} mdOffset={1}>
+					<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+				</Col>
+				<Col md={4} style={{textAlign: 'right'}}>
+					<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
+				</Col>
 				<hr />
-				<Row>
-					<Col md={10} mdOffset={1}>
-						<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
-					</Col>
-				</Row>
+				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 				<hr />
 			</div>
 		);
