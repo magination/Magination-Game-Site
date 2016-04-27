@@ -24,7 +24,6 @@ var Settings = React.createClass({
 		);
 	},
 	onSettingsButtonClicked: function (buttonName) {
-		console.log(buttonName);
 		this.setState({
 			currentExpanded: buttonName
 		});
