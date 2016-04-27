@@ -2,7 +2,7 @@ var Colors = require('./Colors');
 
 var TextStyles = {
 	blueHeader: {
-		color: Colors.blue
+		color: Colors.blueDark
 	},
 	white: {
 		color: 'white'
