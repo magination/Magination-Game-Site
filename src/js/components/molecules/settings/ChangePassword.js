@@ -7,6 +7,7 @@ var URLS = require('../../../config/config').urls;
 var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
 var ButtonStyle = require('../../../styles/Buttons');
+var ContainerStyle = require('../../../styles/Containers');
 
 var ChangePassword = React.createClass({
 	getInitialState () {
@@ -23,9 +24,9 @@ var ChangePassword = React.createClass({
 				<Button onClick={this.onChangePasswordClicked} style={ButtonStyle.MaginationFillParent}>
 					Change password
 				</Button>
-				<Collapse in={this.props.isShow}>
+				<Collapse in={this.props.isShow} style={ContainerStyle.collapse.parent}>
 					<Well>
-						<div>
+						<div style={ContainerStyle.collapse.child}>
 							<form className='form-settings' onSubmit={this.storeChanges}>
 								<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordCHanged}/>
 								<Input value={this.state.newPassword} label='New password' placeholder='Enter new password' type='password' onChange={this.onNewPasswordChanged}/>

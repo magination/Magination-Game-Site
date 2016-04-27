@@ -25,6 +25,18 @@ var ContainerStyles = {
 			verticalAlign: 'middle',
 			paddingLeft: '5'
 		}
+	},
+	collapse: {
+		child: {
+			paddingTop: '20',
+			paddingBottom: '20'
+		},
+		parent: {
+			paddingTop: '0',
+			paddingBottom: '0',
+			marginTop: '0',
+			marginBottom: '0'
+		}
 	}
 };
 
