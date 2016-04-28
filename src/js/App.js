@@ -14,6 +14,11 @@ var App = React.createClass({
 		});
 		LoginAction.checkAutoLogin();
 	},
+	componentDidMount: function () {
+		$.ajaxSetup({
+			error: function () { console.log('an error'); }
+		});
+	},
 	componentWillReceiveProps: function (nextProps) {
 		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.
 			Redundant action with NavigationAction.navigate()

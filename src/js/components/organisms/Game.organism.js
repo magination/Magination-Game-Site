@@ -1,7 +1,11 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-
+var GameAction = require('../../actions/GameAction');
+var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
+var NavigationConstants = require('../../constants/NavigationConstants');
+var LoginAction = require('../../actions/LoginAction');
+var LoginStore = require('../../stores/LoginStore');
 var URLS = require('../../config/config.js').urls;
 var Reviews = require('../molecules/game/Reviews.molecule');
 var GameInformation = require('../molecules/game/GameInformation.molecule');
@@ -60,6 +64,9 @@ var Game = React.createClass({
 		}
 	},
 	componentDidUpdate: function () {
+		/* Dangerous implementation.. should be reconsidered. It may be infinite recursive if the height of gameinformation
+			changes at every render.
+		*/
 		setTimeout(this.onGameInformationRendered, 0);
 	},
 	render: function () {
@@ -102,7 +109,7 @@ var Game = React.createClass({
 						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
 					</Col>
 					<Col md={4} style={{textAlign: 'right'}}>
-						<Button style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
+						<Button onClick={this.onForkGameClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
 					</Col>
 					<Col md={1}>
 					</Col>
@@ -114,16 +121,38 @@ var Game = React.createClass({
 		);
 	},
 	onGameInformationRendered: function () {
-		var informationDivHeight = ReactDOM.findDOMNode(this.refs.gameinformation).offsetHeight;
+		var informationDiv = ReactDOM.findDOMNode(this.refs.gameinformation);
+		if (!informationDiv) return;
+		var informationDivHeight = informationDiv.offsetHeight;
 		if (informationDivHeight !== this.state.gameInformationHeight) {
 			this.setState({
 				gameInformationHeight: informationDivHeight
 			});
 		}
 	},
+	onForkGameClicked: function () {
+		if (!LoginStore.getLoginState().isLoggedIn) {
+			LoginAction.requestLogin();
+			return;
+		}
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.games + '/' + this.state.game._id + '/fork',
+			dataType: 'json',
+			statusCode: {
+				200: this.onGetGameForkSuccessResponse
+			}
+		});
+	},
 	onShareButtonClicked: function () {
 		this.setState({
 			shareGameIsShowing: !this.state.shareGameIsShowing
+		});
+	},
+	onGetGameForkSuccessResponse: function (data) {
+		GameAction.changeGameLocally(data);
+		NavigationAction.navigate({
+			destination: NavigationConstants.PATHS.creategame
 		});
 	},
 	onGetGameSuccessResponse: function (data) {
