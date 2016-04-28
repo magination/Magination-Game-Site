@@ -26,6 +26,15 @@ var Reviews = React.createClass({
 		this.doGetReviews(this.props.id);
 	},
 	componentWillReceiveProps: function (nextProps) {
+		/* Checks if the review list has changed, if it has, refetch the reviews */
+		if (nextProps.reviews.every(function (reviewId, index) {
+			if (reviewId === this.props.reviews[index]) {
+				return true;
+			}
+			return false;
+		}) && this.props.reviews.length === nextProps.reviews.length) {
+			return;
+		}
 		this.doGetReviews(nextProps.id);
 	},
 	componentWillUnmount: function () {
@@ -61,8 +70,13 @@ var Reviews = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<Col md={11} mdOffset={1}>
+					<Col md={6} mdOffset={1}>
 						<h2 style={TextStyles.blueHeader}>Reviews</h2>
+					</Col>
+					<Col md={4} style={{textAlign: 'right'}}>
+						{createNewReviewButton}
+					</Col>
+					<Col md={1}>
 					</Col>
 				</Row>
 				<Row>
@@ -74,10 +88,7 @@ var Reviews = React.createClass({
 							</ButtonGroup>
 						</ButtonToolbar>
 					</Col>
-					<Col md={4} style={{textAlign: 'right'}}>
-						{createNewReviewButton}
-					</Col>
-					<Col md={1}>
+					<Col md={5}>
 					</Col>
 				</Row>
 				<ReviewForm id={this.props.id} onDeleteSuccess={this.onDeleteReviewSuccess} onEditSuccess={this.onEditReviewSuccess} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>
