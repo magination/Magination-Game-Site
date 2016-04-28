@@ -54,11 +54,14 @@ var GameInformation = React.createClass({
 				<Row>
 					<h5 style={TextStyles.white}>{(this.props.game.otherObjects) ? <a onClick={this.onShowObjectsOfChoice} style={TextStyles.white}>+ Objects of choise</a> : 'No Other Objects'}</h5>
 				</Row>
-				<Collapse in={this.state.isShowingObjectsOfChoice}>
+				<Collapse in={this.state.isShowingObjectsOfChoice} onExited={this.onCollapseFinished}>
 					<Row>{otherObjects}</Row>
 				</Collapse>
 			</div>
 		);
+	},
+	onCollapseFinished: function () {
+		this.props.onCollapseFinished();
 	},
 	onShowObjectsOfChoice: function () {
 		this.setState({

@@ -11,6 +11,7 @@ var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Button = require('react-bootstrap').Button;
+var Collapse = require('react-bootstrap').Collapse;
 var ShareGame = require('../molecules/game/ShareGame.molecule');
 var TextStyles = require('../../styles/Text');
 var ButtonStyles = require('../../styles/Buttons');
@@ -59,19 +60,14 @@ var Game = React.createClass({
 		}
 	},
 	componentDidUpdate: function () {
-		var informationDivHeight = ReactDOM.findDOMNode(this.refs.gameinformation).offsetHeight;
-		if (informationDivHeight !== this.state.gameInformationHeight) {
-			this.setState({
-				gameInformationHeight: informationDivHeight
-			});
-		}
+		setTimeout(this.onGameInformationRendered, 0);
 	},
 	render: function () {
 		return (
 			<div>
 				<Row>
 					<Col md={4} mdOffset={1}>
-						<GameInformation ref='gameinformation' game={this.state.game}/>
+						<GameInformation ref='gameinformation' game={this.state.game} onCollapseFinished={this.onGameInformationRendered}/>
 					</Col>
 					<Col md={6}>
 						<ImageCarousel width={'100%'} height={this.state.gameInformationHeight} imageUrls={this.state.game.images}/>
@@ -85,8 +81,13 @@ var Game = React.createClass({
 						<h2 style={TextStyles.blueHeader}>Description</h2>
 						<h4>{this.state.game.shortDescription}</h4>
 					</Col>
-					<Col md={4} style={{textAlign: 'right'}}>
-						<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+					<Col md={4}>
+						<div style={{textAlign: 'right', width: '100%'}}>
+							<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+						</div>
+						<Collapse in={this.state.shareGameIsShowing}>
+							<div><ShareGame title={this.state.game.title} description={this.state.game.shortDescription} url={NavigationStore.getNavigationState().currentPath}/></div>
+						</Collapse>
 					</Col>
 					<Col md={1}>
 					</Col>
@@ -107,15 +108,22 @@ var Game = React.createClass({
 					</Col>
 				</Row>
 				<hr />
-				<ShareGame show={this.state.shareGameIsShowing}/>
 				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 				<hr />
 			</div>
 		);
 	},
+	onGameInformationRendered: function () {
+		var informationDivHeight = ReactDOM.findDOMNode(this.refs.gameinformation).offsetHeight;
+		if (informationDivHeight !== this.state.gameInformationHeight) {
+			this.setState({
+				gameInformationHeight: informationDivHeight
+			});
+		}
+	},
 	onShareButtonClicked: function () {
 		this.setState({
-			shareGameIsShowing: true
+			shareGameIsShowing: !this.state.shareGameIsShowing
 		});
 	},
 	onGetGameSuccessResponse: function (data) {
