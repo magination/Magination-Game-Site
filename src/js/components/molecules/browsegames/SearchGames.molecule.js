@@ -2,7 +2,9 @@ var React = require('react');
 
 var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
-
+var GameListStore = require('../../../stores/GameListStore');
+var GameListAction = require('../../../actions/GameListAction');
+var GameListConstants = require('../../../constants/GameListConstants');
 var ValidatorService = require('../../../service/Validator.service');
 
 var SearchGames = React.createClass({
@@ -21,6 +23,11 @@ var SearchGames = React.createClass({
 	},
 	componentDidMount: function () {
 		this.refs.searchEntry.refs.input.focus();
+		GameListStore.addChangeListener(this.onGameListChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
+	},
+	componentWillUnmount: function () {
+		GameListAction.clearSearchFilters();
+		GameListStore.removeChangeListener(this.onGameListChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
 	},
 	render: function () {
 		return (
@@ -37,6 +44,14 @@ var SearchGames = React.createClass({
 				</form>
 			</div>
 		);
+	},
+	onGameListChange: function () {
+		setTimeout(function () {
+			GameListAction.clearGamesList();
+		}, 0);
+		setTimeout(function () {
+			GameListAction.getGamesSpecificInterval(0, 10);
+		}, 0);
 	},
 	onSubmit: function (e) {
 		e.preventDefault();
@@ -65,8 +80,7 @@ var SearchGames = React.createClass({
 		if (this.state.filter_triples !== '' && this.state.filter_triples > 0) {
 			search_filter['triple'] = this.state.filter_triples;
 		}
-
-		this.props.didSubmit(search_filter);
+		GameListAction.setGameSearchFilters(search_filter);
 	},
 	tagSearchChange: function (e) {
 		this.setState({
