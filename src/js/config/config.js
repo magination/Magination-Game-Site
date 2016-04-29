@@ -30,9 +30,6 @@ var config = {
 			pieceDoubleBlue: imgRoot + 'magination-pieces/piece-blue-double.png',
 			pieceTripleBlue: imgRoot + 'magination-pieces/piece-blue-triple.png',
 			peopleBlue: imgRoot + 'people.png'
-		},
-		server: {
-			uploadImage: serverRoot + 'upload/images'
 		}
 	}
 };
