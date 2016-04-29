@@ -37,6 +37,12 @@ var ContainerStyles = {
 			marginTop: '0',
 			marginBottom: '0'
 		}
+	},
+	hidden: {
+		height: '0'
+	},
+	paddingLess: {
+		padding: '0'
 	}
 };
 

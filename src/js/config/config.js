@@ -1,5 +1,6 @@
 var restApiRoot = 'https://localhost:8000/api/';
-var imgRoot = 'http://localhost:8080/public/img/';
+var serverRoot = 'http://localhost:8080/public/';
+var imgRoot = serverRoot + '/img/';
 var config = {
 	urls: {
 		api: {
@@ -29,6 +30,9 @@ var config = {
 			pieceDoubleBlue: imgRoot + 'magination-pieces/piece-blue-double.png',
 			pieceTripleBlue: imgRoot + 'magination-pieces/piece-blue-triple.png',
 			peopleBlue: imgRoot + 'people.png'
+		},
+		server: {
+			uploadImage: serverRoot + 'upload/images'
 		}
 	}
 };
