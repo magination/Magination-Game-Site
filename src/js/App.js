@@ -1,7 +1,7 @@
 var React = require('react');
 
 var NavigationAction = require('./actions/NavigationAction');
-var LoginService = require('./components/organisms/LoginService');
+var LoginAction = require('./actions/LoginAction');
 var LoginStore = require('./stores/LoginStore');// eslint-disable-line no-unused-vars
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
@@ -12,7 +12,12 @@ var App = React.createClass({
 		NavigationAction.setCurrentPath({
 			destination: this.props.location.pathname
 		});
-		LoginService.checkAutoLogin();
+		LoginAction.checkAutoLogin();
+	},
+	componentDidMount: function () {
+		$.ajaxSetup({
+			error: function () { console.log('an error'); }
+		});
 	},
 	componentWillReceiveProps: function (nextProps) {
 		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.

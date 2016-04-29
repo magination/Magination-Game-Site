@@ -5,6 +5,16 @@ var ContainerStyles = {
 		borderRadius: '5',
 		textAlign: 'center'
 	},
+	imgCarouselContainer: {
+		border: '5px solid ' + Colors.blue,
+		borderRadius: '5',
+		width: '100%',
+		height: '100%'
+	},
+	imgCarouselChevronContainer: {
+		position: 'absolute',
+		textAlign: 'center'
+	},
 	numberOfPlayersContainer: {
 		backgroundColor: Colors.blueLight
 	},

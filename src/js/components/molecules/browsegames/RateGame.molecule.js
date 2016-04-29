@@ -4,9 +4,14 @@ var RatingIcon = require('../../atoms/RatingIcon');
 var RateGame = React.createClass({
 	getInitialState () {
 		return {
-			rating: this.props.isStatic ? this.props.rating : 0,
-			selectedRating: 0
+			rating: (this.props.rating) ? this.props.rating : 0,
+			selectedRating: (this.props.rating) ? this.props.rating : 0
 		};
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({
+			rating: nextProps.rating
+		});
 	},
 	onIconHovered (id) {
 		this.setState({
@@ -34,6 +39,7 @@ var RateGame = React.createClass({
 						selectedImage={this.props.selectedImage}
 						unselectedImage={this.props.unselectedImage}
 						isSelected={this.state.rating > i - 1}
+						glyphStyle={this.props.glyphStyle}
 					/>
 				);
 			}
@@ -47,6 +53,7 @@ var RateGame = React.createClass({
 						onClick={this.onRatingClicked}
 						onMouseOver={this.onIconHovered.bind(this, i)}
 						onMouseLeave={this.onMouseLeave}
+						glyphStyle={this.props.glyphStyle}
 					/>
 				);
 			}

@@ -14,6 +14,10 @@ var TextStyles = {
 		resize: 'none',
 		height: '220px'
 	},
+	chevronGlyph: {
+		fontSize: '50px',
+		color: Colors.blue
+	},
 	alignRight: {
 		textAlign: 'right'
 	},

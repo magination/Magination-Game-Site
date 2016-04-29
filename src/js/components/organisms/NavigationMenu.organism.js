@@ -66,7 +66,7 @@ var Menu = React.createClass({
 		);
 	},
 	onNavigationClick: function (destination) {
-		if (!NavigationConstants.isLegalDestination(getLoginState(), destination)) {
+		if (!NavigationConstants.isLegalDestination(getLoginState().isLoggedIn, destination)) {
 			this.refs.loginModal.open();
 		}
 		NavigationAction.navigate({
@@ -77,11 +77,11 @@ var Menu = React.createClass({
 		this.refs.loginModal.open();
 	},
 	onLoginStateChanged: function () {
-		if (getLoginState()) {
+		if (getLoginState().isLoggedIn) {
 			this.refs.loginModal.close();
 		}
 		this.setState({
-			isLoggedIn: getLoginState()
+			isLoggedIn: getLoginState().isLoggedIn
 		});
 	},
 	onNavigationStateChanged: function () {
@@ -91,6 +91,9 @@ var Menu = React.createClass({
 	},
 	onLogoutClicked: function () {
 		LoginAction.logoutSuccess();
+		NavigationAction.navigate({
+			destination: NavigationPaths.discover
+		});
 	},
 	onSettingsClicked: function () {
 		NavigationAction.navigate({
@@ -108,7 +111,7 @@ var Menu = React.createClass({
 						<MenuItem divider />
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />
-						<MenuItem href='/' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
+						<MenuItem href='#' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
 					</NavDropdown>
 				</Nav>;
 		}

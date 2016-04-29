@@ -7,6 +7,12 @@ var GameAction = {
 			actionType: GameConstants.STORE_GAME_TO_SERVER
 		});
 	},
+	changeGameLocally: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameConstants.CHANGE_GAME_LOCALLY,
+			game: data
+		});
+	},
 	updateCurrentGameLocally: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameConstants.UPDATE_GAME_LOCALLY,
