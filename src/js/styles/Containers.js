@@ -18,6 +18,11 @@ var ContainerStyles = {
 	numberOfPlayersContainer: {
 		backgroundColor: Colors.blueLight
 	},
+	gameInListContainer: {
+		border: '4px solid ' + Colors.blue,
+		borderRadius: '5',
+		padding: '5'
+	},
 	ruleList: {
 		leftIcon: {
 			color: Colors.blue,
