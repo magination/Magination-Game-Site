@@ -11,7 +11,8 @@ var config = {
 			resendEmail: restApiRoot + 'resendVerificationEmail',
 			forgotpassword: restApiRoot + 'login' + '/forgot',
 			comments: restApiRoot + 'comments',
-			verifyEmail: restApiRoot + 'login/update'
+			verifyEmail: restApiRoot + 'login/update',
+			saveGame: restApiRoot + 'unpublishedGames'
 		},
 		img: {
 			starWhite: imgRoot + 'starWhiteTransparent100x100.png',

@@ -2,9 +2,14 @@ var Dispatcher = require('../dispatchers/Dispatcher');
 var GameConstants = require('../constants/GameConstants');
 
 var GameAction = {
-	storeGameToServer: function () {
+	publishGameToServer: function () {
 		Dispatcher.dispatch({
-			actionType: GameConstants.STORE_GAME_TO_SERVER
+			actionType: GameConstants.PUBLISH_GAME_TO_SERVER
+		});
+	},
+	saveGameToServer: function () {
+		Dispatcher.dispatch({
+			actionType: GameConstants.SAVE_GAME_TO_SERVER
 		});
 	},
 	changeGameLocally: function (data) {
