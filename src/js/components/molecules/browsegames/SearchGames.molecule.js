@@ -2,9 +2,16 @@ var React = require('react');
 
 var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
+var Rating = require('../browsegames/RateGame.molecule');
+
+var ImgUrls = require('../../../config/config').urls.img;
+var ContainerStyles = require('../../../styles/Containers');
+var TextStyles = require('../../../styles/Text');
+
 var GameListStore = require('../../../stores/GameListStore');
 var GameListAction = require('../../../actions/GameListAction');
 var GameListConstants = require('../../../constants/GameListConstants');
+// var LoginStore = require('../../../stores/LoginStore');
 var ValidatorService = require('../../../service/Validator.service');
 
 var SearchGames = React.createClass({
@@ -16,36 +23,62 @@ var SearchGames = React.createClass({
 			filter_doubles: '0',
 			filter_triples: '0',
 			filter_general_search: '',
-			singlesBsStyle: 'success',
-			doublesBsStyle: 'success',
-			triplesBsStyle: 'success'
+			filter_rating: 0,
+			hasImportedPieces: false
 		};
 	},
 	componentDidMount: function () {
 		this.refs.searchEntry.refs.input.focus();
-		GameListStore.addChangeListener(this.onGameListChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
+		GameListStore.addChangeListener(this.onGameListFilterChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
 	},
 	componentWillUnmount: function () {
 		GameListAction.clearSearchFilters();
-		GameListStore.removeChangeListener(this.onGameListChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
+		GameListStore.removeChangeListener(this.onGameListFilterChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
 	},
 	render: function () {
 		return (
-			<div>
-				<h2>Search Filters</h2>
+			<div style={ContainerStyles.searchContainer}>
+				<h2 style={TextStyles.white}>Search Filters</h2>
 				<form onSubmit={this.onSubmit}>
-					<Input value={this.state.filter_general_search} ref='searchEntry' type='text' label='Search' placeholder='General search' onChange={this.tagSearchChange}></Input>
-					<Input value={this.state.filter_title} type='text' label='Title' placeholder='Title' onChange={this.titleSearchChanged}></Input>
-					<Input value={this.state.filter_author} type='text' label='Author' placeholder='Author' onChange={this.authorSearchChanged}></Input>
-					<Input value={this.state.filter_singles} bsStyle={this.state.singlesBsStyle} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore='1' label='Maximum Pieces'></Input>
-					<Input value={this.state.filter_doubles} bsStyle={this.state.doublesBsStyle} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore='2'></Input>
-					<Input value={this.state.filter_triples} bsStyle={this.state.triplesBsStyle} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore='3'></Input>
+					<h4 style={TextStyles.white}>General Search</h4>
+					<Input value={this.state.filter_general_search} ref='searchEntry' type='text' placeholder='General search' onChange={this.tagSearchChange}></Input>
+					<h4 style={TextStyles.white}>Title</h4>
+					<Input value={this.state.filter_title} type='text' placeholder='Title' onChange={this.titleSearchChanged}></Input>
+					<h4 style={TextStyles.white}>Author</h4>
+					<Input value={this.state.filter_author} type='text' placeholder='Author' onChange={this.authorSearchChanged}></Input>
+					<h4 style={TextStyles.white}>Minimum Rating</h4>
+					<Rating rating={this.state.filter_rating} glyphStyle={TextStyles.RatingStarWhite} maxRating='5' onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty'/>
+					<h4 style={TextStyles.white}>Pieces</h4>
+					<Input value={this.state.hasImportedPieces} onChange={this.onImportPiecesCheckboxChange} type='checkbox' label={<span style={TextStyles.white}>Import pieces from My Profile</span>}/>
+					<Input value={this.state.filter_singles} enabled={this.state.hasImportedPieces} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}></Input>
+					<Input value={this.state.filter_doubles} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceDoubleBlue} alt='No img'/>}></Input>
+					<Input value={this.state.filter_triples} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceTripleBlue} alt='No img'/>}></Input>
 					<Button type='submit'>Search</Button>
 				</form>
 			</div>
 		);
 	},
-	onGameListChange: function () {
+	onRatingClicked: function (rating) {
+		this.setState({
+			filter_rating: rating
+		});
+	},
+	onImportPiecesCheckboxChange: function (e) {
+		if (e.target.value) {
+			/* TODO import from profile when backend is done */
+		}
+		else {
+			this.setState({
+				filter_singles: 0,
+				filter_doubles: 0,
+				filter_triples: 0
+			});
+		}
+		this.setState({
+			hasImportedPieces: e.target.value
+		});
+	},
+	onGameListFilterChange: function () {
 		setTimeout(function () {
 			GameListAction.clearGamesList();
 		}, 0);
@@ -55,11 +88,6 @@ var SearchGames = React.createClass({
 	},
 	onSubmit: function (e) {
 		e.preventDefault();
-		if (!($.isNumeric(this.state.filter_singles) &&
-			$.isNumeric(this.state.filter_doubles) &&
-			$.isNumeric(this.state.filter_triples))) {
-			return;
-		}
 
 		var search_filter = {};
 		if (this.state.filter_general_search !== '') {

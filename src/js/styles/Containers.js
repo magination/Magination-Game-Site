@@ -5,6 +5,12 @@ var ContainerStyles = {
 		borderRadius: '5',
 		textAlign: 'center'
 	},
+	searchContainer: {
+		backgroundColor: Colors.blue,
+		borderRadius: '5',
+		textAlign: 'center',
+		padding: '40'
+	},
 	imgCarouselContainer: {
 		border: '5px solid ' + Colors.blue,
 		borderRadius: '5',

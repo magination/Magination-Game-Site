@@ -10,6 +10,10 @@ var TextStyles = {
 	blue: {
 		color: Colors.blue
 	},
+	RatingStarWhite: {
+		color: 'white',
+		fontSize: '30'
+	},
 	textArea: {
 		resize: 'none',
 		height: '220px'

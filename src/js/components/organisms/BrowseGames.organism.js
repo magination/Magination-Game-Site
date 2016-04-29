@@ -8,10 +8,10 @@ var BrowseGames = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Col md={3}>
+				<Col md={4}>
 					<SearchGames />
 				</Col>
-				<Col md={9}>
+				<Col md={8}>
 					<GameList/>
 				</Col>
 			</div>
