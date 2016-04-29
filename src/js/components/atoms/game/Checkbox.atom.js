@@ -2,7 +2,7 @@ var React = require('react');
 var GameStore = require('../../../stores/GameStore');
 var GameAction = require('../../../actions/GameAction');
 
-var RatingIcon = React.createClass({
+var Checkbox = React.createClass({
 	getInitialState: function () {
 		if (GameStore.getGame() !== null) {
 			return {
@@ -47,4 +47,4 @@ var RatingIcon = React.createClass({
 		}
 	}
 });
-module.exports = RatingIcon;
+module.exports = Checkbox;

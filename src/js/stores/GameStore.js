@@ -9,7 +9,7 @@ var NavigationAction = require('../actions/NavigationAction');
 var FeedbackAction = require('../actions/FeedbackAction');
 var _game = null;
 
-var GameStore = _.extend({}, EventEmitter.prototype, {
+var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	getGame: function () {
 		return _game;
 	},
