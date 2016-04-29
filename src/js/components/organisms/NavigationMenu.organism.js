@@ -55,12 +55,15 @@ var Menu = React.createClass({
 						<Navbar.Brand>
 							<a href='/' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>
 						</Navbar.Brand>
+						<Navbar.Toggle/>
 					</Navbar.Header>
-					<Nav activeKey={this.state.currentActive}>
-						<MenuItem eventKey={NavigationPaths.discover} onClick={this.onNavigationClick.bind(this, NavigationPaths.discover)}>Discover</MenuItem>
-						<MenuItem eventKey={NavigationPaths.creategame} onClick={this.onNavigationClick.bind(this, NavigationPaths.creategame)}>Create</MenuItem>
-					</Nav>
-					{navigationStateElement}
+					<Navbar.Collapse>
+						<Nav activeKey={this.state.currentActive}>
+							<MenuItem eventKey={NavigationPaths.discover} onClick={this.onNavigationClick.bind(this, NavigationPaths.discover)}>Discover</MenuItem>
+							<MenuItem eventKey={NavigationPaths.creategame} onClick={this.onNavigationClick.bind(this, NavigationPaths.creategame)}>Create</MenuItem>
+						</Nav>
+						{navigationStateElement}
+					</Navbar.Collapse>
 				</Navbar>
 			</div>
 		);
