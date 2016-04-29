@@ -121,7 +121,7 @@ var GameForm = React.createClass({
 	},
 	submitGame: function (e) {
 		e.preventDefault();
-		GameAction.storeGameToServer(GameStore.getGame());
+		GameAction.publishGameToServer(GameStore.getGame());
 	},
 	onTitleChanged: function (e) {
 		this.setState({
@@ -133,10 +133,10 @@ var GameForm = React.createClass({
 		});
 	},
 	onSaveClicked: function () {
-		console.log(GameStore.getGame());
+		GameAction.saveGameToServer();
 	},
 	onSubmitClicked: function () {
-		GameAction.storeGameToServer();
+		GameAction.publishGameToServer();
 	}
 });
 

@@ -37,8 +37,12 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		_game = action.game;
 		GameStore.emitChange();
 		break;
-	case GameConstants.STORE_GAME_TO_SERVER:
-		StoreGameToServer();
+	case GameConstants.PUBLISH_GAME_TO_SERVER:
+		PublishGameToServer();
+		GameStore.emitChange();
+		break;
+	case GameConstants.SAVE_GAME_TO_SERVER:
+		SaveGameToServer();
 		GameStore.emitChange();
 		break;
 	case GameConstants.ADD_NEW_RULE_TO_LOCAL_GAME:
@@ -59,10 +63,29 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	}
 });
-function StoreGameToServer () {
+function PublishGameToServer () {
 	$.ajax({
 		type: 'POST',
 		url: URLS.api.games,
+		data: JSON.stringify(_game),
+		headers: {
+			'Authorization': LoginStore.getToken()
+		},
+		contentType: 'application/json',
+		dataType: 'json',
+		statusCode: {
+			201: onGamePostedSuccess,
+			401: onPostGameUnauthorizedResponse,
+			500: function () {
+				alert('Server Error: see console');
+			}
+		}
+	});
+};
+function SaveGameToServer () {
+	$.ajax({
+		type: 'POST',
+		url: URLS.api.saveGame,
 		data: JSON.stringify(_game),
 		headers: {
 			'Authorization': LoginStore.getToken()
