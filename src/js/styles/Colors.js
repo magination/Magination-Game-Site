@@ -13,7 +13,8 @@ var Colors = {
 	redDark: '#C32419',
 	gray: '#474747',
 	grayDark: '#2B2B2B',
-	grayLight: '#5A5A5A'
+	grayLight: '#5A5A5A',
+	lightCyan: '#D0FFFF'
 };
 
 module.exports = Colors;

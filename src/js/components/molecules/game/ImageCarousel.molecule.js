@@ -2,6 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ContainerStyles = require('../../../styles/Containers');
 var TextStyles = require('../../../styles/Text');
+var Colors = require('../../../styles/Colors');
 var Glyphicon = require('react-bootstrap').Glyphicon;
 
 var ImageCarousel = React.createClass({
@@ -54,12 +55,11 @@ var ImageCarousel = React.createClass({
 		var carouselItems = this.props.imageUrls.map(function (url, index) {
 			var style = {
 				maxHeight: '100%',
-				maxWidth: '80%',
+				maxWidth: '100%',
 				minWidth: '80%',
 				minHeight: '80%',
 				marginRight: 'auto',
-				marginLeft: 'auto',
-				WebkitTransform: 'translate(0,10%)'
+				marginLeft: 'auto'
 			};
 			if (index !== stateIndex) {
 				style.display = 'none';
@@ -68,10 +68,10 @@ var ImageCarousel = React.createClass({
 		});
 		return (
 			<div style={this.state.divStyle}>
-				<div hidden={this.state.index === 0} onClick={this.selectPreviousImage} style={this.state.chevronLeftStyle}>
+				<div onMouseEnter={this.onMouseEnterChevron.bind(this, 'left', true)} onMouseLeave={this.onMouseEnterChevron.bind(this, 'left', false)} hidden={this.state.index === 0} onClick={this.selectPreviousImage} style={this.state.chevronLeftStyle}>
 					<h1 style={TextStyles.chevronGlyph}><Glyphicon glyph='chevron-left'/></h1>
 				</div>
-				<div hidden={this.state.index === this.props.imageUrls.length - 1} onClick={this.selectNextImage} style={this.state.chevronRightStyle}>
+				<div onMouseEnter={this.onMouseEnterChevron.bind(this, 'right', true)} onMouseLeave={this.onMouseEnterChevron.bind(this, 'right', false)} hidden={this.state.index === this.props.imageUrls.length - 1} onClick={this.selectNextImage} style={this.state.chevronRightStyle}>
 					<h1 style={TextStyles.chevronGlyph}><Glyphicon glyph='chevron-right'/></h1>
 				</div>
 				<div style={this.state.innerDivStyle}>
@@ -79,6 +79,36 @@ var ImageCarousel = React.createClass({
 				</div>
 			</div>
 		);
+	},
+	onMouseEnterChevron: function (direction, showAlteredBackground) {
+		var newStyle = {};
+		if (direction === 'right') {
+			newStyle = $.extend(true, {}, this.state.chevronRightStyle);
+			if (showAlteredBackground) {
+				newStyle.background = 'linear-gradient(to right, white , ' + Colors.lightCyan + ')';
+			}
+			else {
+				newStyle.background = 'linear-gradient(to right, white , ' + 'white' + ')';
+			}
+			this.setState({
+				chevronRightStyle: newStyle
+			});
+		}
+		if (direction === 'left') {
+			newStyle = $.extend(true, {}, this.state.chevronLeftStyle);
+			if (showAlteredBackground) {
+				newStyle.background = 'linear-gradient(to right, ' + Colors.lightCyan + ' , white)';
+			}
+			else {
+				newStyle.background = 'linear-gradient(to right, white , ' + 'white' + ')';
+			}
+			this.setState({
+				chevronLeftStyle: newStyle
+			});
+		}
+	},
+	onMouseLeave: function () {
+
 	},
 	onResizeEvent: function () {
 		this.componentWillReceiveProps(this.props);
