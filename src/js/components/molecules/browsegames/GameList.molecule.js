@@ -40,7 +40,7 @@ var GameList = React.createClass({
 						<span style={{marginLeft: '30'}}/>
 						<Glyphicon style={TextStyles.blue} glyph='user'/> {game.numberOfPlayers}{(game.isPlayableWithMorePlayers) ? '+' : ''}
 					</h4>
-					<h4>Description</h4>
+					<h4>Description:</h4>
 					<p>{game.shortDescription}</p>
 					<p>by <a style={{cursor: 'pointer'}}>{game.owner.username}</a></p>
 				</Media.Body>
