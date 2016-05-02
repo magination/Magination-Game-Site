@@ -4,6 +4,10 @@ var TextStyles = {
 	blueHeader: {
 		color: Colors.blueDark
 	},
+	clickableBlueHeader: {
+		color: Colors.blueDark,
+		cursor: 'pointer'
+	},
 	white: {
 		color: 'white'
 	},

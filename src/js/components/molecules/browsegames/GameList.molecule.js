@@ -28,19 +28,17 @@ var GameList = React.createClass({
 		var that = this;
 		var games = this.state.games.map(function (game) {
 			return <div key={game._id}><Media>
-				<Media.Left align='middle' onClick={that.navigateToGame.bind(that, game._id)}>
-					<img width={128} height={128} src={game.images[0]} alt='No image' />
+				<Media.Left style={{cursor: 'pointer'}} onClick={that.navigateToGame.bind(that, game._id)}>
+					<img width={200} height={200} src={game.images[0]} alt='No image' />
 				</Media.Left>
 				<Media.Body>
-					<h3 style={TextStyles.blueHeader}>
+					<h3 onClick={that.navigateToGame.bind(that, game._id)} style={TextStyles.clickableBlueHeader}>
 						{game.title}
 					</h3>
 					<p><Glyphicon glyph='star'/> {(game.sumOfVotes / game.numberOfVotes)}</p>
-					{game.shortDescription}
+					<p>{game.shortDescription}</p>
+					<p>by <a style={{cursor: 'pointer'}}>{game.owner.username}</a></p>
 				</Media.Body>
-				<Media.Right align='bottom'>
-					{game.owner.username}
-				</Media.Right>
 			</Media><hr/></div>;
 		});
 		return (

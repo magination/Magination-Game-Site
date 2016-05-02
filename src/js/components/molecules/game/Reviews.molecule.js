@@ -27,8 +27,9 @@ var Reviews = React.createClass({
 	},
 	componentWillReceiveProps: function (nextProps) {
 		/* Checks if the review list has changed, if it has, refetch the reviews */
+		var that = this;
 		if (nextProps.reviews.every(function (reviewId, index) {
-			if (reviewId === this.props.reviews[index]) {
+			if (reviewId === that.props.reviews[index]) {
 				return true;
 			}
 			return false;

@@ -9,7 +9,8 @@ var ContainerStyles = {
 		backgroundColor: Colors.blue,
 		borderRadius: '5',
 		textAlign: 'center',
-		padding: '40'
+		padding: '40',
+		paddingTop: '10'
 	},
 	imgCarouselContainer: {
 		border: '5px solid ' + Colors.blue,

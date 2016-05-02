@@ -1,6 +1,6 @@
 var restApiRoot = 'https://localhost:8000/api/';
 var serverRoot = 'http://localhost:8080/public/';
-var imgRoot = serverRoot + '/img/';
+var imgRoot = serverRoot + 'img/';
 var config = {
 	urls: {
 		api: {
