@@ -3,6 +3,7 @@ var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var Collapse = require('react-bootstrap').Collapse;
 var Well = require('react-bootstrap').Well;
+var Col = require('react-bootstrap').Col;
 var URLS = require('../../../config/config').urls;
 var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
@@ -21,19 +22,21 @@ var ChangePassword = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Button onClick={this.onChangeEmailClicked} style={ButtonStyle.MaginationFillParent}>
-					Change email
-				</Button>
+				<Col md={12}>
+					<Button onClick={this.onChangeEmailClicked} style={ButtonStyle.MaginationFillParent}><strong>Change email</strong></Button>
+				</Col>
 				<Collapse in={this.props.isShow} style={ContainerStyle.collapse.parent}>
-					<Well>
-						<div style={ContainerStyle.collapse.child}>
-							<form className='form-settings' onSubmit={this.storeChanges}>
-								<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordChanged}/>
-								<Input value={this.state.newEmail} bsStyle={this.state.bsStyleEmail} label='New email' type='text' placeholder='Enter new email address' onChange={this.onNewEmailEntryChange} hasFeedback/>
-								<Button ref='submitButton' type='submit'>Save changes</Button>
-							</form>
-						</div>
-					</Well>
+					<Col md={12}>
+						<Well>
+							<div style={ContainerStyle.collapse.child}>
+								<form className='form-settings' onSubmit={this.storeChanges}>
+									<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordChanged}/>
+									<Input value={this.state.newEmail} bsStyle={this.state.bsStyleEmail} label='New email' type='text' placeholder='Enter new email address' onChange={this.onNewEmailEntryChange} hasFeedback/>
+									<Button ref='submitButton' type='submit'>Save changes</Button>
+								</form>
+							</div>
+						</Well>
+					</Col>
 				</Collapse>
 			</div>
 		);

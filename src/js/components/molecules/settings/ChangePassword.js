@@ -6,8 +6,9 @@ var Well = require('react-bootstrap').Well;
 var URLS = require('../../../config/config').urls;
 var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
-var ButtonStyle = require('../../../styles/Buttons');
-var ContainerStyle = require('../../../styles/Containers');
+var Col = require('react-bootstrap').Col;
+var ButtonStyles = require('../../../styles/Buttons');
+// var ContainerStyle = require('../../../styles/Containers');
 
 var ChangePassword = React.createClass({
 	getInitialState () {
@@ -21,20 +22,22 @@ var ChangePassword = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Button onClick={this.onChangePasswordClicked} style={ButtonStyle.MaginationFillParent}>
-					Change password
-				</Button>
-				<Collapse in={this.props.isShow} style={ContainerStyle.collapse.parent}>
-					<Well>
-						<div style={ContainerStyle.collapse.child}>
-							<form className='form-settings' onSubmit={this.storeChanges}>
-								<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordCHanged}/>
-								<Input value={this.state.newPassword} label='New password' placeholder='Enter new password' type='password' onChange={this.onNewPasswordChanged}/>
-								<Input value={this.state.confirmedPassword} bsStyle={this.state.bsStyleConfirmedPassword} label='Confirm new password' placeholder='Confirm new password' type='password' onChange={this.onConfirmedPasswordChanged}/>
-								<Button ref='submitButton' type='submit'>Save changes</Button>
-							</form>
-						</div>
-					</Well>
+				<Col md={12}>
+					<Button onClick={this.onChangePasswordClicked} style={ButtonStyles.MaginationFillParent}><strong>Change password</strong></Button>
+				</Col>
+				<Collapse in={this.props.isShow}>
+					<Col md={12}>
+						<Well>
+							<div>
+								<form className='form-settings' onSubmit={this.storeChanges}>
+									<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordCHanged}/>
+									<Input value={this.state.newPassword} label='New password' placeholder='Enter new password' type='password' onChange={this.onNewPasswordChanged}/>
+									<Input value={this.state.confirmedPassword} bsStyle={this.state.bsStyleConfirmedPassword} label='Confirm new password' placeholder='Confirm new password' type='password' onChange={this.onConfirmedPasswordChanged}/>
+									<Button ref='submitButton' type='submit'>Save changes</Button>
+								</form>
+							</div>
+						</Well>
+					</Col>
 				</Collapse>
 			</div>
 		);
