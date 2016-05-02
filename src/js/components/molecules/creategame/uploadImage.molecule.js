@@ -17,7 +17,8 @@ var Images = React.createClass({
 			<div style={ContainerStyle.paddingLess}>
 				<form onSubmit={this.onFormSubmitted}>
 					{this.state.description}
-					{this.state.imageSrc ? <img ref='preview' src={this.state.imageSrc} alt='your image'/> : null}
+					<br/>
+					{this.state.imageSrc ? <img ref='preview' style={ContainerStyle.image.uploadImage} src={this.state.imageSrc} alt='your image'/> : null}
 					<input ref='fileInput' type='file' name='image' onChange={this.onSourceChanged}/>
 					<Button style={ButtonStyle.MaginationFillParent} type='submit'>Submit image</Button>
 				</form>
