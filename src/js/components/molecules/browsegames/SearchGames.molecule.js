@@ -179,10 +179,10 @@ var SearchGames = React.createClass({
 		else if (this.state.currentActiveTeamButton === TEAMS_BUTTON_GROUP_VALUES.NOTEAMS) {
 			search_filter['teams'] = false;
 		}
-		if (this.state.currentActiveTeamButton === OTHER_OBJECTS_BUTTON_GROUP_VALUES.YES) {
+		if (this.state.currentActiveOtherObjectsButton === OTHER_OBJECTS_BUTTON_GROUP_VALUES.YES) {
 			search_filter['otherObjects'] = true;
 		}
-		else if (this.state.currentActiveTeamButton === OTHER_OBJECTS_BUTTON_GROUP_VALUES.NO) {
+		else if (this.state.currentActiveOtherObjectsButton === OTHER_OBJECTS_BUTTON_GROUP_VALUES.NO) {
 			search_filter['otherObjects'] = false;
 		}
 		GameListAction.setGameSearchFilters(search_filter);
