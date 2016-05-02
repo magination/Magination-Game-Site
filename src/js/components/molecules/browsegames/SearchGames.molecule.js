@@ -11,8 +11,7 @@ var TextStyles = require('../../../styles/Text');
 var GameListStore = require('../../../stores/GameListStore');
 var GameListAction = require('../../../actions/GameListAction');
 var GameListConstants = require('../../../constants/GameListConstants');
-// var LoginStore = require('../../../stores/LoginStore');
-var ValidatorService = require('../../../service/Validator.service');
+var LoginStore = require('../../../stores/LoginStore');
 
 var SearchGames = React.createClass({
 	getInitialState: function () {
@@ -65,7 +64,11 @@ var SearchGames = React.createClass({
 	},
 	onImportPiecesCheckboxChange: function (e) {
 		if (e.target.value) {
-			/* TODO import from profile when backend is done */
+			this.setState({
+				filter_singles: LoginStore.getLoginProfile().pieces.singles,
+				filter_doubles: LoginStore.getLoginProfile().pieces.doubles,
+				filter_triples: LoginStore.getLoginProfile().pieces.triples
+			});
 		}
 		else {
 			this.setState({
@@ -108,6 +111,9 @@ var SearchGames = React.createClass({
 		if (this.state.filter_triples !== '' && this.state.filter_triples > 0) {
 			search_filter['triple'] = this.state.filter_triples;
 		}
+		if (this.state.filter_rating > 0 && this.state.filter_rating < 6) {
+			search_filter['rating'] = this.state.filter_rating;
+		}
 		GameListAction.setGameSearchFilters(search_filter);
 	},
 	tagSearchChange: function (e) {
@@ -126,33 +132,18 @@ var SearchGames = React.createClass({
 		});
 	},
 	singlesFilterChanged: function (e) {
-		var style = 'success';
-		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
-			style = 'error';
-		}
 		this.setState({
-			filter_singles: e.target.value,
-			singlesBsStyle: style
+			filter_singles: e.target.value
 		});
 	},
 	doublesFilterChanged: function (e) {
-		var style = 'success';
-		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
-			style = 'error';
-		}
 		this.setState({
-			filter_doubles: e.target.value,
-			doublesBsStyle: style
+			filter_doubles: e.target.value
 		});
 	},
 	triplesFilterChanged: function (e) {
-		var style = 'success';
-		if (!ValidatorService.isNumericAndNotNegative(e.target.value)) {
-			style = 'error';
-		}
 		this.setState({
-			filter_triples: e.target.value,
-			triplesBsStyle: style
+			filter_triples: e.target.value
 		});
 	}
 });
