@@ -113,6 +113,7 @@ var ChangePassword = React.createClass({
 			header: 'Success',
 			message: 'Pieces updated'
 		});
+		LoginAction.updateLoginProfile();
 	}
 
 });

@@ -1,6 +1,7 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var LoginConstants = require('../constants/LoginConstants');
 var FeedbackAction = require('./FeedbackAction');
+var LoginStore = require('../stores/LoginStore');
 var Cookie = require('react-cookie');
 var URLS = require('../config/config').urls;
 
@@ -42,6 +43,21 @@ var LoginAction = {
 			actionType: LoginConstants.SET_PROFILE,
 			profile: data.profile
 		});
+	},
+	updateLoginProfile: function () {
+		if (!LoginStore.getLoginState().isLoggedIn) {
+			console.log('Tried to update LoginProfile while not being logged in');
+			return;
+		}
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id,
+			dataType: 'json',
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			success: onGetUserSuccessResponse
+		});
 	}
 };
 
@@ -65,11 +81,6 @@ function onGetUserSuccessResponse (data) {
 	LoginAction.setLoginProfile({
 		profile: data
 	});
-	// NavigationAction.navigateToPrevious();
-	FeedbackAction.displaySuccessMessage({
-		header: 'Login Successful!',
-		message: 'You are now logged in as ' + data.email
-	});
 };
 function onLoginSuccessResponse (data) {
 	LoginAction.loginSuccess({
@@ -92,6 +103,10 @@ function onLoginSuccessResponse (data) {
 				console.log(data);
 			}
 		}
+	});
+	FeedbackAction.displaySuccessMessage({
+		header: 'Login Successful!',
+		message: 'You are now logged in'
 	});
 };
 var LoginService = {
