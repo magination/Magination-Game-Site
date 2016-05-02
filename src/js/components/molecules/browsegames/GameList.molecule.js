@@ -35,7 +35,7 @@ var GameList = React.createClass({
 					<h3 onClick={that.navigateToGame.bind(that, game._id)} style={TextStyles.clickableBlueHeader}>
 						{game.title}
 					</h3>
-					<p><Glyphicon glyph='star'/> {(game.sumOfVotes / game.numberOfVotes)}</p>
+					<h4><Glyphicon style={TextStyles.blue} glyph='star'/> {toOneDecimal(game.rating)}</h4>
 					<p>{game.shortDescription}</p>
 					<p>by <a style={{cursor: 'pointer'}}>{game.owner.username}</a></p>
 				</Media.Body>
@@ -75,6 +75,12 @@ function getDocHeight () {
 		D.body.offsetHeight, D.documentElement.offsetHeight,
 		D.body.clientHeight, D.documentElement.clientHeight
     );
+}
+
+function toOneDecimal (number) {
+	number *= 10;
+	number = parseInt(number);
+	return (number / 10);
 }
 
 module.exports = GameList;

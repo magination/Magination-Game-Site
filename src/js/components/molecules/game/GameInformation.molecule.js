@@ -3,7 +3,7 @@ var ContainerStyles = require('../../../styles/Containers');
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 var Collapse = require('react-bootstrap').Collapse;
-var Rating = require('../browsegames/RateGame.molecule');
+var Glyphicon = require('react-bootstrap').Glyphicon;
 var TextStyles = require('../../../styles/Text');
 var imgUrls = require('../../../config/config').urls.img;
 
@@ -17,7 +17,7 @@ var GameInformation = React.createClass({
 		};
 	},
 	render: function () {
-		var rating = (this.props.game.numberOfVotes) ? (this.props.game.sumOfVotes / this.props.game.numberOfVotes) : 'No Rating';
+		var rating = toOneDecimal(this.props.game.rating);
 		var otherObjects = <div></div>;
 		if (this.props.game.otherObjects) {
 			otherObjects = this.props.game.otherObjects.map(function (object) {
@@ -40,7 +40,7 @@ var GameInformation = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<h3 style={TextStyles.white}><Rating glyphStyle={TextStyles.white} maxRating='5' rating={rating} isStatic selectedImage='star' unselectedImage='star-empty' />{rating}</h3>
+					<h3 style={TextStyles.white}><Glyphicon glyph='star'/>{rating}</h3>
 				</Row>
 				<Row>
 					<h4 style={TextStyles.white}><img width={50} height={19} src={imgUrls.pieceSingleWhiteNoPadding} alt='a'/>	x{this.props.game.pieces.singles}</h4>
@@ -69,5 +69,11 @@ var GameInformation = React.createClass({
 		});
 	}
 });
+
+function toOneDecimal (number) {
+	number *= 10;
+	number = parseInt(number);
+	return (number / 10);
+}
 
 module.exports = GameInformation;
