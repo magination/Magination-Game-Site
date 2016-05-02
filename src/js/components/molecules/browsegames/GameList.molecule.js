@@ -32,10 +32,15 @@ var GameList = React.createClass({
 					<img width={200} height={200} src={game.images[0]} alt='No image' />
 				</Media.Left>
 				<Media.Body>
-					<h3 onClick={that.navigateToGame.bind(that, game._id)} style={TextStyles.clickableBlueHeader}>
+					<h3 onClick={that.navigateToGame.bind(that, game._id)} style={TextStyles.clickableHeader}>
 						{game.title}
 					</h3>
-					<h4><Glyphicon style={TextStyles.blue} glyph='star'/> {toOneDecimal(game.rating)}</h4>
+					<h4>
+						<Glyphicon style={TextStyles.blue} glyph='star'/> {toOneDecimal(game.rating)}
+						<span style={{marginLeft: '30'}}/>
+						<Glyphicon style={TextStyles.blue} glyph='user'/> {game.numberOfPlayers}{(game.isPlayableWithMorePlayers) ? '+' : ''}
+					</h4>
+					<h4>Description</h4>
 					<p>{game.shortDescription}</p>
 					<p>by <a style={{cursor: 'pointer'}}>{game.owner.username}</a></p>
 				</Media.Body>
