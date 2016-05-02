@@ -84,7 +84,11 @@ var ContainerStyles = {
 			verticalAlign: 'middle',
 			maxWidth: '100%',
 			padding: '5'
-
+		},
+		uploadImage: {
+			maxWidth: '100%',
+			verticalAlign: 'middle',
+			display: 'inline-block'
 		}
 	},
 	collapse: {

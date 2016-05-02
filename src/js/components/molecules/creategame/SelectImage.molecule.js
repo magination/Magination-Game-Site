@@ -2,10 +2,11 @@ var React = require('react');
 var Modal = require('react-bootstrap').Modal;
 var Button = require('react-bootstrap').Button;
 var ButtonStyle = require('../../../styles/Buttons');
-var UploadImage = require('./UploadImage.molecule');
-var ImageList = require('./Imagelist');
+var UploadImage = require('./UploadImage.molecule.js');
+var ImageList = require('./ImageList');
 var Row = require('react-bootstrap').Row;
 var LoginStore = require('../../../stores/LoginStore');
+var Col = require('react-bootstrap').Col;
 
 var SelectImage = React.createClass({
 	getInitialState: function () {
@@ -38,7 +39,7 @@ var SelectImage = React.createClass({
 						<Button onClick={this.close}>Close</Button>
 					</Modal.Footer>
 				</Modal>
-				<Button onClick={this.open} type='button' style={ButtonStyle.MaginationRule}>+ Add image</Button>
+				<Row><Col md={6}><Button onClick={this.open} type='button' style={ButtonStyle.MaginationFillParent}>+ Add image</Button></Col></Row>
 			</div>
 		);
 	},
