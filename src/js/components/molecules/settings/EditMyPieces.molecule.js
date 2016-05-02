@@ -46,13 +46,13 @@ var ChangePassword = React.createClass({
 				</Col>
 				<Collapse in={this.props.isShow}>
 					<Col md={12}>
-						<Well>
+						<Well style={{marginBottom: '0'}}>
 							<div>
 								<form className='form-settings' onSubmit={this.onSubmit}>
 									<Input value={this.state.singles} placeholder='Singles' type='number' onChange={this.onSinglesChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}/>
 									<Input value={this.state.doubles} placeholder='Doubles' type='number' onChange={this.onDoublesChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceDoubleBlue} alt='No img'/>}/>
 									<Input value={this.state.triples} placeholder='Triples' type='number' onChange={this.onTriplesChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceTripleBlue} alt='No img'/>}/>
-									<Button type='submit'>Save changes</Button>
+									<Button style={ButtonStyles.Magination} type='submit'><strong>Save changes</strong></Button>
 								</form>
 							</div>
 						</Well>

@@ -27,13 +27,13 @@ var ChangePassword = React.createClass({
 				</Col>
 				<Collapse in={this.props.isShow}>
 					<Col md={12}>
-						<Well>
+						<Well style={{marginBottom: '0'}}>
 							<div>
 								<form className='form-settings' onSubmit={this.storeChanges}>
 									<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordCHanged}/>
 									<Input value={this.state.newPassword} label='New password' placeholder='Enter new password' type='password' onChange={this.onNewPasswordChanged}/>
 									<Input value={this.state.confirmedPassword} bsStyle={this.state.bsStyleConfirmedPassword} label='Confirm new password' placeholder='Confirm new password' type='password' onChange={this.onConfirmedPasswordChanged}/>
-									<Button ref='submitButton' type='submit'>Save changes</Button>
+									<Button style={ButtonStyles.Magination} ref='submitButton' type='submit'><strong>Save changes</strong></Button>
 								</form>
 							</div>
 						</Well>
