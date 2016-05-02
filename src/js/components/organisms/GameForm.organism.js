@@ -1,6 +1,6 @@
 var React = require('react');
 var URLS = require('../../config/config').urls;
-var ImageNumberPair = require('../molecules/ImageNumberPair.molecule');
+var ImageNumberPair = require('../molecules/creategame/ImageNumberPair.molecule.js');
 var GameStore = require('../../stores/GameStore');
 var GameAction = require('../../actions/GameAction');
 var Col = require('react-bootstrap').Col;
@@ -8,8 +8,8 @@ var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var Checkbox = require('../atoms/game/Checkbox.atom');
-var HideableInput = require('../molecules/HideableInput.molecule');
-var GameDescriptionInput = require('../molecules/GameDescriptionInput.molecule');
+var HideableInput = require('../molecules/creategame/HideableInput.molecule.js');
+var GameDescriptionInput = require('../molecules/creategame/GameDescriptionInput.molecule.js');
 var RuleList = require('../molecules/creategame/RuleList');
 var AlternativeRuleList = require('../molecules/creategame/AlternativeRuleList');
 var TextStyle = require('../../styles/Text');
@@ -31,9 +31,6 @@ var GameForm = React.createClass({
 				title: ''
 			};
 		}
-	},
-	componentDidMount () {
-
 	},
 	render: function () {
 		return (

@@ -17,11 +17,11 @@ var Rule = React.createClass({
 					<Row><Glyphicon style={TextStyle.glyphIcon.alignCenterBlue} glyph={this.props.hasUpButton ? 'glyphicon glyphicon-arrow-up' : ''} onClick={this.onUpClicked}/></Row>
 					<Row><Glyphicon style={TextStyle.glyphIcon.alignCenterBlue} glyph={this.props.hasDownButton ? 'glyphicon glyphicon-arrow-down' : ''} onClick={this.onDownClicked}/></Row>
 				</div>
-				<div style={ContainerStyle.ruleList.input}>
-					<Input ref='input' value={this.props.value} type='text' onInput={this.onListItemChanged} placeholder={this.props.placeholder}/>
-				</div>
 				<div style={ContainerStyle.ruleList.rightIcon}>
 					<Glyphicon style={TextStyle.glyphIcon.alignCenterBlue} glyph='glyphicon glyphicon-remove' onClick={this.onDeleteClicked}/>
+				</div>
+				<div style={ContainerStyle.ruleList.input}>
+					<Input ref='input' value={this.props.value} type='text' onInput={this.onListItemChanged} placeholder={this.props.placeholder}/>
 				</div>
 			</div>
 		);

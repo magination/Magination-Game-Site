@@ -25,6 +25,10 @@ var ButtonStyles = {
 		color: 'white',
 		width: '100%'
 	},
+	MaginationSubmit: {
+		backgroundColor: Colors.blueDark,
+		color: 'white'
+	},
 	MaginationRule: {
 		backgroundColor: Colors.blueDark,
 		color: 'white',

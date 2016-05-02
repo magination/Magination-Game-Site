@@ -4,6 +4,8 @@ var Button = require('react-bootstrap').Button;
 var ButtonStyle = require('../../../styles/Buttons');
 var GameAction = require('../../../actions/GameAction');
 var GameStore = require('../../../stores/GameStore');
+var Col = require('react-bootstrap').Col;
+var Row = require('react-bootstrap').Row;
 
 var RuleList = React.createClass({
 	listElements: [],
@@ -28,15 +30,17 @@ var RuleList = React.createClass({
 		for (var i = 0; i < this.state.rules.length; i++) {
 			var position = i;
 			list.push(
-				<div key={i} ref='listContainer'>
-					<Rule id={position} onAdded={this.onRuleAdded} onDeleted={this.onRuleDeleted} onMoveRule={this.onMoveRule} placeholder='Enter a rule' value={this.state.rules[i]} hasUpButton={i !== 0} hasDownButton={i !== this.state.rules.length - 1}/>
-				</div>
+				<Row key={i}>
+					<Col md={6}>
+						<Rule id={position} onAdded={this.onRuleAdded} onDeleted={this.onRuleDeleted} onMoveRule={this.onMoveRule} placeholder='Enter a rule' value={this.state.rules[i]} hasUpButton={i !== 0} hasDownButton={i !== this.state.rules.length - 1}/>
+					</Col>
+				</Row>
 			);
 		}
 		return (
 			<div>
 				{list}
-				<Button onClick={this.onAddItemClicked} type='button' style={ButtonStyle.MaginationRule}>+ Add rule</Button>
+				<Row><Col md={6}><Button onClick={this.onAddItemClicked} style={ButtonStyle.MaginationFillParent}>+ Add rule</Button></Col></Row>
 			</div>
 		);
 	},
@@ -51,7 +55,6 @@ var RuleList = React.createClass({
 		});
 	},
 	onMoveRule: function (newPos) {
-		console.log(this.listElements[newPos]);
 		this.listElements[newPos].refs.input.focus();
 	},
 	onRuleAdded: function (newRule) {

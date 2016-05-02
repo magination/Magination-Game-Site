@@ -55,6 +55,18 @@ var GameAction = {
 			isOptional: data.isOptional
 		});
 	},
+	addImageToLocalGame: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameConstants.ADD_IMAGE_TO_LOCAL_GAME,
+			image: data.image
+		});
+	},
+	removeImageFromLocalGame: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameConstants.REMOVE_IMAGE_FROM_LOCAL_GAME,
+			position: data.position
+		});
+	},
 	createNewGameLocally: function () {
 		Dispatcher.dispatch({
 			actionType: GameConstants.CHANGE_GAME_LOCALLY,

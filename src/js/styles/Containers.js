@@ -35,17 +35,56 @@ var ContainerStyles = {
 			color: Colors.blue,
 			display: 'inline-block',
 			verticalAlign: 'middle',
-			paddingRight: '5'
+			paddingRight: '5',
+			float: 'left'
 		},
 		input: {
-			width: '50%',
-			display: 'inline-block'
+			overflow: 'hidden'
 		},
 		rightIcon: {
 			color: Colors.blue,
-			display: 'inline-block',
 			verticalAlign: 'middle',
-			paddingLeft: '5'
+			textAlign: 'center',
+			paddingLeft: '5',
+			float: 'right',
+			display: 'inline-block'
+		}
+	},
+	imageContainer: {
+		maginationBorderLeft: {
+			padding: '5',
+			maxWidth: '33%',
+			minHeight: '100%',
+			verticalAlign: 'middle',
+			display: 'inline-block'
+		},
+		maginationBorderRight: {
+			padding: '5',
+			maxWidth: '33%',
+			minHeight: '100%',
+			verticalAlign: 'middle',
+			display: 'inline-block'
+		},
+		maginationBorderCenter: {
+			padding: '5',
+			maxWidth: '34%',
+			minHeight: '100%',
+			verticalAlign: 'middle',
+			display: 'inline-block',
+			overflow: 'hidden'
+		},
+		imageListContainer: {
+			whiteSpace: 'normal'
+		}
+	},
+	image: {
+		imageList: {
+			border: '2px solid ' + Colors.blue,
+			borderRadius: '5',
+			verticalAlign: 'middle',
+			maxWidth: '100%',
+			padding: '5'
+
 		}
 	},
 	collapse: {

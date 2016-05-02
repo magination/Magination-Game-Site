@@ -1,7 +1,7 @@
 var React = require('react');
 var Input = require('react-bootstrap').Input;
-var GameAction = require('../../actions/GameAction');
-var GameStore = require('../../stores/GameStore');
+var GameAction = require('../../../actions/GameAction');
+var GameStore = require('../../../stores/GameStore');
 
 var ImageNumberPair = React.createClass({
 	getInitialState () {

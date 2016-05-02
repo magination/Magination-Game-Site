@@ -1,8 +1,8 @@
 var React = require('react');
 var Input = require('react-bootstrap').Input;
-var GameAction = require('../../actions/GameAction');
-var GameStore = require('../../stores/GameStore');
-var TextStyle = require('../../styles/Text');
+var GameAction = require('../../../actions/GameAction');
+var GameStore = require('../../../stores/GameStore');
+var TextStyle = require('../../../styles/Text');
 
 var GameDescription = React.createClass({
 	getInitialState () {

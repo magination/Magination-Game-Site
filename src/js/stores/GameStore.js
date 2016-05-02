@@ -61,8 +61,21 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		ChangeRulePrioritization(action);
 		GameStore.emitChange();
 		break;
+	case GameConstants.ADD_IMAGE_TO_LOCAL_GAME:
+		AddImageToLocalGame(action);
+		GameStore.emitChange();
+		break;
+	case GameConstants.REMOVE_IMAGE_FROM_LOCAL_GAME:
+		RemoveImageFromLocalGame(action);
+		GameStore.emitChange();
 	}
 });
+function AddImageToLocalGame (action) {
+	_game.images.push(action.image);
+};
+function RemoveImageFromLocalGame (action) {
+	_game.images.splice(action.position, 1);
+}
 function PublishGameToServer () {
 	$.ajax({
 		type: 'POST',
