@@ -2,8 +2,8 @@ var React = require('react');
 var Modal = require('react-bootstrap').Modal;
 var Button = require('react-bootstrap').Button;
 var ButtonStyle = require('../../../styles/Buttons');
-var UploadImage = require('./UploadImage.molecule');
-var ImageList = require('./Imagelist');
+var UploadImage = require('./UploadImage.molecule.js');
+var ImageList = require('./ImageList');
 var Row = require('react-bootstrap').Row;
 var LoginStore = require('../../../stores/LoginStore');
 
