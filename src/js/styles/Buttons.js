@@ -4,6 +4,11 @@ var ButtonStyles = {
 		backgroundColor: Colors.blueDark,
 		color: 'white'
 	},
+	ToggledButton: {
+		backgroundColor: Colors.blueLight,
+		border: '1px solid white',
+		color: 'white'
+	},
 	MaginationGameViewButton: {
 		backgroundColor: Colors.blueDark,
 		color: 'white',
