@@ -16,6 +16,7 @@ var Row = require('react-bootstrap').Row;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Button = require('react-bootstrap').Button;
 var Collapse = require('react-bootstrap').Collapse;
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 var ShareGame = require('../molecules/game/ShareGame.molecule');
 var TextStyles = require('../../styles/Text');
 var ButtonStyles = require('../../styles/Buttons');
@@ -34,7 +35,8 @@ var Game = React.createClass({
 					doubles: '',
 					triples: ''
 				},
-				owner: {}
+				owner: {},
+				otherObjects: []
 			},
 			gameInformationHeight: '0',
 			shareGameIsShowing: false
@@ -71,7 +73,7 @@ var Game = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
+			<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
 				<Row>
 					<Col md={4} mdOffset={1}>
 						<GameInformation ref='gameinformation' game={this.state.game} onCollapseFinished={this.onGameInformationRendered}/>
@@ -117,7 +119,7 @@ var Game = React.createClass({
 				<hr />
 				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 				<hr />
-			</div>
+			</ReactCSSTransitionGroup>
 		);
 	},
 	onGameInformationRendered: function () {
