@@ -28,10 +28,12 @@ var SearchGames = React.createClass({
 	},
 	componentDidMount: function () {
 		this.refs.searchEntry.refs.input.focus();
+		LoginStore.addChangeListener(this.onLoginChanged);
 		GameListStore.addChangeListener(this.onGameListFilterChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
 	},
 	componentWillUnmount: function () {
 		GameListAction.clearSearchFilters();
+		LoginStore.removeChangeListener(this.onLoginChanged);
 		GameListStore.removeChangeListener(this.onGameListFilterChange, GameListConstants.SET_GAMES_SEARCH_FILTERS);
 	},
 	render: function () {
@@ -48,7 +50,7 @@ var SearchGames = React.createClass({
 					<h4 style={TextStyles.white}>Minimum Rating</h4>
 					<Rating rating={this.state.filter_rating} glyphStyle={TextStyles.RatingStarWhite} maxRating='5' onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty'/>
 					<h4 style={TextStyles.white}>Pieces</h4>
-					<Input value={this.state.hasImportedPieces} onChange={this.onImportPiecesCheckboxChange} type='checkbox' label={<span style={TextStyles.white}>Import pieces from My Profile</span>}/>
+					<Input disabled={!LoginStore.getLoginState().isLoggedIn} value={this.state.hasImportedPieces} onChange={this.onImportPiecesCheckboxChange} type='checkbox' label={<span style={TextStyles.white}>Import pieces from My Profile</span>}/>
 					<Input value={this.state.filter_singles} enabled={this.state.hasImportedPieces} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}></Input>
 					<Input value={this.state.filter_doubles} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceDoubleBlue} alt='No img'/>}></Input>
 					<Input value={this.state.filter_triples} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceTripleBlue} alt='No img'/>}></Input>
@@ -67,19 +69,18 @@ var SearchGames = React.createClass({
 			this.setState({
 				filter_singles: LoginStore.getLoginProfile().pieces.singles,
 				filter_doubles: LoginStore.getLoginProfile().pieces.doubles,
-				filter_triples: LoginStore.getLoginProfile().pieces.triples
+				filter_triples: LoginStore.getLoginProfile().pieces.triples,
+				hasImportedPieces: e.target.value
 			});
 		}
 		else {
 			this.setState({
 				filter_singles: 0,
 				filter_doubles: 0,
-				filter_triples: 0
+				filter_triples: 0,
+				hasImportedPieces: e.target.value
 			});
 		}
-		this.setState({
-			hasImportedPieces: e.target.value
-		});
 	},
 	onGameListFilterChange: function () {
 		setTimeout(function () {
@@ -88,6 +89,9 @@ var SearchGames = React.createClass({
 		setTimeout(function () {
 			GameListAction.getGamesSpecificInterval(0, 10);
 		}, 0);
+	},
+	onLoginChanged: function () {
+		this.forceUpdate();
 	},
 	onSubmit: function (e) {
 		e.preventDefault();
