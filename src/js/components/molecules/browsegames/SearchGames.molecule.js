@@ -148,44 +148,44 @@ var SearchGames = React.createClass({
 	onSubmit: function (e) {
 		e.preventDefault();
 
-		var search_filter = {};
+		var searchFilter = {};
 		if (this.state.filter_general_search !== '') {
-			search_filter['search'] = this.state.filter_general_search;
+			searchFilter['search'] = this.state.filter_general_search;
 		}
 		if (this.state.filter_title !== '') {
-			search_filter['title'] = this.state.filter_title;
+			searchFilter['title'] = this.state.filter_title;
 		}
 		if (this.state.filter_author !== '') {
-			search_filter['owner'] = this.state.filter_author;
+			searchFilter['owner'] = this.state.filter_author;
 		}
 		if (this.state.filter_singles !== '' && this.state.filter_singles > 0) {
-			search_filter['singles'] = this.state.filter_singles;
+			searchFilter['singles'] = this.state.filter_singles;
 		}
 		if (this.state.filter_doubles !== '' && this.state.filter_doubles > 0) {
-			search_filter['doubles'] = this.state.filter_doubles;
+			searchFilter['doubles'] = this.state.filter_doubles;
 		}
 		if (this.state.filter_triples !== '' && this.state.filter_triples > 0) {
-			search_filter['triple'] = this.state.filter_triples;
+			searchFilter['triple'] = this.state.filter_triples;
 		}
 		if (this.state.filter_rating > 0 && this.state.filter_rating < 6) {
-			search_filter['rating'] = this.state.filter_rating;
+			searchFilter['rating'] = this.state.filter_rating;
 		}
 		if (this.state.filter_players > 0) {
-			search_filter['numberOfPlayers'] = this.state.filter_players;
+			searchFilter['numberOfPlayers'] = this.state.filter_players;
 		}
 		if (this.state.currentActiveTeamButton === TEAMS_BUTTON_GROUP_VALUES.TEAMS) {
-			search_filter['teams'] = true;
+			searchFilter['teams'] = true;
 		}
 		else if (this.state.currentActiveTeamButton === TEAMS_BUTTON_GROUP_VALUES.NOTEAMS) {
-			search_filter['teams'] = false;
+			searchFilter['teams'] = false;
 		}
 		if (this.state.currentActiveOtherObjectsButton === OTHER_OBJECTS_BUTTON_GROUP_VALUES.YES) {
-			search_filter['otherObjects'] = true;
+			searchFilter['otherObjects'] = true;
 		}
 		else if (this.state.currentActiveOtherObjectsButton === OTHER_OBJECTS_BUTTON_GROUP_VALUES.NO) {
-			search_filter['otherObjects'] = false;
+			searchFilter['otherObjects'] = false;
 		}
-		GameListAction.setGameSearchFilters(search_filter);
+		GameListAction.setGameSearchFilters(searchFilter);
 	},
 	tagSearchChange: function (e) {
 		this.setState({

@@ -1,5 +1,6 @@
 var React = require('react');
 
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 // var Game = require('./Game.molecule');
 var Media = require('react-bootstrap').Media;
 var Glyphicon = require('react-bootstrap').Glyphicon;
@@ -49,7 +50,9 @@ var GameList = React.createClass({
 		return (
 			<div>
 				<h1 style={TextStyles.blueHeader}>Games</h1>
-				{games}
+				<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={50}>
+					{games}
+				</ReactCSSTransitionGroup>
 			</div>
 		);
 	},

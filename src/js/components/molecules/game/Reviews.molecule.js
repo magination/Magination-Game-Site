@@ -164,7 +164,9 @@ var Reviews = React.createClass({
 		});
 	},
 	onLoginChanged: function () {
-		this.doGetReviews(this.props.id);
+		if (LoginStore.getLoginState().isLoggedIn) {
+			this.doGetReviews(this.props.id);
+		}
 	}
 });
 

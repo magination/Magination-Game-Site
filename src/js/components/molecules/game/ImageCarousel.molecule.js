@@ -71,7 +71,7 @@ var ImageCarousel = React.createClass({
 				<div onMouseEnter={this.onMouseEnterChevron.bind(this, 'left', true)} onMouseLeave={this.onMouseEnterChevron.bind(this, 'left', false)} hidden={this.state.index === 0} onClick={this.selectPreviousImage} style={this.state.chevronLeftStyle}>
 					<h1 style={TextStyles.chevronGlyph}><Glyphicon glyph='chevron-left'/></h1>
 				</div>
-				<div onMouseEnter={this.onMouseEnterChevron.bind(this, 'right', true)} onMouseLeave={this.onMouseEnterChevron.bind(this, 'right', false)} hidden={this.state.index === this.props.imageUrls.length - 1} onClick={this.selectNextImage} style={this.state.chevronRightStyle}>
+				<div onMouseEnter={this.onMouseEnterChevron.bind(this, 'right', true)} onMouseLeave={this.onMouseEnterChevron.bind(this, 'right', false)} hidden={this.state.index === this.props.imageUrls.length - 1 || this.props.imageUrls.length === 0} onClick={this.selectNextImage} style={this.state.chevronRightStyle}>
 					<h1 style={TextStyles.chevronGlyph}><Glyphicon glyph='chevron-right'/></h1>
 				</div>
 				<div style={this.state.innerDivStyle}>

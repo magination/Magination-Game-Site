@@ -16,8 +16,20 @@ var App = React.createClass({
 	},
 	componentDidMount: function () {
 		$.ajaxSetup({
-			error: function () { console.log('an error'); }
+			error: this.handleDefaultErrorResponses
 		});
+	},
+	/* handle default actions on http response errors here*/
+	handleDefaultErrorResponses: function (data) {
+		var status = data.statusCode().status;
+		switch (status) {
+		case 401:
+			console.log('Unauthorized, TODO: should request new token if logged in, if fails log out');
+			break;
+		}
+	},
+	onUnauthorizedDefaultResponse: function () {
+
 	},
 	componentWillReceiveProps: function (nextProps) {
 		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.
