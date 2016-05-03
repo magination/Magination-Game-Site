@@ -3,6 +3,7 @@ var React = require('react');
 var NavigationAction = require('./actions/NavigationAction');
 var LoginAction = require('./actions/LoginAction');
 var LoginStore = require('./stores/LoginStore');// eslint-disable-line no-unused-vars
+var GameCreator = require('./components/atoms/GameCreator.atom');
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
@@ -45,6 +46,7 @@ var App = React.createClass({
 			<div className='container'>
 				<Menu></Menu>
 				<StatusBar />
+				<GameCreator/>
 				<div className='row'>{this.props.children}</div>
 			</div>
 		);
