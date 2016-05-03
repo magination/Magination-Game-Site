@@ -55,18 +55,21 @@ var Menu = React.createClass({
 						<Navbar.Brand>
 							<a href='/' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>
 						</Navbar.Brand>
+						<Navbar.Toggle/>
 					</Navbar.Header>
-					<Nav activeKey={this.state.currentActive}>
-						<MenuItem eventKey={NavigationPaths.discover} onClick={this.onNavigationClick.bind(this, NavigationPaths.discover)}>Discover</MenuItem>
-						<MenuItem eventKey={NavigationPaths.creategame} onClick={this.onNavigationClick.bind(this, NavigationPaths.creategame)}>Create</MenuItem>
-					</Nav>
-					{navigationStateElement}
+					<Navbar.Collapse>
+						<Nav activeKey={this.state.currentActive}>
+							<MenuItem eventKey={NavigationPaths.discover} onClick={this.onNavigationClick.bind(this, NavigationPaths.discover)}>Discover</MenuItem>
+							<MenuItem eventKey={NavigationPaths.creategame} onClick={this.onNavigationClick.bind(this, NavigationPaths.creategame)}>Create</MenuItem>
+						</Nav>
+						{navigationStateElement}
+					</Navbar.Collapse>
 				</Navbar>
 			</div>
 		);
 	},
 	onNavigationClick: function (destination) {
-		if (!NavigationConstants.isLegalDestination(getLoginState(), destination)) {
+		if (!NavigationConstants.isLegalDestination(getLoginState().isLoggedIn, destination)) {
 			this.refs.loginModal.open();
 		}
 		NavigationAction.navigate({
@@ -77,11 +80,11 @@ var Menu = React.createClass({
 		this.refs.loginModal.open();
 	},
 	onLoginStateChanged: function () {
-		if (getLoginState()) {
+		if (getLoginState().isLoggedIn) {
 			this.refs.loginModal.close();
 		}
 		this.setState({
-			isLoggedIn: getLoginState()
+			isLoggedIn: getLoginState().isLoggedIn
 		});
 	},
 	onNavigationStateChanged: function () {
@@ -91,6 +94,9 @@ var Menu = React.createClass({
 	},
 	onLogoutClicked: function () {
 		LoginAction.logoutSuccess();
+		NavigationAction.navigate({
+			destination: NavigationPaths.discover
+		});
 	},
 	onSettingsClicked: function () {
 		NavigationAction.navigate({
@@ -108,7 +114,7 @@ var Menu = React.createClass({
 						<MenuItem divider />
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />
-						<MenuItem href='/' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
+						<MenuItem href='#' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
 					</NavDropdown>
 				</Nav>;
 		}

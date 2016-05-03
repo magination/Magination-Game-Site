@@ -1,123 +1,139 @@
 var React = require('react');
 var URLS = require('../../config/config').urls;
-var LoginStore = require('../../stores/LoginStore');
-var FeedbackAction = require('../../actions/FeedbackAction');
-var NavigationAction = require('../../actions/NavigationAction');
-var NavigationConstants = require('../../constants/NavigationConstants');
-var ValidatorService = require('../../service/Validator.service');
-
+var ImageNumberPair = require('../molecules/creategame/ImageNumberPair.molecule.js');
+var GameStore = require('../../stores/GameStore');
+var GameAction = require('../../actions/GameAction');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
+var Checkbox = require('../atoms/game/Checkbox.atom');
+var HideableInput = require('../molecules/creategame/HideableInput.molecule.js');
+var GameDescriptionInput = require('../molecules/creategame/GameDescriptionInput.molecule.js');
+var RuleList = require('../molecules/creategame/RuleList');
+var AlternativeRuleList = require('../molecules/creategame/AlternativeRuleList');
+var TextStyle = require('../../styles/Text');
+var ButtonStyle = require('../../styles/Buttons');
+var Colors = require('../../styles/Colors');
+var Images = require('../molecules/creategame/Images.molecule');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
-		return {
-			title: '',
-			description: '',
-			singles: '',
-			doubles: '',
-			triples: ''
-		};
+		if (GameStore.getGame() !== null) {
+			return {
+				title: GameStore.getGame().title,
+				game: GameStore.getGame()
+			};
+		}
+		else {
+			return {
+				game: {},
+				title: ''
+			};
+		}
 	},
 	render: function () {
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
-					<h2 className='text-center'>Create Game</h2>
-					<form className='form-signin' onSubmit={this.postGame}>
-						<Input value={this.state.title} type='text' label='Title' placeholder='Title' onChange={this.onTitleChanged}/>
-						<Input value={this.state.description} type='textarea' label='Description' placeholder='How is your game played?' onChange={this.onDescriptionChanged}/>
-						<Row>
-							<Col md={4}>
-								<strong>Required Pieces</strong>
-								<Input value={this.state.singles} type='number' placeholder='Singles' onChange={this.singlesChanged} addonBefore='1'></Input>
-								<Input value={this.state.doubles} type='number' placeholder='Doubles' onChange={this.doublesChanged} addonBefore='2'></Input>
-								<Input value={this.state.triples} type='number' placeholder='Triples' onChange={this.triplesChanged} addonBefore={<img width={20} height={20} src='/public/img/triples.png'/>}></Input>
-							</Col>
-							<Col md={8}></Col>
-						</Row>
-						<Row>
-							<Col md={12}>
-								<Button type='submit'>Upload</Button>
-							</Col>
-						</Row>
-					</form>
+				<h3 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h3>
+				<h5>Upload your game idea!</h5>
+				<hr/>
+					<Row>
+						<Col md={6}>
+							<Input value={this.state.title} type='text' placeholder='GAME TITLE' onChange={this.onTitleChanged}/>
+						</Col>
+					</Row>
+					<h3 style={TextStyle.blueHeader}>PLAYERS</h3>
+					<Row>
+						<Col md={3}>
+							<ImageNumberPair value={this.state.game ? this.state.game.numberOfPlayers : 0} src={URLS.img.peopleBlue} placeholder='No. players' bindingProperty='numberOfPlayers'/>
+						</Col>
+					</Row>
+					<Checkbox checked={false} description='Can be played with more players' bindingProperty='isPlayableWithMorePlayers'/>
+					<br/>
+					<Checkbox checked={false} description='Can be played in teams' bindingProperty='isPlayableInTeams'/>
+					<hr/>
+					<h3 style={TextStyle.blueHeader}>PIECES</h3>
+					<Row>
+						<Col md={3}>
+							<ImageNumberPair value={this.state.game.pieces ? this.state.game.pieces.singles : 0} src={URLS.img.pieceSingleBlue} placeholder='No. singles' bindingCollection ='pieces' bindingProperty='singles'/>
+							<ImageNumberPair value={this.state.game.pieces ? this.state.game.pieces.doubles : 0} src={URLS.img.pieceDoubleBlue} placeholder='No. doubles' bindingCollection ='pieces' bindingProperty='doubles'/>
+							<ImageNumberPair value={this.state.game.pieces ? this.state.game.pieces.triples : 0} src={URLS.img.pieceTripleBlue} placeholder='No. triples' bindingCollection ='pieces' bindingProperty='triples'/>
+						</Col>
+					</Row>
+					<Row>
+						<Col md={8}>
+							<HideableInput description='Need other objects' bindableTextProperty='otherObjects' placeholder='Separate with ","' />
+						</Col>
+					</Row>
+					<hr/>
+					<h3 style={TextStyle.blueHeader}>DESCRIPTION</h3>
+					<Row>
+						<Col md={8}>
+							<GameDescriptionInput bindableTextProperty='shortDescription' placeholder='Describe your game!' maxLength={255} />
+						</Col>
+					</Row>
+					<hr/>
+					<h3 style={TextStyle.blueHeader}>RULES</h3>
+					<Row>
+						<Col md={8}>
+							<RuleList propertyCollection='rules' listItemPlaceholder = 'Enter a rule' bindableTextProperty='rule' propertyCollection='rules'/>
+						</Col>
+					</Row>
+					<hr/>
+					<h3 style={TextStyle.blueHeader}>ALTERNATIVE RULES</h3>
+					<Row>
+						<Col md={8}>
+							<AlternativeRuleList propertyCollection='alternativeRules' listItemPlaceholder = 'Enter a rule' bindableTextProperty='rule' propertyCollection='rules'/>
+						</Col>
+					</Row>
+					<hr/>
+					<h3 style={TextStyle.blueHeader}>IMAGES</h3>
+					<Row>
+						<Col md={8}>
+							<Images/>
+						</Col>
+					</Row>
+					<br/>
+					<hr/>
+					<Row>
+						<Col md={2}>
+							<Button style={ButtonStyle.Game.gameButton(Colors.red)}>CANCEL</Button>
+						</Col>
+						<Col md={2}>
+							<Button style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked}>SAVE</Button>
+						</Col>
+						<Col md={2}>
+							<Button style={ButtonStyle.Game.gameButton(Colors.yellow)}>PREVIEW</Button>
+						</Col>
+						<Col md={2}>
+							<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onSubmitClicked}>PUBLISH</Button>
+						</Col>
+					</Row>
+					<hr/>
 				</Col>
 			</div>
 		);
 	},
-	singlesChanged: function (e) {
-		var singles = e.target.value;
-		if (!ValidatorService.isNumericAndNotNegative(singles)) {
-			singles = 0;
-		}
-		this.setState({
-			singles: singles
-		});
-	},
-	doublesChanged: function (e) {
-		var doubles = e.target.value;
-		if (!ValidatorService.isNumericAndNotNegative(doubles)) {
-			doubles = 0;
-		}
-		this.setState({
-			doubles: doubles
-		});
-	},
-	triplesChanged: function (e) {
-		var triples = e.target.value;
-		if (!ValidatorService.isNumericAndNotNegative(triples)) {
-			triples = 0;
-		}
-		this.setState({
-			triples: triples
-		});
+	submitGame: function (e) {
+		e.preventDefault();
+		GameAction.publishGameToServer(GameStore.getGame());
 	},
 	onTitleChanged: function (e) {
 		this.setState({
 			title: e.target.value
 		});
-	},
-	onDescriptionChanged: function (e) {
-		this.setState({
-			description: e.target.value
+		GameAction.updateCurrentGameLocally({
+			propertyName: 'title',
+			propertyValue: e.target.value
 		});
 	},
-	postGame: function (e) {
-		e.preventDefault();
-		$.ajax({
-			type: 'POST',
-			url: URLS.api.games,
-			data: JSON.stringify({
-				title: this.state.title,
-				mainDescription: this.state.description,
-				pieces: {
-					singles: this.state.singles,
-					doubles: this.state.doubles,
-					triples: this.state.triples
-				}
-			}),
-			headers: {
-				'Authorization': LoginStore.getToken()
-			},
-			contentType: 'application/json',
-			dataType: 'json',
-			success: this.didPost
-		});
+	onSaveClicked: function () {
+		GameAction.saveGameToServer();
 	},
-	didPost: function (data) {
-		NavigationAction.navigate({
-			destination: NavigationConstants.PATHS.game + '/' + data._id,
-			data: {
-				game: data
-			}
-		});
-		FeedbackAction.displaySuccessMessage({
-			header: 'Success!',
-			message: 'The game was created!'
-		});
+	onSubmitClicked: function () {
+		GameAction.publishGameToServer();
 	}
 });
 

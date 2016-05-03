@@ -1,7 +1,7 @@
 var React = require('react');
 
 var NavigationAction = require('./actions/NavigationAction');
-var LoginService = require('./components/organisms/LoginService');
+var LoginAction = require('./actions/LoginAction');
 var LoginStore = require('./stores/LoginStore');// eslint-disable-line no-unused-vars
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
@@ -12,7 +12,24 @@ var App = React.createClass({
 		NavigationAction.setCurrentPath({
 			destination: this.props.location.pathname
 		});
-		LoginService.checkAutoLogin();
+		LoginAction.checkAutoLogin();
+	},
+	componentDidMount: function () {
+		$.ajaxSetup({
+			error: this.handleDefaultErrorResponses
+		});
+	},
+	/* handle default actions on http response errors here*/
+	handleDefaultErrorResponses: function (data) {
+		var status = data.statusCode().status;
+		switch (status) {
+		case 401:
+			console.log('Unauthorized, TODO: should request new token if logged in, if fails log out');
+			break;
+		}
+	},
+	onUnauthorizedDefaultResponse: function () {
+
 	},
 	componentWillReceiveProps: function (nextProps) {
 		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.

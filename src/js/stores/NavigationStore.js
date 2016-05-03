@@ -55,7 +55,7 @@ NavigationStore.dispatchToken = Dispatcher.register(function (action) {
 		// NavigationStore.emitChange();
 		break;
 	case NavigationConstants.NAVIGATE_PREVIOUS:
-		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), _navigationState.lastPath)) {
+		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState().isLoggedIn, _navigationState.lastPath)) {
 			console.log('BACK NOT IMPLMENTED');
 		}
 	// NavigationStore.emitChange();

@@ -1,12 +1,11 @@
 var React = require('react');
-var LoginService = require('./LoginService');
 
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationConstants = require('../../constants/NavigationConstants');
 var NavigationStore = require('../../stores/NavigationStore');
 var PATHS = require('../../constants/NavigationConstants').PATHS;
 var LoginStore = require('../../stores/LoginStore');
-
+var LoginAction = require('../../actions/LoginAction');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
@@ -19,10 +18,16 @@ var LoginForm = React.createClass({
 			showModal: false
 		};
 	},
+	componentDidMount: function () {
+		LoginStore.addChangeListener(this.onLoginStateChanged);
+	},
+	componentWillUnmount: function () {
+		LoginStore.removeChangeListener(this.onLoginStateChanged);
+	},
 	render: function () {
 		return (
 			<div>
-				<Modal ref='modal' show={this.state.showModal} onHide={this.onHide}>
+				<Modal dialogClassName='custom-modal' ref='modal' show={this.state.showModal} onHide={this.onHide}>
 					<Modal.Header>
 						<Modal.Title>Please sign in</Modal.Title>
 					</Modal.Header>
@@ -40,12 +45,17 @@ var LoginForm = React.createClass({
 			</div>
 		);
 	},
+	onLoginStateChanged: function () {
+		if (LoginStore.getLoginState().requestedLogin) {
+			this.open();
+		}
+	},
 	onHide: function () {
 		this.close();
-		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().currentPath)) {
+		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState().isLoggedIn, NavigationStore.getNavigationState().currentPath)) {
 			return;
 		}
-		else if (NavigationConstants.isLegalDestination(LoginStore.getLoginState(), NavigationStore.getNavigationState().lastPath)) {
+		else if (NavigationConstants.isLegalDestination(LoginStore.getLoginState().isLoggedIn, NavigationStore.getNavigationState().lastPath)) {
 			NavigationAction.navigate({
 				destination: NavigationStore.getNavigationState().lastPath
 			});
@@ -81,7 +91,7 @@ var LoginForm = React.createClass({
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();
-		LoginService.doLogin(this.state.username, this.state.password);
+		LoginAction.doLogin(this.state.username, this.state.password);
 		this.setState({
 			password: ''
 		});

@@ -1,0 +1,66 @@
+var Dispatcher = require('../dispatchers/Dispatcher');
+var GameListConstants = require('../constants/GameListConstants');
+var EventEmitter = require('events').EventEmitter;
+var _ = require('lodash');
+var CHANGE_EVENT = 'change-gamelist';
+
+var _games = [];
+var _filters = {};
+
+var GameListStore = _.extend({}, EventEmitter.prototype, {
+	getGames: function () {
+		return _games;
+	},
+	getSearchFilters: function () {
+		return _filters;
+	},
+	addChangeListener: function (callback, changeEvent) {
+		if (!changeEvent) {
+			changeEvent = CHANGE_EVENT;
+		}
+		this.on(changeEvent, callback);
+	},
+	emitChange: function (changeEvent) {
+		if (!changeEvent) {
+			changeEvent = CHANGE_EVENT;
+		}
+		this.emit(changeEvent);
+	},
+	removeChangeListener: function (callback, changeEvent) {
+		if (!changeEvent) {
+			changeEvent = CHANGE_EVENT;
+		}
+		this.removeListener(changeEvent, callback);
+	}
+});
+
+GameListStore.dispatchToken = Dispatcher.register(function (action) {
+	switch (action.actionType) {
+	case GameListConstants.ADD_GAMES_TO_LIST:
+		if (!action.games) {
+			console.log('addGamesToList was called in the GameListStore, with an undefined game list');
+			return;
+		}
+		for (var i = 0; i < action.games.length; i++) {
+			_games.push(action.games[i]);
+		}
+		GameListStore.emitChange();
+		break;
+	case GameListConstants.CLEAR_GAMES_LIST:
+		_games = [];
+		GameListStore.emitChange();
+		break;
+	case GameListConstants.SET_GAMES_SEARCH_FILTERS:
+		if (!action.filters) {
+			console.log('setGameSearchFilters was called in the GameListStore, with an undefined filter');
+		}
+		_filters = action.filters;
+		GameListStore.emitChange(GameListConstants.SET_GAMES_SEARCH_FILTERS);
+		break;
+	case GameListConstants.CLEAR_GAME_SEARCH_FILTERS:
+		_filters = {};
+		break;
+	}
+});
+
+module.exports = GameListStore;

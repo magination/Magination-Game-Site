@@ -1,24 +1,45 @@
 var React = require('react');
-
+var ReactDOM = require('react-dom');
+var GameAction = require('../../actions/GameAction');
+var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
-var URLS = require('../../config/config.js').urls;
-var Comments = require('../molecules/Comments.molecule');
-var RateGame = require('../molecules/browsegames/RateGame.molecule');
-var EditableField = require('../molecules/EditableField.molecule');
-var FeedbackAction = require('../../actions/FeedbackAction');
+var NavigationConstants = require('../../constants/NavigationConstants');
+var LoginAction = require('../../actions/LoginAction');
 var LoginStore = require('../../stores/LoginStore');
+var URLS = require('../../config/config.js').urls;
+var Reviews = require('../molecules/game/Reviews.molecule');
+var GameInformation = require('../molecules/game/GameInformation.molecule');
+var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
+var CustomList = require('../molecules/lists/CustomList.molecule');
+var Col = require('react-bootstrap').Col;
+var Row = require('react-bootstrap').Row;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+var Button = require('react-bootstrap').Button;
+var Collapse = require('react-bootstrap').Collapse;
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+var ShareGame = require('../molecules/game/ShareGame.molecule');
+var TextStyles = require('../../styles/Text');
+var ButtonStyles = require('../../styles/Buttons');
 
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
 			game: {
-				owner: {
-					username: ''
+				shortDescription: '',
+				rules: [],
+				images: [],
+				alternativeRules: [],
+				reviews: [],
+				pieces: {
+					singles: '',
+					doubles: '',
+					triples: ''
 				},
-				mainDescription: '',
-				title: 'Loading ...'
+				owner: {},
+				otherObjects: []
 			},
-			isEditing: false
+			gameInformationHeight: '0',
+			shareGameIsShowing: false
 		};
 	},
 	componentWillMount: function () {
@@ -31,8 +52,8 @@ var Game = React.createClass({
 				statusCode: {
 					200: this.onGetGameSuccessResponse,
 					404: this.onGetGameNotFoundResponse,
-					500: function () {
-						alert('Server Error: see console');
+					500: function (data) {
+						console.log('Internal Server Error: ' + data.message);
 					}
 				}
 			});
@@ -44,42 +65,97 @@ var Game = React.createClass({
 			});
 		}
 	},
-	componentDidMount: function () {
-		LoginStore.addChangeListener(this.onLoginChange);
-	},
-	componentWillUnmount: function () {
-		LoginStore.removeChangeListener(this.onLoginChange);
+	componentDidUpdate: function () {
+		/* Dangerous implementation.. should be reconsidered. It may be infinite recursive if the height of gameinformation
+			changes at every render.
+		*/
+		setTimeout(this.onGameInformationRendered, 0);
 	},
 	render: function () {
 		return (
-			<div>
-				<strong>Title</strong>
-				<EditableField
-					dataVariableName='title'
-					displayValue={this.state.game.title}
-					owner={this.state.game.owner._id}
-					onSuccessCallback={this.onGetGameSuccessResponse}
-				/>
-				<br/>
-				<strong>Description</strong>
-				<EditableField
-					dataVariableName='mainDescription'
-					displayValue={this.state.game.mainDescription}
-					owner={this.state.game.owner._id}
-					onSuccessCallback={this.onGetGameSuccessResponse}
-				/>
-				<br/>
-				<strong>Author: </strong>
-				<p>{this.state.game.owner.username}</p>
-
-				<strong>Rating: </strong>{calculateRating(this.state.game.sumOfVotes, this.state.game.numberOfVotes)}
-				<br/>
-				<div>
-					<strong>Rate the game: </strong><RateGame onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty' maxRating={5}/>
-				</div>
-				<Comments id={this.state.game._id} url={URLS.api.games}/>
-			</div>
+			<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+				<Row>
+					<Col md={4} mdOffset={1}>
+						<GameInformation ref='gameinformation' game={this.state.game} onCollapseFinished={this.onGameInformationRendered}/>
+					</Col>
+					<Col md={6}>
+						<ImageCarousel width={'100%'} height={this.state.gameInformationHeight} imageUrls={this.state.game.images}/>
+					</Col>
+					<Col md={1}>
+					</Col>
+				</Row>
+				<hr />
+				<Row>
+					<Col md={6} mdOffset={1}>
+						<h2 style={TextStyles.blueHeader}>Description</h2>
+						<h4>{this.state.game.shortDescription}</h4>
+					</Col>
+					<Col md={4}>
+						<div style={{textAlign: 'right', width: '100%'}}>
+							<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+						</div>
+						<Collapse in={this.state.shareGameIsShowing}>
+							<div><ShareGame title={this.state.game.title} description={this.state.game.shortDescription} url={NavigationStore.getNavigationState().currentPath}/></div>
+						</Collapse>
+					</Col>
+					<Col md={1}>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={11} mdOffset={1}>
+						<CustomList title='Rules' listElements={this.state.game.rules}/>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={6} mdOffset={1}>
+						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+					</Col>
+					<Col md={4} style={{textAlign: 'right'}}>
+						<Button onClick={this.onForkGameClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
+					</Col>
+					<Col md={1}>
+					</Col>
+				</Row>
+				<hr />
+				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
+				<hr />
+			</ReactCSSTransitionGroup>
 		);
+	},
+	onGameInformationRendered: function () {
+		var informationDiv = ReactDOM.findDOMNode(this.refs.gameinformation);
+		if (!informationDiv) return;
+		var informationDivHeight = informationDiv.offsetHeight;
+		if (informationDivHeight !== this.state.gameInformationHeight) {
+			this.setState({
+				gameInformationHeight: informationDivHeight
+			});
+		}
+	},
+	onForkGameClicked: function () {
+		if (!LoginStore.getLoginState().isLoggedIn) {
+			LoginAction.requestLogin();
+			return;
+		}
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.games + '/' + this.state.game._id + '/fork',
+			dataType: 'json',
+			statusCode: {
+				200: this.onGetGameForkSuccessResponse
+			}
+		});
+	},
+	onShareButtonClicked: function () {
+		this.setState({
+			shareGameIsShowing: !this.state.shareGameIsShowing
+		});
+	},
+	onGetGameForkSuccessResponse: function (data) {
+		GameAction.changeGameLocally(data);
+		NavigationAction.navigate({
+			destination: NavigationConstants.PATHS.creategame
+		});
 	},
 	onGetGameSuccessResponse: function (data) {
 		this.setState({
@@ -87,29 +163,6 @@ var Game = React.createClass({
 		});
 	},
 	onGetGameNotFoundResponse: function (data) {
-	},
-	onRatingClicked: function (rating) {
-		$.ajax({
-			type: 'PUT',
-			url: URLS.api.games + '/' + this.state.game._id + '/ratings',
-			data: JSON.stringify({
-				rating: rating
-			}),
-			headers: {
-				'Authorization': LoginStore.getToken()
-			},
-			contentType: 'application/json',
-			dataType: 'json',
-			success: function () {
-				FeedbackAction.displaySuccessMessage({
-					header: 'Rated',
-					message: 'Thank you for rating!'
-				});
-			}
-		});
-	},
-	onLoginChange: function () {
-		this.forceUpdate();
 	}
 });
 
@@ -121,20 +174,13 @@ function shouldRequestGame () {
 	if (data.game === undefined) {
 		return true;
 	}
-	return false;
+	return true; /* always returns true */
 }
 
 function getLastUrlId () {
 	var url = NavigationStore.getNavigationState().currentPath;
 	/* returns the id(last element) from the current link*/
 	return url.split('/').slice(-1)[0];
-}
-
-function calculateRating (sumOfVotes, numberOfVotes) {
-	if (!sumOfVotes > 0 || !numberOfVotes > 0) {
-		return 'Not rated';
-	}
-	return sumOfVotes / numberOfVotes;
 }
 
 module.exports = Game;

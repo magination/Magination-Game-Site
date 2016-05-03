@@ -14,6 +14,7 @@ var App = require('./App');
 var LoginForm = require('./components/organisms/LoginForm.organism');
 var RegisterForm = require('./components/organisms/RegisterForm.organism');
 var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
+var VerifyEmailChange = require('./components/organisms/VerifyEmailChange');
 var VerificationSent = require('./components/organisms/VerificationSent.organism');
 var GameForm = require('./components/organisms/GameForm.organism');
 var BrowseGames = require('./components/organisms/BrowseGames.organism');
@@ -35,6 +36,7 @@ var ReactRouter = React.createClass({
 						<Route path={PATHS.discover} component={BrowseGames} />
 						<Route path='/confirmation/:id' component={ConfirmEmail} />
 						<Route path='/verificationsent' component={VerificationSent} />
+						<Route path='/verifyEmailChange/:id' component={VerifyEmailChange} />
 						<Route path='/game/:id' component={Game} />
 						<Route path='/settings' component={SettingsForm}/>
 						<Route path={PATHS.forgotpassword} component={ForgotPassword}/>

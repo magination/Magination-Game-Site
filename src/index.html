@@ -2,18 +2,52 @@
 <html>
 	<head>
 		<title>Magination Game</title>
-		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-		<link rel="icon" href="http://localhost:8080/public/img/favicon.ico">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script src='//code.jquery.com/jquery-1.12.0.min.js'></script>
+		<link rel='icon' href='/public/img/favicon.ico'>
+		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
 		<style>
 			body{
 				padding-top: 60px;
+				font-family: 'Open Sans', sans-serif;
+			}
+			.custom-modal {
+				padding-top: 5%;
+			}
+			.example-enter {
+				opacity: 0.01;
+			}
+			.example-enter.example-enter-active {
+				opacity: 1;
+				transition: opacity 500ms ease-in;
+			}
+			.example-leave {
+				opacity: 1;
+			}
+			.example-leave.example-leave-active {
+				opacity: 0.01;
+				transition: opacity 50ms ease-in;
 			}
 		</style>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
 	</head>
 	<body>
-		<div id="react-container"></div>
-		<script src="http://localhost:8080/public/app.js"></script>
+		<script>
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId      : '1729344223947397',
+					xfbml      : true,
+					version    : 'v2.6'
+				});
+			};
+			(function(d, s, id){
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) {return;}
+				js = d.createElement(s); js.id = id;
+				js.src = '//connect.facebook.net/en_US/sdk.js';
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		</script>
+		<div id='react-container'></div>
+		<script src='/public/app.js'></script>
 	</body>
 </html>
