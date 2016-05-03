@@ -27,7 +27,12 @@ var GameForm = React.createClass({
 		}
 		else {
 			return {
-				game: {},
+				game: {
+					pieces: {
+					},
+					images: {
+					}
+				},
 				title: ''
 			};
 		}
@@ -36,9 +41,9 @@ var GameForm = React.createClass({
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
-				<h3 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h3>
-				<h5>Upload your game idea!</h5>
-				<hr/>
+					<h1 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
+					<h5 style={TextStyle.blueHeader}>Upload your game idea!</h5>
+					<hr/>
 					<Row>
 						<Col md={6}>
 							<Input value={this.state.title} type='text' placeholder='GAME TITLE' onChange={this.onTitleChanged}/>
