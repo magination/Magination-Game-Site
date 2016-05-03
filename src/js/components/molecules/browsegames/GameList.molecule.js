@@ -50,7 +50,7 @@ var GameList = React.createClass({
 		return (
 			<div>
 				<h1 style={TextStyles.blueHeader}>Games</h1>
-				<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={100}>
+				<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={50}>
 					{games}
 				</ReactCSSTransitionGroup>
 			</div>
