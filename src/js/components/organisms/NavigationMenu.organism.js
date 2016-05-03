@@ -103,6 +103,11 @@ var Menu = React.createClass({
 			destination: '/settings'
 		});
 	},
+	onMyGamesClicked: function () {
+		NavigationAction.navigate({
+			destination: '/mygames'
+		});
+	},
 	makeNavigationStatefulElement: function () {
 		var navigationStateElement;
 		if (this.state.isLoggedIn && getProfile() !== null) {
@@ -110,7 +115,7 @@ var Menu = React.createClass({
 				<Nav pullRight activeKey={this.state.currentActive}>
 					<NavDropdown title={getProfile().username} id='nav-dropdown'>
 						<MenuItem eventKey={'profile'}><Glyphicon glyph='user'/> My Profile</MenuItem>
-						<MenuItem eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
+						<MenuItem onClick={this.onMyGamesClicked}eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
 						<MenuItem divider />
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />

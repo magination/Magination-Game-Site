@@ -35,6 +35,7 @@ var TextStyles = {
 	glyphIcon: {
 		alignCenterBlue: {
 			textAlign: 'center',
+			verticalAlign: 'center',
 			color: Colors.blue
 		}
 	}
