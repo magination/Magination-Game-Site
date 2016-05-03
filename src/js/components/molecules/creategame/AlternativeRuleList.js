@@ -32,7 +32,7 @@ var AlternativeRuleList = React.createClass({
 			list.push(
 				<Row key={i}>
 					<Col md={6}>
-						<Rule id={position} onAdded={this.onRuleAdded} onDeleted={this.onRuleDeleted} onMoveRule={this.onMoveRule} placeholder='Enter a rule' value={this.state.rules[i]} hasUpButton={i !== 0} hasDownButton={i !== this.state.rules.length - 1}/>
+						<Rule id={position} isAlternativeRule={true} onAdded={this.onRuleAdded} onDeleted={this.onRuleDeleted} onMoveRule={this.onMoveRule} placeholder='Enter an alternative rule' value={this.state.rules[i]} hasUpButton={i !== 0} hasDownButton={i !== this.state.rules.length - 1}/>
 					</Col>
 				</Row>
 			);
@@ -40,7 +40,11 @@ var AlternativeRuleList = React.createClass({
 		return (
 			<div>
 				{list}
-				<Row><Col md={6}><Button onClick={this.onAddItemClicked} style={ButtonStyle.MaginationFillParent}>+ Add rule</Button></Col></Row>
+				<Row>
+					<Col md={6}>
+						<Button onClick={this.onAddItemClicked} style={ButtonStyle.MaginationFillParent}>+ Add rule</Button>
+					</Col>
+				</Row>
 			</div>
 		);
 	},

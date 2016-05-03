@@ -5,8 +5,8 @@ var ButtonStyle = require('../../../styles/Buttons');
 var UploadImage = require('./UploadImage.molecule.js');
 var ImageList = require('./ImageList');
 var Row = require('react-bootstrap').Row;
-var LoginStore = require('../../../stores/LoginStore');
 var Col = require('react-bootstrap').Col;
+var LoginStore = require('../../../stores/LoginStore');
 
 var SelectImage = React.createClass({
 	getInitialState: function () {

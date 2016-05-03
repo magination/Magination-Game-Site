@@ -1,6 +1,5 @@
 var React = require('react');
 var GameStore = require('../../../stores/GameStore');
-var ContainerStyle = require('../../../styles/Containers');
 var SelectImage = require('./SelectImage.molecule.js');
 var SelectedImageList = require('./SelectedImageList.molecule');
 var Row = require('react-bootstrap').Row;
@@ -8,7 +7,8 @@ var Row = require('react-bootstrap').Row;
 var Images = React.createClass({
 	getInitialState: function () {
 		return {
-			images: GameStore.getGame().images
+			images: GameStore.getGame().images,
+			isShowSelectImage: false
 		};
 	},
 	componentDidMount: function () {
@@ -19,9 +19,9 @@ var Images = React.createClass({
 	},
 	render: function () {
 		return (
-			<div style={ContainerStyle.paddingLess}>
+			<div>
 				<Row><SelectedImageList images = {this.state.images} /></Row>
-				<Row><SelectImage/></Row>
+				<SelectImage/>
 			</div>
 		);
 	},
