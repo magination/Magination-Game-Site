@@ -27,6 +27,24 @@ var GameListActions = {
 			dataType: 'json',
 			success: onGetUnpublishedGames
 		});
+	},
+	publishGame: function (gameId) {
+		Dispatcher.dispatch({
+			actionType: MyGamesConstants.PUBLISH_UNPUBLISHED_GAME,
+			gameId: gameId
+		});
+	},
+	unPublishGame: function (gameId) {
+		Dispatcher.dispatch({
+			actionType: MyGamesConstants.UNPUBLISH_PUBLISHED_GAME,
+			gameId: gameId
+		});
+	},
+	deleteGame: function (gameId) {
+		Dispatcher.dispatch({
+			actionType: MyGamesConstants.DELETE_GAME,
+			gameId: gameId
+		});
 	}
 };
 

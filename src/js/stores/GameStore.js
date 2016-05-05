@@ -106,11 +106,7 @@ function SaveGameToServer () {
 		contentType: 'application/json',
 		dataType: 'json',
 		statusCode: {
-			201: onGamePostedSuccess,
-			401: onPostGameUnauthorizedResponse,
-			500: function () {
-				alert('Server Error: see console');
-			}
+			201: onSaveGameResponse
 		}
 	});
 };
@@ -193,7 +189,6 @@ function ChangeRulePrioritization (action) {
 	}
 };
 var onGamePostedSuccess = function (data) {
-	console.log(data);
 	FeedbackAction.displaySuccessMessage({
 		header: 'Success.',
 		message: 'Game uploaded!'
@@ -203,6 +198,12 @@ var onGamePostedSuccess = function (data) {
 		data: {
 			game: data
 		}
+	});
+};
+var onSaveGameResponse = function () {
+	FeedbackAction.displaySuccessMessage({
+		header: 'Success',
+		message: 'Game saved.'
 	});
 };
 var onPostGameUnauthorizedResponse = function () {

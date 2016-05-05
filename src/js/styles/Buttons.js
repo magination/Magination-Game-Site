@@ -35,6 +35,22 @@ var ButtonStyles = {
 		width: '50%',
 		marginLeft: '5'
 	},
+	MyGames: {
+		myGamesButton: function (customColor) {
+			return {
+				color: 'white',
+				width: '100%',
+				paddingTop: '10',
+				paddingBottom: '10',
+				paddingLeft: '20',
+				paddingRight: '20',
+				borderWidth: '0',
+				borderRadius: '10',
+				marginTop: '10',
+				backgroundColor: !customColor ? Colors.blueDark : customColor
+			};
+		}
+	},
 	Game: {
 		gameButton: function (customColor) {
 			return {

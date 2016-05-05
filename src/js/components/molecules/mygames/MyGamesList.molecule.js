@@ -1,12 +1,9 @@
 var React = require('react');
 
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-var NavigationAction = require('../../../actions/NavigationAction');
-var GameAction = require('../../../actions/GameAction');
-var NavigationConstants = require('../../../constants/NavigationConstants');
 var MyGamesStore = require('../../../stores/MyGamesStore');
 var MyGamesAction = require('../../../actions/MyGamesAction');
-var GameListElement = require('../browsegames/GameListElement.molecule');
+var MyGameListElement = require('./MyGameListElement');
 var LoginStore = require('../../../stores/LoginStore');
 
 var PublishedGameList = React.createClass({
@@ -31,7 +28,7 @@ var PublishedGameList = React.createClass({
 		var that = this;
 		var games = this.state.games.map(function (game) {
 			return <div key={game._id}>
-				<GameListElement game={game} onGameClick={that.navigateToGame}/>
+				<MyGameListElement isPublished={that.props.isPublished} game={game}/>
 			</div>;
 		});
 		return (
@@ -46,20 +43,6 @@ var PublishedGameList = React.createClass({
 		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
 		this.setState({
 			games: games
-		});
-	},
-	navigateToGame: function (id) {
-		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
-		var game;
-		for (var i = 0; i < games.length; i++) {
-			if (games[i]._id === id) {
-				game = games[i];
-				break;
-			}
-		}
-		GameAction.changeGameLocally(game);
-		NavigationAction.navigate({
-			destination: NavigationConstants.PATHS.creategame
 		});
 	},
 	onLoginChange: function () {
