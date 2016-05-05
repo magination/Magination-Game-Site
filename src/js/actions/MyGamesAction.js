@@ -1,5 +1,5 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
-var GameListConstants = require('../constants/GameListConstants');
+var MyGamesConstants = require('../constants/MyGamesConstants');
 var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 
@@ -32,15 +32,15 @@ var GameListActions = {
 
 function onGetPublishedGames (data) {
 	Dispatcher.dispatch({
-		actionType: GameListConstants.UPDATE_PUBLISHED_GAMES,
-		games: data.games
+		actionType: MyGamesConstants.UPDATE_PUBLISHED_GAMES,
+		games: data
 	});
 }
 
 function onGetUnpublishedGames (data) {
 	Dispatcher.dispatch({
-		actionType: GameListConstants.UPDATE_UNPUBLISHED_GAMES,
-		games: data.games
+		actionType: MyGamesConstants.UPDATE_UNPUBLISHED_GAMES,
+		games: data
 	});
 }
 

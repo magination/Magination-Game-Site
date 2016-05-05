@@ -2,6 +2,7 @@ var React = require('react');
 
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 var NavigationAction = require('../../../actions/NavigationAction');
+var GameAction = require('../../../actions/GameAction');
 var NavigationConstants = require('../../../constants/NavigationConstants');
 var MyGamesStore = require('../../../stores/MyGamesStore');
 var MyGamesAction = require('../../../actions/MyGamesAction');
@@ -48,8 +49,17 @@ var PublishedGameList = React.createClass({
 		});
 	},
 	navigateToGame: function (id) {
+		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
+		var game;
+		for (var i = 0; i < games.length; i++) {
+			if (games[i]._id === id) {
+				game = games[i];
+				break;
+			}
+		}
+		GameAction.changeGameLocally(game);
 		NavigationAction.navigate({
-			destination: NavigationConstants.PATHS.game + '/' + id
+			destination: NavigationConstants.PATHS.creategame
 		});
 	},
 	onLoginChange: function () {
