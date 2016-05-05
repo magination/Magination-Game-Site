@@ -7,6 +7,9 @@ var GameListActions = {
 	getPublishedGames: function () {
 		$.ajax({
 			type: 'GET',
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
 			url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/games',
 			contentType: 'application/json',
 			dataType: 'json',
@@ -16,7 +19,10 @@ var GameListActions = {
 	getUnpublishedGames: function () {
 		$.ajax({
 			type: 'GET',
-			url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedgames',
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedGames',
 			contentType: 'application/json',
 			dataType: 'json',
 			success: onGetUnpublishedGames
