@@ -1,19 +1,22 @@
 var React = require('react');
 var Modal = require('react-bootstrap').Modal;
 var Button = require('react-bootstrap').Button;
-var ButtonStyle = require('../../../styles/Buttons');
 var UploadImage = require('./UploadImage.molecule.js');
 var ImageList = require('./ImageList');
 var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
 var LoginStore = require('../../../stores/LoginStore');
 
 var SelectImage = React.createClass({
 	getInitialState: function () {
 		return {
-			showModal: false,
+			showModal: this.props.show,
 			images: LoginStore.getLoginProfile() ? LoginStore.getLoginProfile().images : []
 		};
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({
+			showModal: nextProps.show
+		});
 	},
 	componentDidMount: function () {
 		LoginStore.addChangeListener(this.onLoginStateChanged);
@@ -39,15 +42,8 @@ var SelectImage = React.createClass({
 						<Button onClick={this.close}>Close</Button>
 					</Modal.Footer>
 				</Modal>
-				<Row><Col md={6}><Button onClick={this.open} type='button' style={ButtonStyle.MaginationFillParent}>+ Add image</Button></Col></Row>
 			</div>
 		);
-	},
-	close: function () {
-		this.setState({ showModal: false });
-	},
-	open: function () {
-		this.setState({ showModal: true });
 	},
 	onHide: function () {
 		this.setState({ showModal: false });

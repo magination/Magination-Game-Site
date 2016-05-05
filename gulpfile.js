@@ -44,7 +44,7 @@ gulp.task('server', ['clean', 'build', 'moveDepencies'], function () {
 	nodemon({
 		script: './server/server.js',
 		ext: 'js html',
-		ignore: ['src/**, gulpfile.js'],
+		ignore: ['./src/**, gulpfile.js'],
 		env: { 'NODE_ENV': 'development' }
 	}).on('restart', function () {
 		reloadBrowser(1000);
