@@ -31,9 +31,6 @@ var ChangePassword = React.createClass({
 	},
 	componentDidMount: function () {
 		LoginStore.addChangeListener(this.onLoginChange);
-		if (!LoginStore.getLoginState().isLoggedIn) {
-			LoginAction.requestLogin();
-		}
 	},
 	componentWillUnmount: function () {
 		LoginStore.removeChangeListener(this.onLoginChange);
