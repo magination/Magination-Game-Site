@@ -14,7 +14,7 @@ var config = {
 			forgotpassword: restApiRoot + 'login' + '/forgot',
 			comments: restApiRoot + 'comments',
 			verifyEmail: restApiRoot + 'login/update',
-			saveGame: restApiRoot + 'unpublishedGames',
+			unpublishedGames: restApiRoot + 'unpublishedGames',
 			gamecreator: {
 				staticimages: restApiRoot + 'public/pieces'
 			}

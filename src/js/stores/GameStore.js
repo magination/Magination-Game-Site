@@ -97,8 +97,8 @@ function PublishGameToServer () {
 };
 function SaveGameToServer () {
 	$.ajax({
-		type: 'POST',
-		url: URLS.api.saveGame,
+		type: _game._id ? 'PUT' : 'POST',
+		url: URLS.api.unpublishedGames,
 		data: JSON.stringify(_game),
 		headers: {
 			'Authorization': LoginStore.getToken()

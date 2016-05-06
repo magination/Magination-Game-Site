@@ -2,7 +2,7 @@ var Dispatcher = require('../dispatchers/Dispatcher');
 var MyGamesConstants = require('../constants/MyGamesConstants');
 var EventEmitter = require('events').EventEmitter;
 var _ = require('lodash');
-var CHANGE_EVENT = 'change-gamelist';
+var CHANGE_EVENT = 'change-myGames';
 var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 
@@ -51,18 +51,12 @@ MyGamesStore.dispatchToken = Dispatcher.register(function (action) {
 		MyGamesStore.emitChange();
 		break;
 	case MyGamesConstants.PUBLISH_UNPUBLISHED_GAME:
-		publishGameOptimistically(action.gameId);
 		publishGameToServer(action.gameId);
-		MyGamesStore.emitChange();
 		break;
 	case MyGamesConstants.UNPUBLISH_PUBLISHED_GAME:
-		unPublishGameOptimistically(action.gameId);
-		MyGamesStore.emitChange();
 		unPublishGameToServer(action.gameId);
 		break;
 	case MyGamesConstants.DELETE_GAME:
-		deleteGameOptimistically(action.gameId, action.isPublished);
-		MyGamesStore.emitChange();
 		deleteGameFromServer(action.gameId, action.isPublished);
 		break;
 	}
@@ -72,7 +66,7 @@ function publishGameToServer (gameId) {
 	var game = findGameById(gameId, false);
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedGames/' + gameId + '/publish',
+		url: URLS.api.unpublishedGames + '/' + gameId + '/publish',
 		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -80,7 +74,10 @@ function publishGameToServer (gameId) {
 		contentType: 'application/json',
 		dataType: 'json',
 		statusCode: {
-			201: function (data) {
+			200: function (data) {
+				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
+				_publishedGames.push(data);
+				MyGamesStore.emitChange();
 			}
 		}
 	});
@@ -89,7 +86,7 @@ function unPublishGameToServer (gameId) {
 	var game = findGameById(gameId, true);
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedGames/' + gameId + '/publish',
+		url: URLS.api.games + '/' + gameId + '/unpublish',
 		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -97,7 +94,10 @@ function unPublishGameToServer (gameId) {
 		contentType: 'application/json',
 		dataType: 'json',
 		statusCode: {
-			201: function (data) {
+			200: function (data) {
+				_publishedGames.splice(_publishedGames.indexOf(game), 1);
+				_unpublishedGames.push(data);
+				MyGamesStore.emitChange();
 			}
 		}
 	});
@@ -106,8 +106,8 @@ function unPublishGameToServer (gameId) {
 function deleteGameFromServer (gameId) {
 	var game = findGameById(gameId, true);
 	$.ajax({
-		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedGames/' + gameId + '/publish',
+		type: 'DELETE',
+		url: URLS.api.unpublishedGames + '/' + gameId,
 		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -115,28 +115,14 @@ function deleteGameFromServer (gameId) {
 		contentType: 'application/json',
 		dataType: 'json',
 		statusCode: {
-			201: function (data) {
+			200: function (data) {
+				var game = findGameById(data._id);
+				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
+				MyGamesStore.emitChange();
 			}
 		}
 	});
 }
-
-function deleteGameOptimistically (gameId) {
-	var game = findGameById(gameId);
-	_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
-}
-
-function unPublishGameOptimistically (gameId) {
-	var game = findGameById(gameId, true);
-	_publishedGames.splice(_publishedGames.indexOf(game), 1);
-	_unpublishedGames.push(game);
-}
-
-function publishGameOptimistically (gameId) {
-	var game = findGameById(gameId, false);
-	_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
-	_publishedGames.push(game);
-};
 
 function findGameById (gameId, isPublished) {
 	var list = isPublished ? _publishedGames : _unpublishedGames;

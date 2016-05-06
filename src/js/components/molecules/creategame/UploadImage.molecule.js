@@ -4,6 +4,7 @@ var ContainerStyle = require('../../../styles/Containers');
 var URLS = require('../../../config/config').urls;
 var Button = require('react-bootstrap').Button;
 var ButtonStyle = require('../../../styles/Buttons');
+var LoginAction = require('../../../actions/LoginAction');
 
 var Images = React.createClass({
 	getInitialState: function () {
@@ -52,7 +53,7 @@ var Images = React.createClass({
 		});
 	},
 	onRequestSuccess: function () {
-		this.props.onSubmitted();
+		LoginAction.updateLoginProfile();
 	},
 	onRequestError: function (data) {
 	}
