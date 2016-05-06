@@ -17,7 +17,7 @@ var config = {
 			unpublishedGames: restApiRoot + 'unpublishedGames',
 			gamecreator: {
 				staticimages: restApiRoot + 'public/pieces'
-			},
+			}
 		},
 		img: {
 			starWhite: imgRoot + 'starWhiteTransparent100x100.png',
