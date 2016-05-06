@@ -16,7 +16,6 @@ var Row = require('react-bootstrap').Row;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Button = require('react-bootstrap').Button;
 var Collapse = require('react-bootstrap').Collapse;
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 var ShareGame = require('../molecules/game/ShareGame.molecule');
 var TextStyles = require('../../styles/Text');
 var ButtonStyles = require('../../styles/Buttons');
@@ -66,14 +65,14 @@ var Game = React.createClass({
 		}
 	},
 	componentDidUpdate: function () {
-		/* Dangerous implementation.. should be reconsidered. It may be infinite recursive if the height of gameinformation
+		/* Dangerous implementation.. should be reconsidered. It may be infinitely recursive if the height of gameinformation
 			changes at every render.
 		*/
 		setTimeout(this.onGameInformationRendered, 0);
 	},
 	render: function () {
 		return (
-			<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+			<div>
 				<Row>
 					<Col md={4} mdOffset={1}>
 						<GameInformation ref='gameinformation' game={this.state.game} onCollapseFinished={this.onGameInformationRendered}/>
@@ -119,7 +118,7 @@ var Game = React.createClass({
 				<hr />
 				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
 				<hr />
-			</ReactCSSTransitionGroup>
+			</div>
 		);
 	},
 	onGameInformationRendered: function () {
