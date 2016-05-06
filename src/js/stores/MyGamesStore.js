@@ -116,7 +116,6 @@ function deleteGameFromServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			200: function (data) {
-				var game = findGameById(data._id);
 				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
 				MyGamesStore.emitChange();
 			}
@@ -126,14 +125,12 @@ function deleteGameFromServer (gameId) {
 
 function findGameById (gameId, isPublished) {
 	var list = isPublished ? _publishedGames : _unpublishedGames;
-	var game;
 	for (var i = 0; i < list.length; i++) {
 		if (list[i]._id === gameId) {
-			game = list[i];
-			break;
+			return list[i];
 		}
 	}
-	return game;
+	return null;
 }
 
 module.exports = MyGamesStore;
