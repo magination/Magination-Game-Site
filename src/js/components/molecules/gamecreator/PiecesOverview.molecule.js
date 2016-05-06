@@ -4,30 +4,28 @@ var GameCreatorStore = require('../../../stores/GameCreatorStore');
 // var GameCreatorAction = require('../../../actions/GameCreatorAction');
 var GameCreatorConstants = require('../../../constants/GameCreatorConstants');
 var Button = require('react-bootstrap').Button;
-
-var imgStyle = {
-	maxHeight: '100%',
-	maxWidth: '100%'
-};
+var PieceOverview = require('../../atoms/gamecreator/PieceOverview.atom');
 
 var PiecesOverview = React.createClass({
 	getInitialState: function () {
 		return {
-			pieces: []
+			pieces: [],
+			currentSelectedIndex: -1
 		};
 	},
 	componentDidMount: function () {
 		GameCreatorStore.addChangeListener(this.onPieceAdded, GameCreatorConstants.ADD_PIECE_TO_CREATOR);
+		GameCreatorStore.addChangeListener(this.onPieceSelected, GameCreatorConstants.PIECE_WAS_SELECTED);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onPieceAdded, GameCreatorConstants.ADD_PIECE_TO_CREATOR);
 	},
 	render: function () {
+		var that = this;
 		var pieces = this.state.pieces.map(function (piece, index) {
 			return (
-				<div id={index}>
-					<img src={piece.url} style={imgStyle}/>
-					<hr />
+				<div key={piece.url + '' + index}>
+					<PieceOverview piece={piece} index={index} isSelected={(index === that.state.currentSelectedIndex)}/>
 				</div>
 			);
 		});
@@ -43,6 +41,11 @@ var PiecesOverview = React.createClass({
 		newState.push(piece);
 		this.setState({
 			pieces: newState
+		});
+	},
+	onPieceSelected: function (index) {
+		this.setState({
+			currentSelectedIndex: index
 		});
 	},
 	onSavePngClick: function () {

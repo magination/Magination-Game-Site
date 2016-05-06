@@ -63,8 +63,21 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameCreatorConstants.SET_CANVAS:
 		_fabricCanvas = new fabric.Canvas(action.id);
+		_fabricCanvas.on('selection:cleared', selectionChanged);
+		break;
+	case GameCreatorConstants.SET_SELECTED_INDEX:
+		_fabricCanvas.setActiveObject(_fabricCanvas.item(action.index));
+		selectionChanged(action.index);
+		break;
 	}
 });
+
+function selectionChanged (index) {
+	if (index === undefined) {
+		index = -1;
+	}
+	GameCreatorStore.emitChange(GameCreatorConstants.PIECE_WAS_SELECTED, index);
+}
 
 function addPieceToCreator (piece) {
 	var img = new Image();
@@ -75,10 +88,14 @@ function addPieceToCreator (piece) {
 			left: 200,
 			top: 200
 		});
-		imgInstance.scale(0.20);
 		var quantity = _fabricCanvas.getObjects().length;
+		imgInstance.scale(0.20);
+		imgInstance.on('selected', function () {
+			selectionChanged(quantity);
+		});
 		_fabricCanvas.add(imgInstance);
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
+		selectionChanged(quantity);
 	};
 	img.src = piece.url;
 }

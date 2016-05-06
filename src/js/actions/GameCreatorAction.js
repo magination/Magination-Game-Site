@@ -23,6 +23,12 @@ var GameCreatorActions = {
 			actionType: GameCreatorConstants.SET_CANVAS,
 			id: data.id
 		});
+	},
+	setSelectedObjectIndex: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.SET_SELECTED_INDEX,
+			index: data.index
+		});
 	}
 };
 

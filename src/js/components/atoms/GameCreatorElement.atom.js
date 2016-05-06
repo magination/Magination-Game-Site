@@ -34,9 +34,9 @@ var GameCreatorElement = React.createClass({
 	},
 	render: function () {
 		var that = this;
-		var images = this.props.piece.map(function (color) {
+		var images = this.props.piece.map(function (color, index) {
 			return (
-				<div key={color[0].url}><img width={100} height={62} onClick={that.onImageClick.bind(that, color[0].url)} src={color[0].url}/></div>
+				<div key={color[0].url + '' + index}><img width={100} height={62} onClick={that.onImageClick.bind(that, color[0].url)} src={color[0].url}/></div>
 			);
 		});
 		var Overlay = <Popover id='chooseImgVariation'>{images}</Popover>;
