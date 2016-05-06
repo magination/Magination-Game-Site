@@ -75,9 +75,8 @@ function publishGameToServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			200: function (data) {
-				var game = findGameById(data._id, false);
 				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
-				_publishedGames.push(game);
+				_publishedGames.push(data);
 				MyGamesStore.emitChange();
 			}
 		}
@@ -96,9 +95,8 @@ function unPublishGameToServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			200: function (data) {
-				var game = findGameById(data._id, true);
 				_publishedGames.splice(_publishedGames.indexOf(game), 1);
-				_unpublishedGames.push(game);
+				_unpublishedGames.push(data);
 				MyGamesStore.emitChange();
 			}
 		}
