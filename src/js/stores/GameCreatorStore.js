@@ -90,6 +90,8 @@ function addPieceToCreator (piece) {
 		});
 		var quantity = _fabricCanvas.getObjects().length;
 		imgInstance.scale(0.20);
+		imgInstance.perPixelTargetFind = true;
+		imgInstance.targetFindTolerance = 4;
 		imgInstance.on('selected', function () {
 			selectionChanged(quantity);
 		});
