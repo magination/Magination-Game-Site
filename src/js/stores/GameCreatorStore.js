@@ -1,4 +1,5 @@
-
+var URLS = require('../config/config').urls;
+var LoginStore = require('./LoginStore');
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameCreatorConstants = require('../constants/GameCreatorConstants');
 var EventEmitter = require('events').EventEmitter;
@@ -72,6 +73,12 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		_fabricCanvas = new fabric.Canvas(action.id);
 		_fabricCanvas.on('selection:cleared', selectionChanged);
 		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
+		break;
+	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
+		break;
+	case GameCreatorConstants.SAVE_GAMECREATOR_PNG:
+		saveGameAsPng();
+		break;
 	}
 });
 
@@ -105,6 +112,52 @@ function addPieceToCreator (piece) {
 	};
 	img.src = piece.url;
 	console.log(GameCreatorStore.getPieces());
+}
+
+function saveGameAsPng () {
+	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
+	var blob = b64toBlob(data, 'image/png');
+	var formData = new FormData();
+	formData.append('image', blob, Date.now() + '.png');
+	$.ajax({
+		type: 'POST',
+		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/images',
+		data: formData,
+		headers: {
+			'Authorization': LoginStore.getToken()
+		},
+		contentType: false,
+		processData: false,
+		success: onRequestSuccess
+	});
+}
+
+function onRequestSuccess (data) {
+	console.log(data);
+}
+
+function b64toBlob (b64Data, contentType, sliceSize) {
+	contentType = contentType || '';
+	sliceSize = sliceSize || 512;
+
+	var byteCharacters = atob(b64Data);
+	var byteArrays = [];
+
+	for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+		var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+		var byteNumbers = new Array(slice.length);
+		for (var i = 0; i < slice.length; i++) {
+			byteNumbers[i] = slice.charCodeAt(i);
+		}
+
+		var byteArray = new Uint8Array(byteNumbers);
+
+		byteArrays.push(byteArray);
+	}
+
+	var blob = new Blob(byteArrays, {type: contentType});
+	return blob;
 }
 
 module.exports = GameCreatorStore;

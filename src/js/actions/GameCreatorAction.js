@@ -30,6 +30,16 @@ var GameCreatorActions = {
 			index: data.index
 		});
 	},
+	saveCurrentToPng: function () {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.SAVE_GAMECREATOR_PNG
+		});
+	},
+	saveCurrentToJson: function () {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.SAVE_GAMECREATOR_JSON
+		});
+	},
 	clearStore: function () {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.CLEAR_GAMECREATOR_STORE

@@ -1,7 +1,7 @@
 var React = require('react');
 
 var GameCreatorStore = require('../../../stores/GameCreatorStore');
-// var GameCreatorAction = require('../../../actions/GameCreatorAction');
+var GameCreatorAction = require('../../../actions/GameCreatorAction');
 var GameCreatorConstants = require('../../../constants/GameCreatorConstants');
 var Button = require('react-bootstrap').Button;
 var PieceOverview = require('../../atoms/gamecreator/PieceOverview.atom');
@@ -50,9 +50,7 @@ var PiecesOverview = React.createClass({
 		});
 	},
 	onSavePngClick: function () {
-		GameCreatorStore.getFabricCanvas().renderAll();
-		var dataUrl = GameCreatorStore.getFabricCanvas().toDataURL();
-		console.log(dataUrl);
+		GameCreatorAction.saveCurrentToPng();
 	}
 });
 
