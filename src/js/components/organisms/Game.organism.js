@@ -173,7 +173,7 @@ function shouldRequestGame () {
 	if (data.game === undefined) {
 		return true;
 	}
-	return true; /* always returns true */
+	return false; /* always returns true */
 }
 
 function getLastUrlId () {
