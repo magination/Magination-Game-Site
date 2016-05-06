@@ -19,6 +19,7 @@ var PiecesOverview = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onPieceAdded, GameCreatorConstants.ADD_PIECE_TO_CREATOR);
+		GameCreatorStore.removeChangeListener(this.onPieceSelected, GameCreatorConstants.PIECE_WAS_SELECTED);
 	},
 	render: function () {
 		var that = this;

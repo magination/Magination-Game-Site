@@ -8,7 +8,7 @@ var ButtonStyle = require('../../styles/Buttons');
 var GameCreatorModal = React.createClass({
 	getInitialState: function () {
 		return {
-			show: false,
+			show: false
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
