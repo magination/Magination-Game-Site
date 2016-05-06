@@ -13,11 +13,17 @@ var _staticPieces = [
 		]
 	]
 ];
+// var _canvasComponent = null;
+var _fabricCanvas = null;
+
 var _rawData = {};
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
 		return _pieces;
+	},
+	getFabricCanvas: function () {
+		return _fabricCanvas;
 	},
 	getStaticPieces: function () {
 		return _staticPieces;
@@ -47,14 +53,34 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	switch (action.actionType) {
 	case GameCreatorConstants.ADD_PIECE_TO_CREATOR:
-		GameCreatorStore.emitChange(GameCreatorConstants.ADD_PIECE_TO_CREATOR, action.url);
+		addPieceToCreator(action.piece);
+		GameCreatorStore.emitChange(GameCreatorConstants.ADD_PIECE_TO_CREATOR, action.piece);
 		break;
 	case GameCreatorConstants.SET_STATIC_PIECES:
 		_staticPieces = action.pieces;
 		GameCreatorStore.emitChange(GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.emitChange(CHANGE_EVENT);
 		break;
+	case GameCreatorConstants.SET_CANVAS:
+		_fabricCanvas = new fabric.Canvas(action.id);
 	}
 });
+
+function addPieceToCreator (piece) {
+	var img = new Image();
+	img.crossOrigin = 'Anonymous';
+	img.onload = function () {
+		var imgInstance = new fabric.Image(img, {});
+		imgInstance.set({
+			left: 200,
+			top: 200
+		});
+		imgInstance.scale(0.20);
+		var quantity = _fabricCanvas.getObjects().length;
+		_fabricCanvas.add(imgInstance);
+		_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
+	};
+	img.src = piece.url;
+}
 
 module.exports = GameCreatorStore;

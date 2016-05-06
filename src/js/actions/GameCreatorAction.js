@@ -5,7 +5,7 @@ var GameCreatorActions = {
 	addPieceByUrl: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.ADD_PIECE_TO_CREATOR,
-			url: data.url
+			piece: data.piece
 		});
 	},
 	setStaticPiecesFromServer: function (data) {
@@ -16,6 +16,12 @@ var GameCreatorActions = {
 			statusCode: {
 				200: onGetStaticPiecesSuccessResponse
 			}
+		});
+	},
+	setCanvas: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.SET_CANVAS,
+			id: data.id
 		});
 	}
 };
@@ -32,8 +38,13 @@ function parseFolderStructureToPieces (folderStructure) { /* hardcoded against t
 	var pieces = [];
 	pieces = folderStructure.children.map(function (piece) {
 		var aPiece = piece.children.map(function (color) {
-			var aColor = color.children.map(function (img) {
-				return ('' + URLS.server.root + '' + img.path);
+			var aColor = color.children.map(function (rotation) {
+				var img = new Image();
+				var url = ('' + URLS.server.root + '' + rotation.path);
+				img.src = url;
+				return {
+					url: url
+				};
 			});
 			return aColor;
 		});
