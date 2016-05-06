@@ -18,8 +18,7 @@ var MyGameListElement = React.createClass({
 			title: React.PropTypes.string.isRequired,
 			rating: React.PropTypes.number,
 			numberOfPlayers: React.PropTypes.number,
-			shortDescription: React.PropTypes.string,
-			owner: React.PropTypes.object.isRequired
+			shortDescription: React.PropTypes.string
 		})
 	},
 	render: function () {
@@ -38,7 +37,7 @@ var MyGameListElement = React.createClass({
 							<span style={{marginLeft: '30'}}/>
 							<Glyphicon style={TextStyles.blue} glyph='user'/> {this.props.game.numberOfPlayers}{(this.props.game.isPlayableWithMorePlayers) ? '+' : ''}
 						</h4>
-						<div onClick={this.onGameClick}>
+						<div>
 							<h4>Description:</h4>
 							<p>{this.props.game.shortDescription}</p>
 						</div>
@@ -56,9 +55,6 @@ var MyGameListElement = React.createClass({
 				<hr/>
 			</div>
 		);
-	},
-	onGameClick: function () {
-		this.props.onGameClick(this.props.game._id);
 	},
 	onPublishClicked: function () {
 		MyGamesAction.publishGame(this.props.game._id);
