@@ -29,6 +29,11 @@ var GameCreatorActions = {
 			actionType: GameCreatorConstants.SET_SELECTED_INDEX,
 			index: data.index
 		});
+	},
+	clearStore: function () {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.CLEAR_GAMECREATOR_STORE
+		});
 	}
 };
 

@@ -13,13 +13,15 @@ var _staticPieces = [
 		]
 	]
 ];
-// var _canvasComponent = null;
 var _fabricCanvas = null;
-
-var _rawData = {};
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
+		_pieces = _fabricCanvas.getObjects().map(function (object) {
+			return {
+				url: object.imageUrl
+			};
+		});
 		return _pieces;
 	},
 	getFabricCanvas: function () {
@@ -27,9 +29,6 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	},
 	getStaticPieces: function () {
 		return _staticPieces;
-	},
-	getRawData: function () {
-		return _rawData;
 	},
 	addChangeListener: function (callback, specificEvent) {
 		if (specificEvent) {
@@ -69,6 +68,10 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(action.index));
 		selectionChanged(action.index);
 		break;
+	case GameCreatorConstants.CLEAR_GAMECREATOR_STORE:
+		_fabricCanvas = new fabric.Canvas(action.id);
+		_fabricCanvas.on('selection:cleared', selectionChanged);
+		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
 	}
 });
 
@@ -86,7 +89,8 @@ function addPieceToCreator (piece) {
 		var imgInstance = new fabric.Image(img, {});
 		imgInstance.set({
 			left: 200,
-			top: 200
+			top: 200,
+			imageUrl: piece.url
 		});
 		var quantity = _fabricCanvas.getObjects().length;
 		imgInstance.scale(0.20);
@@ -100,6 +104,7 @@ function addPieceToCreator (piece) {
 		selectionChanged(quantity);
 	};
 	img.src = piece.url;
+	console.log(GameCreatorStore.getPieces());
 }
 
 module.exports = GameCreatorStore;
