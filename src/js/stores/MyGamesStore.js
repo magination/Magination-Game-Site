@@ -109,8 +109,8 @@ function unPublishGameToServer (gameId) {
 function deleteGameFromServer (gameId) {
 	var game = findGameById(gameId, true);
 	$.ajax({
-		type: 'POST',
-		url: URLS.api.unpublishedGames + '/' + gameId + '/delete',
+		type: 'DELETE',
+		url: URLS.api.unpublishedGames + '/' + gameId,
 		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
