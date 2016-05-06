@@ -2,7 +2,7 @@ var Dispatcher = require('../dispatchers/Dispatcher');
 var MyGamesConstants = require('../constants/MyGamesConstants');
 var EventEmitter = require('events').EventEmitter;
 var _ = require('lodash');
-var CHANGE_EVENT = 'change-gamelist';
+var CHANGE_EVENT = 'change-myGames';
 var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 
