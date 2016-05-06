@@ -51,17 +51,14 @@ MyGamesStore.dispatchToken = Dispatcher.register(function (action) {
 		MyGamesStore.emitChange();
 		break;
 	case MyGamesConstants.PUBLISH_UNPUBLISHED_GAME:
-		publishGameOptimistically(action.gameId);
 		publishGameToServer(action.gameId);
 		MyGamesStore.emitChange();
 		break;
 	case MyGamesConstants.UNPUBLISH_PUBLISHED_GAME:
-		unPublishGameOptimistically(action.gameId);
 		MyGamesStore.emitChange();
 		unPublishGameToServer(action.gameId);
 		break;
 	case MyGamesConstants.DELETE_GAME:
-		deleteGameOptimistically(action.gameId, action.isPublished);
 		MyGamesStore.emitChange();
 		deleteGameFromServer(action.gameId, action.isPublished);
 		break;
@@ -81,6 +78,9 @@ function publishGameToServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			201: function (data) {
+				var game = findGameById(data._id, false);
+				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
+				_publishedGames.push(game);
 			}
 		}
 	});
@@ -98,6 +98,9 @@ function unPublishGameToServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			201: function (data) {
+				var game = findGameById(data._id, true);
+				_publishedGames.splice(_publishedGames.indexOf(game), 1);
+				_unpublishedGames.push(game);
 			}
 		}
 	});
@@ -116,27 +119,12 @@ function deleteGameFromServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			201: function (data) {
+				var game = findGameById(data._id);
+				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
 			}
 		}
 	});
 }
-
-function deleteGameOptimistically (gameId) {
-	var game = findGameById(gameId);
-	_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
-}
-
-function unPublishGameOptimistically (gameId) {
-	var game = findGameById(gameId, true);
-	_publishedGames.splice(_publishedGames.indexOf(game), 1);
-	_unpublishedGames.push(game);
-}
-
-function publishGameOptimistically (gameId) {
-	var game = findGameById(gameId, false);
-	_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
-	_publishedGames.push(game);
-};
 
 function findGameById (gameId, isPublished) {
 	var list = isPublished ? _publishedGames : _unpublishedGames;
