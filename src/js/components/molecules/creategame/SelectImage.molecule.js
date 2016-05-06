@@ -4,21 +4,13 @@ var Button = require('react-bootstrap').Button;
 var UploadImage = require('./UploadImage.molecule.js');
 var ImageList = require('./ImageList');
 var Row = require('react-bootstrap').Row;
-var LoginStore = require('../../../stores/LoginStore');
 var ButtonStyle = require('../../../styles/Buttons');
 
 var SelectImage = React.createClass({
 	getInitialState: function () {
 		return {
-			showModal: false,
-			images: LoginStore.getLoginProfile() ? LoginStore.getLoginProfile().images : []
+			showModal: false
 		};
-	},
-	componentDidMount: function () {
-		LoginStore.addChangeListener(this.onLoginStateChanged);
-	},
-	componentWillUnmount: function () {
-		LoginStore.removeChangeListener(this.onLoginStateChanged);
 	},
 	render: function () {
 		return (
@@ -29,7 +21,7 @@ var SelectImage = React.createClass({
 						<h3>YOUR IMAGES</h3>
 						<h5>Click an image to add it to the list. If you have no images, upload one below!</h5>
 						<Row>
-							<ImageList images = {this.state.images} onSelected={this.close}/>
+							<ImageList onSelected={this.close}/>
 						</Row>
 						<hr/>
 						<h3>UPLOAD AN IMAGE</h3>
@@ -60,14 +52,6 @@ var SelectImage = React.createClass({
 	},
 	onAddImageClicked: function () {
 		this.setState({showModal: true});
-	},
-	onLoginStateChanged: function () {
-		if (LoginStore.getLoginProfile() === null) return;
-		this.setState({
-			images: LoginStore.getLoginProfile().images
-		});
-	},
-	refreshImageList: function () {
 	}
 });
 

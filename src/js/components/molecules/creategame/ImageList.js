@@ -1,12 +1,19 @@
 var React = require('react');
 var ContainerStyle = require('../../../styles/Containers');
 var GameAction = require('../../../actions/GameAction');
+var LoginStore = require('../../../stores/LoginStore');
 
 var ImageList = React.createClass({
 	getInitialState: function () {
 		return {
-			images: this.props.images ? this.props.images : []
+			images: LoginStore.getLoginProfile() ? LoginStore.getLoginProfile().images : []
 		};
+	},
+	componentDidMount: function () {
+		LoginStore.addChangeListener(this.onLoginStateChanged);
+	},
+	componentWillUnmount: function () {
+		LoginStore.removeChangeListener(this.onLoginStateChanged);
 	},
 	render: function () {
 		var images = [];
@@ -31,6 +38,13 @@ var ImageList = React.createClass({
 			image: this.state.images[position]
 		});
 		this.props.onSelected();
+	},
+	onLoginStateChanged: function () {
+		if (LoginStore.getLoginProfile() === null) return;
+		console.log(LoginStore.getLoginProfile().images);
+		this.setState({
+			images: LoginStore.getLoginProfile().images
+		});
 	}
 });
 module.exports = ImageList;
