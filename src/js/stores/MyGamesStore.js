@@ -52,14 +52,11 @@ MyGamesStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case MyGamesConstants.PUBLISH_UNPUBLISHED_GAME:
 		publishGameToServer(action.gameId);
-		MyGamesStore.emitChange();
 		break;
 	case MyGamesConstants.UNPUBLISH_PUBLISHED_GAME:
-		MyGamesStore.emitChange();
 		unPublishGameToServer(action.gameId);
 		break;
 	case MyGamesConstants.DELETE_GAME:
-		MyGamesStore.emitChange();
 		deleteGameFromServer(action.gameId, action.isPublished);
 		break;
 	}
@@ -81,6 +78,7 @@ function publishGameToServer (gameId) {
 				var game = findGameById(data._id, false);
 				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
 				_publishedGames.push(game);
+				MyGamesStore.emitChange();
 			}
 		}
 	});
@@ -101,6 +99,7 @@ function unPublishGameToServer (gameId) {
 				var game = findGameById(data._id, true);
 				_publishedGames.splice(_publishedGames.indexOf(game), 1);
 				_unpublishedGames.push(game);
+				MyGamesStore.emitChange();
 			}
 		}
 	});
@@ -121,6 +120,7 @@ function deleteGameFromServer (gameId) {
 			201: function (data) {
 				var game = findGameById(data._id);
 				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
+				MyGamesStore.emitChange();
 			}
 		}
 	});
