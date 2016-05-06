@@ -14,10 +14,10 @@ var config = {
 			forgotpassword: restApiRoot + 'login' + '/forgot',
 			comments: restApiRoot + 'comments',
 			verifyEmail: restApiRoot + 'login/update',
-			saveGame: restApiRoot + 'unpublishedGames',
+			unpublishedGames: restApiRoot + 'unpublishedGames',
 			gamecreator: {
 				staticimages: restApiRoot + 'public/pieces'
-			}
+			},
 		},
 		img: {
 			starWhite: imgRoot + 'starWhiteTransparent100x100.png',

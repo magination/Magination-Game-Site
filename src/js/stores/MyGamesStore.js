@@ -72,7 +72,7 @@ function publishGameToServer (gameId) {
 	var game = findGameById(gameId, false);
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedGames/' + gameId + '/publish',
+		url: URLS.api.unpublishedGames + '/' + gameId + '/publish',
 		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -89,7 +89,7 @@ function unPublishGameToServer (gameId) {
 	var game = findGameById(gameId, true);
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedGames/' + gameId + '/publish',
+		url: URLS.api.games + '/' + gameId + '/unpublish',
 		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -107,7 +107,7 @@ function deleteGameFromServer (gameId) {
 	var game = findGameById(gameId, true);
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/unpublishedGames/' + gameId + '/publish',
+		url: URLS.api.unpublishedGames + '/' + gameId + '/delete',
 		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
