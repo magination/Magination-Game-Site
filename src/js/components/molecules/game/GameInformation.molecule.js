@@ -36,11 +36,11 @@ var GameInformation = React.createClass({
 				</Row>
 				<Row>
 					<Col md={12} style={ContainerStyles.numberOfPlayersContainer}>
-						<h4 style={TextStyles.white}>{this.props.game.numberOfPlayers} Players</h4>
+						<h3 style={TextStyles.white}><Glyphicon glyph='user'/> {this.props.game.numberOfPlayers}{this.props.game.isPlayableWithMorePlayers ? '+' : ''}</h3>
 					</Col>
 				</Row>
 				<Row>
-					<h3 style={TextStyles.white}><Glyphicon glyph='star'/>{rating}</h3>
+					<h3 style={TextStyles.white}><Glyphicon glyph='star'/> {rating}</h3>
 				</Row>
 				<Row>
 					<h4 style={TextStyles.white}><img width={50} height={19} src={imgUrls.pieceSingleWhiteNoPadding} alt='a'/>	x{this.props.game.pieces.singles}</h4>
