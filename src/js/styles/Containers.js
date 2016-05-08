@@ -67,7 +67,7 @@ var ContainerStyles = {
 		},
 		maginationBorderCenter: {
 			padding: '5',
-			maxWidth: '34%',
+			maxWidth: '33%',
 			minHeight: '100%',
 			verticalAlign: 'middle',
 			display: 'inline-block',

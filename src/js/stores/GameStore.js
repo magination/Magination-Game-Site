@@ -7,11 +7,16 @@ var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 var NavigationAction = require('../actions/NavigationAction');
 var FeedbackAction = require('../actions/FeedbackAction');
+
 var _game = null;
+var _hasSelectedGameToEdit = false;
 
 var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	getGame: function () {
 		return _game;
+	},
+	hasSelectedGameToEdit: function () {
+		return _hasSelectedGameToEdit;
 	},
 	addChangeListener: function (callback) {
 		this.on(CHANGE_EVENT, callback);
@@ -43,7 +48,6 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameConstants.SAVE_GAME_TO_SERVER:
 		SaveGameToServer();
-		GameStore.emitChange();
 		break;
 	case GameConstants.ADD_NEW_RULE_TO_LOCAL_GAME:
 		AddRule(action);
@@ -68,15 +72,23 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameConstants.REMOVE_IMAGE_FROM_LOCAL_GAME:
 		RemoveImageFromLocalGame(action);
 		GameStore.emitChange();
+		break;
+	case GameConstants.SET_HAS_SELECTED_GAME_TO_EDIT:
+		_hasSelectedGameToEdit = action.hasSelectedGameToEdit;
+		GameStore.emitChange();
+		break;
 	}
 });
 function AddImageToLocalGame (action) {
 	_game.images.push(action.image);
+	SaveGameToServer();
 };
 function RemoveImageFromLocalGame (action) {
 	_game.images.splice(action.position, 1);
+	SaveGameToServer();
 }
 function PublishGameToServer () {
+	_game.id = undefined;
 	$.ajax({
 		type: 'POST',
 		url: URLS.api.games,
@@ -98,7 +110,7 @@ function PublishGameToServer () {
 function SaveGameToServer () {
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
-		url: URLS.api.unpublishedGames,
+		url: _game._id ? URLS.api.unpublishedGames + '/' + _game._id : URLS.api.unpublishedGames,
 		data: JSON.stringify(_game),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -191,20 +203,16 @@ function ChangeRulePrioritization (action) {
 var onGamePostedSuccess = function (data) {
 	FeedbackAction.displaySuccessMessage({
 		header: 'Success.',
-		message: 'Game uploaded!'
+		message: 'Game published!'
 	});
 	NavigationAction.navigate({
-		destination: '/game/' + data._id,
-		data: {
-			game: data
-		}
+		destination: '/game/' + data._id
 	});
 };
-var onSaveGameResponse = function () {
-	FeedbackAction.displaySuccessMessage({
-		header: 'Success',
-		message: 'Game saved.'
-	});
+var onSaveGameResponse = function (data) {
+	if (!_game._id) {
+		_game._id = data._id;
+	}
 };
 var onPostGameUnauthorizedResponse = function () {
 	FeedbackAction.displayWarningMessage({

@@ -29,7 +29,7 @@ var ImageList = React.createClass({
 		}
 		return (
 			<div style={ContainerStyle.imageContainer.imageListContainer}>
-				{images}
+				{LoginStore.getLoginProfile().images ? images : <h5>It seems like you have no uploaded images, click the 'upload image' tab to upload an image!</h5>}
 			</div>
 		);
 	},
@@ -41,7 +41,6 @@ var ImageList = React.createClass({
 	},
 	onLoginStateChanged: function () {
 		if (LoginStore.getLoginProfile() === null) return;
-		console.log(LoginStore.getLoginProfile().images);
 		this.setState({
 			images: LoginStore.getLoginProfile().images
 		});

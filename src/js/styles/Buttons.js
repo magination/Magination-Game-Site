@@ -65,6 +65,15 @@ var ButtonStyles = {
 				backgroundColor: !customColor ? Colors.blueDark : customColor
 			};
 		}
+	},
+	CreateNewGame: {
+		color: 'white',
+		width: '100%',
+		paddingTop: '25',
+		paddingBottom: '25',
+		borderWidth: '0',
+		borderRadius: '10',
+		backgroundColor: Colors.blueDark
 	}
 };
 

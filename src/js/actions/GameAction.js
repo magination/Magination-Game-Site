@@ -67,6 +67,12 @@ var GameAction = {
 			position: data.position
 		});
 	},
+	setHasSelectedGameToEdit: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameConstants.SET_HAS_SELECTED_GAME_TO_EDIT,
+			hasSelectedGameToEdit: data.hasSelectedGameToEdit
+		});
+	},
 	createNewGameLocally: function () {
 		Dispatcher.dispatch({
 			actionType: GameConstants.CHANGE_GAME_LOCALLY,

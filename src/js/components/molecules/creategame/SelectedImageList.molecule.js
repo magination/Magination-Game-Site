@@ -1,12 +1,19 @@
 var React = require('react');
 var ContainerStyle = require('../../../styles/Containers');
 var GameAction = require('../../../actions/GameAction');
+var GameStore = require('../../../stores/GameStore');
 
 var SelectedImageList = React.createClass({
 	getInitialState: function () {
 		return {
 			images: this.props.images ? this.props.images : []
 		};
+	},
+	componentDidMount: function () {
+		GameStore.addChangeListener(this.onGameStateChanged);
+	},
+	componentWillUnmount: function () {
+		GameStore.removeChangeListener(this.onGameStateChanged);
 	},
 	render: function () {
 		var images = [];
@@ -29,6 +36,11 @@ var SelectedImageList = React.createClass({
 	onImageClicked: function (position) {
 		GameAction.removeImageFromLocalGame({
 			position: position
+		});
+	},
+	onGameStateChanged: function () {
+		this.setState({
+			images: GameStore.getGame().images
 		});
 	}
 });

@@ -18,26 +18,22 @@ var TextStyle = require('../../styles/Text');
 var ButtonStyle = require('../../styles/Buttons');
 var Colors = require('../../styles/Colors');
 var Images = require('../molecules/creategame/Images.molecule');
+var MyGamesAction = require('../../actions/MyGamesAction');
+var NavigationAction = require('../../actions/NavigationAction');
+var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
+var AutoSave = require('../../service/AutoSave.service.js');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
-		if (GameStore.getGame() !== null) {
-			return {
-				title: GameStore.getGame().title,
-				game: GameStore.getGame()
-			};
-		}
-		else {
-			return {
-				game: {
-					pieces: {
-					},
-					images: {
-					}
-				},
-				title: ''
-			};
-		}
+		return {
+			game: GameStore.getGame()
+		};
+	},
+	componentDidMount: function () {
+		GameStore.addChangeListener(this.onGameStateChanged);
+	},
+	componentWillUnmount: function () {
+		GameStore.removeChangeListener(this.onGameStateChanged);
 	},
 	componentDidMount: function () {
 		if (!LoginStore.getLoginState().isLoggedIn) {
@@ -49,11 +45,11 @@ var GameForm = React.createClass({
 			<div>
 				<Col md={10} mdOffset={1}>
 					<h1 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
-					<h5 style={TextStyle.blueHeader}>Upload your game idea!</h5>
+					<h5>Upload your game idea!</h5>
 					<hr/>
 					<Row>
 						<Col md={6}>
-							<Input value={this.state.title} type='text' placeholder='GAME TITLE' onChange={this.onTitleChanged}/>
+							<Input value={this.state.game.title} type='text' ref='gameTitle' placeholder='GAME TITLE' onChange={this.onTitleChanged} onBlur={AutoSave}/>
 						</Col>
 					</Row>
 					<h3 style={TextStyle.blueHeader}>PLAYERS</h3>
@@ -83,14 +79,14 @@ var GameForm = React.createClass({
 					<h3 style={TextStyle.blueHeader}>DESCRIPTION</h3>
 					<Row>
 						<Col md={8}>
-							<GameDescriptionInput bindableTextProperty='shortDescription' placeholder='Describe your game!' maxLength={255} />
+							<GameDescriptionInput ref='gameDescription' bindableTextProperty='shortDescription' placeholder='Describe your game!' maxLength={255} />
 						</Col>
 					</Row>
 					<hr/>
 					<h3 style={TextStyle.blueHeader}>RULES</h3>
 					<Row>
 						<Col md={8}>
-							<RuleList propertyCollection='rules' listItemPlaceholder = 'Enter a rule' bindableTextProperty='rule' propertyCollection='rules'/>
+							<RuleList ref='rules' propertyCollection='rules' listItemPlaceholder = 'Enter a rule' bindableTextProperty='rule' propertyCollection='rules'/>
 						</Col>
 					</Row>
 					<hr/>
@@ -111,13 +107,13 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.red)}>CANCEL</Button>
+							<Button style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked}>CANCEL</Button>
 						</Col>
 						<Col md={2}>
 							<Button style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked}>SAVE</Button>
 						</Col>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.yellow)}>PREVIEW</Button>
+							<Button style={ButtonStyle.Game.gameButton(Colors.yellow)} onClick={this.onPreviewClicked}>PREVIEW</Button>
 						</Col>
 						<Col md={2}>
 							<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onSubmitClicked}>PUBLISH</Button>
@@ -128,14 +124,12 @@ var GameForm = React.createClass({
 			</div>
 		);
 	},
-	submitGame: function (e) {
-		e.preventDefault();
-		GameAction.publishGameToServer(GameStore.getGame());
+	onGameStateChanged: function () {
+		this.setState({
+			game: GameStore.getGame()
+		});
 	},
 	onTitleChanged: function (e) {
-		this.setState({
-			title: e.target.value
-		});
 		GameAction.updateCurrentGameLocally({
 			propertyName: 'title',
 			propertyValue: e.target.value
@@ -144,8 +138,43 @@ var GameForm = React.createClass({
 	onSaveClicked: function () {
 		GameAction.saveGameToServer();
 	},
+	onPreviewClicked: function () {
+		NavigationAction.navigate({
+			destination: '/game/preview',
+			data: {
+				game: this.state.game
+			}
+		});
+	},
 	onSubmitClicked: function () {
-		GameAction.publishGameToServer();
+		if (this.gameIsValid()) {
+			GameAction.publishGameToServer();
+			GameAction.setHasSelectedGameToEdit(false);
+		}
+	},
+	onCancelClicked () {
+		GameAction.createNewGameLocally();
+		MyGamesAction.deleteGame(this.state.game._id);
+		GameAction.setHasSelectedGameToEdit(false);
+		NavigationAction.navigate({
+			destination: NavigationPaths.discover
+		});
+	},
+	gameIsValid: function () {
+		var game = GameStore.getGame();
+		if (!game.title) {
+			this.refs.gameTitle.refs.input.focus();
+			return false;
+		}
+		if (!game.shortDescription) {
+			this.refs.gameDescription.focusInput();
+			return false;
+		}
+		if (!game.rules || !game.rules.length > 0) {
+			this.refs.rules.focus();
+			return false;
+		}
+		return true;
 	}
 });
 
