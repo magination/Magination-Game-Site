@@ -30,9 +30,10 @@ var GameCreatorActions = {
 			index: data.index
 		});
 	},
-	saveCurrentToPng: function () {
+	saveCurrentToPng: function (data) {
 		Dispatcher.dispatch({
-			actionType: GameCreatorConstants.SAVE_GAMECREATOR_PNG
+			actionType: GameCreatorConstants.SAVE_GAMECREATOR_PNG,
+			filename: data.filename
 		});
 	},
 	saveCurrentToJson: function () {

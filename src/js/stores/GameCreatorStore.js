@@ -75,9 +75,10 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
+		saveGameAsJson();
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_PNG:
-		saveGameAsPng();
+		saveGameAsPng(action.filename);
 		break;
 	}
 });
@@ -111,28 +112,43 @@ function addPieceToCreator (piece) {
 		selectionChanged(quantity);
 	};
 	img.src = piece.url;
-	console.log(GameCreatorStore.getPieces());
 }
 
-function saveGameAsPng () {
+function saveGameAsJson () {
+	var jsonData = JSON.stringify(_fabricCanvas.toJSON());
+	console.log(jsonData);
+}
+
+function saveGameAsPng (filename) {
 	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
 	var blob = b64toBlob(data, 'image/png');
 	var formData = new FormData();
-	formData.append('image', blob, Date.now() + '.png');
+	formData.append('image', blob, filename);
+	formData.append('filename', filename);
+	formData.append('jsonData', JSON.stringify(_fabricCanvas.toJSON()));
+	formData.append('overwrite', true); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
+	console.log(JSON.stringify(_fabricCanvas.toJSON()));
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/images',
+		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects',
 		data: formData,
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
 		contentType: false,
 		processData: false,
-		success: onRequestSuccess
+		success: onRequestSuccess,
+		statusCode: {
+			409: onSavePngConflictResponse
+		}
 	});
 }
 
 function onRequestSuccess (data) {
+	console.log(data);
+}
+
+function onSavePngConflictResponse (data) {
 	console.log(data);
 }
 
