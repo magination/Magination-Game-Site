@@ -110,6 +110,7 @@ function addPieceToCreator (piece) {
 		_fabricCanvas.add(imgInstance);
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
 		selectionChanged(quantity);
+		saveGameAsJson();
 	};
 	img.src = piece.url;
 }
