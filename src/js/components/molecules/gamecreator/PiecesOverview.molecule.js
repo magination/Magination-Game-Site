@@ -16,10 +16,12 @@ var PiecesOverview = React.createClass({
 		};
 	},
 	componentDidMount: function () {
+		GameCreatorStore.addChangeListener(this.onPieceDeleted, GameCreatorConstants.PIECE_DELETED_FROM_CREATOR);
 		GameCreatorStore.addChangeListener(this.onPieceAdded, GameCreatorConstants.ADD_PIECE_TO_CREATOR);
 		GameCreatorStore.addChangeListener(this.onPieceSelected, GameCreatorConstants.PIECE_WAS_SELECTED);
 	},
 	componentWillUnmount: function () {
+		GameCreatorStore.removeChangeListener(this.onPieceDeleted, GameCreatorConstants.PIECE_DELETED_FROM_CREATOR);
 		GameCreatorStore.removeChangeListener(this.onPieceAdded, GameCreatorConstants.ADD_PIECE_TO_CREATOR);
 		GameCreatorStore.removeChangeListener(this.onPieceSelected, GameCreatorConstants.PIECE_WAS_SELECTED);
 	},
@@ -50,6 +52,11 @@ var PiecesOverview = React.createClass({
 		newState.push(piece);
 		this.setState({
 			pieces: newState
+		});
+	},
+	onPieceDeleted: function () {
+		this.setState({
+			pieces: GameCreatorStore.getPieces()
 		});
 	},
 	onPieceSelected: function (index) {
