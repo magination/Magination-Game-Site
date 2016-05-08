@@ -60,6 +60,7 @@ var MyGameListElement = React.createClass({
 	},
 	onPublishClicked: function () {
 		MyGamesAction.publishGame(this.props.game._id);
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
 	},
 	onEditGameClicked: function () {
 		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
@@ -78,9 +79,11 @@ var MyGameListElement = React.createClass({
 	},
 	onUnPublishGameClicked: function () {
 		MyGamesAction.unPublishGame(this.props.game._id);
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
 	},
 	onDeleteGameClicked: function () {
 		MyGamesAction.deleteGame(this.props.game._id);
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
 	}
 });
 
