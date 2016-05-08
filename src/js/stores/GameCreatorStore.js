@@ -85,6 +85,9 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		deleteSelectedPiece();
 		GameCreatorStore.emitChange(GameCreatorConstants.PIECE_DELETED_FROM_CREATOR);
 		break;
+	case GameCreatorConstants.ROTATE_CURRENT_SELECTED_PIECE:
+		rotateSelectedPiece(action.next);
+		break;
 	}
 });
 
@@ -97,6 +100,10 @@ function selectionChanged (index) {
 
 function deleteSelectedPiece () {
 	_fabricCanvas.getActiveObject().remove();
+}
+
+function rotateSelectedPiece (rotateToNext) {
+	console.log(rotateToNext);
 }
 
 function addPieceToCreator (piece) {
@@ -125,7 +132,7 @@ function addPieceToCreator (piece) {
 }
 
 function saveGameAsJson () {
-	var jsonData = JSON.stringify(_fabricCanvas.toJSON());
+	var jsonData = _fabricCanvas.toJSON();
 	var requestAction = null;
 	var url = null;
 	if (_loadedData === null) {
@@ -145,10 +152,12 @@ function saveGameAsJson () {
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
-		contentType: false,
+		dataType: 'json',
+		contentType: 'application/json',
 		processData: false,
 		success: onSaveJsonSuccessResponse
 	});
+	console.log(jsonData);
 }
 
 function saveGameAsPng (filename) {
@@ -169,6 +178,7 @@ function saveGameAsPng (filename) {
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
+		dataType: 'json',
 		contentType: false,
 		processData: false,
 		success: onRequestSuccess,
