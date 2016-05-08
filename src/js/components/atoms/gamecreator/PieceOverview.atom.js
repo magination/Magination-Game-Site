@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Collapse = require('react-bootstrap').Collapse;
+var Button = require('react-bootstrap').Button;
 
 var GameCreatorAction = require('../../../actions/GameCreatorAction');
 
@@ -20,16 +21,24 @@ var PieceOverview = React.createClass({
 			<div onClick={this.onClick} style={imgDivStyle}>
 				<img src={this.props.piece.url} style={imgStyle}/>
 				<Collapse in={this.props.isSelected}>
-					<div>hello</div>
+					<div>
+						<Button onClick={this.onDeleteClick}>X</Button>
+					</div>
 				</Collapse>
 				<hr />
 			</div>
 		);
 	},
 	onClick: function () {
+		var index = (this.props.isSelected) ? -1 : this.props.index;
 		GameCreatorAction.setSelectedObjectIndex({
-			index: this.props.index
+			index: index
 		});
+	},
+	onDeleteClick: function () {
+		if (this.props.isSelected) {
+			GameCreatorAction.deleteCurrentSelectedPiece();
+		}
 	}
 });
 

@@ -15,6 +15,7 @@ var _staticPieces = [
 	]
 ];
 var _fabricCanvas = null;
+var _loadedData = null;
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
@@ -125,20 +126,45 @@ function addPieceToCreator (piece) {
 
 function saveGameAsJson () {
 	var jsonData = JSON.stringify(_fabricCanvas.toJSON());
-	console.log(jsonData);
+	var requestAction = null;
+	var url = null;
+	if (_loadedData === null) {
+		requestAction = 'POST';
+		url = URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects';
+	}
+	else {
+		requestAction = 'PUT';
+		url = URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects/' + _loadedData._id;
+	}
+	$.ajax({
+		type: requestAction,
+		url: url,
+		data: JSON.stringify({
+			json: jsonData
+		}),
+		headers: {
+			'Authorization': LoginStore.getToken()
+		},
+		contentType: false,
+		processData: false,
+		success: onSaveJsonSuccessResponse
+	});
 }
 
 function saveGameAsPng (filename) {
+	if (!_loadedData) {
+		console.log('never saved');
+		return;
+	}
 	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
 	var blob = b64toBlob(data, 'image/png');
 	var formData = new FormData();
 	formData.append('image', blob, filename);
 	formData.append('filename', filename);
-	formData.append('jsonData', JSON.stringify(_fabricCanvas.toJSON()));
 	formData.append('overwrite', 'true'); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
 	$.ajax({
-		type: 'POST',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects',
+		type: 'PUT',
+		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects/' + _loadedData._id + '/image',
 		data: formData,
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -150,6 +176,10 @@ function saveGameAsPng (filename) {
 			409: onSavePngConflictResponse
 		}
 	});
+}
+
+function onSaveJsonSuccessResponse (data) {
+	_loadedData = data;
 }
 
 function onRequestSuccess (data) {
