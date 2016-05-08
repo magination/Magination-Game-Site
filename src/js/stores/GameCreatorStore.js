@@ -80,6 +80,10 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.SAVE_GAMECREATOR_PNG:
 		saveGameAsPng(action.filename);
 		break;
+	case GameCreatorConstants.DELETE_SELECTED_PIECE_FROM_CREATOR:
+		deleteSelectedPiece();
+		GameCreatorStore.emitChange(GameCreatorConstants.PIECE_DELETED_FROM_CREATOR);
+		break;
 	}
 });
 
@@ -88,6 +92,10 @@ function selectionChanged (index) {
 		index = -1;
 	}
 	GameCreatorStore.emitChange(GameCreatorConstants.PIECE_WAS_SELECTED, index);
+}
+
+function deleteSelectedPiece () {
+	_fabricCanvas.getActiveObject().remove();
 }
 
 function addPieceToCreator (piece) {
@@ -105,7 +113,7 @@ function addPieceToCreator (piece) {
 		imgInstance.perPixelTargetFind = true;
 		imgInstance.targetFindTolerance = 4;
 		imgInstance.on('selected', function () {
-			selectionChanged(quantity);
+			selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
 		});
 		_fabricCanvas.add(imgInstance);
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));

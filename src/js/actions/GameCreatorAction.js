@@ -8,6 +8,11 @@ var GameCreatorActions = {
 			piece: data.piece
 		});
 	},
+	deleteCurrentSelectedPiece: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.DELETE_SELECTED_PIECE_FROM_CREATOR
+		});
+	},
 	setStaticPiecesFromServer: function (data) {
 		$.ajax({
 			type: 'GET',

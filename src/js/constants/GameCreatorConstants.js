@@ -8,7 +8,9 @@ var constants = {
 	CLEAR_GAMECREATOR_STORE: 'clear_gamecreator_store',
 	GAMECREATORE_STORE_CLEARED: 'gamecreator_store_cleared',
 	SAVE_GAMECREATOR_JSON: 'save_gamecreator_json',
-	SAVE_GAMECREATOR_PNG: 'save_gamecreator_png'
+	SAVE_GAMECREATOR_PNG: 'save_gamecreator_png',
+	DELETE_SELECTED_PIECE_FROM_CREATOR: 'delete_selected_piece_from_creator',
+	PIECE_DELETED_FROM_CREATOR: 'piece_deleted_from_creator'
 };
 
 module.exports = constants;

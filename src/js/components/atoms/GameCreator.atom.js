@@ -30,10 +30,12 @@ var GameCreator = React.createClass({
 
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.setStaticPiecesFromServer();
+		$(window).keypress(this.handleKeyPress);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.clearStore();
+		$(window).unbind('keypress');
 	},
 	render: function () {
 		var gamecreatorelements = this.state.staticPieces.map(function (piece, index) {
@@ -54,6 +56,11 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	handleKeyPress: function (e) {
+		if (e.keyCode === 127) {
+			GameCreatorAction.deleteCurrentSelectedPiece();
+		}
 	},
 	onGameCreatorStaticPiecesChange: function () {
 		this.setState({
