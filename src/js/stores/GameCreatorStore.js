@@ -127,7 +127,7 @@ function saveGameAsPng (filename) {
 	formData.append('image', blob, filename);
 	formData.append('filename', filename);
 	formData.append('jsonData', JSON.stringify(_fabricCanvas.toJSON()));
-	formData.append('overwrite', true); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
+	formData.append('overwrite', 'true'); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
 	$.ajax({
 		type: 'POST',
 		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects',
@@ -135,7 +135,7 @@ function saveGameAsPng (filename) {
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
-		contentType: 'multipart/form-data',
+		contentType: false,
 		processData: false,
 		success: onRequestSuccess,
 		statusCode: {
