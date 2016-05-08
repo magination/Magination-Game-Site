@@ -30,12 +30,12 @@ var GameCreator = React.createClass({
 
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.setStaticPiecesFromServer();
-		$(window).keypress(this.handleKeyPress);
+		$(window).keyup(this.handleKeyPress);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.clearStore();
-		$(window).unbind('keypress');
+		$(window).unbind('keyup');
 	},
 	render: function () {
 		var gamecreatorelements = this.state.staticPieces.map(function (piece, index) {
@@ -58,8 +58,22 @@ var GameCreator = React.createClass({
 		);
 	},
 	handleKeyPress: function (e) {
-		if (e.keyCode === 127) {
+		switch (e.which) {
+		case 127:
 			GameCreatorAction.deleteCurrentSelectedPiece();
+			break;
+		case 37:
+			GameCreatorAction.rotateCurrentSelectedPiece({
+				next: false
+			});
+			e.preventDefault();
+			break;
+		case 39:
+			GameCreatorAction.rotateCurrentSelectedPiece({
+				next: true
+			});
+			e.preventDefault();
+			break;
 		}
 	},
 	onGameCreatorStaticPiecesChange: function () {

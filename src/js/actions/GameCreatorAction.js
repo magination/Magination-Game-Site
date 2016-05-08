@@ -23,6 +23,12 @@ var GameCreatorActions = {
 			}
 		});
 	},
+	rotateCurrentSelectedPiece: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.ROTATE_CURRENT_SELECTED_PIECE,
+			next: data.next
+		});
+	},
 	setCanvas: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.SET_CANVAS,
@@ -57,7 +63,8 @@ function onGetStaticPiecesSuccessResponse (data) {
 	var pieces = parseFolderStructureToPieces(data);
 	Dispatcher.dispatch({
 		actionType: GameCreatorConstants.SET_STATIC_PIECES,
-		pieces: pieces
+		pieces: pieces,
+		imageFolderStructure: data
 	});
 }
 
