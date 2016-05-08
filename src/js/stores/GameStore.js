@@ -108,6 +108,7 @@ function PublishGameToServer () {
 	});
 };
 function SaveGameToServer () {
+	_game.id = undefined;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
 		url: _game._id ? URLS.api.unpublishedGames + '/' + _game._id : URLS.api.unpublishedGames,
