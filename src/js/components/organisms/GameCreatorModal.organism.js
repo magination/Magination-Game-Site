@@ -12,9 +12,6 @@ var GameCreatorModal = React.createClass({
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
-		this.setState({
-			show: nextProps.show
-		});
 	},
 	render: function () {
 		return (

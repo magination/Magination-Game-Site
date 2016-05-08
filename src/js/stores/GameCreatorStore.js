@@ -1,4 +1,5 @@
-
+var URLS = require('../config/config').urls;
+var LoginStore = require('./LoginStore');
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameCreatorConstants = require('../constants/GameCreatorConstants');
 var EventEmitter = require('events').EventEmitter;
@@ -13,13 +14,15 @@ var _staticPieces = [
 		]
 	]
 ];
-// var _canvasComponent = null;
 var _fabricCanvas = null;
-
-var _rawData = {};
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
+		_pieces = _fabricCanvas.getObjects().map(function (object) {
+			return {
+				url: object.imageUrl
+			};
+		});
 		return _pieces;
 	},
 	getFabricCanvas: function () {
@@ -27,9 +30,6 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	},
 	getStaticPieces: function () {
 		return _staticPieces;
-	},
-	getRawData: function () {
-		return _rawData;
 	},
 	addChangeListener: function (callback, specificEvent) {
 		if (specificEvent) {
@@ -69,6 +69,17 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(action.index));
 		selectionChanged(action.index);
 		break;
+	case GameCreatorConstants.CLEAR_GAMECREATOR_STORE:
+		_fabricCanvas = new fabric.Canvas(action.id);
+		_fabricCanvas.on('selection:cleared', selectionChanged);
+		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
+		break;
+	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
+		saveGameAsJson();
+		break;
+	case GameCreatorConstants.SAVE_GAMECREATOR_PNG:
+		saveGameAsPng(action.filename);
+		break;
 	}
 });
 
@@ -86,7 +97,8 @@ function addPieceToCreator (piece) {
 		var imgInstance = new fabric.Image(img, {});
 		imgInstance.set({
 			left: 200,
-			top: 200
+			top: 200,
+			imageUrl: piece.url
 		});
 		var quantity = _fabricCanvas.getObjects().length;
 		imgInstance.scale(0.20);
@@ -98,8 +110,70 @@ function addPieceToCreator (piece) {
 		_fabricCanvas.add(imgInstance);
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
 		selectionChanged(quantity);
+		saveGameAsJson();
 	};
 	img.src = piece.url;
+}
+
+function saveGameAsJson () {
+	var jsonData = JSON.stringify(_fabricCanvas.toJSON());
+	console.log(jsonData);
+}
+
+function saveGameAsPng (filename) {
+	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
+	var blob = b64toBlob(data, 'image/png');
+	var formData = new FormData();
+	formData.append('image', blob, filename);
+	formData.append('filename', filename);
+	formData.append('jsonData', JSON.stringify(_fabricCanvas.toJSON()));
+	formData.append('overwrite', 'true'); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
+	$.ajax({
+		type: 'POST',
+		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects',
+		data: formData,
+		headers: {
+			'Authorization': LoginStore.getToken()
+		},
+		contentType: false,
+		processData: false,
+		success: onRequestSuccess,
+		statusCode: {
+			409: onSavePngConflictResponse
+		}
+	});
+}
+
+function onRequestSuccess (data) {
+	console.log(data);
+}
+
+function onSavePngConflictResponse (data) {
+	console.log(data);
+}
+
+function b64toBlob (b64Data, contentType, sliceSize) {
+	contentType = contentType || '';
+	sliceSize = sliceSize || 512;
+
+	var byteCharacters = atob(b64Data);
+	var byteArrays = [];
+
+	for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+		var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+		var byteNumbers = new Array(slice.length);
+		for (var i = 0; i < slice.length; i++) {
+			byteNumbers[i] = slice.charCodeAt(i);
+		}
+
+		var byteArray = new Uint8Array(byteNumbers);
+
+		byteArrays.push(byteArray);
+	}
+
+	var blob = new Blob(byteArrays, {type: contentType});
+	return blob;
 }
 
 module.exports = GameCreatorStore;

@@ -16,15 +16,22 @@ var App = React.createClass({
 	},
 	componentDidMount: function () {
 		$.ajaxSetup({
+			timeout: (1000 * 10), /* milliseconds*/
 			error: this.handleDefaultErrorResponses
 		});
 	},
 	/* handle default actions on http response errors here*/
-	handleDefaultErrorResponses: function (data) {
+	handleDefaultErrorResponses: function (data, dataText) {
+		if (dataText === 'timeout') {
+			console.log('TODO should handle timeout');
+		}
 		var status = data.statusCode().status;
 		switch (status) {
 		case 401:
 			console.log('Unauthorized, TODO: should request new token if logged in, if fails log out');
+			break;
+		case 500:
+			console.log('Internal Server Error');
 			break;
 		}
 	},

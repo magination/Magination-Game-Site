@@ -72,6 +72,7 @@ var Menu = React.createClass({
 		if (!NavigationConstants.isLegalDestination(getLoginState().isLoggedIn, destination)) {
 			this.refs.loginModal.open();
 		}
+		window.location.href = '#';
 		NavigationAction.navigate({
 			destination: destination
 		});

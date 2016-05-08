@@ -33,6 +33,7 @@ var GameCreator = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
+		GameCreatorAction.clearStore();
 	},
 	render: function () {
 		var gamecreatorelements = this.state.staticPieces.map(function (piece, index) {
@@ -46,7 +47,7 @@ var GameCreator = React.createClass({
 					{gamecreatorelements}
 				</Col>
 				<Col md={8}>
-					<canvas ref='creatorCanvas' id='fabricCanvas' style={{border: '4px solid blue', borderRadius: '5'}}></canvas>
+					<canvas ref='creatorCanvas' id='fabricCanvas'></canvas>
 				</Col>
 				<Col md={2}>
 					<PiecesOverview />
