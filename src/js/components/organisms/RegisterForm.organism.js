@@ -5,6 +5,7 @@ var URLS = require('../../config/config').urls;
 var Col = require('react-bootstrap').Col;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
+var ButtonStyle = require('../../styles/Buttons');
 
 function isEmail (email) {
 	var regex = /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -40,7 +41,7 @@ var RegisterForm = React.createClass({
 						<Input value={this.state.emailConfirm} bsStyle={this.state.bsStyleEmailConfirm} type='text' placeholder='Confirm your email address' onChange={this.onEmailConfirmEntryChange} hasFeedback/>
 						<Input value={this.state.password} bsStyle={this.state.bsStylePassword} type='password' label='Password' placeholder='Password' onChange={this.onPasswordEntryChange} hasFeedback/>
 						<Input value={this.state.passwordConfirm} bsStyle={this.state.bsStylePasswordConfirm} type='password' placeholder='Confirm Password' onChange={this.onPasswordConfirmEntryChange} hasFeedback/>
-						<Button type='submit'>Register</Button>
+						<Button style={ButtonStyle.MaginationFillParent} type='submit'>Sign up</Button>
 					</form>
 				</Col>
 			</div>
