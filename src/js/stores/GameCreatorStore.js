@@ -5,6 +5,7 @@ var GameCreatorConstants = require('../constants/GameCreatorConstants');
 var EventEmitter = require('events').EventEmitter;
 var _ = require('lodash');
 var CHANGE_EVENT = 'default_creator_event';
+var apiRootUrl = require('../config/config').urls.server.root;
 
 var _pieces = [];
 var _staticPieces = [
@@ -14,6 +15,7 @@ var _staticPieces = [
 		]
 	]
 ];
+var _staticPiecesFolderStructure = {};
 var _fabricCanvas = null;
 var _loadedData = null;
 
@@ -59,6 +61,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameCreatorConstants.SET_STATIC_PIECES:
 		_staticPieces = action.pieces;
+		_staticPiecesFolderStructure = action.imageFolderStructure;
 		GameCreatorStore.emitChange(GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.emitChange(CHANGE_EVENT);
 		break;
@@ -103,7 +106,26 @@ function deleteSelectedPiece () {
 }
 
 function rotateSelectedPiece (rotateToNext) {
-	console.log(rotateToNext);
+	var newSrc = findNextRotationImage(rotateToNext);
+	var newImg = new Image();
+	newImg.crossOrigin = 'Anonymous';
+	newImg.onload = function () {
+		var currentObj = _fabricCanvas.getActiveObject();
+		var oldWidth = currentObj.width;
+		var oldHeight = currentObj.height;
+		currentObj.setElement(newImg);
+		currentObj.setCoords();
+		var widthDiff = (oldWidth - currentObj.width) / 10;
+		var heightDiff = (oldHeight - currentObj.height) / 10;
+		console.log(widthDiff);
+		currentObj.set({
+			left: currentObj.left + widthDiff,
+			top: currentObj.top + heightDiff,
+			imageUrl: newSrc
+		});
+		_fabricCanvas.renderAll();
+	};
+	newImg.src = newSrc;
 }
 
 function addPieceToCreator (piece) {
@@ -157,7 +179,6 @@ function saveGameAsJson () {
 		processData: false,
 		success: onSaveJsonSuccessResponse
 	});
-	console.log(jsonData);
 }
 
 function saveGameAsPng (filename) {
@@ -222,6 +243,43 @@ function b64toBlob (b64Data, contentType, sliceSize) {
 
 	var blob = new Blob(byteArrays, {type: contentType});
 	return blob;
+}
+
+function findNextRotationImage (rotateToNext) {
+	var currentSrc = _fabricCanvas.getActiveObject().imageUrl.replace(apiRootUrl, '');
+	var splittedSrc = currentSrc.split('/');
+	splittedSrc.splice(0, 3);
+	var url = '';
+	_staticPiecesFolderStructure.children.forEach(function (piece) {
+		if (piece.name === splittedSrc[0]) {
+			piece.children.forEach(function (color) {
+				if (color.name === splittedSrc[1]) {
+					color.children.forEach(function (rotation, index) {
+						if (rotation.name === splittedSrc[2]) {
+							if (rotateToNext) {
+								if (index + 1 > color.children.length - 1) {
+									url = color.children[0].path;
+								}
+								else {
+									url = color.children[(index + 1)].path;
+								}
+							}
+							else {
+								if (index - 1 < 0) {
+									url = color.children[color.children.length - 1].path;
+								}
+								else {
+									url = color.children[(index - 1)].path;
+								}
+							}
+						}
+					});
+				}
+			});
+		}
+	});
+	url = apiRootUrl + '' + url;
+	return url;
 }
 
 module.exports = GameCreatorStore;
