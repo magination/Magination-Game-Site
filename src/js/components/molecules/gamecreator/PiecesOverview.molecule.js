@@ -51,6 +51,7 @@ var PiecesOverview = React.createClass({
 		this.setState({
 			pieces: newState
 		});
+		GameCreatorAction.saveCurrentToJson();
 	},
 	onPieceSelected: function (index) {
 		this.setState({
