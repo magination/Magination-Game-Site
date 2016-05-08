@@ -3,8 +3,6 @@ var URLS = require('../../config/config').urls;
 var ImageNumberPair = require('../molecules/creategame/ImageNumberPair.molecule.js');
 var GameStore = require('../../stores/GameStore');
 var GameAction = require('../../actions/GameAction');
-var LoginStore = require('../../stores/LoginStore');
-var LoginAction = require('../../actions/LoginAction');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
@@ -34,11 +32,6 @@ var GameForm = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
-	},
-	componentDidMount: function () {
-		if (!LoginStore.getLoginState().isLoggedIn) {
-			LoginAction.requestLogin();
-		}
 	},
 	render: function () {
 		return (
