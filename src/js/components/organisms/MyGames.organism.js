@@ -18,12 +18,12 @@ var MyGames = React.createClass({
 			<div>
 				<Row>
 					<Col md={8} mdOffset={2}>
-						<Tabs defaultActiveKey={2} id='uncontrolled-tab-example'>
+						<Tabs defaultActiveKey={1}>
 							<Tab eventKey={1} title='Published games'>
-								<MyGameList isPublished={true}/>
+								<MyGameList isPublished={true} hasEditButton={true} hasPublishButton={false}/>
 							</Tab>
 							<Tab eventKey={2} title='Unpublished games'>
-								<MyGameList isPublished={false}/>
+								<MyGameList isPublished={false} hasEditButton={true} hasPublishButton={true}/>
 							</Tab>
 						</Tabs>
 					</Col>

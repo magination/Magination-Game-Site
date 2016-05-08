@@ -3,6 +3,7 @@ var Input = require('react-bootstrap').Input;
 var GameAction = require('../../../actions/GameAction');
 var ValidatorService = require('../../../service/Validator.service.js');
 var GameStore = require('../../../stores/GameStore');
+var AutoSave = require('../../../service/AutoSave.service.js');
 
 var ImageNumberPair = React.createClass({
 	getInitialState () {
@@ -19,7 +20,7 @@ var ImageNumberPair = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Input value={this.state.value} type='number' placeholder={this.props.placeholder} onChange={this.valueChanged} addonBefore={<img width={40} height={20} src={this.props.src}/>}>
+				<Input onBlur={AutoSave} value={this.state.value} type='number' placeholder={this.props.placeholder} onChange={this.valueChanged} addonBefore={<img width={40} height={20} src={this.props.src}/>}>
 				</Input>
 			</div>
 		);

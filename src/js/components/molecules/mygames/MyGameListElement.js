@@ -29,7 +29,7 @@ var MyGameListElement = React.createClass({
 						<img width={200} height={200} src={this.props.game.images[0]} alt='No image' />
 					</Media.Left>
 					<Media.Body>
-						<h3 style={TextStyles.clickableHeader}>
+						<h3>
 							{this.props.game.title}
 						</h3>
 						<h4>
@@ -43,10 +43,12 @@ var MyGameListElement = React.createClass({
 						</div>
 					</Media.Body>
                     <Media.Right>
-						{this.props.isPublished
-							? null
-							: <Button onClick={this.onPublishClicked} style={ButtonStyles.MyGames.myGamesButton(Colors.green)}><strong>Publish</strong></Button>}
-						<Button onClick={this.onEditGameClicked} style={ButtonStyles.MyGames.myGamesButton(Colors.blue)}><strong>Edit</strong></Button>
+						{this.props.hasPublishButton
+							? <Button onClick={this.onPublishClicked} style={ButtonStyles.MyGames.myGamesButton(Colors.green)}><strong>Publish</strong></Button>
+							: null}
+						{this.props.hasEditButton
+							? <Button onClick={this.onEditGameClicked} style={ButtonStyles.MyGames.myGamesButton(Colors.blue)}><strong>Edit</strong></Button>
+							: null}
 						{this.props.isPublished
 							? <Button onClick={this.onUnPublishGameClicked} style={ButtonStyles.MyGames.myGamesButton(Colors.yellow)}><strong>Unpublish</strong></Button>
 							: <Button onClick={this.onDeleteGameClicked} style={ButtonStyles.MyGames.myGamesButton(Colors.red)}><strong>Delete</strong></Button>}
@@ -68,6 +70,7 @@ var MyGameListElement = React.createClass({
 				break;
 			}
 		}
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: true});
 		GameAction.changeGameLocally(game);
 		NavigationAction.navigate({
 			destination: NavigationConstants.PATHS.creategame

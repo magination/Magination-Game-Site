@@ -1,3 +1,6 @@
-/**
- * Created by petteriversen on 08.05.16.
- */
+var GameAction = require('../actions/GameAction');
+
+function autosave () {
+	GameAction.saveGameToServer();
+}
+module.exports = autosave;

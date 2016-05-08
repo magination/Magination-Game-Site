@@ -3,6 +3,7 @@ var LoginStore = require('../../../stores/LoginStore');
 var ContainerStyle = require('../../../styles/Containers');
 var URLS = require('../../../config/config').urls;
 var Button = require('react-bootstrap').Button;
+
 var ButtonStyle = require('../../../styles/Buttons');
 var LoginAction = require('../../../actions/LoginAction');
 
@@ -21,7 +22,7 @@ var Images = React.createClass({
 					<br/>
 					{this.state.imageSrc ? <img ref='preview' style={ContainerStyle.image.uploadImage} src={this.state.imageSrc} alt='your image'/> : null}
 					<input ref='fileInput' type='file' name='image' onChange={this.onSourceChanged}/>
-					<Button style={ButtonStyle.MaginationFillParent} type='submit'>Submit image</Button>
+					{this.state.imageSrc ? <Button style={ButtonStyle.MaginationFillParent} type='submit'>Submit image</Button> : null}
 				</form>
 			</div>
 		);

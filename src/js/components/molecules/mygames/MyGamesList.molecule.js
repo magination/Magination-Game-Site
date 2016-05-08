@@ -12,7 +12,6 @@ var PublishedGameList = React.createClass({
 			games: []
 		};
 	},
-
 	componentDidMount: function () {
 		MyGamesStore.addChangeListener(this.onGameListChange);
 		LoginStore.addChangeListener(this.onLoginChange);
@@ -21,14 +20,13 @@ var PublishedGameList = React.createClass({
 		}
 	},
 	componentWillUnmount: function () {
-		MyGamesStore.clearGameList(this.props.isPublished);
 		MyGamesStore.removeChangeListener(this.onGameListChange);
 	},
 	render: function () {
 		var that = this;
 		var games = this.state.games.map(function (game) {
 			return <div key={game._id}>
-				<MyGameListElement isPublished={that.props.isPublished} game={game}/>
+				<MyGameListElement isPublished={that.props.isPublished} hasEditButton={that.props.hasEditButton} hasPublishButton={that.props.hasPublishButton} game={game}/>
 			</div>;
 		});
 		return (
@@ -40,7 +38,9 @@ var PublishedGameList = React.createClass({
 		);
 	},
 	onGameListChange: function () {
-		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
+		var games = this.props.isPublished
+			? MyGamesStore.getPublishedGames() === null ? [] : MyGamesStore.getPublishedGames()
+			: MyGamesStore.getUnpublishedGames() == null ? [] : MyGamesStore.getUnpublishedGames();
 		this.setState({
 			games: games
 		});

@@ -2,6 +2,7 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var GameAction = require('../../../actions/GameAction');
 var GameStore = require('../../../stores/GameStore');
+var AutoSave = require('../../../service/AutoSave.service.js');
 
 var ImageNumberPair = React.createClass({
 	getInitialState () {
@@ -28,7 +29,7 @@ var ImageNumberPair = React.createClass({
 		return (
 			<div>
 				<input ref='checkbox' type='checkbox' onChange={this.onVisibilityChanged} checked={this.props.checked} /> {this.props.description}
-				{this.state.isShowInput ? <Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} /> : null}
+				{this.state.isShowInput ? <Input onBlur={AutoSave} onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} /> : null}
 			</div>
 		);
 	},

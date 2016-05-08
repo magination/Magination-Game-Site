@@ -29,7 +29,7 @@ var GameDescription = React.createClass({
 		return (
 			<div>
 				<h5>Describe your game briefly.</h5>
-				<Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} />
+				<Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} ref='descriptionInput' type='textarea' placeholder={this.props.placeholder} />
 				<h5 style={TextStyle.alignRight}>{this.state.lengthString} characters</h5>
 			</div>
 		);
@@ -55,6 +55,9 @@ var GameDescription = React.createClass({
 				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty]
 			});
 		}
+	},
+	focusInput: function () {
+		this.refs.descriptionInput.refs.input.focus();
 	}
 });
 module.exports = GameDescription;

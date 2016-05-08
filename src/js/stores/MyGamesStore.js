@@ -6,8 +6,8 @@ var CHANGE_EVENT = 'change-myGames';
 var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 
-var _publishedGames = [];
-var _unpublishedGames = [];
+var _publishedGames = null;
+var _unpublishedGames = null;
 
 var MyGamesStore = _.extend({}, EventEmitter.prototype, {
 	getPublishedGames: function () {
@@ -29,8 +29,8 @@ var MyGamesStore = _.extend({}, EventEmitter.prototype, {
 		this.emit(changeEvent);
 	},
 	clearGameList: function (isPublished) {
-		if (isPublished) _publishedGames = [];
-		else _unpublishedGames = [];
+		if (isPublished) _publishedGames = null;
+		else _unpublishedGames = null;
 	},
 	removeChangeListener: function (callback, changeEvent) {
 		if (!changeEvent) {
@@ -67,7 +67,6 @@ function publishGameToServer (gameId) {
 	$.ajax({
 		type: 'POST',
 		url: URLS.api.unpublishedGames + '/' + gameId + '/publish',
-		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
@@ -87,7 +86,6 @@ function unPublishGameToServer (gameId) {
 	$.ajax({
 		type: 'POST',
 		url: URLS.api.games + '/' + gameId + '/unpublish',
-		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
@@ -104,11 +102,9 @@ function unPublishGameToServer (gameId) {
 }
 
 function deleteGameFromServer (gameId) {
-	var game = findGameById(gameId, true);
 	$.ajax({
 		type: 'DELETE',
 		url: URLS.api.unpublishedGames + '/' + gameId,
-		data: JSON.stringify(game),
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
@@ -116,7 +112,7 @@ function deleteGameFromServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			200: function (data) {
-				var game = findGameById(data._id);
+				var game = findGameById(data._id, false);
 				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
 				MyGamesStore.emitChange();
 			}
