@@ -44,6 +44,7 @@ var LoginAction = {
 	},
 	logoutSuccess: function () {
 		Cookie.remove(LoginConstants.COOKIE_TOKEN);
+		Cookie.remove(LoginConstants.COOKIE_REFRESH_TOKEN);
 		Dispatcher.dispatch({
 			actionType: LoginConstants.LOGOUT_SUCCESS
 		});
