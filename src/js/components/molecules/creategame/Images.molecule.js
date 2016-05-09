@@ -21,7 +21,7 @@ var Images = React.createClass({
 		return (
 			<div>
 				<Col md={12}>
-					<h5>Add images to describe your game. Drag and drop images to swap places.</h5>
+					<h5>Add images to describe your game. Drag an image on top of another one to swap places.</h5>
 				</Col>
 				<DragAndDropImageList/>
 				<Col md={12}>

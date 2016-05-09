@@ -40,12 +40,10 @@ var TextStyles = {
 		verticalAlign: 'middle'
 	},
 	glyphIcon: {
-		deleteListItem: {
-			color: Colors.red,
-			position: 'absolute',
-			top: '50%',
-			left: '50%',
-			transform: 'translateX(-50%) translateY(-50%)'
+		alignCenterBlue: {
+			textAlign: 'center',
+			verticalAlign: 'center',
+			color: Colors.blue
 		}
 	}
 };

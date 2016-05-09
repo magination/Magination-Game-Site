@@ -37,9 +37,6 @@ var SelectGameToEdit = React.createClass({
 						<h5 style={{width: '100%', textAlign: 'center'}}>Select a game below to continue editing it</h5>
 						<MyGameList isPublished={false} hasEditButton={true} hasPublishButton={false}/>
 					</Modal.Body>
-					<Modal.Footer>
-						<Button onClick={this.close}>Hide</Button>
-					</Modal.Footer>
 				</Modal>
 			</div>
 		);

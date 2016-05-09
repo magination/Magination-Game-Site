@@ -25,18 +25,24 @@ var ButtonStyles = {
 		color: 'white',
 		width: '100%',
 		borderWidth: '0',
-		padding: '10'
+		padding: '10',
+		marginTop: '10'
+	},
+	MaginationSettingsButton: {
+		customColor: function (customColor) {
+			return {
+				backgroundColor: !customColor ? Colors.blueDark : customColor,
+				color: 'white',
+				width: '100%',
+				borderWidth: '0',
+				padding: '10',
+				marginTop: '10'
+			};
+		}
 	},
 	MaginationSubmit: {
 		backgroundColor: Colors.blueDark,
 		color: 'white'
-	},
-	MaginationRule: {
-		backgroundColor: Colors.blueDark,
-		color: 'white',
-		width: '50%',
-		marginLeft: '5',
-		padding: '10'
 	},
 	MyGames: {
 		myGamesButton: function (customColor) {

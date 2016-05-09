@@ -18,7 +18,7 @@ var SelectImage = React.createClass({
 		return (
 			<div>
 				<Button onClick={this.onAddImageClicked} type='button' style={ButtonStyle.MaginationFillParent}>+ Add image</Button>
-				<Modal ref='modal' show={this.state.showModal} onEnter={this.onEnter} onHide={this.onHide}>
+				<Modal ref='modal' show={this.state.showModal} onEnter={this.onEnter} onHide={this.onHide} dialogClassName='selectimage-modal'>
 					<Modal.Body>
 						<Tabs defaultActiveKey={1}>
 							<Tab eventKey={1} title='Your images'>
