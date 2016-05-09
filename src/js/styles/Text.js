@@ -17,6 +17,9 @@ var TextStyles = {
 	blue: {
 		color: Colors.blue
 	},
+	red: {
+		color: Colors.red
+	},
 	RatingStarWhite: {
 		color: 'white',
 		fontSize: '30'
@@ -32,11 +35,17 @@ var TextStyles = {
 	alignRight: {
 		textAlign: 'right'
 	},
+	alignCenter: {
+		textAlign: 'center',
+		verticalAlign: 'middle'
+	},
 	glyphIcon: {
-		alignCenterBlue: {
-			textAlign: 'center',
-			verticalAlign: 'center',
-			color: Colors.blue
+		deleteListItem: {
+			color: Colors.red,
+			position: 'absolute',
+			top: '50%',
+			left: '50%',
+			transform: 'translateX(-50%) translateY(-50%)'
 		}
 	}
 };

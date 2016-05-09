@@ -42,11 +42,11 @@ var GameForm = React.createClass({
 					<h1 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
 					<hr/>
 					<Row>
-						<Col md={6}>
-							<Input value={this.state.game.title} type='text' ref='gameTitle' placeholder='GAME TITLE' onChange={this.onTitleChanged} onBlur={AutoSave}/>
+						<Col md={4}>
+							<Input value={this.state.game.title} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={AutoSave}/>
 						</Col>
 					</Row>
-					<h3 style={TextStyle.blueHeader}>PLAYERS</h3>
+					<h3>PLAYERS</h3>
 					<Row>
 						<Col md={3}>
 							<ImageNumberPair value={this.state.game ? this.state.game.numberOfPlayers : 0} src={URLS.img.peopleBlue} placeholder='No. players' bindingProperty='numberOfPlayers'/>
@@ -108,7 +108,7 @@ var GameForm = React.createClass({
 							<Button style={ButtonStyle.Game.gameButton(Colors.yellow)} onClick={this.onPreviewClicked}>PREVIEW</Button>
 						</Col>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onSubmitClicked}>PUBLISH</Button>
+							<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked}>PUBLISH</Button>
 						</Col>
 					</Row>
 					<hr/>
@@ -139,10 +139,9 @@ var GameForm = React.createClass({
 			}
 		});
 	},
-	onSubmitClicked: function () {
+	onPublishClicked: function () {
 		if (this.gameIsValid()) {
 			GameAction.publishGameToServer();
-			GameAction.setHasSelectedGameToEdit(false);
 		}
 	},
 	onCancelClicked () {

@@ -23,7 +23,9 @@ var ButtonStyles = {
 	MaginationFillParent: {
 		backgroundColor: Colors.blueDark,
 		color: 'white',
-		width: '100%'
+		width: '100%',
+		borderWidth: '0',
+		padding: '10'
 	},
 	MaginationSubmit: {
 		backgroundColor: Colors.blueDark,
@@ -33,7 +35,8 @@ var ButtonStyles = {
 		backgroundColor: Colors.blueDark,
 		color: 'white',
 		width: '50%',
-		marginLeft: '5'
+		marginLeft: '5',
+		padding: '10'
 	},
 	MyGames: {
 		myGamesButton: function (customColor) {

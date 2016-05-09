@@ -21,20 +21,21 @@ var Images = React.createClass({
 					{this.state.description}
 					<br/>
 					{this.state.imageSrc ? <img ref='preview' style={ContainerStyle.image.uploadImage} src={this.state.imageSrc} alt='your image'/> : null}
-					<input ref='fileInput' type='file' name='image' onChange={this.onSourceChanged}/>
+					<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSelectImageClicked}>Select image to upload</Button>
+					<input style={{height: '0'}} ref='fileInput' type='file' name='image' onChange={this.onSourceChanged} />
 					{this.state.imageSrc ? <Button style={ButtonStyle.MaginationFillParent} type='submit'>Submit image</Button> : null}
 				</form>
 			</div>
 		);
-	},
-	onUploadClicked: function () {
-		this.refs.fileInput.click();
 	},
 	onSourceChanged: function (e) {
 		this.setState({
 			description: e.target.files[0] ? 'Image preview' : 'Select an image to upload',
 			imageSrc: URL.createObjectURL(e.target.files[0])
 		});
+	},
+	onSelectImageClicked: function () {
+		this.refs.fileInput.click();
 	},
 	onFormSubmitted: function (e) {
 		e.preventDefault();
@@ -55,6 +56,10 @@ var Images = React.createClass({
 	},
 	onRequestSuccess: function () {
 		LoginAction.updateLoginProfile();
+		this.setState({
+			description: 'Image submitted.',
+			imageSrc: null
+		});
 	},
 	onRequestError: function (data) {
 	}

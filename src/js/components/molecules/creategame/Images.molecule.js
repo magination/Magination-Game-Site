@@ -2,8 +2,7 @@ var React = require('react');
 var GameStore = require('../../../stores/GameStore');
 var SelectImage = require('./SelectImage.molecule.js');
 var GameCreatorModal = require('../../organisms/GameCreatorModal.organism');
-var SelectedImageList = require('./SelectedImageList.molecule');
-var Row = require('react-bootstrap').Row;
+var DragAndDropImageList = require('./DragAndDropImageList');
 var Col = require('react-bootstrap').Col;
 
 var Images = React.createClass({
@@ -21,17 +20,19 @@ var Images = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Row>
-					<SelectedImageList images = {this.state.images} />
-				</Row>
-				<Row>
-					<Col md={6}>
-						<SelectImage ref='selectImageModal'/>
-					</Col>
-					<Col md={6}>
-						<GameCreatorModal ref='createImageModal'/>
-					</Col>
-				</Row>
+				<Col md={12}>
+					<h5>Add images to describe your game. Drag and drop images to swap places.</h5>
+				</Col>
+				<DragAndDropImageList/>
+				<Col md={12}>
+					{/* Force new line */}
+				</Col>
+				<Col md={4}>
+					<SelectImage ref='selectImageModal'/>
+				</Col>
+				<Col md={4}>
+					<GameCreatorModal ref='createImageModal'/>
+				</Col>
 			</div>
 		);
 	},
