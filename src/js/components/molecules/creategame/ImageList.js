@@ -74,7 +74,9 @@ var ImageList = React.createClass({
 			},
 			contentType: 'application/json',
 			dataType: 'json',
-			success: this.onRequestSuccess,
+			statusCode: {
+				204: this.onRequestSuccess
+			},
 			error: this.onRequestError
 		});
 	},
@@ -86,7 +88,7 @@ var ImageList = React.createClass({
 	},
 	onRequestError: function (data) {
 		this.setState({
-			description: 'Image not deleted, please try again.'
+			description: 'Could not delete image.'
 		});
 	}
 });
