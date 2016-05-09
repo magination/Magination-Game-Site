@@ -3,6 +3,7 @@ var LoginConstants = require('../constants/LoginConstants');
 var EventEmitter = require('events').EventEmitter;
 var _ = require('lodash');
 var CHANGE_EVENT = 'change-login';
+var Cookie = require('react-cookie');
 
 var _loginState = {
 	isLoggedIn: false,
@@ -15,6 +16,9 @@ var _lastUnsuccessfulRequestOptions = [];
 var LoginStore = _.extend({}, EventEmitter.prototype, {
 	getToken: function () {
 		return _token;
+	},
+	getRefreshTokenCookie: function () {
+		return Cookie.load(LoginConstants.COOKIE_REFRESH_TOKEN);
 	},
 	getLoginState: function () {
 		return _loginState;

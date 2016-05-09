@@ -48,6 +48,10 @@ var LoginForm = React.createClass({
 	},
 	onLoginStateChanged: function () {
 		if (LoginStore.getLoginState().requestedLogin) {
+			if (LoginStore.getRefreshTokenCookie()) {
+				LoginAction.checkAutoLogin();
+				return;
+			}
 			this.open();
 		}
 	},
