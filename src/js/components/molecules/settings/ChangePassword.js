@@ -8,7 +8,7 @@ var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
 var Col = require('react-bootstrap').Col;
 var ButtonStyles = require('../../../styles/Buttons');
-// var ContainerStyle = require('../../../styles/Containers');
+var Colors = require('../../../styles/Colors');
 
 var ChangePassword = React.createClass({
 	getInitialState () {
@@ -33,7 +33,7 @@ var ChangePassword = React.createClass({
 									<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordCHanged}/>
 									<Input value={this.state.newPassword} label='New password' placeholder='Enter new password' type='password' onChange={this.onNewPasswordChanged}/>
 									<Input value={this.state.confirmedPassword} bsStyle={this.state.bsStyleConfirmedPassword} label='Confirm new password' placeholder='Confirm new password' type='password' onChange={this.onConfirmedPasswordChanged}/>
-									<Button style={ButtonStyles.Magination} ref='submitButton' type='submit'><strong>Save changes</strong></Button>
+									<Button style={ButtonStyles.MaginationSettingsButton.customColor(Colors.green)} ref='submitButton' type='submit'><strong>Save changes</strong></Button>
 								</form>
 							</div>
 						</Well>

@@ -9,6 +9,8 @@ var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
 var ValidatorService = require('../../../service/Validator.service');
 var ButtonStyles = require('../../../styles/Buttons');
+var Colors = require('../../../styles/Colors');
+
 // var ContainerStyle = require('../../../styles/Containers');
 
 var ChangePassword = React.createClass({
@@ -32,7 +34,7 @@ var ChangePassword = React.createClass({
 								<form className='form-settings' onSubmit={this.storeChanges}>
 									<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordChanged}/>
 									<Input value={this.state.newEmail} bsStyle={this.state.bsStyleEmail} label='New email' type='text' placeholder='Enter new email address' onChange={this.onNewEmailEntryChange} hasFeedback/>
-									<Button style={ButtonStyles.Magination} ref='submitButton' type='submit'><strong>Save changes</strong></Button>
+									<Button style={ButtonStyles.MaginationSettingsButton.customColor(Colors.green)} ref='submitButton' type='submit'><strong>Save changes</strong></Button>
 								</form>
 							</div>
 						</Well>
