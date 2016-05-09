@@ -20,6 +20,7 @@ var MyGamesAction = require('../../actions/MyGamesAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
 var AutoSave = require('../../service/AutoSave.service.js');
+var FeedbackAction = require('../../actions/FeedbackAction');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
@@ -32,20 +33,20 @@ var GameForm = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
 	},
 	render: function () {
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
 					<h1 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
-					<h5>Upload your game idea!</h5>
 					<hr/>
 					<Row>
-						<Col md={6}>
-							<Input value={this.state.game.title} type='text' ref='gameTitle' placeholder='GAME TITLE' onChange={this.onTitleChanged} onBlur={AutoSave}/>
+						<Col md={4}>
+							<Input value={this.state.game.title} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={AutoSave}/>
 						</Col>
 					</Row>
-					<h3 style={TextStyle.blueHeader}>PLAYERS</h3>
+					<h3>PLAYERS</h3>
 					<Row>
 						<Col md={3}>
 							<ImageNumberPair value={this.state.game ? this.state.game.numberOfPlayers : 0} src={URLS.img.peopleBlue} placeholder='No. players' bindingProperty='numberOfPlayers'/>
@@ -92,9 +93,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<h3 style={TextStyle.blueHeader}>IMAGES</h3>
 					<Row>
-						<Col md={8}>
-							<Images/>
-						</Col>
+						<Images/>
 					</Row>
 					<br/>
 					<hr/>
@@ -109,7 +108,7 @@ var GameForm = React.createClass({
 							<Button style={ButtonStyle.Game.gameButton(Colors.yellow)} onClick={this.onPreviewClicked}>PREVIEW</Button>
 						</Col>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onSubmitClicked}>PUBLISH</Button>
+							<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked}>PUBLISH</Button>
 						</Col>
 					</Row>
 					<hr/>
@@ -129,6 +128,7 @@ var GameForm = React.createClass({
 		});
 	},
 	onSaveClicked: function () {
+		FeedbackAction.displaySuccessMessage({header: 'Success', message: 'Game saved'});
 		GameAction.saveGameToServer();
 	},
 	onPreviewClicked: function () {
@@ -139,10 +139,9 @@ var GameForm = React.createClass({
 			}
 		});
 	},
-	onSubmitClicked: function () {
+	onPublishClicked: function () {
 		if (this.gameIsValid()) {
 			GameAction.publishGameToServer();
-			GameAction.setHasSelectedGameToEdit(false);
 		}
 	},
 	onCancelClicked () {
@@ -152,6 +151,9 @@ var GameForm = React.createClass({
 		NavigationAction.navigate({
 			destination: NavigationPaths.discover
 		});
+	},
+	onSelectGameToEditClicked: function () {
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
 	},
 	gameIsValid: function () {
 		var game = GameStore.getGame();

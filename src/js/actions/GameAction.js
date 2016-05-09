@@ -73,6 +73,13 @@ var GameAction = {
 			hasSelectedGameToEdit: data.hasSelectedGameToEdit
 		});
 	},
+	changeImagePrioritizationLocally: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameConstants.CHANGE_IMAGE_PRIORITIZATION_LOCALLY,
+			oldPosition: data.oldPosition,
+			newPosition: data.newPosition
+		});
+	},
 	createNewGameLocally: function () {
 		Dispatcher.dispatch({
 			actionType: GameConstants.CHANGE_GAME_LOCALLY,

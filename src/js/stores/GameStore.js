@@ -77,8 +77,19 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		_hasSelectedGameToEdit = action.hasSelectedGameToEdit;
 		GameStore.emitChange();
 		break;
+	case GameConstants.CHANGE_IMAGE_PRIORITIZATION_LOCALLY:
+		ChangeImagePrioritization(action);
+		GameStore.emitChange();
+		break;
 	}
 });
+function ChangeImagePrioritization (action) {
+	var images = _game.images;
+	let selectedItem = images[action.oldPosition];
+	images[action.oldPosition] = images[action.newPosition];
+	images[action.newPosition] = selectedItem;
+	_game.images = images;
+};
 function AddImageToLocalGame (action) {
 	_game.images.push(action.image);
 	SaveGameToServer();
@@ -88,21 +99,20 @@ function RemoveImageFromLocalGame (action) {
 	SaveGameToServer();
 }
 function PublishGameToServer () {
-	_game.id = undefined;
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.games,
-		data: JSON.stringify(_game),
+		url: URLS.api.unpublishedGames + '/' + _game._id + '/publish',
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
 		contentType: 'application/json',
 		dataType: 'json',
 		statusCode: {
-			201: onGamePostedSuccess,
-			401: onPostGameUnauthorizedResponse,
-			500: function () {
-				alert('Server Error: see console');
+			200: function (data) {
+				onGamePostedSuccess(data);
+			},
+			401: function (data) {
+				onPostGameUnauthorizedResponse(data);
 			}
 		}
 	});
@@ -209,11 +219,10 @@ var onGamePostedSuccess = function (data) {
 	NavigationAction.navigate({
 		destination: '/game/' + data._id
 	});
+	_hasSelectedGameToEdit = false;
 };
 var onSaveGameResponse = function (data) {
-	if (!_game._id) {
-		_game._id = data._id;
-	}
+	_game._id = data._id;
 };
 var onPostGameUnauthorizedResponse = function () {
 	FeedbackAction.displayWarningMessage({

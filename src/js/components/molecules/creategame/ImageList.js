@@ -2,7 +2,7 @@ var React = require('react');
 var ContainerStyle = require('../../../styles/Containers');
 var GameAction = require('../../../actions/GameAction');
 var LoginStore = require('../../../stores/LoginStore');
-
+var Image = require('react-bootstrap').Image;
 var ImageList = React.createClass({
 	getInitialState: function () {
 		return {
@@ -23,7 +23,7 @@ var ImageList = React.createClass({
 			var imageUrl = this.state.images[currentIteration];
 			images.push(
 				<span key={i} style={styles[i % 3]}>
-					<img style={ContainerStyle.image.imageList} src={imageUrl} onClick={this.onImageSelected.bind(this, currentIteration)}/>
+					<Image style={ContainerStyle.image.imageList} src={imageUrl} onClick={this.onImageSelected.bind(this, currentIteration)}/>
 				</span>
 			);
 		}
