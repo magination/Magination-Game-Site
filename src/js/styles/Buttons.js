@@ -28,6 +28,16 @@ var ButtonStyles = {
 		padding: '10',
 		marginTop: '10'
 	},
+	MaginationFillParentCustom: function (customColor) {
+		return {
+			backgroundColor: !customColor ? Colors.blueDark : customColor,
+			color: 'white',
+			width: '100%',
+			borderWidth: '0',
+			padding: '10',
+			marginTop: '10'
+		};
+	},
 	MaginationSettingsButton: {
 		customColor: function (customColor) {
 			return {

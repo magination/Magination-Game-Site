@@ -113,6 +113,12 @@ var ContainerStyles = {
 			border: '2px solid ' + Colors.blueDark,
 			borderRadius: '5'
 		},
+		outerBorderLess: {
+			height: '0',
+			paddingBottom: '50%',
+			width: '100%',
+			position: 'relative'
+		},
 		inner: {
 			width: '100%',
 			height: '100%',

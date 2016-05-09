@@ -3,27 +3,34 @@ var LoginStore = require('../../../stores/LoginStore');
 var ContainerStyle = require('../../../styles/Containers');
 var URLS = require('../../../config/config').urls;
 var Button = require('react-bootstrap').Button;
-
 var ButtonStyle = require('../../../styles/Buttons');
 var LoginAction = require('../../../actions/LoginAction');
+var Colors = require('../../../styles/Colors');
 
 var Images = React.createClass({
 	getInitialState: function () {
 		return {
 			description: 'Select an image to upload',
-			imageSrc: null
+			imageSrc: null,
+			selectButtonText: 'Click here to upload an image'
 		};
 	},
 	render: function () {
 		return (
-			<div style={ContainerStyle.paddingLess}>
+			<div style={{padding: '10'}}>
 				<form onSubmit={this.onFormSubmitted}>
-					{this.state.description}
-					<br/>
-					{this.state.imageSrc ? <img ref='preview' style={ContainerStyle.image.uploadImage} src={this.state.imageSrc} alt='your image'/> : null}
-					<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSelectImageClicked}>Select image to upload</Button>
+					{this.state.imageSrc
+						? 	<div>
+								<div style={ContainerStyle.imageList.outerBorderLess}>
+									<div style={ContainerStyle.imageList.inner}>
+										<img ref='preview' style={ContainerStyle.imageList.img} src={this.state.imageSrc} alt='your image'/>
+									</div>
+								</div>
+							</div>
+						: 	null}
+					{this.state.imageSrc ? <Button style={ButtonStyle.MaginationFillParentCustom(Colors.green)} type='submit'>Submit image</Button> : null}
+					<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSelectImageClicked}>{this.state.selectButtonText}</Button>
 					<input style={{height: '0'}} ref='fileInput' type='file' name='image' onChange={this.onSourceChanged} />
-					{this.state.imageSrc ? <Button style={ButtonStyle.MaginationFillParent} type='submit'>Submit image</Button> : null}
 				</form>
 			</div>
 		);
@@ -31,7 +38,8 @@ var Images = React.createClass({
 	onSourceChanged: function (e) {
 		this.setState({
 			description: e.target.files[0] ? 'Image preview' : 'Select an image to upload',
-			imageSrc: URL.createObjectURL(e.target.files[0])
+			imageSrc: URL.createObjectURL(e.target.files[0]),
+			selectButtonText: 'Select another image to upload'
 		});
 	},
 	onSelectImageClicked: function () {
@@ -58,7 +66,8 @@ var Images = React.createClass({
 		LoginAction.updateLoginProfile();
 		this.setState({
 			description: 'Image submitted.',
-			imageSrc: null
+			imageSrc: null,
+			selectButtonText: 'Click here to upload an image'
 		});
 	},
 	onRequestError: function (data) {
