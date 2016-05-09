@@ -20,6 +20,7 @@ var MyGamesAction = require('../../actions/MyGamesAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
 var AutoSave = require('../../service/AutoSave.service.js');
+var FeedbackAction = require('../../actions/FeedbackAction');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
@@ -32,13 +33,13 @@ var GameForm = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
 	},
 	render: function () {
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
 					<h1 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
-					<h5>Upload your game idea!</h5>
 					<hr/>
 					<Row>
 						<Col md={6}>
@@ -92,9 +93,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<h3 style={TextStyle.blueHeader}>IMAGES</h3>
 					<Row>
-						<Col md={8}>
-							<Images/>
-						</Col>
+						<Images/>
 					</Row>
 					<br/>
 					<hr/>
@@ -129,6 +128,7 @@ var GameForm = React.createClass({
 		});
 	},
 	onSaveClicked: function () {
+		FeedbackAction.displaySuccessMessage({header: 'Success', message: 'Game saved'});
 		GameAction.saveGameToServer();
 	},
 	onPreviewClicked: function () {
@@ -152,6 +152,9 @@ var GameForm = React.createClass({
 		NavigationAction.navigate({
 			destination: NavigationPaths.discover
 		});
+	},
+	onSelectGameToEditClicked: function () {
+		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
 	},
 	gameIsValid: function () {
 		var game = GameStore.getGame();
