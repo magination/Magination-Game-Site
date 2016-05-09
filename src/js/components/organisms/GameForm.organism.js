@@ -165,10 +165,6 @@ var GameForm = React.createClass({
 			this.refs.gameDescription.focusInput();
 			return false;
 		}
-		if (!game.rules || !game.rules.length > 0) {
-			this.refs.rules.focus();
-			return false;
-		}
 		return true;
 	}
 });
