@@ -3,6 +3,7 @@ var React = require('react');
 var NavigationAction = require('./actions/NavigationAction');
 var LoginAction = require('./actions/LoginAction');
 var LoginStore = require('./stores/LoginStore');// eslint-disable-line no-unused-vars
+var URLS = require('./config/config').urls;
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
@@ -16,27 +17,24 @@ var App = React.createClass({
 	},
 	componentDidMount: function () {
 		$.ajaxSetup({
-			timeout: (1000 * 10), /* milliseconds*/
-			error: this.handleDefaultErrorResponses
+			timeout: (1000 * 10) /* milliseconds*/
 		});
-	},
-	/* handle default actions on http response errors here*/
-	handleDefaultErrorResponses: function (data, dataText) {
-		if (dataText === 'timeout') {
-			console.log('TODO should handle timeout');
-		}
-		var status = data.statusCode().status;
-		switch (status) {
-		case 401:
-			console.log('Unauthorized, TODO: should request new token if logged in, if fails log out');
-			break;
-		case 500:
-			console.log('Internal Server Error');
-			break;
-		}
-	},
-	onUnauthorizedDefaultResponse: function () {
-
+		$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+			originalOptions._error = originalOptions.error;
+			// overwrite error handler for current request
+			options.error = function (_jqXHR, _textStatus, _errorThrown) {
+				if (_jqXHR.status === 401) {
+					if (originalOptions.url === URLS.api.refresh) {
+						return;
+					}
+					if (LoginStore.getLoginState().isLoggedIn) {
+						console.log('401 while state indicated logged in status. Assuming token has expired; fetching new token');
+						LoginAction.appendLastUnsuccessfulRequestOptions(originalOptions);
+					}
+					LoginAction.checkAutoLogin();
+				}
+			};
+		});
 	},
 	componentWillReceiveProps: function (nextProps) {
 		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.

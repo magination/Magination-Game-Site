@@ -9,6 +9,7 @@ var config = {
 			users: restApiRoot + 'users',
 			games: restApiRoot + 'games',
 			login: restApiRoot + 'login',
+			refresh: restApiRoot + 'login/refresh',
 			confirmation: restApiRoot + 'confirmation',
 			resendEmail: restApiRoot + 'resendVerificationEmail',
 			forgotpassword: restApiRoot + 'login' + '/forgot',

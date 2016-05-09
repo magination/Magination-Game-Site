@@ -10,6 +10,7 @@ var _loginState = {
 };
 var _profile = null;
 var _token = null;
+var _lastUnsuccessfulRequestOptions = [];
 
 var LoginStore = _.extend({}, EventEmitter.prototype, {
 	getToken: function () {
@@ -42,6 +43,7 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 	case LoginConstants.LOGOUT_SUCCESS:
 		_loginState.isLoggedIn = false;
 		_loginState.requestedLogin = false;
+		_profile = null;
 		_token = null;
 		LoginStore.emitChange();
 		break;
@@ -49,11 +51,18 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 		_profile = action.profile;
 		_loginState.isLoggedIn = true;
 		_loginState.requestedLogin = false;
+		_lastUnsuccessfulRequestOptions.forEach(function (options) {
+			$.ajax(options);
+		});
+		_lastUnsuccessfulRequestOptions = [];
 		LoginStore.emitChange();
 		break;
 	case LoginConstants.LOGIN_REQUEST:
 		_loginState.requestedLogin = true;
 		LoginStore.emitChange();
+		break;
+	case LoginConstants.APPEND_LAST_REQUEST_OPTIONS:
+		_lastUnsuccessfulRequestOptions.push(action.lastRequestOptions);
 		break;
 	}
 });

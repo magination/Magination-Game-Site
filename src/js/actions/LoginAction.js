@@ -2,6 +2,7 @@ var Dispatcher = require('../dispatchers/Dispatcher');
 var LoginConstants = require('../constants/LoginConstants');
 var FeedbackAction = require('./FeedbackAction');
 var LoginStore = require('../stores/LoginStore');
+var ParserService = require('../service/Parser.service');
 var Cookie = require('react-cookie');
 var URLS = require('../config/config').urls;
 
@@ -14,18 +15,27 @@ var LoginAction = {
 			actionType: LoginConstants.LOGIN_REQUEST
 		});
 	},
+	appendLastUnsuccessfulRequestOptions: function (data) {
+		Dispatcher.dispatch({
+			actionType: LoginConstants.APPEND_LAST_REQUEST_OPTIONS,
+			lastRequestOptions: data.lastRequestOptions
+		});
+	},
 	checkAutoLogin: function () {
 		LoginService.checkAutoLogin();
 	},
 	loginSuccess: function (data) {
-		if (data.token === undefined || data.token === null || data.tokenExpires === undefined || data.tokenExpires === null) {
-			alert('Weird error with cookie');
+		if (!data.token || !data.refreshToken) {
+			console.log('Error: missing token or refreshtoken, stop login');
 			// loginError();
 			return;
 		}
-		var d = new Date(data.tokenExpires);
-		Cookie.save(LoginConstants.COOKIE_TOKEN, data.token, {expires: d, path: '/'});
-		Cookie.save(LoginConstants.COOKIE_ID, data.id, {expires: d, path: '/'});
+		var token = ParserService.decodeJWT(data.token);
+		var refreshToken = ParserService.decodeJWT(data.refreshToken);
+		var tokenExpiration = new Date(token.claims.exp * 1000);
+		var refreshTokenExpiration = new Date(refreshToken.claims.exp * 1000);
+		Cookie.save(LoginConstants.COOKIE_TOKEN, data.token, {expires: tokenExpiration, path: '/'});
+		Cookie.save(LoginConstants.COOKIE_REFRESH_TOKEN, data.refreshToken, {expires: refreshTokenExpiration, path: '/'});
 
 		Dispatcher.dispatch({
 			actionType: LoginConstants.LOGIN_SUCCESS,
@@ -66,6 +76,7 @@ function onLoginUnauthorizedResponse (data) {
 		header: 'Wrong credentials!',
 		message: 'The username/password combination is not recognized'
 	});
+	LoginAction.logoutSuccess();
 };
 function onLoginNotFoundResponse (data) {
 	FeedbackAction.displayErrorMessage({
@@ -85,12 +96,12 @@ function onGetUserSuccessResponse (data) {
 function onLoginSuccessResponse (data) {
 	LoginAction.loginSuccess({
 		token: data.token,
-		tokenExpires: data.expiresIn,
-		id: data.id
+		refreshToken: data.refreshToken
 	});
+	var token = ParserService.decodeJWT(data.token);
 	$.ajax({
 		type: 'GET',
-		url: URLS.api.users + '/' + data.id,
+		url: URLS.api.users + '/' + token.claims.id,
 		dataType: 'json',
 		headers: {
 			'Authorization': data.token
@@ -128,15 +139,15 @@ var LoginService = {
 		});
 	},
 	checkAutoLogin: function () {
-		var token = Cookie.load(LoginConstants.COOKIE_TOKEN);
-		if (token) {
-			this.doLoginWithToken(token);
+		var refreshToken = Cookie.load(LoginConstants.COOKIE_REFRESH_TOKEN);
+		if (refreshToken) {
+			this.doLoginWithToken(refreshToken);
 		}
 	},
 	doLoginWithToken: function (token) {
 		$.ajax({
 			type: 'GET',
-			url: URLS.api.login + '/refresh',
+			url: URLS.api.refresh,
 			headers: {
 				'Authorization': token
 			},
