@@ -65,12 +65,12 @@ var SelectGameToEdit = React.createClass({
 	},
 	onMyGamesStateChanged: function () {
 		this.setState({
-			showModal: (MyGamesStore.getUnpublishedGames().length > 0 && !GameStore.hasSelectedGameToEdit())
+			showModal: (MyGamesStore.getUnpublishedGames() && MyGamesStore.getUnpublishedGames().length > 0 && !GameStore.hasSelectedGameToEdit())
 		});
 	},
 	onGamesStateChanged: function () {
 		this.setState({
-			showModal: (MyGamesStore.getUnpublishedGames().length > 0 && !GameStore.hasSelectedGameToEdit())
+			showModal: (MyGamesStore.getUnpublishedGames() && MyGamesStore.getUnpublishedGames().length > 0 && !GameStore.hasSelectedGameToEdit())
 		});
 	}
 });
