@@ -5,6 +5,7 @@ var LoginAction = require('../../actions/LoginAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
 var NavigationConstants = require('../../constants/NavigationConstants');
+var Parser = require('../../service/Parser.service');
 
 var NavigationPaths = NavigationConstants.PATHS;
 
@@ -109,6 +110,11 @@ var Menu = React.createClass({
 			destination: '/mygames'
 		});
 	},
+	onModerateClicked: function () {
+		NavigationAction.navigate({
+			destination: '/moderator'
+		});
+	},
 	makeNavigationStatefulElement: function () {
 		var navigationStateElement;
 		if (this.state.isLoggedIn && getProfile() !== null) {
@@ -118,6 +124,9 @@ var Menu = React.createClass({
 						<MenuItem eventKey={'profile'}><Glyphicon glyph='user'/> My Profile</MenuItem>
 						<MenuItem onClick={this.onMyGamesClicked}eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
 						<MenuItem divider />
+						{this.isModeratorPermission
+							? <MenuItem onClick={this.onModerateClicked}eventKey={'settings'}><Glyphicon glyph='flag'/> Moderate</MenuItem>
+							: null}
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />
 						<MenuItem href='#' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>
@@ -132,6 +141,11 @@ var Menu = React.createClass({
 				</Nav>;
 		}
 		return navigationStateElement;
+	},
+	isModeratorPermission: function () {
+		var token = LoginStore.getToken();
+		var decodedToken = Parser.decodeJWT(token);
+		return decodedToken && decodedToken.claims.privileges > 0;
 	}
 });
 

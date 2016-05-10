@@ -202,6 +202,12 @@ var ContainerStyles = {
 			borderRadius: '0',
 			padding: '5'
 		}
+	},
+	moderatorPage: {
+		reportListElementContainer: {
+			border: '1px solid ' + Colors.gray,
+			marginTop: '10'
+		}
 	}
 };
 module.exports = ContainerStyles;
