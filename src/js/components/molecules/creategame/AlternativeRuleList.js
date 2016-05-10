@@ -40,7 +40,7 @@ var AlternativeRuleList = React.createClass({
 		return (
 			<div>
 				{list}
-				<Row><Col md={6}><Button onClick={this.onAddItemClicked} style={ButtonStyle.MaginationFillParent}>+ Add rule</Button></Col></Row>
+				<Row><Col md={6}><Button onClick={this.onAddItemClicked} style={ButtonStyle.MaginationFillParent}>+ ADD RULE</Button></Col></Row>
 			</div>
 		);
 	},
