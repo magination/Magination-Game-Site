@@ -256,6 +256,9 @@ function b64toBlob (b64Data, contentType, sliceSize) {
 function findNextRotationImage (rotateToNext) {
 	var currentSrc = _fabricCanvas.getActiveObject().imageUrl.replace(apiRootUrl, '');
 	var splittedSrc = currentSrc.split('/');
+	if (currentSrc.indexOf('\\') > -1) {
+		splittedSrc = currentSrc.split('\\');
+	}
 	splittedSrc.splice(0, 3);
 	var url = '';
 	_staticPiecesFolderStructure.children.forEach(function (piece) {
@@ -266,18 +269,18 @@ function findNextRotationImage (rotateToNext) {
 						if (rotation.name === splittedSrc[2]) {
 							if (rotateToNext) {
 								if (index + 1 > color.children.length - 1) {
-									url = color.children[0].path.replace('\\', '/');
+									url = color.children[0].path;
 								}
 								else {
-									url = color.children[(index + 1)].replace('\\', '/');
+									url = color.children[(index + 1)].path;
 								}
 							}
 							else {
 								if (index - 1 < 0) {
-									url = color.children[color.children.length - 1].replace('\\', '/');
+									url = color.children[color.children.length - 1].path;
 								}
 								else {
-									url = color.children[(index - 1)].replace('\\', '/');
+									url = color.children[(index - 1)].path;
 								}
 							}
 						}
