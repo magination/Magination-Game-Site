@@ -13,7 +13,9 @@ var constants = {
 	PIECE_DELETED_FROM_CREATOR: 'piece_deleted_from_creator',
 	ROTATE_CURRENT_SELECTED_PIECE: 'rotate_current_selected_piece',
 	CHANGE_FREEDRAW_STATE: 'change_freedraw_state',
-	FREEDRAW_STATE_CHANGED: 'freedraw_state_changed'
+	FREEDRAW_STATE_CHANGED: 'freedraw_state_changed',
+	SET_PENCIL_OPTIONS: 'set_pencil_options',
+	PENCIL_OPTIONS_CHANGED: 'pencil_options_changed'
 };
 
 module.exports = constants;

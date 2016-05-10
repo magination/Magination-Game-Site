@@ -28,6 +28,12 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 		});
 		return _pieces;
 	},
+	getPencilOptions: function () {
+		return {
+			size: _fabricCanvas.freeDrawingBrush.width,
+			color: _fabricCanvas.freeDrawingBrush.color
+		};
+	},
 	getFabricCanvas: function () {
 		return _fabricCanvas;
 	},
@@ -95,12 +101,25 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.CHANGE_FREEDRAW_STATE:
 		changeFreedrawState();
 		break;
+	case GameCreatorConstants.SET_PENCIL_OPTIONS:
+		setPencilOptions(action.options);
+		break;
 	}
 });
 
 function changeFreedrawState () {
 	_fabricCanvas.isDrawingMode = !_fabricCanvas.isDrawingMode;
 	GameCreatorStore.emitChange(GameCreatorConstants.FREEDRAW_STATE_CHANGED, _fabricCanvas.isDrawingMode);
+}
+
+function setPencilOptions (options) {
+	if (options['size'] > 0) {
+		_fabricCanvas.freeDrawingBrush.width = options['size'];
+	}
+	if (options['color']) {
+		_fabricCanvas.freeDrawingBrush.color = options['color'];
+	}
+	GameCreatorStore.emitChange(GameCreatorConstants.PENCIL_OPTIONS_CHANGED);
 }
 
 function selectionChanged (index) {
