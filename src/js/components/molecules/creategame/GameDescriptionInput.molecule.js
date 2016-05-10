@@ -36,9 +36,6 @@ var GameDescription = React.createClass({
 	},
 	onTextChanged: function (e) {
 		if (e.target.value.length > this.props.maxLength) return;
-		this.setState({
-			lengthString: e.target.value.length + '/' + this.props.maxLength
-		});
 		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindableTextProperty,
 			propertyValue: e.target.value
