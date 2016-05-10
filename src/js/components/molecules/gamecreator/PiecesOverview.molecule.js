@@ -6,6 +6,7 @@ var GameCreatorConstants = require('../../../constants/GameCreatorConstants');
 var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
 var PieceOverview = require('../../atoms/gamecreator/PieceOverview.atom');
+var ButtonStyle = require('../../../styles/Buttons');
 
 var PiecesOverview = React.createClass({
 	getInitialState: function () {
@@ -28,17 +29,22 @@ var PiecesOverview = React.createClass({
 	render: function () {
 		var that = this;
 		var pieces = this.state.pieces.map(function (piece, index) {
+			var isSelected = (index === that.state.currentSelectedIndex);
 			return (
-				<div key={piece.url + '' + index}>
-					<PieceOverview piece={piece} index={index} isSelected={(index === that.state.currentSelectedIndex)}/>
+				<div id={'pieceelement' + index} key={piece.url + '' + index}>
+					<PieceOverview piece={piece} index={index} isSelected={isSelected}/>
 				</div>
 			);
 		});
 		return (
-			<div>
-				{pieces}
-				<Input type='text' value={this.state.filenameValue} placeholder='Image filename' onChange={this.onFilenameChange}/>
-				<Button onClick={this.onSavePngClick}>Save as png</Button>
+			<div style={{margin: 'auto', height: '800px'}}>
+				<div style={{height: '80%', overflowY: 'scroll'}}>
+					{pieces}
+				</div>
+				<div style={{height: '20%'}}>
+					<Input type='text' value={this.state.filenameValue} placeholder='Image filename' onChange={this.onFilenameChange}/>
+					<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSavePngClick}><strong>Save as png</strong></Button>
+				</div>
 			</div>
 		);
 	},
@@ -63,6 +69,7 @@ var PiecesOverview = React.createClass({
 		this.setState({
 			currentSelectedIndex: index
 		});
+		window.location.href = '#pieceelement' + index;
 	},
 	onSavePngClick: function () {
 		GameCreatorAction.saveCurrentToPng({

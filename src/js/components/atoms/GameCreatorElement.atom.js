@@ -1,21 +1,31 @@
 var React = require('react');
-
 var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var Popover = require('react-bootstrap').Popover;
 var Glyphicon = require('react-bootstrap').Glyphicon;
-var Button = require('react-bootstrap').Button;
+// var TextStyles = require('../../styles/Text');
+var Color = require('../../styles/Colors');
 
 var GameCreatorAction = require('../../actions/GameCreatorAction');
 
 var imgStyle = {
 	maxHeight: '100%',
-	maxWidth: '100%'
+	maxWidth: '100%',
+	padding: '10px'
 };
 var imgDivStyle = {
+	position: 'relative',
 	textAlign: 'center',
-	marginTop: '20%',
+	marginTop: '10%',
 	height: '100%',
-	width: '100%'
+	width: '80%',
+	border: '1px solid ' + Color.blue,
+	borderRadius: '5'
+};
+var chevronDivStyle = {
+	position: 'absolute',
+	top: '0px',
+	right: '0px',
+	height: '100%'
 };
 
 var GameCreatorElement = React.createClass({
@@ -36,18 +46,22 @@ var GameCreatorElement = React.createClass({
 		var that = this;
 		var images = this.props.piece.map(function (color, index) {
 			return (
-				<div key={color[0].url + '' + index}><img width={100} height={62} onClick={that.onImageClick.bind(that, color[0].url)} src={color[0].url}/></div>
+				<div key={color[0].url + '' + index}><img width={100} height={65} onClick={that.onImageClick.bind(that, color[0].url)} src={color[0].url}/></div>
 			);
 		});
 		var Overlay = <Popover id='chooseImgVariation'>{images}</Popover>;
 		return (
 			<div>
 				<div style={imgDivStyle} onClick={this.onPieceClick}>
-					<img width={100} height={62} src={this.state.selectedImage} alt='' style={imgStyle}/>
+					<div style={{width: '90%'}}>
+						<img src={this.state.selectedImage} alt='' style={imgStyle}/>
+					</div>
+					<div style={chevronDivStyle} onClick={function (e) { e.stopPropagation(); }}>
+						<OverlayTrigger trigger='click' rootClose placement='right' overlay={Overlay}>
+								<p style={{color: Color.blue, lineHeight: '65px', fontSize: '20px'}}><Glyphicon glyph='chevron-right'/></p>
+						</OverlayTrigger>
+					</div>
 				</div>
-				<OverlayTrigger trigger='click' rootClose placement='right' overlay={Overlay}>
-						<Button><Glyphicon glyph='chevron-right'/></Button>
-				</OverlayTrigger>
 			</div>
 		);
 	},

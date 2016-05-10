@@ -23,6 +23,11 @@ var GameCreatorActions = {
 			}
 		});
 	},
+	changeFreeDrawState: function () {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.CHANGE_FREEDRAW_STATE
+		});
+	},
 	rotateCurrentSelectedPiece: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.ROTATE_CURRENT_SELECTED_PIECE,

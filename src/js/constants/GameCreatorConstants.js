@@ -11,7 +11,9 @@ var constants = {
 	SAVE_GAMECREATOR_PNG: 'save_gamecreator_png',
 	DELETE_SELECTED_PIECE_FROM_CREATOR: 'delete_selected_piece_from_creator',
 	PIECE_DELETED_FROM_CREATOR: 'piece_deleted_from_creator',
-	ROTATE_CURRENT_SELECTED_PIECE: 'rotate_current_selected_piece'
+	ROTATE_CURRENT_SELECTED_PIECE: 'rotate_current_selected_piece',
+	CHANGE_FREEDRAW_STATE: 'change_freedraw_state',
+	FREEDRAW_STATE_CHANGED: 'freedraw_state_changed'
 };
 
 module.exports = constants;
