@@ -15,9 +15,9 @@ var imgStyle = {
 var imgDivStyle = {
 	position: 'relative',
 	textAlign: 'center',
-	marginTop: '10%',
+	marginTop: '20px',
 	height: '100%',
-	width: '80%',
+	width: '100%%',
 	border: '1px solid ' + Color.blue,
 	borderRadius: '5'
 };
@@ -53,7 +53,7 @@ var GameCreatorElement = React.createClass({
 		return (
 			<div>
 				<div style={imgDivStyle} onClick={this.onPieceClick}>
-					<div style={{width: '90%'}}>
+					<div style={{width: '80%'}}>
 						<img src={this.state.selectedImage} alt='' style={imgStyle}/>
 					</div>
 					<div style={chevronDivStyle} onClick={function (e) { e.stopPropagation(); }}>

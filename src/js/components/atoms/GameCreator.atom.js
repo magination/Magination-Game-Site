@@ -60,7 +60,9 @@ var GameCreator = React.createClass({
 			<div ref='canvasParent' style={{height: height}}>
 				<Col md={2}>
 					{gamecreatorelements}
-					<div style={(!this.state.isPencilToggled) ? {backgroundColor: 'white'} : {backgroundColor: Color.blue}} onClick={this.onPencilClick}><Glyphicon style={(!this.state.isPencilToggled) ? {color: Color.blue} : {color: 'white'}} glyph='pencil'/></div>
+					<Col md={12} style={(!this.state.isPencilToggled) ? {marginTop: '20px', height: '80px', textAlign: 'center', border: ('1px solid ' + Color.blue), backgroundColor: 'white', borderRadius: '5'} : {marginTop: '20px', height: '80px', textAlign: 'center', border: ('1px solid ' + Color.blue), backgroundColor: Color.blue, borderRadius: '5'}} onClick={this.onPencilClick}>
+						<Glyphicon style={(!this.state.isPencilToggled) ? {marginTop: '20px', fontSize: '40px', color: Color.blue} : {marginTop: '20px', fontSize: '40px', color: 'white'}} glyph='pencil'/>
+					</Col>
 				</Col>
 				<Col md={8}>
 					<canvas ref='creatorCanvas' id='fabricCanvas'></canvas>
@@ -149,6 +151,11 @@ var GameCreator = React.createClass({
 			break;
 		}
 	},
+	onFilenameChange: function (e) {
+		this.setState({
+			filenameValue: e.target.value
+		});
+	},
 	onGameCreatorFreedrawStateChanged: function (isFreedraw) {
 		this.setState({
 			isPencilToggled: isFreedraw
@@ -157,6 +164,11 @@ var GameCreator = React.createClass({
 	onGameCreatorStaticPiecesChange: function () {
 		this.setState({
 			staticPieces: GameCreatorStore.getStaticPieces()
+		});
+	},
+	onSavePngClick: function () {
+		GameCreatorAction.saveCurrentToPng({
+			filename: this.state.filenameValue
 		});
 	},
 	onDeleteClick: function () {
