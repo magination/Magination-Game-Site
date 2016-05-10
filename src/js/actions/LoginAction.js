@@ -81,8 +81,8 @@ function onLoginUnauthorizedResponse (data) {
 };
 function onLoginNotFoundResponse (data) {
 	FeedbackAction.displayErrorMessage({
-		header: 'No connection!',
-		message: 'It seems you do not have a connection to the login server, are you sure you are connected to the internet?'
+		header: 'User does not exist!',
+		message: 'The user you tried to log in with does not exist'
 	});
 };
 function onGetUserUnauthorizedResponse (data) {

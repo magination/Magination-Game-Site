@@ -70,7 +70,8 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		_fabricCanvas.on('selection:cleared', selectionChanged);
 		break;
 	case GameCreatorConstants.SET_SELECTED_INDEX:
-		_fabricCanvas.setActiveObject(_fabricCanvas.item(action.index));
+		if (action.index < 0) _fabricCanvas.deactivateAll().renderAll();
+		else _fabricCanvas.setActiveObject(_fabricCanvas.item(action.index));
 		selectionChanged(action.index);
 		break;
 	case GameCreatorConstants.CLEAR_GAMECREATOR_STORE:
@@ -91,8 +92,16 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.ROTATE_CURRENT_SELECTED_PIECE:
 		rotateSelectedPiece(action.next);
 		break;
+	case GameCreatorConstants.CHANGE_FREEDRAW_STATE:
+		changeFreedrawState();
+		break;
 	}
 });
+
+function changeFreedrawState () {
+	_fabricCanvas.isDrawingMode = !_fabricCanvas.isDrawingMode;
+	GameCreatorStore.emitChange(GameCreatorConstants.FREEDRAW_STATE_CHANGED, _fabricCanvas.isDrawingMode);
+}
 
 function selectionChanged (index) {
 	if (index === undefined) {
@@ -117,7 +126,6 @@ function rotateSelectedPiece (rotateToNext) {
 		currentObj.setCoords();
 		var widthDiff = (oldWidth - currentObj.width) / 10;
 		var heightDiff = (oldHeight - currentObj.height) / 10;
-		console.log(widthDiff);
 		currentObj.set({
 			left: currentObj.left + widthDiff,
 			top: currentObj.top + heightDiff,

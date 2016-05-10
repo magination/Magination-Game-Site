@@ -2,7 +2,7 @@ var React = require('react');
 
 var Collapse = require('react-bootstrap').Collapse;
 var Button = require('react-bootstrap').Button;
-
+var Color = require('../../../styles/Colors');
 var GameCreatorAction = require('../../../actions/GameCreatorAction');
 
 var imgStyle = {
@@ -14,17 +14,27 @@ var imgStyle = {
 var imgDivStyle = {
 	textAlign: 'center'
 };
+var innerCollapseDivStyle = {
+	padding: '10px',
+	paddingTop: '20px',
+	paddingBottom: '0px'
+};
 
 var PieceOverview = React.createClass({
 	render: function () {
 		return (
 			<div onClick={this.onClick} style={imgDivStyle}>
 				<img src={this.props.piece.url} style={imgStyle}/>
-				<Collapse in={this.props.isSelected}>
-					<div>
-						<Button onClick={this.onDeleteClick}>X</Button>
-					</div>
-				</Collapse>
+				<div style={innerCollapseDivStyle}>
+					<Collapse in={this.props.isSelected}>
+						<div>
+							<Button></Button>
+						</div>
+						<div>
+							<Button style={{backgroundColor: Color.redLight, width: '100%'}} onClick={this.onDeleteClick}><strong style={{color: 'white'}}>Delete</strong></Button>
+						</div>
+					</Collapse>
+				</div>
 				<hr />
 			</div>
 		);
