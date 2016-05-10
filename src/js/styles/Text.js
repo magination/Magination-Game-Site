@@ -45,6 +45,13 @@ var TextStyles = {
 			verticalAlign: 'center',
 			color: Colors.blue
 		}
+	},
+	gameView: {
+		paddingLessHeader: {
+			margin: '0',
+			padding: '0',
+			color: Colors.blueDark
+		}
 	}
 };
 
