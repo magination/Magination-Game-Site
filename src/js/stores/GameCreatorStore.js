@@ -255,6 +255,7 @@ function b64toBlob (b64Data, contentType, sliceSize) {
 
 function findNextRotationImage (rotateToNext) {
 	var currentSrc = _fabricCanvas.getActiveObject().imageUrl.replace(apiRootUrl, '');
+	currentSrc = currentSrc.replace('\\', '/');
 	var splittedSrc = currentSrc.split('/');
 	splittedSrc.splice(0, 3);
 	var url = '';
