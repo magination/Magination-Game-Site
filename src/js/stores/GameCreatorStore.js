@@ -1,5 +1,7 @@
 var URLS = require('../config/config').urls;
 var LoginStore = require('./LoginStore');
+var LoginAction = require('../actions/LoginAction');
+var GameAction = require('../actions/GameAction');
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameCreatorConstants = require('../constants/GameCreatorConstants');
 var EventEmitter = require('events').EventEmitter;
@@ -241,7 +243,10 @@ function onSaveJsonSuccessResponse (data) {
 }
 
 function onRequestSuccess (data) {
-	console.log(data);
+	LoginAction.updateLoginProfile();
+	GameAction.addImageToLocalGame({
+		image: data.image
+	});
 }
 
 function onSavePngConflictResponse (data) {
