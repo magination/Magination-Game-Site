@@ -132,29 +132,40 @@ function selectionChanged (index) {
 }
 
 function deleteSelectedPiece () {
-	_fabricCanvas.getActiveObject().remove();
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (object.get('active')) {
+			object.remove();
+			deleteSelectedPiece();
+		}
+	});
 }
 
 function rotateSelectedPiece (rotateToNext) {
-	var newSrc = findNextRotationImage(rotateToNext);
-	var newImg = new Image();
-	newImg.crossOrigin = 'Anonymous';
-	newImg.onload = function () {
-		var currentObj = _fabricCanvas.getActiveObject();
-		var oldWidth = currentObj.width;
-		var oldHeight = currentObj.height;
-		currentObj.setElement(newImg);
-		currentObj.setCoords();
-		var widthDiff = (oldWidth - currentObj.width) / 10;
-		var heightDiff = (oldHeight - currentObj.height) / 10;
-		currentObj.set({
-			left: currentObj.left + widthDiff,
-			top: currentObj.top + heightDiff,
-			imageUrl: newSrc
-		});
-		_fabricCanvas.renderAll();
-	};
-	newImg.src = newSrc;
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (object.get('active')) {
+			if (object.imageUrl) {
+				var newSrc = findNextRotationImage(rotateToNext, object);
+				var newImg = new Image();
+				newImg.crossOrigin = 'Anonymous';
+				newImg.onload = function () {
+					var currentObj = object;
+					var oldWidth = currentObj.width;
+					var oldHeight = currentObj.height;
+					currentObj.setElement(newImg);
+					currentObj.setCoords();
+					var widthDiff = (oldWidth - currentObj.width) / 10;
+					var heightDiff = (oldHeight - currentObj.height) / 10;
+					currentObj.set({
+						left: currentObj.left + widthDiff,
+						top: currentObj.top + heightDiff,
+						imageUrl: newSrc
+					});
+					_fabricCanvas.renderAll();
+				};
+				newImg.src = newSrc;
+			}
+		}
+	});
 }
 
 function addPieceToCreator (piece) {
@@ -277,8 +288,8 @@ function b64toBlob (b64Data, contentType, sliceSize) {
 	return blob;
 }
 
-function findNextRotationImage (rotateToNext) {
-	var currentSrc = _fabricCanvas.getActiveObject().imageUrl.replace(apiRootUrl, '');
+function findNextRotationImage (rotateToNext, object) {
+	var currentSrc = object.imageUrl.replace(apiRootUrl, '');
 	var splittedSrc = currentSrc.split('/');
 	if (currentSrc.indexOf('\\') > -1) {
 		splittedSrc = currentSrc.split('\\');
