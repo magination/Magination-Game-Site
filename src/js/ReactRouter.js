@@ -24,7 +24,7 @@ var ForgotPassword = require('./components/organisms/ForgotPassword.organism');
 var MyGames = require('./components/organisms/MyGames.organism');
 var ConfirmForgotPassword = require('./components/organisms/ConfirmForgotPassword.organism');
 var PATHS = require('./constants/NavigationConstants').PATHS;
-
+var Moderator = require('./components/organisms/ModeratorPage.organism');
 var ReactRouter = React.createClass({
 	render: function () {
 		return (
@@ -43,6 +43,7 @@ var ReactRouter = React.createClass({
 						<Route path='/settings' component={SettingsForm}/>
 						<Route path={PATHS.forgotpassword} component={ForgotPassword}/>
 						<Route path={PATHS.confirmforgotpassword} component={ConfirmForgotPassword}/>
+						<Route path='/moderator' component={Moderator}/>
 						<Route path='*' component={BrowseGames} />
 					</Route>
 				</Router>
