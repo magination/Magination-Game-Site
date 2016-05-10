@@ -20,6 +20,7 @@ var MyGamesAction = require('../../actions/MyGamesAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
 var AutoSave = require('../../service/AutoSave.service.js');
+var ButtonWithTooltip = require('../atoms/ButtonWithTooltip');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
@@ -107,7 +108,7 @@ var GameForm = React.createClass({
 							<Button style={ButtonStyle.Game.gameButton(Colors.yellow)} onClick={this.onPreviewClicked}>PREVIEW</Button>
 						</Col>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked}>PUBLISH</Button>
+							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked} tooltip='Publish your game for everyone to see!' buttonText='PUBLISH'/>
 						</Col>
 					</Row>
 					<hr/>
