@@ -223,6 +223,7 @@ var onGamePostedSuccess = function (data) {
 };
 var onSaveGameResponse = function (data) {
 	_game._id = data._id;
+	FeedbackAction.displaySuccessMessage({header: 'Success', message: 'Game saved'});
 };
 var onPostGameUnauthorizedResponse = function () {
 	FeedbackAction.displayWarningMessage({

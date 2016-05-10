@@ -20,7 +20,6 @@ var MyGamesAction = require('../../actions/MyGamesAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
 var AutoSave = require('../../service/AutoSave.service.js');
-var FeedbackAction = require('../../actions/FeedbackAction');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
@@ -128,7 +127,6 @@ var GameForm = React.createClass({
 		});
 	},
 	onSaveClicked: function () {
-		FeedbackAction.displaySuccessMessage({header: 'Success', message: 'Game saved'});
 		GameAction.saveGameToServer();
 	},
 	onPreviewClicked: function () {
