@@ -19,7 +19,7 @@ var Collapse = require('react-bootstrap').Collapse;
 var ShareGame = require('../molecules/game/ShareGame.molecule');
 var TextStyles = require('../../styles/Text');
 var ButtonStyles = require('../../styles/Buttons');
-
+var Report = require('../molecules/report/Report.molecule');
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
@@ -121,6 +121,12 @@ var Game = React.createClass({
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 				<Reviews id={this.state.game._id} reviews={this.state.game.reviews} offset={offset} leftWidth={leftWidth} rightWidth={rightWidth}/>
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
+				<Row>
+					<Col md={leftWidth} mdOffset={offset}/>
+					<Col md={rightWidth}>
+						<Report reportType={'game'} reportId={getLastUrlId()}/>
+					</Col>
+				</Row>
 			</div>
 		);
 	},

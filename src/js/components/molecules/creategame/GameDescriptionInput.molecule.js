@@ -3,6 +3,7 @@ var Input = require('react-bootstrap').Input;
 var GameAction = require('../../../actions/GameAction');
 var GameStore = require('../../../stores/GameStore');
 var TextStyle = require('../../../styles/Text');
+var AutoSave = require('../../../service/AutoSave.service.js');
 
 var GameDescription = React.createClass({
 	getInitialState () {
@@ -29,16 +30,13 @@ var GameDescription = React.createClass({
 		return (
 			<div>
 				<h5>Describe your game briefly.</h5>
-				<Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} ref='descriptionInput' type='textarea' placeholder={this.props.placeholder} />
+				<Input onChange={this.onTextChanged} onBlur={AutoSave} value={this.state.bindableTextProperty} ref='descriptionInput' type='textarea' placeholder={this.props.placeholder} />
 				<h5 style={TextStyle.alignRight}>{this.state.lengthString} characters</h5>
 			</div>
 		);
 	},
 	onTextChanged: function (e) {
 		if (e.target.value.length > this.props.maxLength) return;
-		this.setState({
-			lengthString: e.target.value.length + '/' + this.props.maxLength
-		});
 		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindableTextProperty,
 			propertyValue: e.target.value
@@ -52,7 +50,8 @@ var GameDescription = React.createClass({
 		}
 		else {
 			this.setState({
-				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty]
+				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty],
+				lengthString: GameStore.getGame()[this.props.bindableTextProperty].length + '/' + this.props.maxLength
 			});
 		}
 	},

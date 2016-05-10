@@ -92,6 +92,29 @@ var ButtonStyles = {
 		borderWidth: '0',
 		borderRadius: '10',
 		backgroundColor: Colors.blueDark
+	},
+	report: {
+		color: 'white',
+		width: '100%',
+		paddingTop: '10',
+		paddingBottom: '10',
+		borderWidth: '0',
+		height: '50',
+		backgroundColor: Colors.redDark
+	},
+	submit: {
+		color: 'white',
+		paddingTop: '10',
+		paddingBottom: '10',
+		borderWidth: '0',
+		backgroundColor: Colors.greenDark
+	},
+	cancel: {
+		color: 'white',
+		paddingTop: '10',
+		paddingBottom: '10',
+		borderWidth: '0',
+		backgroundColor: Colors.yellowDark
 	}
 };
 
