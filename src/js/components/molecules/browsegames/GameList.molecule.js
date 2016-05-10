@@ -1,5 +1,5 @@
 var React = require('react');
-
+var Col = require('react-bootstrap').Col;
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 // var Game = require('./Game.molecule');
 var GameListElement = require('./GameListElement.molecule');
@@ -26,9 +26,12 @@ var GameList = React.createClass({
 	},
 	render: function () {
 		var that = this;
-		var games = this.state.games.map(function (game) {
+		console.log(this.state.games.length);
+		var games = this.state.games.map(function (game, i) {
 			return <div key={game._id}>
 				<GameListElement game={game} onGameClick={that.navigateToGame}/>
+				{console.log(i < that.state.games.length)}
+				<Col md={12}>{i < (that.state.games.length - 1) ? <hr/> : null}</Col>
 			</div>;
 		});
 		return (

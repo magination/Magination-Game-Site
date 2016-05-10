@@ -13,8 +13,7 @@ var ButtonStyles = {
 		backgroundColor: Colors.blueDark,
 		color: 'white',
 		width: '100%',
-		height: '50',
-		marginTop: '40'
+		height: '50'
 	},
 	RatingStar: {
 		color: Colors.blue,
@@ -27,6 +26,16 @@ var ButtonStyles = {
 		borderWidth: '0',
 		padding: '10',
 		marginTop: '10'
+	},
+	MaginationFillParentCustom: function (customColor) {
+		return {
+			backgroundColor: !customColor ? Colors.blueDark : customColor,
+			color: 'white',
+			width: '100%',
+			borderWidth: '0',
+			padding: '10',
+			marginTop: '10'
+		};
 	},
 	MaginationSettingsButton: {
 		customColor: function (customColor) {

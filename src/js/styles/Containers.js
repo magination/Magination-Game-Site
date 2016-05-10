@@ -105,6 +105,38 @@ var ContainerStyles = {
 		padding: '0'
 	},
 	imageList: {
+		aspectOneToOne: {
+			outer: {
+				height: '0',
+				paddingBottom: '100%',
+				width: '100%',
+				position: 'relative',
+				border: '2px solid ' + Colors.blueDark,
+				borderRadius: '5'
+			},
+			outerBorderLess: {
+				height: '0',
+				paddingBottom: '100%',
+				width: '100%',
+				position: 'relative'
+			},
+			inner: {
+				width: '100%',
+				height: '100%',
+				position: 'absolute',
+				top: '0',
+				left: '0'
+			},
+			img: {
+				maxHeight: '100%',
+				maxWidth: '100%',
+				padding: '10',
+				position: 'absolute',
+				top: '50%',
+				left: '50%',
+				transform: 'translateX(-50%) translateY(-50%)'
+			}
+		},
 		outer: {
 			height: '0',
 			paddingBottom: '50%',
@@ -112,6 +144,12 @@ var ContainerStyles = {
 			position: 'relative',
 			border: '2px solid ' + Colors.blueDark,
 			borderRadius: '5'
+		},
+		outerBorderLess: {
+			height: '0',
+			paddingBottom: '50%',
+			width: '100%',
+			position: 'relative'
 		},
 		inner: {
 			width: '100%',
@@ -145,6 +183,24 @@ var ContainerStyles = {
 		},
 		droppableDiv: {
 			marginBottom: '10'
+		}
+	},
+	gameList: {
+		regular: {
+			cursor: 'pointer',
+			marginBottom: '10'
+		},
+		hovered: {
+			cursor: 'pointer',
+			backgroundColor: Colors.blueTransparent,
+			marginBottom: '10'
+		}
+	},
+	gameView: {
+		shortDescription: {
+			border: '1px solid ' + Colors.blue,
+			borderRadius: '0',
+			padding: '5'
 		}
 	}
 };

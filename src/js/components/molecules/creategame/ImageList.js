@@ -27,7 +27,7 @@ var ImageList = React.createClass({
 			var currentIteration = i;
 			var imageUrl = this.state.images[currentIteration];
 			images.push(
-				<Col md={4}>
+				<Col md={4} key={currentIteration}>
 					<div style={ContainerStyle.imageList.droppableDiv} onClick={this.onImageSelected.bind(this, currentIteration)}>
 						<div style={ContainerStyle.imageList.outer}>
 							<div style={ContainerStyle.imageList.inner}>
@@ -62,18 +62,21 @@ var ImageList = React.createClass({
 	},
 	onDeleteClicked: function (position, e) {
 		e.stopPropagation();
+		console.log(this.state.images[position]);
 		$.ajax({
 			type: 'DELETE',
 			url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/images',
-			data: {
+			data: JSON.stringify({
 				url: this.state.images[position]
-			},
+			}),
 			headers: {
 				'Authorization': LoginStore.getToken()
 			},
 			contentType: 'application/json',
 			dataType: 'json',
-			success: this.onRequestSuccess,
+			statusCode: {
+				204: this.onRequestSuccess
+			},
 			error: this.onRequestError
 		});
 	},
@@ -85,7 +88,7 @@ var ImageList = React.createClass({
 	},
 	onRequestError: function (data) {
 		this.setState({
-			description: 'Image not deleted, please try again.'
+			description: 'Could not delete image.'
 		});
 	}
 });
