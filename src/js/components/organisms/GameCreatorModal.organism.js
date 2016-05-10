@@ -17,7 +17,7 @@ var GameCreatorModal = React.createClass({
 		return (
 			<div>
 				<Button onClick={this.onCreateYourOwnClicked} type='button' style={ButtonStyle.MaginationFillParent}>Create Your Own</Button>
-				<Modal show={this.state.show} onHide={this.onHide} dialogClassName='gamecreator-modal'>
+				<Modal enforceFocus={false} show={this.state.show} onHide={this.onHide} dialogClassName='gamecreator-modal'>
 					<Modal.Body>
 						<GameCreator />
 					</Modal.Body>

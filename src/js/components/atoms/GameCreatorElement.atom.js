@@ -23,8 +23,8 @@ var imgDivStyle = {
 };
 var chevronDivStyle = {
 	position: 'absolute',
-	top: '0px',
-	right: '0px',
+	top: '5px',
+	right: '5px',
 	height: '100%'
 };
 
@@ -58,7 +58,7 @@ var GameCreatorElement = React.createClass({
 					</div>
 					<div style={chevronDivStyle} onClick={function (e) { e.stopPropagation(); }}>
 						<OverlayTrigger trigger='click' rootClose placement='right' overlay={Overlay}>
-								<p style={{color: Color.blue, lineHeight: '65px', fontSize: '20px'}}><Glyphicon glyph='chevron-right'/></p>
+								<p style={{color: Color.blue, fontSize: '20px'}}><Glyphicon glyph='cog'/></p>
 						</OverlayTrigger>
 					</div>
 				</div>

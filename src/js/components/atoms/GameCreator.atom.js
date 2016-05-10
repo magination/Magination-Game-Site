@@ -9,8 +9,11 @@ var Color = require('../../styles/Colors');
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
+var Popover = require('react-bootstrap').Popover;
+var PencilSettingsOverlay = require('./gamecreator/PencilSettingsOverlay.atom');
 // var PiecesOverview = require('../molecules/gamecreator/PiecesOverview.molecule');
 var Col = require('react-bootstrap').Col;
+var CustomGameCreatorElement = require('../molecules/gamecreator/CustomGameCreatorElement.molecule');
 var GameCreatorElement = require('./GameCreatorElement.atom');
 var height = '800px';
 
@@ -38,15 +41,14 @@ var GameCreator = React.createClass({
 		GameCreatorAction.setCanvas({
 			id: 'fabricCanvas'
 		});
-
-		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.addChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
+		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.setStaticPiecesFromServer();
 		$(window).keyup(this.handleKeyPress);
 	},
 	componentWillUnmount: function () {
-		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.removeChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
+		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.clearStore();
 		$(window).unbind('keyup');
 	},
@@ -56,13 +58,14 @@ var GameCreator = React.createClass({
 				<GameCreatorElement key={index} piece={piece} />
 			);
 		});
+		var pencilPopover = <Popover id='pencilSettings'><PencilSettingsOverlay /></Popover>;
 		return (
 			<div ref='canvasParent' style={{height: height}}>
 				<Col md={2}>
 					{gamecreatorelements}
-					<Col md={12} style={(!this.state.isPencilToggled) ? {marginTop: '20px', height: '80px', textAlign: 'center', border: ('1px solid ' + Color.blue), backgroundColor: 'white', borderRadius: '5'} : {marginTop: '20px', height: '80px', textAlign: 'center', border: ('1px solid ' + Color.blue), backgroundColor: Color.blue, borderRadius: '5'}} onClick={this.onPencilClick}>
-						<Glyphicon style={(!this.state.isPencilToggled) ? {marginTop: '20px', fontSize: '40px', color: Color.blue} : {marginTop: '20px', fontSize: '40px', color: 'white'}} glyph='pencil'/>
-					</Col>
+					<div onClick={this.onPencilClick}>
+						<CustomGameCreatorElement glyph={'pencil'} isToggled={this.state.isPencilToggled} settingsComponent={pencilPopover}/>
+					</div>
 				</Col>
 				<Col md={8}>
 					<canvas ref='creatorCanvas' id='fabricCanvas'></canvas>
@@ -156,14 +159,14 @@ var GameCreator = React.createClass({
 			filenameValue: e.target.value
 		});
 	},
-	onGameCreatorFreedrawStateChanged: function (isFreedraw) {
-		this.setState({
-			isPencilToggled: isFreedraw
-		});
-	},
 	onGameCreatorStaticPiecesChange: function () {
 		this.setState({
 			staticPieces: GameCreatorStore.getStaticPieces()
+		});
+	},
+	onGameCreatorFreedrawStateChanged: function (isFreedraw) {
+		this.setState({
+			isPencilToggled: isFreedraw
 		});
 	},
 	onSavePngClick: function () {

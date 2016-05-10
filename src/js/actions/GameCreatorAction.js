@@ -13,6 +13,12 @@ var GameCreatorActions = {
 			actionType: GameCreatorConstants.DELETE_SELECTED_PIECE_FROM_CREATOR
 		});
 	},
+	setPencilOptions: function (options) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.SET_PENCIL_OPTIONS,
+			options: options
+		});
+	},
 	setStaticPiecesFromServer: function (data) {
 		$.ajax({
 			type: 'GET',
