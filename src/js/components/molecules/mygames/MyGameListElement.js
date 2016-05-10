@@ -11,7 +11,7 @@ var GameAction = require('../../../actions/GameAction');
 var NavigationAction = require('../../../actions/NavigationAction');
 var MyGamesStore = require('../../../stores/MyGamesStore');
 var NavigationConstants = require('../../../constants/NavigationConstants');
-
+var CenteredImage = require('../../atoms/CenteredImage.atom');
 var MyGameListElement = React.createClass({
 	propTypes: {
 		game: React.PropTypes.shape({
@@ -26,7 +26,9 @@ var MyGameListElement = React.createClass({
 			<div>
 				<Media>
 					<Media.Left>
-						<img width={200} height={200} src={this.props.game.images[0]} alt='No image' />
+						<div style={{width: '200', height: '200'}}>
+							<CenteredImage src={this.props.game.images[0]}/>
+						</div>
 					</Media.Left>
 					<Media.Body>
 						<h3>
