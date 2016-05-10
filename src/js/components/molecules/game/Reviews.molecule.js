@@ -56,32 +56,32 @@ var Reviews = React.createClass({
 			}
 		}
 		var ownReview = (this.state.ownReview) ? <Review data={this.state.ownReview}/> : <div></div>;
-		var editReviewButton = (this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/><strong> Edit Review</strong></Button> : <div/>;
-		var createNewReviewButton = (!this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/><strong> Write your own review</strong></Button> : <div/>;
+		var editReviewButton = (this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/> EDIT REVIEW</Button> : <div/>;
+		var createNewReviewButton = (!this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/> WRITE A REVIEW</Button> : <div/>;
 		return (
 			<div>
 				<Row>
-					<Col md={6} mdOffset={1}>
+					<Col md={this.props.leftWidth} mdOffset={this.props.offset}>
 						{ownReview}
 					</Col>
-					<Col md={4}>
+					<Col md={this.props.rightWidth}>
 						{editReviewButton}
 					</Col>
-					<Col md={1}>
+					<Col md={this.props.offset}>
 					</Col>
 				</Row>
 				<Row>
-					<Col md={6} mdOffset={1}>
-						<h2 style={TextStyles.blueHeader}>Reviews</h2>
+					<Col md={this.props.leftWidth} mdOffset={this.props.offset}>
+						<h2 style={TextStyles.gameView.paddingLessHeader}>Reviews</h2>
 					</Col>
-					<Col md={4} style={{textAlign: 'right'}}>
+					<Col md={this.props.rightWidth} style={{textAlign: 'right'}}>
 						{createNewReviewButton}
 					</Col>
-					<Col md={1}>
+					<Col md={this.props.offset}>
 					</Col>
 				</Row>
 				<Row>
-					<Col md={6} mdOffset={1}>
+					<Col md={this.props.leftWidth} mdOffset={this.props.offset}>
 						{reviews}
 						<ButtonToolbar>
 							<ButtonGroup>
@@ -89,7 +89,7 @@ var Reviews = React.createClass({
 							</ButtonGroup>
 						</ButtonToolbar>
 					</Col>
-					<Col md={5}>
+					<Col md={12 - this.props.leftWidth - this.props.offset}>
 					</Col>
 				</Row>
 				<ReviewForm id={this.props.id} onDeleteSuccess={this.onDeleteReviewSuccess} onEditSuccess={this.onEditReviewSuccess} show={this.state.isShowingReviewForm} onHide={this.onModalHide} oldReview={this.state.ownReview}/>

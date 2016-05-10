@@ -71,6 +71,9 @@ var Game = React.createClass({
 		setTimeout(this.onGameInformationRendered, 0);
 	},
 	render: function () {
+		var offset = 1;
+		var leftWidth = 7;
+		var rightWidth = 3;
 		return (
 			<div>
 				<Row>
@@ -83,41 +86,41 @@ var Game = React.createClass({
 					<Col md={1}>
 					</Col>
 				</Row>
-				<hr />
+				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 				<Row>
-					<Col md={6} mdOffset={1}>
-						<h2 style={TextStyles.blueHeader}>Description</h2>
+					<Col md={leftWidth} mdOffset={offset}>
+						<h2 style={TextStyles.gameView.paddingLessHeader}>Description</h2>
 						<h4>{this.state.game.shortDescription}</h4>
 					</Col>
-					<Col md={4}>
+					<Col md={rightWidth}>
 						<div style={{textAlign: 'right', width: '100%'}}>
-							<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
+							<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/> SHARE THIS</Button>
 						</div>
 						<Collapse in={this.state.shareGameIsShowing}>
 							<div><ShareGame title={this.state.game.title} description={this.state.game.shortDescription} url={NavigationStore.getNavigationState().currentPath}/></div>
 						</Collapse>
 					</Col>
-					<Col md={1}>
+					<Col md={offset}>
 					</Col>
 				</Row>
 				<Row>
-					<Col md={11} mdOffset={1}>
+					<Col md={leftWidth + rightWidth} mdOffset={offset}>
 						<CustomList title='Rules' listElements={this.state.game.rules}/>
 					</Col>
 				</Row>
 				<Row>
-					<Col md={6} mdOffset={1}>
-						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+					<Col md={leftWidth} mdOffset={offset}>
+						<CustomList title='Alternative rules' listElements={this.state.game.alternativeRules}/>
 					</Col>
-					<Col md={4} style={{textAlign: 'right'}}>
-						<Button onClick={this.onForkGameClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
+					<Col md={rightWidth} style={{textAlign: 'right'}}>
+						<Button onClick={this.onForkGameClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/> CREATE A VARIATION</Button>
 					</Col>
-					<Col md={1}>
+					<Col md={offset}>
 					</Col>
 				</Row>
-				<hr />
-				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
-				<hr />
+				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
+				<Reviews id={this.state.game._id} reviews={this.state.game.reviews} offset={offset} leftWidth={leftWidth} rightWidth={rightWidth}/>
+				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 			</div>
 		);
 	},
