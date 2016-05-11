@@ -27,8 +27,7 @@ var GameCreator = React.createClass({
 		return {
 			canvas: null,
 			staticPieces: GameCreatorStore.getStaticPieces(),
-			isPencilToggled: false,
-			isInitialDown: true
+			isPencilToggled: false
 		};
 	},
 	componentDidMount: function () {
@@ -45,14 +44,12 @@ var GameCreator = React.createClass({
 		GameCreatorStore.addChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.setStaticPiecesFromServer();
-		$(window).keyup(this.handleKeyUp);
 		$(window).keydown(this.handleKeyDown);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
 		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.clearStore();
-		$(window).unbind('keyup');
 		$(window).unbind('keydown');
 	},
 	render: function () {
@@ -113,11 +110,8 @@ var GameCreator = React.createClass({
 		GameCreatorAction.changeFreeDrawState();
 	},
 	handleKeyDown: function (e) {
-		if (this.state.isInitialDown) {
-			this.setState({
-				isInitialDown: false
-			});
-			return;
+		if (e.which >= 37 && e.which <= 40) {
+			e.preventDefault();
 		}
 		keyPressed(e.which);
 	},
@@ -125,10 +119,6 @@ var GameCreator = React.createClass({
 		if (e.which >= 37 && e.which <= 40) {
 			e.preventDefault();
 		}
-		keyPressed(e.which);
-		this.setState({
-			isInitialDown: true
-		});
 	},
 	onFilenameChange: function (e) {
 		this.setState({
