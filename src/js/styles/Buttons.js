@@ -113,6 +113,22 @@ var ButtonStyles = {
 		paddingBottom: '10',
 		borderWidth: '0',
 		backgroundColor: Colors.yellowDark
+	},
+	confirmButton: {
+		yes: {
+			color: 'white',
+			backgroundColor: Colors.greenDark,
+			borderWidth: 0,
+			paddingTop: 5,
+			paddingBottom: 5
+		},
+		no: {
+			color: 'white',
+			backgroundColor: Colors.redDark,
+			borderWidth: 0,
+			paddingTop: 5,
+			paddingBottom: 5
+		}
 	}
 };
 

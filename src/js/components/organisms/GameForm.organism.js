@@ -20,6 +20,7 @@ var NavigationAction = require('../../actions/NavigationAction');
 var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
 var AutoSave = require('../../service/AutoSave.service.js');
 var ButtonWithTooltip = require('../atoms/ButtonWithTooltip');
+var ConfirmButton = require('../atoms/ConfirmButton');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
@@ -98,7 +99,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={2}>
-							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked} tooltip='Remove the game and exit the editor.' buttonText='CANCEL'/>
+							<ConfirmButton confirmationDialog='This action will delete the game and any changes you have made to it, and exit the editor. Do you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked} placement='top' buttonText='CANCEL'/>
 						</Col>
 						<Col md={2}>
 							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
