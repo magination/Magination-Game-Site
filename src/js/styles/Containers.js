@@ -137,6 +137,9 @@ var ContainerStyles = {
 				transform: 'translateX(-50%) translateY(-50%)',
 				msTransform: 'translateX(-50%) translateY(-50%)',
 				WebkitTransition: 'translateX(-50%) translateY(-50%)'
+				userSelect: 'none',
+				WebkitUserSelect: 'none',
+				msUserSelect: 'none'
 			}
 		},
 		outer: {

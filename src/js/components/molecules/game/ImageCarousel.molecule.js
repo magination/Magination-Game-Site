@@ -4,6 +4,7 @@ var ContainerStyles = require('../../../styles/Containers');
 var TextStyles = require('../../../styles/Text');
 var Colors = require('../../../styles/Colors');
 var Glyphicon = require('react-bootstrap').Glyphicon;
+var CenteredImage = require('../../atoms/CenteredImage.atom');
 
 var ImageCarousel = React.createClass({
 	getInitialState: function () {
@@ -53,18 +54,11 @@ var ImageCarousel = React.createClass({
 	render: function () {
 		var stateIndex = this.state.index;
 		var carouselItems = this.props.imageUrls.map(function (url, index) {
-			var style = {
-				maxHeight: '100%',
-				maxWidth: '100%',
-				minWidth: '80%',
-				minHeight: '80%',
-				marginRight: 'auto',
-				marginLeft: 'auto'
-			};
+			var style = {};
 			if (index !== stateIndex) {
 				style.display = 'none';
 			}
-			return <img key={url} style={style} alt='There was an error loading the image' src={url}/>;
+			return <div key={url} style={style}><CenteredImage src={url} /></div>;
 		});
 		return (
 			<div style={this.state.divStyle}>

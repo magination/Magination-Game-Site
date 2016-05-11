@@ -106,6 +106,12 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.SET_PENCIL_OPTIONS:
 		setPencilOptions(action.options);
 		break;
+	case GameCreatorConstants.MOVE_SELECTED_PIECE:
+		moveSelectedPieces(action.direction);
+		break;
+	case GameCreatorConstants.ITERATE_SELECTED_PIECES_DEPTH:
+		iterateSelectedPiecesDepth(action.direction);
+		break;
 	}
 });
 
@@ -124,10 +130,69 @@ function setPencilOptions (options) {
 	GameCreatorStore.emitChange(GameCreatorConstants.PENCIL_OPTIONS_CHANGED);
 }
 
+function iterateSelectedPiecesDepth (direction) {
+	var objects = _fabricCanvas.getObjects();
+	var iterateIndexes = [];
+	objects.forEach(function (object, index) {
+		if (object.get('active')) {
+			iterateIndexes.push(index);
+		}
+	});
+	var lastObjectIndexDeniedMove = -1;
+	if (direction === 'in') {
+		iterateIndexes.forEach(function (objectIndex, index) {
+			if (lastObjectIndexDeniedMove !== (objectIndex - 1)) {
+				_fabricCanvas.sendBackwards(objects[objectIndex]);
+				// iterateIndexes[index] = objectIndex - 1;
+			}
+			else lastObjectIndexDeniedMove = objectIndex;
+		});
+	}
+	else if (direction === 'out') {
+		lastObjectIndexDeniedMove = objects.length;
+		iterateIndexes.reverse();
+		iterateIndexes.forEach(function (objectIndex, index) {
+			if (lastObjectIndexDeniedMove !== (objectIndex + 1)) {
+				_fabricCanvas.bringForward(objects[objectIndex]);
+				// iterateIndexes[index] = objectIndex + 1;
+			}
+			else lastObjectIndexDeniedMove = objectIndex;
+		});
+	}
+}
+
+function moveSelectedPieces (direction) {
+	var deltaX = 0;
+	var deltaY = 0;
+	var moveQuantity = 10;
+	switch (direction) {
+	case 'right':
+		deltaX = moveQuantity;
+		break;
+	case 'left':
+		deltaX = -moveQuantity;
+		break;
+	case 'down':
+		deltaY = moveQuantity;
+		break;
+	case 'up':
+		deltaY = -moveQuantity;
+		break;
+	}
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (object.get('active')) {
+			object.set('left', object.get('left') + deltaX);
+			object.set('top', object.get('top') + deltaY);
+		}
+	});
+	_fabricCanvas.renderAll();
+}
+
 function selectionChanged (index) {
 	if (index === undefined) {
 		index = -1;
 	}
+	removeObjectsOutsideCanvas();
 	GameCreatorStore.emitChange(GameCreatorConstants.PIECE_WAS_SELECTED, index);
 }
 
@@ -193,6 +258,40 @@ function addPieceToCreator (piece) {
 	img.src = piece.url;
 }
 
+function removeObjectsOutsideCanvas () {
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (isOutsideBorder(object)) {
+			object.remove();
+		}
+	});
+	var objects = _fabricCanvas.getObjects();
+	for (var i = 0; i < objects.length; i++) {
+		if (isOutsideBorder(objects[i])) {
+			objects[i].remove();
+			i--;
+		}
+	}
+}
+
+function isOutsideBorder (object) {
+	var width = _fabricCanvas.getWidth();
+	var height = _fabricCanvas.getHeight();
+	var bounding = object.getBoundingRect();
+	if (bounding.left + bounding.width < 0) {
+		return true;
+	}
+	else if (bounding.left > width) {
+		return true;
+	}
+	else if (bounding.top + bounding.height < 0) {
+		return true;
+	}
+	else if (bounding.top > height) {
+		return true;
+	}
+	else return false;
+}
+
 function saveGameAsJson () {
 	var jsonData = _fabricCanvas.toJSON();
 	var requestAction = null;
@@ -226,15 +325,22 @@ function saveGameAsPng (filename) {
 		console.log('never saved');
 		return;
 	}
+	_fabricCanvas.deactivateAll().renderAll();
 	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
 	var blob = b64toBlob(data, 'image/png');
 	var formData = new FormData();
 	formData.append('image', blob, filename);
 	formData.append('filename', filename);
 	formData.append('overwrite', 'true'); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
+	var url = URLS.api.users +
+		'/' + LoginStore.getLoginProfile()._id +
+		'/gameCreatorObjects/' +
+		_loadedData._id +
+		'/image' +
+		'?' + $.param({overwrite: 'true'});
 	$.ajax({
 		type: 'PUT',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects/' + _loadedData._id + '/image',
+		url: url,
 		data: formData,
 		headers: {
 			'Authorization': LoginStore.getToken()
