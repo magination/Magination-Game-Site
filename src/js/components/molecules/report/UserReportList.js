@@ -20,7 +20,7 @@ var UserReportList = React.createClass({
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
-				201: this.onRequestSuccess
+				200: this.onRequestSuccess
 			}
 		});
 	},
