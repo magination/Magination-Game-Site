@@ -73,7 +73,7 @@ var MyGameListElement = React.createClass({
 				break;
 			}
 		}
-		GameAction.setHasSelectedGameToEdit(false);
+		GameAction.setHasSelectedGameToEdit(true);
 		GameAction.changeGameLocally(game);
 		NavigationAction.navigate({
 			destination: NavigationConstants.PATHS.creategame
