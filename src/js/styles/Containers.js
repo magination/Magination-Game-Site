@@ -134,7 +134,10 @@ var ContainerStyles = {
 				position: 'absolute',
 				top: '50%',
 				left: '50%',
-				transform: 'translateX(-50%) translateY(-50%)'
+				transform: 'translateX(-50%) translateY(-50%)',
+				userSelect: 'none',
+				WebkitUserSelect: 'none',
+				msUserSelect: 'none'
 			}
 		},
 		outer: {
