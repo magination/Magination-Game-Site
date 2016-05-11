@@ -5,8 +5,7 @@ var LoginAction = require('../../actions/LoginAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
 var NavigationConstants = require('../../constants/NavigationConstants');
-var Parser = require('../../service/Parser.service');
-
+var Validator = require('../../service/Validator.service');
 var NavigationPaths = NavigationConstants.PATHS;
 
 var LoginForm = require('./LoginForm.organism');
@@ -124,7 +123,7 @@ var Menu = React.createClass({
 						<MenuItem eventKey={'profile'}><Glyphicon glyph='user'/> My Profile</MenuItem>
 						<MenuItem onClick={this.onMyGamesClicked}eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
 						<MenuItem divider />
-						{this.isModeratorPermission
+						{Validator.isModeratorPermission()
 							? <MenuItem onClick={this.onModerateClicked}eventKey={'settings'}><Glyphicon glyph='flag'/> Moderate</MenuItem>
 							: null}
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
@@ -141,11 +140,6 @@ var Menu = React.createClass({
 				</Nav>;
 		}
 		return navigationStateElement;
-	},
-	isModeratorPermission: function () {
-		var token = LoginStore.getToken();
-		var decodedToken = Parser.decodeJWT(token);
-		return decodedToken && decodedToken.claims.privileges > 0;
 	}
 });
 

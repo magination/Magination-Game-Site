@@ -5,8 +5,16 @@ var Row = require('react-bootstrap').Row;
 var Collapse = require('react-bootstrap').Collapse;
 var Well = require('react-bootstrap').Well;
 var Button = require('react-bootstrap').Button;
+var NavigationAction = require('../../../actions/NavigationAction');
+var NavigationConstants = require('../../../constants/NavigationConstants');
+var ReportAction = require('../../../actions/ReportAction');
 
 var GameReportListElement = React.createClass({
+	getInitialState: function () {
+		return {
+			userFeedback: undefined
+		};
+	},
 	render: function () {
 		var reports = this.props.reports.map(function (report, i) {
 			return (
@@ -28,11 +36,13 @@ var GameReportListElement = React.createClass({
 						<Col md={12}>
 							<Well style={{marginBottom: '0'}}>
 								<div>
-									{reports}
+									{this.state.userFeedback ? <h5>{this.state.userFeedback}</h5> : reports}
 									<Row>
-										<Col md={4}><Button>Unpublish</Button></Col>
-										<Col md={4}><Button>Dismiss reports</Button></Col>
-										<Col md={4}><Button>Go to game</Button></Col>
+										<Col md={12}>
+											<Button onClick={this.onUnpublishClicked}>Unpublish</Button>
+											<Button onClick={this.onDismissClicked}>Dismiss reports</Button>
+											<Button onClick={this.onGoToGameClicked}>Go to game</Button>
+										</Col>
 									</Row>
 								</div>
 							</Well>
@@ -44,6 +54,17 @@ var GameReportListElement = React.createClass({
 	},
 	onExpandElementClicked: function () {
 		this.props.onExpandElementClicked(this.props.isShow ? '' : this.props.id);
+	},
+	onUnpublishClicked () {
+		ReportAction.unpublishGame(this.props.id);
+	},
+	onDismissClicked: function () {
+		ReportAction.dismissReports('games', this.props.id);
+	},
+	onGoToGameClicked: function () {
+		NavigationAction.navigate({
+			destination: NavigationConstants.PATHS.game + '/' + this.props.id
+		});
 	}
 });
 

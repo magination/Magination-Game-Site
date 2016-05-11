@@ -1,3 +1,6 @@
+var LoginStore = require('../stores/LoginStore');
+var Parser = require('./Parser.service');
+
 var validatorService = {
 	isEmail: function (email) {
 		var regex = /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -11,6 +14,11 @@ var validatorService = {
 			return false;
 		}
 		return true;
+	},
+	isModeratorPermission: function () {
+		var token = LoginStore.getToken();
+		var decodedToken = Parser.decodeJWT(token);
+		return decodedToken && (parseInt(decodedToken.claims.privileges) > 0);
 	}
 };
 

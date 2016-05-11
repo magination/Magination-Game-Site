@@ -124,7 +124,7 @@ var Game = React.createClass({
 				<Row>
 					<Col md={leftWidth} mdOffset={offset}/>
 					<Col md={rightWidth}>
-						<Report reportType={'game'} reportId={getLastUrlId()}/>
+						<Report reportType={'games'} reportId={getLastUrlId()}/>
 					</Col>
 				</Row>
 			</div>

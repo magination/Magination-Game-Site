@@ -19,7 +19,8 @@ var config = {
 			gamecreator: {
 				staticimages: restApiRoot + 'public/pieces'
 			},
-			report: restApiRoot + 'reports'
+			reports: restApiRoot + 'reports',
+			reviews: restApiRoot + 'reviews'
 		},
 		img: {
 			starWhite: imgRoot + 'starWhiteTransparent100x100.png',
