@@ -41,9 +41,13 @@ GameListStore.dispatchToken = Dispatcher.register(function (action) {
 			console.log('addGamesToList was called in the GameListStore, with an undefined game list');
 			return;
 		}
-		for (var i = 0; i < action.games.length; i++) {
-			_games.push(action.games[i]);
-		}
+		action.games.forEach(function (gameToBeAdded) {
+			if (_games.every(function (game) {
+				return (gameToBeAdded._id !== game._id);
+			})) {
+				_games.push(gameToBeAdded);
+			}
+		});
 		GameListStore.emitChange();
 		break;
 	case GameListConstants.CLEAR_GAMES_LIST:
