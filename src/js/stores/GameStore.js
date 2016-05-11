@@ -219,6 +219,7 @@ var onGamePostedSuccess = function (data) {
 	NavigationAction.navigate({
 		destination: '/game/' + data._id
 	});
+	_game = null;
 	_hasSelectedGameToEdit = false;
 };
 var onSaveGameResponse = function (data) {
