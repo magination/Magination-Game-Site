@@ -36,8 +36,18 @@ var GameCreator = React.createClass({
 		var canvas = ReactDOM.findDOMNode(this.refs.creatorCanvas);
 		canvas.width = (parent.offsetWidth / 12) * 8;
 		canvas.height = parent.offsetHeight;
-
-		// fabriccanvas = new fabric.Canvas('fabricCanvas');
+		var browserHeight = 0;
+		if (typeof (window.innerHeight) === 'number') {
+		// Non-IE
+			console.log(window.innerHeight);
+			console.log($(window).height());
+			browserHeight = window.innerHeight;
+		}
+		else if (document.documentElement && (document.documentElement.clientHeight)) {
+		// IE 6+ in 'standards compliant mode'
+			browserHeight = document.documentElement.clientHeight;
+		}
+		height = (browserHeight * 90) / 100;
 		GameCreatorAction.setCanvas({
 			id: 'fabricCanvas'
 		});
