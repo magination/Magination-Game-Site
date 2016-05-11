@@ -100,11 +100,19 @@ var SearchGames = React.createClass({
 		this.setState({
 			currentActiveOtherObjectsButton: active
 		});
+		var that = this;
+		setTimeout(function () {
+			that.onSubmit();
+		}, 0);
 	},
 	onTeamButtonGroupClicked: function (active) {
 		this.setState({
 			currentActiveTeamButton: active
 		});
+		var that = this;
+		setTimeout(function () {
+			that.onSubmit();
+		}, 0);
 	},
 	playersFilterChanged: function (e) {
 		this.setState({
@@ -115,6 +123,10 @@ var SearchGames = React.createClass({
 		this.setState({
 			filter_rating: rating
 		});
+		var that = this;
+		setTimeout(function () {
+			that.onSubmit();
+		}, 0);
 	},
 	onImportPiecesCheckboxChange: function (e) {
 		if (e.target.value) {
@@ -146,7 +158,9 @@ var SearchGames = React.createClass({
 		this.forceUpdate();
 	},
 	onSubmit: function (e) {
-		e.preventDefault();
+		if (e) {
+			e.preventDefault();
+		}
 
 		var searchFilter = {};
 		if (this.state.filter_general_search !== '') {
