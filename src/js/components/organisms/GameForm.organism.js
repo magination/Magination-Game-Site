@@ -145,7 +145,7 @@ var GameForm = React.createClass({
 	},
 	onCancelClicked () {
 		GameAction.createNewGameLocally();
-		MyGamesAction.deleteGame(this.state.game._id);
+		if (this.state.game_id) MyGamesAction.deleteGame(this.state.game._id);
 		GameAction.setHasSelectedGameToEdit(false);
 		NavigationAction.navigate({
 			destination: NavigationPaths.discover
