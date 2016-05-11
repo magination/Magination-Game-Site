@@ -96,8 +96,6 @@ var ButtonStyles = {
 	report: {
 		color: 'white',
 		width: '100%',
-		paddingTop: '10',
-		paddingBottom: '10',
 		borderWidth: '0',
 		height: '50',
 		backgroundColor: Colors.redDark

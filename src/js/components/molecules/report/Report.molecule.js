@@ -6,21 +6,18 @@ var ButtonStyles = require('../../../styles/Buttons');
 var TextStyles = require('../../../styles/Text');
 var LoginStore = require('../../../stores/LoginStore');
 var URLS = require('../../../config/config').urls;
-var GlyphIcon = require('react-bootstrap').Glyphicon;
 
 var Report = React.createClass({
 	getInitialState: function () {
 		return {
 			userMessage: undefined,
-			reportText: '',
-			isShowModal: false
+			reportText: ''
 		};
 	},
 	render: function () {
 		return (
 			<div>
-				<Button onClick={this.onShowModalClicked}><GlyphIcon glyph='glyphicon glyphicon-flag'/> REPORT</Button>
-				<Modal dialogClassName='custom-modal' show={this.state.isShowModal} onHide={this.onHide}>
+				<Modal dialogClassName='custom-modal' show={this.props.show} onHide={this.onHide}>
 					<Modal.Header>
 						<Modal.Title>Report</Modal.Title>
 					</Modal.Header>
@@ -47,21 +44,12 @@ var Report = React.createClass({
 		this.postReport();
 	},
 	onHide: function () {
-		this.setState({
-			isShowModal: false,
-			reportText: '',
-			userMessage: undefined
-		});
-	},
-	onShowModalClicked: function () {
-		this.setState({
-			isShowModal: true
-		});
+		this.props.close();
 	},
 	postReport: function () {
 		var report = {
 			type: this.props.reportType,
-			id: this.props.reportId,
+			id: this.props.objectId,
 			reportText: this.state.reportText
 		};
 		var requestUrl = URLS.api.reports;

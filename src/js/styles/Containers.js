@@ -134,7 +134,9 @@ var ContainerStyles = {
 				position: 'absolute',
 				top: '50%',
 				left: '50%',
-				transform: 'translateX(-50%) translateY(-50%)'
+				transform: 'translateX(-50%) translateY(-50%)',
+				msTransform: 'translateX(-50%) translateY(-50%)',
+				WebkitTransition: 'translateX(-50%) translateY(-50%)'
 			}
 		},
 		outer: {

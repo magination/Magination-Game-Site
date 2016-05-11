@@ -1,11 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var GameAction = require('../../actions/GameAction');
-var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
-var NavigationConstants = require('../../constants/NavigationConstants');
-var LoginAction = require('../../actions/LoginAction');
-var LoginStore = require('../../stores/LoginStore');
 var URLS = require('../../config/config.js').urls;
 var Reviews = require('../molecules/game/Reviews.molecule');
 var GameInformation = require('../molecules/game/GameInformation.molecule');
@@ -13,13 +8,9 @@ var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
 var CustomList = require('../molecules/lists/CustomList.molecule');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
-var Glyphicon = require('react-bootstrap').Glyphicon;
-var Button = require('react-bootstrap').Button;
-var Collapse = require('react-bootstrap').Collapse;
-var ShareGame = require('../molecules/game/ShareGame.molecule');
 var TextStyles = require('../../styles/Text');
-var ButtonStyles = require('../../styles/Buttons');
-var Report = require('../molecules/report/Report.molecule');
+var GameActionBar = require('../molecules/game/GameActionBar');
+
 var Game = React.createClass({
 	getInitialState: function () {
 		return {
@@ -86,6 +77,7 @@ var Game = React.createClass({
 					<Col md={1}>
 					</Col>
 				</Row>
+				<Row style={{marginTop: '10'}}><Col md={4} mdOffset={1}><GameActionBar gameId={getLastUrlId()}/></Col></Row>
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 				<Row>
 					<Col md={leftWidth} mdOffset={offset}>
@@ -93,12 +85,6 @@ var Game = React.createClass({
 						<h4>{this.state.game.shortDescription}</h4>
 					</Col>
 					<Col md={rightWidth}>
-						<div style={{textAlign: 'right', width: '100%'}}>
-							<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/> SHARE THIS</Button>
-						</div>
-						<Collapse in={this.state.shareGameIsShowing}>
-							<div><ShareGame title={this.state.game.title} description={this.state.game.shortDescription} url={NavigationStore.getNavigationState().currentPath}/></div>
-						</Collapse>
 					</Col>
 					<Col md={offset}>
 					</Col>
@@ -113,7 +99,6 @@ var Game = React.createClass({
 						<CustomList title='Alternative rules' listElements={this.state.game.alternativeRules}/>
 					</Col>
 					<Col md={rightWidth} style={{textAlign: 'right'}}>
-						<Button onClick={this.onForkGameClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/> CREATE A VARIATION</Button>
 					</Col>
 					<Col md={offset}>
 					</Col>
@@ -121,12 +106,6 @@ var Game = React.createClass({
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 				<Reviews id={this.state.game._id} reviews={this.state.game.reviews} offset={offset} leftWidth={leftWidth} rightWidth={rightWidth}/>
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
-				<Row>
-					<Col md={leftWidth} mdOffset={offset}/>
-					<Col md={rightWidth}>
-						<Report reportType={'games'} reportId={getLastUrlId()}/>
-					</Col>
-				</Row>
 			</div>
 		);
 	},
@@ -139,31 +118,6 @@ var Game = React.createClass({
 				gameInformationHeight: informationDivHeight
 			});
 		}
-	},
-	onForkGameClicked: function () {
-		if (!LoginStore.getLoginState().isLoggedIn) {
-			LoginAction.requestLogin();
-			return;
-		}
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.games + '/' + this.state.game._id + '/fork',
-			dataType: 'json',
-			statusCode: {
-				200: this.onGetGameForkSuccessResponse
-			}
-		});
-	},
-	onShareButtonClicked: function () {
-		this.setState({
-			shareGameIsShowing: !this.state.shareGameIsShowing
-		});
-	},
-	onGetGameForkSuccessResponse: function (data) {
-		GameAction.changeGameLocally(data);
-		NavigationAction.navigate({
-			destination: NavigationConstants.PATHS.creategame
-		});
 	},
 	onGetGameSuccessResponse: function (data) {
 		this.setState({
