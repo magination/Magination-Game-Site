@@ -1,5 +1,8 @@
 var React = require('react');
 
+var GameCreatorStore = require('../../stores/GameCreatorStore');
+var GameCreatorConstants = require('../../constants/GameCreatorConstants');
+
 var Modal = require('react-bootstrap').Modal;
 var GameCreator = require('../atoms/GameCreator.atom.js');
 var Button = require('react-bootstrap').Button;
@@ -12,6 +15,12 @@ var GameCreatorModal = React.createClass({
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
+	},
+	componentDidMount: function () {
+		GameCreatorStore.addChangeListener(this.onPngAddedToGame, GameCreatorConstants.PNG_ADDED_TO_GAME);
+	},
+	componentWillUnmount: function () {
+		GameCreatorStore.removeChangeListener(this.onPngAddedToGame, GameCreatorConstants.PNG_ADDED_TO_GAME);
 	},
 	render: function () {
 		return (
@@ -29,6 +38,9 @@ var GameCreatorModal = React.createClass({
 		this.setState({
 			show: false
 		});
+	},
+	onPngAddedToGame: function () {
+		this.onHide();
 	},
 	onCreateYourOwnClicked: function () {
 		this.setState({

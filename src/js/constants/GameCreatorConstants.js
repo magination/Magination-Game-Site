@@ -17,7 +17,8 @@ var constants = {
 	SET_PENCIL_OPTIONS: 'set_pencil_options',
 	PENCIL_OPTIONS_CHANGED: 'pencil_options_changed',
 	MOVE_SELECTED_PIECE: 'move_selected_piece',
-	ITERATE_SELECTED_PIECES_DEPTH: 'iterate_selected_pieces_depth'
+	ITERATE_SELECTED_PIECES_DEPTH: 'iterate_selected_pieces_depth',
+	PNG_ADDED_TO_GAME: 'png_added_to_game'
 };
 
 module.exports = constants;

@@ -364,6 +364,7 @@ function onRequestSuccess (data) {
 	GameAction.addImageToLocalGame({
 		image: data.image
 	});
+	GameCreatorStore.emitChange(GameCreatorConstants.PNG_ADDED_TO_GAME);
 }
 
 function onSavePngConflictResponse (data) {

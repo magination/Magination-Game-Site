@@ -39,12 +39,10 @@ var GameCreator = React.createClass({
 		var browserHeight = 0;
 		if (typeof (window.innerHeight) === 'number') {
 		// Non-IE
-			console.log(window.innerHeight);
-			console.log($(window).height());
 			browserHeight = window.innerHeight;
 		}
 		else if (document.documentElement && (document.documentElement.clientHeight)) {
-		// IE 6+ in 'standards compliant mode'
+		// IE 6+'
 			browserHeight = document.documentElement.clientHeight;
 		}
 		height = (browserHeight * 90) / 100;
@@ -93,7 +91,7 @@ var GameCreator = React.createClass({
 						</div>
 						<div style={{height: '15%'}}>
 							<Input type='text' value={this.state.filenameValue} placeholder='Image filename' onChange={this.onFilenameChange}/>
-							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSavePngClick}><strong>Save as png</strong></Button>
+							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSavePngClick}><strong>Add to game</strong></Button>
 						</div>
 					</div>
 				</Col>
@@ -132,7 +130,7 @@ var GameCreator = React.createClass({
 	},
 	onFilenameChange: function (e) {
 		this.setState({
-			filenameValue: e.target.value
+			filenameValue: e.target.value.split('.')[0]
 		});
 	},
 	onGameCreatorStaticPiecesChange: function () {
