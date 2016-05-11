@@ -64,9 +64,12 @@ var Report = React.createClass({
 			id: this.props.reportId,
 			reportText: this.state.reportText
 		};
+		var requestUrl = URLS.api.report;
+		requestUrl += '/' + report.type;
+
 		$.ajax({
 			type: 'POST',
-			url: URLS.api.report,
+			url: requestUrl,
 			data: JSON.stringify(report),
 			headers: {
 				'Authorization': LoginStore.getToken()
