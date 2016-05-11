@@ -109,6 +109,9 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.MOVE_SELECTED_PIECE:
 		moveSelectedPieces(action.direction);
 		break;
+	case GameCreatorConstants.ITERATE_SELECTED_PIECES_DEPTH:
+		iterateSelectedPiecesDepth(action.direction);
+		break;
 	}
 });
 
@@ -125,6 +128,37 @@ function setPencilOptions (options) {
 		_fabricCanvas.freeDrawingBrush.color = options['color'];
 	}
 	GameCreatorStore.emitChange(GameCreatorConstants.PENCIL_OPTIONS_CHANGED);
+}
+
+function iterateSelectedPiecesDepth (direction) {
+	var objects = _fabricCanvas.getObjects();
+	var iterateIndexes = [];
+	objects.forEach(function (object, index) {
+		if (object.get('active')) {
+			iterateIndexes.push(index);
+		}
+	});
+	var lastObjectIndexDeniedMove = -1;
+	if (direction === 'in') {
+		iterateIndexes.forEach(function (objectIndex, index) {
+			if (lastObjectIndexDeniedMove !== (objectIndex - 1)) {
+				_fabricCanvas.sendBackwards(objects[objectIndex]);
+				// iterateIndexes[index] = objectIndex - 1;
+			}
+			else lastObjectIndexDeniedMove = objectIndex;
+		});
+	}
+	else if (direction === 'out') {
+		lastObjectIndexDeniedMove = objects.length;
+		iterateIndexes.reverse();
+		iterateIndexes.forEach(function (objectIndex, index) {
+			if (lastObjectIndexDeniedMove !== (objectIndex + 1)) {
+				_fabricCanvas.bringForward(objects[objectIndex]);
+				// iterateIndexes[index] = objectIndex + 1;
+			}
+			else lastObjectIndexDeniedMove = objectIndex;
+		});
+	}
 }
 
 function moveSelectedPieces (direction) {

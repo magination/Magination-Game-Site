@@ -77,8 +77,8 @@ var GameCreator = React.createClass({
 					<div style={{height: height}}>
 						<div style={{height: '85%'}}>
 							<h4>Piece Tools</h4>
-							<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
-							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
+							<Button style={toolButton} onClick={this.onMoveSelectedDeeperClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
+							<Button style={toolButton} onClick={this.onMoveSelectedShallowerClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
 							<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-left'/></Button>
 							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
 							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
@@ -92,6 +92,12 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onMoveSelectedDeeperClick: function () {
+		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'in'});
+	},
+	onMoveSelectedShallowerClick: function () {
+		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'out'});
 	},
 	onCounterClockwiseRotateClick: function () {
 		GameCreatorAction.rotateCurrentSelectedPiece({

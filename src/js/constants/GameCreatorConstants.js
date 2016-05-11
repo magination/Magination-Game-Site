@@ -16,7 +16,8 @@ var constants = {
 	FREEDRAW_STATE_CHANGED: 'freedraw_state_changed',
 	SET_PENCIL_OPTIONS: 'set_pencil_options',
 	PENCIL_OPTIONS_CHANGED: 'pencil_options_changed',
-	MOVE_SELECTED_PIECE: 'move_selected_piece'
+	MOVE_SELECTED_PIECE: 'move_selected_piece',
+	ITERATE_SELECTED_PIECES_DEPTH: 'iterate_selected_pieces_depth'
 };
 
 module.exports = constants;

@@ -73,6 +73,12 @@ var GameCreatorActions = {
 			actionType: GameCreatorConstants.MOVE_SELECTED_PIECE,
 			direction: data.direction
 		});
+	},
+	iterateSelectedPiecesDepth: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.ITERATE_SELECTED_PIECES_DEPTH,
+			direction: data.direction
+		});
 	}
 };
 
