@@ -75,6 +75,7 @@ var GameActionBar = React.createClass({
 	},
 	onGetGameForkSuccessResponse: function (data) {
 		GameAction.changeGameLocally(data);
+		GameAction.setHasSelectedGameToEdit(true);
 		NavigationAction.navigate({
 			destination: NavigationConstants.PATHS.creategame
 		});

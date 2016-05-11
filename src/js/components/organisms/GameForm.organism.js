@@ -32,7 +32,7 @@ var GameForm = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	render: function () {
 		return (
@@ -151,7 +151,7 @@ var GameForm = React.createClass({
 		});
 	},
 	onSelectGameToEditClicked: function () {
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	gameIsValid: function () {
 		var game = GameStore.getGame();

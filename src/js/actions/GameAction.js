@@ -67,10 +67,10 @@ var GameAction = {
 			position: data.position
 		});
 	},
-	setHasSelectedGameToEdit: function (data) {
+	setHasSelectedGameToEdit: function (hasSelectedGameToEdit) {
 		Dispatcher.dispatch({
 			actionType: GameConstants.SET_HAS_SELECTED_GAME_TO_EDIT,
-			hasSelectedGameToEdit: data.hasSelectedGameToEdit
+			hasSelectedGameToEdit: hasSelectedGameToEdit
 		});
 	},
 	changeImagePrioritizationLocally: function (data) {

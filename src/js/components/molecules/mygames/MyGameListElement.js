@@ -62,7 +62,7 @@ var MyGameListElement = React.createClass({
 	},
 	onPublishClicked: function () {
 		MyGamesAction.publishGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	onEditGameClicked: function () {
 		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
@@ -73,7 +73,7 @@ var MyGameListElement = React.createClass({
 				break;
 			}
 		}
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: true});
+		GameAction.setHasSelectedGameToEdit(false);
 		GameAction.changeGameLocally(game);
 		NavigationAction.navigate({
 			destination: NavigationConstants.PATHS.creategame
@@ -81,11 +81,11 @@ var MyGameListElement = React.createClass({
 	},
 	onUnPublishGameClicked: function () {
 		MyGamesAction.unPublishGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	onDeleteGameClicked: function () {
 		MyGamesAction.deleteGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	}
 });
 

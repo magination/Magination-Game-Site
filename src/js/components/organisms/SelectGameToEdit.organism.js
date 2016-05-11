@@ -55,7 +55,7 @@ var SelectGameToEdit = React.createClass({
 	createNewGameClicked: function () {
 		GameAction.saveGameToServer();
 		GameAction.createNewGameLocally();
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: true});
+		GameAction.setHasSelectedGameToEdit(true);
 		this.setState({
 			showModal: false
 		});
