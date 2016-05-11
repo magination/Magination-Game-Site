@@ -7,7 +7,8 @@ var UserReportList = React.createClass({
 	getInitialState () {
 		return {
 			currentExpanded: '',
-			users: []
+			users: [],
+			userFeedback: 'Loading reports'
 		};
 	},
 	componentDidMount () {
@@ -33,7 +34,7 @@ var UserReportList = React.createClass({
 		});
 		return (
 			<div>
-				{users}
+				{this.state.users.length > 0 ? users : <h5>{this.state.userFeedback}</h5>}
 			</div>
 		);
 	},
@@ -44,7 +45,8 @@ var UserReportList = React.createClass({
 	},
 	onRequestSuccess: function (data) {
 		this.setState({
-			users: data
+			users: data.users,
+			userFeedback: 'No reports to show, good job!'
 		});
 	}
 });

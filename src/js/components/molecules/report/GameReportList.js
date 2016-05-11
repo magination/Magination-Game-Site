@@ -45,8 +45,8 @@ var GameReportList = React.createClass({
 	},
 	onRequestSuccess: function (data) {
 		this.setState({
-			games: data,
-			hasSuccesRequest: 'No reports to show, good job!'
+			games: data.games,
+			userFeedback: 'No reports to show, good job!'
 		});
 	}
 });

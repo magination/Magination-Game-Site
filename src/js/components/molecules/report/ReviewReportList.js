@@ -7,7 +7,8 @@ var ReviewReportList = React.createClass({
 	getInitialState () {
 		return {
 			currentExpanded: '',
-			reviews: []
+			reviews: [],
+			userFeedback: 'Loading reports'
 		};
 	},
 	componentDidMount () {
@@ -33,7 +34,7 @@ var ReviewReportList = React.createClass({
 		});
 		return (
 			<div>
-				{reviews}
+				{this.state.reviews.length > 0 ? reviews : <h5>{this.state.userFeedback}</h5>}
 			</div>
 		);
 	},
@@ -44,7 +45,8 @@ var ReviewReportList = React.createClass({
 	},
 	onRequestSuccess: function (data) {
 		this.setState({
-			reviews: data
+			reviews: data.reviews,
+			userFeedback: 'No reports to show, good job!'
 		});
 	}
 
