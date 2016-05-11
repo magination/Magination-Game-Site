@@ -27,7 +27,8 @@ var GameCreator = React.createClass({
 		return {
 			canvas: null,
 			staticPieces: GameCreatorStore.getStaticPieces(),
-			isPencilToggled: false
+			isPencilToggled: false,
+			isInitialDown: true
 		};
 	},
 	componentDidMount: function () {
@@ -44,13 +45,15 @@ var GameCreator = React.createClass({
 		GameCreatorStore.addChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.setStaticPiecesFromServer();
-		$(window).keyup(this.handleKeyPress);
+		$(window).keyup(this.handleKeyUp);
+		$(window).keydown(this.handleKeyDown);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
 		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.clearStore();
 		$(window).unbind('keyup');
+		$(window).unbind('keydown');
 	},
 	render: function () {
 		var gamecreatorelements = this.state.staticPieces.map(function (piece, index) {
@@ -103,64 +106,23 @@ var GameCreator = React.createClass({
 	onPencilClick: function () {
 		GameCreatorAction.changeFreeDrawState();
 	},
-	handleKeyPress: function (e) {
-		switch (e.which) {
-		case 39:
-			/* right*/
-			GameCreatorAction.moveSelectedPieces({direction: 'right'});
-			e.preventDefault();
-			break;
-		case 37:
-			/* left*/
-			GameCreatorAction.moveSelectedPieces({direction: 'left'});
-			e.preventDefault();
-			break;
-		case 38:
-			/* up*/
-			GameCreatorAction.moveSelectedPieces({direction: 'up'});
-			e.preventDefault();
-			break;
-		case 40:
-			/* down*/
-			GameCreatorAction.moveSelectedPieces({direction: 'down'});
-			e.preventDefault();
-			break;
-		case 87:
-			/* w*/
-			GameCreatorAction.moveSelectedPieces({direction: 'up'});
-			break;
-		case 65:
-			/* a*/
-			GameCreatorAction.moveSelectedPieces({direction: 'left'});
-			break;
-		case 68:
-			/* d*/
-			GameCreatorAction.moveSelectedPieces({direction: 'right'});
-			break;
-		case 83:
-			/* s*/
-			GameCreatorAction.moveSelectedPieces({direction: 'down'});
-			break;
-		case 187:
-			/* +*/
-			break;
-		case 189:
-			/* -*/
-			break;
-		case 46:
-			GameCreatorAction.deleteCurrentSelectedPiece();
-			break;
-		case 69:
-			GameCreatorAction.rotateCurrentSelectedPiece({
-				next: true
+	handleKeyDown: function (e) {
+		if (this.state.isInitialDown) {
+			this.setState({
+				isInitialDown: false
 			});
-			break;
-		case 81:
-			GameCreatorAction.rotateCurrentSelectedPiece({
-				next: false
-			});
-			break;
+			return;
 		}
+		keyPressed(e.which);
+	},
+	handleKeyUp: function (e) {
+		if (e.which >= 37 && e.which <= 40) {
+			e.preventDefault();
+		}
+		keyPressed(e.which);
+		this.setState({
+			isInitialDown: true
+		});
 	},
 	onFilenameChange: function (e) {
 		this.setState({
@@ -186,5 +148,61 @@ var GameCreator = React.createClass({
 		GameCreatorAction.deleteCurrentSelectedPiece();
 	}
 });
+
+function keyPressed (key) {
+	switch (key) {
+	case 39:
+		/* right*/
+		GameCreatorAction.moveSelectedPieces({direction: 'right'});
+		break;
+	case 37:
+		/* left*/
+		GameCreatorAction.moveSelectedPieces({direction: 'left'});
+		break;
+	case 38:
+		/* up*/
+		GameCreatorAction.moveSelectedPieces({direction: 'up'});
+		break;
+	case 40:
+		/* down*/
+		GameCreatorAction.moveSelectedPieces({direction: 'down'});
+		break;
+	case 87:
+		/* w*/
+		GameCreatorAction.moveSelectedPieces({direction: 'up'});
+		break;
+	case 65:
+		/* a*/
+		GameCreatorAction.moveSelectedPieces({direction: 'left'});
+		break;
+	case 68:
+		/* d*/
+		GameCreatorAction.moveSelectedPieces({direction: 'right'});
+		break;
+	case 83:
+		/* s*/
+		GameCreatorAction.moveSelectedPieces({direction: 'down'});
+		break;
+	case 187:
+		/* +*/
+		break;
+	case 189:
+		/* -*/
+		break;
+	case 46:
+		GameCreatorAction.deleteCurrentSelectedPiece();
+		break;
+	case 69:
+		GameCreatorAction.rotateCurrentSelectedPiece({
+			next: true
+		});
+		break;
+	case 81:
+		GameCreatorAction.rotateCurrentSelectedPiece({
+			next: false
+		});
+		break;
+	}
+}
 
 module.exports = GameCreator;

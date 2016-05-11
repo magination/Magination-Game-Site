@@ -159,7 +159,6 @@ function selectionChanged (index) {
 		index = -1;
 	}
 	removeObjectsOutsideCanvas();
-	console.log(_fabricCanvas.toJSON());
 	GameCreatorStore.emitChange(GameCreatorConstants.PIECE_WAS_SELECTED, index);
 }
 
