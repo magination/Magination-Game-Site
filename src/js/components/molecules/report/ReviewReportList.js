@@ -1,7 +1,8 @@
 var React = require('react');
 var ReportListElement = require('./ReviewReportListElement');
-var URLS = require('../../../config/config').urls;
-var LoginStore = require('../../../stores/LoginStore');
+var ReportStore = require('../../../stores/ReportStore');
+var ReportAction = require('../../../actions/ReportAction');
+var ReportConstants = require('../../../constants/ReportConstants');
 
 var ReviewReportList = React.createClass({
 	getInitialState () {
@@ -12,18 +13,11 @@ var ReviewReportList = React.createClass({
 		};
 	},
 	componentDidMount () {
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.report + '/reviews',
-			headers: {
-				'Authorization': LoginStore.getToken()
-			},
-			contentType: 'application/json',
-			dataType: 'json',
-			statusCode: {
-				200: this.onRequestSuccess
-			}
-		});
+		ReportStore.addChangeListener(this.onReviewReportsChanged, ReportConstants.REVIEW_REPORTS_UPDATED);
+		ReportAction.getReports('reviews');
+	},
+	componentWillUnmount: function () {
+		ReportStore.removeChangeListener(this.onReviewReportsChanged, ReportConstants.REVIEW_REPORTS_UPDATED);
 	},
 	render: function () {
 		var that = this;
@@ -43,10 +37,10 @@ var ReviewReportList = React.createClass({
 			currentExpanded: id
 		});
 	},
-	onRequestSuccess: function (data) {
+	onReviewReportsChanged: function () {
 		this.setState({
-			reviews: data.reviews,
-			userFeedback: 'No reports to show, good job!'
+			games: ReportStore.getReviewReports(),
+			userFeedback: 'No reports to show, great job!'
 		});
 	}
 

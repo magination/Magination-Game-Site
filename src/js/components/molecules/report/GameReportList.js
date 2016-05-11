@@ -1,7 +1,8 @@
 var React = require('react');
 var ReportListElement = require('./GameReportListElement');
-var URLS = require('../../../config/config').urls;
-var LoginStore = require('../../../stores/LoginStore');
+var ReportStore = require('../../../stores/ReportStore');
+var ReportAction = require('../../../actions/ReportAction');
+var ReportConstants = require('../../../constants/ReportConstants');
 
 var GameReportList = React.createClass({
 	getInitialState () {
@@ -12,18 +13,11 @@ var GameReportList = React.createClass({
 		};
 	},
 	componentDidMount () {
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.report + '/games',
-			headers: {
-				'Authorization': LoginStore.getToken()
-			},
-			contentType: 'application/json',
-			dataType: 'json',
-			statusCode: {
-				200: this.onRequestSuccess
-			}
-		});
+		ReportStore.addChangeListener(this.onGameReportsChanged, ReportConstants.GAME_REPORTS_UPDATED);
+		ReportAction.getReports('games');
+	},
+	componentWillUnmount: function () {
+		ReportStore.removeChangeListener(this.onGameReportsChanged, ReportConstants.GAME_REPORTS_UPDATED);
 	},
 	render: function () {
 		var that = this;
@@ -43,10 +37,10 @@ var GameReportList = React.createClass({
 			currentExpanded: id
 		});
 	},
-	onRequestSuccess: function (data) {
+	onGameReportsChanged: function () {
 		this.setState({
-			games: data.games,
-			userFeedback: 'No reports to show, good job!'
+			games: ReportStore.getGameReports(),
+			userFeedback: 'No reports to show, great job!'
 		});
 	}
 });

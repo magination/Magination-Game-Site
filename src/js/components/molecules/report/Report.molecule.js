@@ -19,7 +19,7 @@ var Report = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Button style={ButtonStyles.report} onClick={this.onShowModalClicked}><GlyphIcon glyph='glyphicon glyphicon-flag'/> REPORT</Button>
+				<Button onClick={this.onShowModalClicked}><GlyphIcon glyph='glyphicon glyphicon-flag'/> REPORT</Button>
 				<Modal dialogClassName='custom-modal' show={this.state.isShowModal} onHide={this.onHide}>
 					<Modal.Header>
 						<Modal.Title>Report</Modal.Title>
@@ -64,7 +64,7 @@ var Report = React.createClass({
 			id: this.props.reportId,
 			reportText: this.state.reportText
 		};
-		var requestUrl = URLS.api.report;
+		var requestUrl = URLS.api.reports;
 		requestUrl += '/' + report.type;
 
 		$.ajax({
