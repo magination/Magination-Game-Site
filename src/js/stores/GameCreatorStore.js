@@ -106,6 +106,9 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.SET_PENCIL_OPTIONS:
 		setPencilOptions(action.options);
 		break;
+	case GameCreatorConstants.MOVE_SELECTED_PIECE:
+		moveSelectedPieces(action.direction);
+		break;
 	}
 });
 
@@ -124,10 +127,39 @@ function setPencilOptions (options) {
 	GameCreatorStore.emitChange(GameCreatorConstants.PENCIL_OPTIONS_CHANGED);
 }
 
+function moveSelectedPieces (direction) {
+	var deltaX = 0;
+	var deltaY = 0;
+	var moveQuantity = 10;
+	switch (direction) {
+	case 'right':
+		deltaX = moveQuantity;
+		break;
+	case 'left':
+		deltaX = -moveQuantity;
+		break;
+	case 'down':
+		deltaY = moveQuantity;
+		break;
+	case 'up':
+		deltaY = -moveQuantity;
+		break;
+	}
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (object.get('active')) {
+			object.set('left', object.get('left') + deltaX);
+			object.set('top', object.get('top') + deltaY);
+		}
+	});
+	_fabricCanvas.renderAll();
+}
+
 function selectionChanged (index) {
 	if (index === undefined) {
 		index = -1;
 	}
+	removeObjectsOutsideCanvas();
+	console.log(_fabricCanvas.toJSON());
 	GameCreatorStore.emitChange(GameCreatorConstants.PIECE_WAS_SELECTED, index);
 }
 
@@ -191,6 +223,40 @@ function addPieceToCreator (piece) {
 		saveGameAsJson();
 	};
 	img.src = piece.url;
+}
+
+function removeObjectsOutsideCanvas () {
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (isOutsideBorder(object)) {
+			object.remove();
+		}
+	});
+	var objects = _fabricCanvas.getObjects();
+	for (var i = 0; i < objects.length; i++) {
+		if (isOutsideBorder(objects[i])) {
+			objects[i].remove();
+			i--;
+		}
+	}
+}
+
+function isOutsideBorder (object) {
+	var width = _fabricCanvas.getWidth();
+	var height = _fabricCanvas.getHeight();
+	var bounding = object.getBoundingRect();
+	if (bounding.left + bounding.width < 0) {
+		return true;
+	}
+	else if (bounding.left > width) {
+		return true;
+	}
+	else if (bounding.top + bounding.height < 0) {
+		return true;
+	}
+	else if (bounding.top > height) {
+		return true;
+	}
+	else return false;
 }
 
 function saveGameAsJson () {

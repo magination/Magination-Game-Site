@@ -107,31 +107,39 @@ var GameCreator = React.createClass({
 		switch (e.which) {
 		case 39:
 			/* right*/
+			GameCreatorAction.moveSelectedPieces({direction: 'right'});
 			e.preventDefault();
 			break;
 		case 37:
 			/* left*/
+			GameCreatorAction.moveSelectedPieces({direction: 'left'});
 			e.preventDefault();
 			break;
 		case 38:
 			/* up*/
+			GameCreatorAction.moveSelectedPieces({direction: 'up'});
 			e.preventDefault();
 			break;
 		case 40:
 			/* down*/
+			GameCreatorAction.moveSelectedPieces({direction: 'down'});
 			e.preventDefault();
 			break;
 		case 87:
 			/* w*/
+			GameCreatorAction.moveSelectedPieces({direction: 'up'});
 			break;
 		case 65:
 			/* a*/
+			GameCreatorAction.moveSelectedPieces({direction: 'left'});
 			break;
 		case 68:
 			/* d*/
+			GameCreatorAction.moveSelectedPieces({direction: 'right'});
 			break;
 		case 83:
 			/* s*/
+			GameCreatorAction.moveSelectedPieces({direction: 'down'});
 			break;
 		case 187:
 			/* +*/
