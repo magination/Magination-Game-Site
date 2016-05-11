@@ -27,7 +27,7 @@ var Images = React.createClass({
 									</div>
 								</div>
 							</div>
-						: 	null}
+						: 	<h3>{this.state.description}</h3>}
 					{this.state.imageSrc ? <Button style={ButtonStyle.MaginationFillParentCustom(Colors.green)} type='submit'>Submit image</Button> : null}
 					<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSelectImageClicked}>{this.state.selectButtonText}</Button>
 					<input style={{height: '0'}} ref='fileInput' type='file' name='image' onChange={this.onSourceChanged} />
@@ -65,10 +65,10 @@ var Images = React.createClass({
 	onRequestSuccess: function () {
 		LoginAction.updateLoginProfile();
 		this.setState({
-			description: 'Image submitted.',
 			imageSrc: null,
 			selectButtonText: 'Click here to upload an image'
 		});
+		this.props.onImageSubmitted();
 	},
 	onRequestError: function (data) {
 	}

@@ -11,7 +11,8 @@ var ButtonStyle = require('../../../styles/Buttons');
 var SelectImage = React.createClass({
 	getInitialState: function () {
 		return {
-			showModal: false
+			showModal: false,
+			activeKey: 1
 		};
 	},
 	render: function () {
@@ -20,14 +21,14 @@ var SelectImage = React.createClass({
 				<Button onClick={this.onAddImageClicked} type='button' style={ButtonStyle.MaginationFillParent}>ADD IMAGE</Button>
 				<Modal ref='modal' show={this.state.showModal} onEnter={this.onEnter} onHide={this.onHide} dialogClassName='selectimage-modal'>
 					<Modal.Body>
-						<Tabs defaultActiveKey={1}>
+						<Tabs activeKey={this.state.activeKey} onSelect={this.onTabSelected}>
 							<Tab eventKey={1} title='Your images'>
 								<Row>
 									<ImageList onSelected={this.close}/>
 								</Row>
 							</Tab>
 							<Tab eventKey={2} title='Upload an image'>
-								<UploadImage onSubmitted={this.refreshImageList}/>
+								<UploadImage onImageSubmitted={this.onImageSubmitted}/>
 							</Tab>
 						</Tabs>
 					</Modal.Body>
@@ -50,6 +51,16 @@ var SelectImage = React.createClass({
 	},
 	onAddImageClicked: function () {
 		this.setState({showModal: true});
+	},
+	onImageSubmitted: function () {
+		this.setState({
+			activeKey: 1
+		});
+	},
+	onTabSelected: function (selectedTabKey) {
+		this.setState({
+			activeKey: selectedTabKey
+		});
 	}
 });
 

@@ -3,8 +3,9 @@ var MyGamesConstants = require('../constants/MyGamesConstants');
 var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 
-var GameListActions = {
+var MyGamesAction = {
 	getPublishedGames: function () {
+		if (!LoginStore.getLoginProfile()._id) return;
 		$.ajax({
 			type: 'GET',
 			headers: {
@@ -17,6 +18,7 @@ var GameListActions = {
 		});
 	},
 	getUnpublishedGames: function () {
+		if (!LoginStore.getLoginProfile()._id) return;
 		$.ajax({
 			type: 'GET',
 			headers: {
@@ -62,4 +64,4 @@ function onGetUnpublishedGames (data) {
 	});
 }
 
-module.exports = GameListActions;
+module.exports = MyGamesAction;

@@ -6,7 +6,6 @@ var GameAction = require('../../actions/GameAction');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
-var Button = require('react-bootstrap').Button;
 var Checkbox = require('../atoms/game/Checkbox.atom');
 var HideableInput = require('../molecules/creategame/HideableInput.molecule.js');
 var GameDescriptionInput = require('../molecules/creategame/GameDescriptionInput.molecule.js');
@@ -99,13 +98,13 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked}>CANCEL</Button>
+							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked} tooltip='Remove the game and exit the editor.' buttonText='CANCEL'/>
 						</Col>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked}>SAVE</Button>
+							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
 						</Col>
 						<Col md={2}>
-							<Button style={ButtonStyle.Game.gameButton(Colors.yellow)} onClick={this.onPreviewClicked}>PREVIEW</Button>
+							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.yellow)} onClick={this.onPreviewClicked} tooltip='See how your game will look once published!' buttonText='PREVIEW'/>
 						</Col>
 						<Col md={2}>
 							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked} tooltip='Publish your game for everyone to see!' buttonText='PUBLISH'/>

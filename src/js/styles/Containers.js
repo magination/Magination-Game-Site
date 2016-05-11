@@ -136,7 +136,11 @@ var ContainerStyles = {
 				left: '50%',
 				transform: 'translateX(-50%) translateY(-50%)',
 				msTransform: 'translateX(-50%) translateY(-50%)',
+<<<<<<< Updated upstream
 				WebkitTransition: 'translateX(-50%) translateY(-50%)'
+=======
+				WebkitTransition: 'translateX(-50%) translateY(-50%)',
+>>>>>>> Stashed changes
 				userSelect: 'none',
 				WebkitUserSelect: 'none',
 				msUserSelect: 'none'
