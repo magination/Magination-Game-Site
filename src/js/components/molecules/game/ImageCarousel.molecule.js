@@ -58,7 +58,7 @@ var ImageCarousel = React.createClass({
 			if (index !== stateIndex) {
 				style.display = 'none';
 			}
-			return <div key={url} style={style}><CenteredImage src={url} /></div>;
+			return <div key={index} style={style}><CenteredImage src={url} /></div>;
 		});
 		return (
 			<div style={this.state.divStyle}>
