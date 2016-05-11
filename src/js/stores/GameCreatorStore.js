@@ -226,15 +226,22 @@ function saveGameAsPng (filename) {
 		console.log('never saved');
 		return;
 	}
+	_fabricCanvas.deactivateAll().renderAll();
 	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
 	var blob = b64toBlob(data, 'image/png');
 	var formData = new FormData();
 	formData.append('image', blob, filename);
 	formData.append('filename', filename);
 	formData.append('overwrite', 'true'); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
+	var url = URLS.api.users +
+		'/' + LoginStore.getLoginProfile()._id +
+		'/gameCreatorObjects/' +
+		_loadedData._id +
+		'/image' +
+		'?' + $.param({overwrite: 'true'});
 	$.ajax({
 		type: 'PUT',
-		url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects/' + _loadedData._id + '/image',
+		url: url,
 		data: formData,
 		headers: {
 			'Authorization': LoginStore.getToken()
