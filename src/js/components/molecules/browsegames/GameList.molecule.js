@@ -49,7 +49,7 @@ var GameList = React.createClass({
 		$(window).unbind('scroll');
 		$(window).scroll(function () {
 			if ($(window).scrollTop() + $(window).height() === getDocHeight()) {
-				GameListAction.getGamesSpecificInterval(games.length, 10);
+				GameListAction.getGamesSpecificInterval(games.length, 15);
 				$(window).unbind('scroll');
 			}
 		});
