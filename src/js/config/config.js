@@ -1,5 +1,5 @@
-var serverRoot = 'http://88.95.2.143/';
-var backendRoot = 'https://88.95.2.143:8000/';
+var serverRoot = 'http://localhost:8080/';
+var backendRoot = 'https://localhost:8000/';
 var restApiRoot = backendRoot + 'api/';
 var imgRoot = serverRoot + 'public/img/';
 
