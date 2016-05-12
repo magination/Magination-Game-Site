@@ -27,10 +27,10 @@ var Report = React.createClass({
 							: <Input style={TextStyles.textArea} type='textarea' value={this.state.reportText} placeholder='Describe the infringement' onChange={this.onReportTextChanged}/>}
 					</Modal.Body>
 					<Modal.Footer>
-						<Button style={ButtonStyles.cancel} onClick={this.onHide}>{this.state.userMessage ? 'CLOSE' : 'CANCEL'}</Button>
+						<Button onClick={this.onHide}>{this.state.userMessage ? 'CLOSE' : 'CANCEL'}</Button>
 						{this.state.userMessage
 							? null
-							: <Button style={ButtonStyles.submit} onClick={this.onReportClicked}>REPORT</Button>}
+							: <Button style={ButtonStyles.Magination} onClick={this.onReportClicked}>REPORT</Button>}
 					</Modal.Footer>
 				</Modal>
 			</div>

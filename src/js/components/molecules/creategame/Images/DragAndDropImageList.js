@@ -1,7 +1,7 @@
 var React = require('react');
 var Col = require('react-bootstrap').Col;
-var GameStore = require('../../../stores/GameStore');
-var GameAction = require('../../../actions/GameAction');
+var GameStore = require('../../../../stores/GameStore');
+var GameAction = require('../../../../actions/GameAction');
 var AllowDropImageContainer = require('./AllowDropImageContainer');
 
 var DragAndDropImageList = React.createClass({

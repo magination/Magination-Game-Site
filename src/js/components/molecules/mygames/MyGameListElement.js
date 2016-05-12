@@ -32,7 +32,7 @@ var MyGameListElement = React.createClass({
 					</Media.Left>
 					<Media.Body>
 						<h3>
-							{this.props.game.title}
+							{this.props.game.title ? this.props.game.title : 'No title'}
 						</h3>
 						<h4>
 							<Glyphicon style={TextStyles.blue} glyph='star'/> {toOneDecimal(this.props.game.rating)}
@@ -41,7 +41,7 @@ var MyGameListElement = React.createClass({
 						</h4>
 						<div>
 							<h4>Description:</h4>
-							<p>{this.props.game.shortDescription}</p>
+							<p>{this.props.game.shortDescription ? this.props.game.shortDescription : 'No description'}</p>
 						</div>
 					</Media.Body>
                     <Media.Right>
@@ -62,7 +62,7 @@ var MyGameListElement = React.createClass({
 	},
 	onPublishClicked: function () {
 		MyGamesAction.publishGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	onEditGameClicked: function () {
 		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
@@ -73,7 +73,7 @@ var MyGameListElement = React.createClass({
 				break;
 			}
 		}
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: true});
+		GameAction.setHasSelectedGameToEdit(true);
 		GameAction.changeGameLocally(game);
 		NavigationAction.navigate({
 			destination: NavigationConstants.PATHS.creategame
@@ -81,11 +81,11 @@ var MyGameListElement = React.createClass({
 	},
 	onUnPublishGameClicked: function () {
 		MyGamesAction.unPublishGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	onDeleteGameClicked: function () {
 		MyGamesAction.deleteGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	}
 });
 

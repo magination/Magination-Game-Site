@@ -6,7 +6,7 @@ var Tab = require('react-bootstrap').Tab;
 var Row = require('react-bootstrap').Row;
 var UploadImage = require('./UploadImage.molecule.js');
 var ImageList = require('./ImageList');
-var ButtonStyle = require('../../../styles/Buttons');
+var ButtonStyle = require('../../../../styles/Buttons');
 
 var SelectImage = React.createClass({
 	getInitialState: function () {

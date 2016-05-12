@@ -6,6 +6,11 @@ var GameStore = require('../../stores/GameStore');
 var GameAction = require('../../actions/GameAction');
 var ButtonStyle = require('../../styles/Buttons');
 var MyGameList = require('../molecules/mygames/MyGamesList.molecule');
+var NavigationAction = require('../../actions/NavigationAction');
+var NavigationConstants = require('../../constants/NavigationConstants');
+var NavigationStore = require('../../stores/NavigationStore');
+var LoginStore = require('../../stores/LoginStore');
+
 var SelectGameToEdit = React.createClass({
 	getInitialState: function () {
 		return {
@@ -28,7 +33,7 @@ var SelectGameToEdit = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Modal ref='modal' show={this.state.showModal} onEnter={this.onEnter}>
+				<Modal ref='modal' show={this.state.showModal} onEnter={this.onEnter} onHide={this.onHide}>
 					<Modal.Body>
 						<h5>It seems like you are already editing some games. Select a game to continue editing it, or click the "create new" button to create a new game.</h5>
 						<br/>
@@ -43,9 +48,17 @@ var SelectGameToEdit = React.createClass({
 	},
 
 	onHide: function () {
-		this.setState({
-			showModal: false
-		});
+		if (NavigationConstants.isLegalDestination(LoginStore.getLoginState().isLoggedIn, NavigationStore.getNavigationState().lastPath)) {
+			NavigationAction.navigate({
+				destination: NavigationStore.getNavigationState().lastPath
+			});
+			return;
+		}
+		else {
+			NavigationAction.navigate({
+				destination: NavigationConstants.PATHS.discover
+			});
+		}
 	},
 	close: function () {
 		this.setState({
@@ -53,9 +66,9 @@ var SelectGameToEdit = React.createClass({
 		});
 	},
 	createNewGameClicked: function () {
-		GameAction.saveGameToServer();
 		GameAction.createNewGameLocally();
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: true});
+		GameAction.saveGameToServer();
+		GameAction.setHasSelectedGameToEdit(true);
 		this.setState({
 			showModal: false
 		});

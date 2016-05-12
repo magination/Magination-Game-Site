@@ -2,7 +2,8 @@ var Colors = require('./Colors');
 var ButtonStyles = {
 	Magination: {
 		backgroundColor: Colors.blueDark,
-		color: 'white'
+		color: 'white',
+		borderWidth: 0
 	},
 	ToggledButton: {
 		backgroundColor: Colors.blueLight,
@@ -13,7 +14,8 @@ var ButtonStyles = {
 		backgroundColor: Colors.blueDark,
 		color: 'white',
 		width: '100%',
-		height: '50'
+		height: '50',
+		borderWidth: 0
 	},
 	RatingStar: {
 		color: Colors.blue,
@@ -113,6 +115,24 @@ var ButtonStyles = {
 		paddingBottom: '10',
 		borderWidth: '0',
 		backgroundColor: Colors.yellowDark
+	},
+	confirmButton: {
+		yes: {
+			color: 'white',
+			backgroundColor: Colors.greenDark,
+			borderWidth: 0,
+			paddingTop: 5,
+			paddingBottom: 5,
+			width: '100%'
+		},
+		no: {
+			color: 'white',
+			backgroundColor: Colors.redDark,
+			borderWidth: 0,
+			paddingTop: 5,
+			paddingBottom: 5,
+			width: '100%'
+		}
 	}
 };
 

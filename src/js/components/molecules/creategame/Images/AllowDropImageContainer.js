@@ -1,7 +1,7 @@
 var React = require('react');
-var ContainerStyle = require('../../../styles/Containers');
+var ContainerStyle = require('../../../../styles/Containers');
 var GlyphIcon = require('react-bootstrap').Glyphicon;
-var TextStyle = require('../../../styles/Text');
+var TextStyle = require('../../../../styles/Text');
 var AllowDropImageContainer = React.createClass({
 	render: function () {
 		return (

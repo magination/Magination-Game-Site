@@ -1,30 +1,35 @@
 var React = require('react');
-var URLS = require('../../config/config').urls;
-var ImageNumberPair = require('../molecules/creategame/ImageNumberPair.molecule.js');
-var GameStore = require('../../stores/GameStore');
-var GameAction = require('../../actions/GameAction');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
+
+var URLS = require('../../config/config').urls;
+var TextStyle = require('../../styles/Text');
+var ButtonStyle = require('../../styles/Buttons');
+var Colors = require('../../styles/Colors');
+var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
+
+var ImageNumberPair = require('../molecules/creategame/ImageNumberPair.molecule.js');
 var Checkbox = require('../atoms/game/Checkbox.atom');
 var HideableInput = require('../molecules/creategame/HideableInput.molecule.js');
 var GameDescriptionInput = require('../molecules/creategame/GameDescriptionInput.molecule.js');
 var RuleList = require('../molecules/creategame/RuleList');
 var AlternativeRuleList = require('../molecules/creategame/AlternativeRuleList');
-var TextStyle = require('../../styles/Text');
-var ButtonStyle = require('../../styles/Buttons');
-var Colors = require('../../styles/Colors');
-var Images = require('../molecules/creategame/Images.molecule');
-var MyGamesAction = require('../../actions/MyGamesAction');
-var NavigationAction = require('../../actions/NavigationAction');
-var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
 var AutoSave = require('../../service/AutoSave.service.js');
 var ButtonWithTooltip = require('../atoms/ButtonWithTooltip');
+var ConfirmButton = require('../atoms/ConfirmButton');
+var Images = require('../molecules/creategame/Images/Images.molecule.js');
+
+var GameStore = require('../../stores/GameStore');
+var GameAction = require('../../actions/GameAction');
+var MyGamesAction = require('../../actions/MyGamesAction');
+var NavigationAction = require('../../actions/NavigationAction');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
 		return {
-			game: GameStore.getGame()
+			game: GameStore.getGame(),
+			userFeedback: undefined
 		};
 	},
 	componentDidMount: function () {
@@ -32,13 +37,13 @@ var GameForm = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	render: function () {
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
-					<h1 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
+						<h1 ref='header' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
 					<hr/>
 					<Row>
 						<Col md={4}>
@@ -98,7 +103,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={2}>
-							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked} tooltip='Remove the game and exit the editor.' buttonText='CANCEL'/>
+							<ConfirmButton confirmationDialog='This action will delete the game and any changes you have made to it, and exit the editor. Do you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked} placement='top' buttonText='CANCEL'/>
 						</Col>
 						<Col md={2}>
 							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
@@ -127,7 +132,7 @@ var GameForm = React.createClass({
 		});
 	},
 	onSaveClicked: function () {
-		GameAction.saveGameToServer();
+		GameAction.saveGameToServer(true);
 	},
 	onPreviewClicked: function () {
 		NavigationAction.navigate({
@@ -144,14 +149,14 @@ var GameForm = React.createClass({
 	},
 	onCancelClicked () {
 		GameAction.createNewGameLocally();
-		MyGamesAction.deleteGame(this.state.game._id);
+		if (this.state.game_id) MyGamesAction.deleteGame(this.state.game._id);
 		GameAction.setHasSelectedGameToEdit(false);
 		NavigationAction.navigate({
 			destination: NavigationPaths.discover
 		});
 	},
 	onSelectGameToEditClicked: function () {
-		GameAction.setHasSelectedGameToEdit({hasSelectedGameToEdit: false});
+		GameAction.setHasSelectedGameToEdit(false);
 	},
 	gameIsValid: function () {
 		var game = GameStore.getGame();

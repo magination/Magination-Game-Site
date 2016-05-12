@@ -1,7 +1,7 @@
 var React = require('react');
-var GameStore = require('../../../stores/GameStore');
+var GameStore = require('../../../../stores/GameStore');
 var SelectImage = require('./SelectImage.molecule.js');
-var GameCreatorModal = require('../../organisms/GameCreatorModal.organism');
+var GameCreatorModal = require('../../../organisms/GameCreatorModal.organism.js');
 var DragAndDropImageList = require('./DragAndDropImageList');
 var Col = require('react-bootstrap').Col;
 

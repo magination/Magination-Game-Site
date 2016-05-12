@@ -1,10 +1,10 @@
 var React = require('react');
-var ContainerStyle = require('../../../styles/Containers');
-var GameAction = require('../../../actions/GameAction');
-var LoginStore = require('../../../stores/LoginStore');
-var TextStyle = require('../../../styles/Text');
-var URLS = require('../../../config/config').urls;
-var LoginAction = require('../../../actions/LoginAction');
+var ContainerStyle = require('../../../../styles/Containers');
+var GameAction = require('../../../../actions/GameAction');
+var LoginStore = require('../../../../stores/LoginStore');
+var TextStyle = require('../../../../styles/Text');
+var URLS = require('../../../../config/config').urls;
+var LoginAction = require('../../../../actions/LoginAction');
 var GlyphIcon = require('react-bootstrap').Glyphicon;
 var Col = require('react-bootstrap').Col;
 
