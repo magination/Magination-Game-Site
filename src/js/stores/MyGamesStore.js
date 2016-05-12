@@ -6,8 +6,8 @@ var CHANGE_EVENT = 'change-myGames';
 var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 
-var _publishedGames = null;
-var _unpublishedGames = null;
+var _publishedGames;
+var _unpublishedGames;
 
 var MyGamesStore = _.extend({}, EventEmitter.prototype, {
 	getPublishedGames: function () {

@@ -6,7 +6,7 @@ var MyGamesAction = require('../../../actions/MyGamesAction');
 var MyGameListElement = require('./MyGameListElement');
 var LoginStore = require('../../../stores/LoginStore');
 
-var PublishedGameList = React.createClass({
+var MyGamesList = React.createClass({
 	getInitialState: function () {
 		return {
 			games: []
@@ -38,9 +38,9 @@ var PublishedGameList = React.createClass({
 		);
 	},
 	onGameListChange: function () {
-		var games = this.props.isPublished
-			? MyGamesStore.getPublishedGames() === null ? [] : MyGamesStore.getPublishedGames()
-			: MyGamesStore.getUnpublishedGames() == null ? [] : MyGamesStore.getUnpublishedGames();
+		var games;
+		if (this.props.isPublished) games = MyGamesStore.getPublishedGames() ? MyGamesStore.getPublishedGames() : [];
+		else games = MyGamesStore.getUnpublishedGames() ? MyGamesStore.getUnpublishedGames() : [];
 		this.setState({
 			games: games
 		});
@@ -55,9 +55,9 @@ var PublishedGameList = React.createClass({
 			MyGamesAction.getPublishedGames();
 		}
 		else {
-			MyGamesAction.getUnpublishedGames();
+			MyGamesAction.requestUnpublishedGames();
 		}
 	}
 });
 
-module.exports = PublishedGameList;
+module.exports = MyGamesList;

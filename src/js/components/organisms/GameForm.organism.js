@@ -42,7 +42,6 @@ var GameForm = React.createClass({
 		GameStore.removeChangeListener(this.onGameStateChanged);
 		GameStore.removeChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
 		GameStore.emitChange(GameConstants.GAME_FORM_CLOSED);
-		GameAction.setHasSelectedGameToEdit(false);
 	},
 	render: function () {
 		return (
@@ -144,7 +143,7 @@ var GameForm = React.createClass({
 		AutoSave();
 	},
 	onSaveClicked: function () {
-		GameAction.saveGameToServer(true);
+		GameAction.manualSaveGameToServer();
 	},
 	onPreviewClicked: function () {
 		NavigationAction.navigate({
@@ -160,15 +159,11 @@ var GameForm = React.createClass({
 		}
 	},
 	onCancelClicked () {
-		GameAction.createNewGameLocally();
 		if (this.state.game_id) MyGamesAction.deleteGame(this.state.game._id);
-		GameAction.setHasSelectedGameToEdit(false);
+		GameAction.removeGameLocally();
 		NavigationAction.navigate({
 			destination: NavigationPaths.discover
 		});
-	},
-	onSelectGameToEditClicked: function () {
-		GameAction.setHasSelectedGameToEdit(false);
 	},
 	gameIsValid: function () {
 		var game = GameStore.getGame();

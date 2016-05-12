@@ -9,18 +9,9 @@ var Colors = require('../../../styles/Colors');
 var MyGamesAction = require('../../../actions/MyGamesAction');
 var GameAction = require('../../../actions/GameAction');
 var NavigationAction = require('../../../actions/NavigationAction');
-var MyGamesStore = require('../../../stores/MyGamesStore');
 var NavigationConstants = require('../../../constants/NavigationConstants');
 var CenteredImage = require('../../atoms/CenteredImage.atom');
 var MyGameListElement = React.createClass({
-	propTypes: {
-		game: React.PropTypes.shape({
-			title: React.PropTypes.string.isRequired,
-			rating: React.PropTypes.number,
-			numberOfPlayers: React.PropTypes.number,
-			shortDescription: React.PropTypes.string
-		})
-	},
 	render: function () {
 		return (
 			<div>
@@ -62,30 +53,21 @@ var MyGameListElement = React.createClass({
 	},
 	onPublishClicked: function () {
 		MyGamesAction.publishGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit(false);
+		GameAction.removeGameLocally();
 	},
 	onEditGameClicked: function () {
-		var games = this.props.isPublished ? MyGamesStore.getPublishedGames() : MyGamesStore.getUnpublishedGames();
-		var game;
-		for (var i = 0; i < games.length; i++) {
-			if (games[i]._id === this.props.game._id) {
-				game = games[i];
-				break;
-			}
-		}
-		GameAction.setHasSelectedGameToEdit(true);
-		GameAction.changeGameLocally(game);
+		GameAction.changeGameLocally(this.props.game);
 		NavigationAction.navigate({
 			destination: NavigationConstants.PATHS.creategame
 		});
 	},
 	onUnPublishGameClicked: function () {
 		MyGamesAction.unPublishGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit(false);
+		GameAction.removeGameLocally();
 	},
 	onDeleteGameClicked: function () {
 		MyGamesAction.deleteGame(this.props.game._id);
-		GameAction.setHasSelectedGameToEdit(false);
+		GameAction.removeGameLocally();
 	}
 });
 

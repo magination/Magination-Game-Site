@@ -1,6 +1,6 @@
 var GameAction = require('../actions/GameAction');
 
 function autosave () {
-	GameAction.saveGameToServer();
+	GameAction.autoSaveGameToServer();
 }
 module.exports = autosave;

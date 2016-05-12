@@ -55,6 +55,7 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameConstants.CHANGE_GAME_LOCALLY:
 		_game = action.game;
+		_hasSelectedGameToEdit = true;
 		GameStore.emitChange(GameConstants.LOCAL_GAME_HAS_CHANGED);
 		GameStore.emitChange(CHANGE_EVENT);
 		break;
@@ -104,7 +105,24 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		_hasPromptedSave = action.hasPromptedSave;
 		break;
 	case GameConstants.DELETE_GAME_FROM_SERVER:
+		CreateNewGame();
+		_hasSelectedGameToEdit = false;
 		GameStore.emitChange();
+		break;
+	case GameConstants.CLEAR_GAME_LOCALLY:
+		CreateNewGame();
+		_hasSelectedGameToEdit = false;
+		GameStore.emitChange();
+		break;
+	case GameConstants.SAVE_GAME_AND_RESET_GAME_STORE:
+		SaveGameAndResetGameStore();
+		GameStore.emitChange();
+		break;
+	case GameConstants.REMOVE_GAME_LOCALLY:
+		CreateNewGame();
+		_hasSelectedGameToEdit = false;
+		GameStore.emitChange();
+		break;
 	}
 });
 function ChangeImagePrioritization (action) {
@@ -143,6 +161,7 @@ function PublishGameToServer () {
 };
 function SaveGameToServer (hasPromptedSave) {
 	_hasPromptedSave = hasPromptedSave;
+	_hasSelectedGameToEdit = !hasPromptedSave;
 	_game.id = undefined;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
@@ -154,6 +173,27 @@ function SaveGameToServer (hasPromptedSave) {
 		contentType: 'application/json',
 		dataType: 'json',
 		success: onSaveGameSuccessResponse
+	});
+};
+function SaveGameAndResetGameStore () {
+	_hasPromptedSave = true;
+	$.ajax({
+		type: _game._id ? 'PUT' : 'POST',
+		url: _game._id ? URLS.api.unpublishedGames + '/' + _game._id : URLS.api.unpublishedGames,
+		data: JSON.stringify(_game),
+		headers: {
+			'Authorization': LoginStore.getToken()
+		},
+		contentType: 'application/json',
+		dataType: 'json',
+		success: function () {
+			FeedbackAction.displaySuccessMessage({
+				header: 'Success.',
+				message: 'Game saved, you can leave and edit it later.'
+			});
+			_hasSelectedGameToEdit = false;
+			CreateNewGame();
+		}
 	});
 };
 function CreateNewGame () {
@@ -247,7 +287,8 @@ var onGamePostedSuccess = function (data) {
 	NavigationAction.navigate({
 		destination: '/game/' + data._id
 	});
-	_game = null;
+	CreateNewGame();
+	_hasPromptedSave = true;
 	_hasSelectedGameToEdit = false;
 };
 var onSaveGameSuccessResponse = function (data) {
