@@ -89,6 +89,10 @@ var GameCreatorActions = {
 	},
 	fetchGameCreatorListFromServer: function (data) {
 		var gameId = GameStore.getGame()._id;
+		if (!gameId) {
+			console.log('WARNING - Tried to fetch gamecreator list from server, but game id was undefined');
+			return;
+		}
 		$.ajax({
 			type: 'GET',
 			url: URLS.api.unpublishedGames + '/' + gameId + '/gameCreators',

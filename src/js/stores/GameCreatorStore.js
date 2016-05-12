@@ -39,6 +39,13 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 			color: _fabricCanvas.freeDrawingBrush.color
 		};
 	},
+	getActiveGameCreatorId: function () {
+		if (!_loadedData) {
+			console.log('ERROR: Tried to get active gamecreator id, but active data was null');
+			return;
+		}
+		return _loadedData._id;
+	},
 	getGameCreatorList: function () {
 		return _gamecreatorList;
 	},
@@ -91,6 +98,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.CLEAR_GAMECREATOR_STORE:
 		_fabricCanvas = new fabric.Canvas(action.id);
 		_fabricCanvas.on('selection:cleared', selectionChanged);
+		_loadedData = null;
 		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
@@ -141,11 +149,16 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 			_fabricCanvas.loadFromDatalessJSON(gamecreator.json, _fabricCanvas.renderAll.bind(_fabricCanvas));
 			// _fabricCanvas.renderAll();
 
-			_loadedData = gamecreator;
+			setLoadedData(gamecreator);
 			return false;
 		}
 		return true;
 	});
+}
+
+function setLoadedData (gamecreator) {
+	_loadedData = gamecreator;
+	GameCreatorStore.emitChange(GameCreatorConstants.ACTIVE_DATA_CHANGED);
 }
 
 function changeFreedrawState () {
@@ -396,7 +409,18 @@ function saveGameAsPng () {
 }
 
 function onSaveJsonSuccessResponse (data) {
-	_loadedData = data;
+	var isNew = _gamecreatorList.every(function (gamecreator, index) {
+		if (gamecreator._id === data._id) {
+			_gamecreatorList[index] = $.extend(true, {}, data);
+			setLoadedData(_gamecreatorList[index]);
+			return false;
+		}
+		return true;
+	});
+	if (isNew) {
+		_gamecreatorList.unshift(data);
+		setLoadedData(_gamecreatorList[_gamecreatorList.length - 1]);
+	}
 }
 
 function onRequestSuccess (data) {

@@ -20,7 +20,8 @@ var constants = {
 	ITERATE_SELECTED_PIECES_DEPTH: 'iterate_selected_pieces_depth',
 	PNG_ADDED_TO_GAME: 'png_added_to_game',
 	FETCHED_GAMECREATOR_LIST_FROM_SERVER: 'fetched_gamecreator_list_from_server',
-	SET_LOADED_DATA_TO_ID: 'set_loaded_data_to_id'
+	SET_LOADED_DATA_TO_ID: 'set_loaded_data_to_id',
+	ACTIVE_DATA_CHANGED: 'active_data_changed'
 };
 
 module.exports = constants;

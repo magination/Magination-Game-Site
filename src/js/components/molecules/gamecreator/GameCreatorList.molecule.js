@@ -11,13 +11,16 @@ var containerStyle = {
 var GameCreatorList = React.createClass({
 	getInitialState: function () {
 		return {
-			gameCreatorList: GameCreatorStore.getGameCreatorList()
+			gameCreatorList: GameCreatorStore.getGameCreatorList(),
+			currentSelected: ''
 		};
 	},
 	componentDidMount: function () {
+		GameCreatorStore.addChangeListener(this.onActiveDataChanged, GameCreatorConstants.ACTIVE_DATA_CHANGED);
 		GameCreatorStore.addChangeListener(this.onListChanged, GameCreatorConstants.FETCHED_GAMECREATOR_LIST_FROM_SERVER);
 	},
 	componentWillUnmount: function () {
+		GameCreatorStore.removeChangeListener(this.onActiveDataChanged, GameCreatorConstants.ACTIVE_DATA_CHANGED);
 		GameCreatorStore.removeChangeListener(this.onListChanged, GameCreatorConstants.FETCHED_GAMECREATOR_LIST_FROM_SERVER);
 	},
 	render: function () {
@@ -38,6 +41,12 @@ var GameCreatorList = React.createClass({
 	onGameCreatorClicked: function (gameCreatorId) {
 		GameCreatorAction.loadCreatorId({
 			gameCreatorId: gameCreatorId
+		});
+	},
+	onActiveDataChanged: function () {
+		this.setState({
+			gameCreatorList: GameCreatorStore.getGameCreatorList(),
+			currentSelected: GameCreatorStore.getActiveGameCreatorId()
 		});
 	},
 	onListChanged: function () {
