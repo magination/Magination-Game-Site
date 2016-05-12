@@ -22,6 +22,7 @@ var Images = require('../molecules/creategame/Images/Images.molecule.js');
 
 var GameStore = require('../../stores/GameStore');
 var GameAction = require('../../actions/GameAction');
+var GameConstants = require('../../constants/GameConstants');
 var MyGamesAction = require('../../actions/MyGamesAction');
 var NavigationAction = require('../../actions/NavigationAction');
 
@@ -29,14 +30,16 @@ var GameForm = React.createClass({
 	getInitialState: function () {
 		return {
 			game: GameStore.getGame(),
-			userFeedback: undefined
+			isAvailableGameName: undefined
 		};
 	},
 	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
+		GameStore.addChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
+		GameStore.removeChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
 		GameAction.setHasSelectedGameToEdit(false);
 	},
 	render: function () {
@@ -47,7 +50,10 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={4}>
-							<Input value={this.state.game.title} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={AutoSave}/>
+							<Input value={this.state.game.title} bsStyle={this.state.isAvailableGameName ? 'success' : 'error'} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={this.onTitleUnfocused} hasFeedback/>
+						</Col>
+						<Col md={8} style={{paddingLeft: 0}}>
+							{<h5 style={this.state.isAvailableGameName ? TextStyle.green : TextStyle.red}>{this.getGameNameFeedbackMessage()}</h5>}
 						</Col>
 					</Row>
 					<h3>PLAYERS</h3>
@@ -131,6 +137,10 @@ var GameForm = React.createClass({
 			propertyValue: e.target.value
 		});
 	},
+	onTitleUnfocused: function () {
+		GameAction.checkNameAvailability(this.state.game.title);
+		AutoSave();
+	},
 	onSaveClicked: function () {
 		GameAction.saveGameToServer(true);
 	},
@@ -169,6 +179,20 @@ var GameForm = React.createClass({
 			return false;
 		}
 		return true;
+	},
+	onGameNameAvailabilityChanged: function () {
+		this.setState({
+			isAvailableGameName: GameStore.isAvailableGameName()
+		});
+	},
+	getGameNameFeedbackMessage: function () {
+		if (this.state.isAvailableGameName === undefined) {
+			return '';
+		}
+		if (this.state.isAvailableGameName) {
+			return 'Name available!';
+		}
+		return 'Name already taken';
 	}
 });
 

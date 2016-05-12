@@ -10,6 +10,7 @@ var constants = {
 	ADD_IMAGE_TO_LOCAL_GAME: 'add_image_to_local_game',
 	REMOVE_IMAGE_FROM_LOCAL_GAME: 'remove_image_from_local_game',
 	CHANGE_IMAGE_PRIORITIZATION_LOCALLY: 'change_image_prioritization_locally',
-	SET_HAS_SELECTED_GAME_TO_EDIT: 'set_has_selected_game_to_edit'
+	SET_HAS_SELECTED_GAME_TO_EDIT: 'set_has_selected_game_to_edit',
+	CHECK_NAME_AVAILABILITY: 'check_name_availability'
 };
 module.exports = constants;

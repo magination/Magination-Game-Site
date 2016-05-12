@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameConstants = require('../constants/GameConstants');
+var URLS = require('../config/config').urls;
 
 var GameAction = {
 	publishGameToServer: function () {
@@ -11,6 +12,15 @@ var GameAction = {
 		Dispatcher.dispatch({
 			actionType: GameConstants.SAVE_GAME_TO_SERVER,
 			hasPromptedSave: hasPromptedSave
+		});
+	},
+	checkNameAvailability: function (name) {
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.games + '?' + 'title=' + name,
+			contentType: 'application/json',
+			dataType: 'json',
+			success: onSearchResult
 		});
 	},
 	changeGameLocally: function (data) {
@@ -102,6 +112,13 @@ var GameAction = {
 			}
 		});
 	}
+};
+
+function onSearchResult (data) {
+	Dispatcher.dispatch({
+		actionType: GameConstants.CHECK_NAME_AVAILABILITY,
+		isAvailableGameName: data.games.length === 0
+	});
 };
 
 module.exports = GameAction;
