@@ -217,6 +217,12 @@ function keyPressed (key) {
 	case 189:
 		/* -*/
 		break;
+	case 90:
+		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'in'});
+		break;
+	case 88:
+		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'out'});
+		break;
 	case 46:
 		GameCreatorAction.deleteCurrentSelectedPiece();
 		break;

@@ -293,16 +293,17 @@ function rotateSelectedPiece (rotateToNext) {
 				var newImg = new Image();
 				newImg.crossOrigin = 'Anonymous';
 				newImg.onload = function () {
-					var currentObj = object;
-					var oldWidth = currentObj.width;
-					var oldHeight = currentObj.height;
-					currentObj.setElement(newImg);
-					currentObj.setCoords();
-					var widthDiff = (oldWidth - currentObj.width) / 10;
-					var heightDiff = (oldHeight - currentObj.height) / 10;
-					currentObj.set({
-						left: currentObj.left + widthDiff,
-						top: currentObj.top + heightDiff,
+					var bounding = object.getBoundingRect();
+					var oldWidth = bounding.width;
+					var oldHeight = bounding.height;
+					object.setElement(newImg);
+					object.setCoords();
+					bounding = object.getBoundingRect();
+					var widthDiff = (oldWidth - bounding.width) / 2;
+					var heightDiff = (oldHeight - bounding.height) / 2;
+					object.set({
+						left: bounding.left + widthDiff,
+						top: bounding.top + heightDiff,
 						imageUrl: newSrc
 					});
 					_fabricCanvas.renderAll();
