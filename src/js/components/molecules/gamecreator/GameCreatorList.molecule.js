@@ -4,6 +4,8 @@ var GameCreatorStore = require('../../../stores/GameCreatorStore');
 var GameCreatorConstants = require('../../../constants/GameCreatorConstants');
 var GameCreatorAction = require('../../../actions/GameCreatorAction');
 
+var Colors = require('../../../styles/Colors');
+
 var containerStyle = {
 	overflowY: 'scroll'
 };
@@ -30,7 +32,23 @@ var GameCreatorList = React.createClass({
 			if (!name) {
 				name = 'No Title';
 			}
-			return <div key={gameCreator._id} onClick={that.onGameCreatorClicked.bind(that, gameCreator._id)}>{name}</div>;
+			var listElementStyle = {
+				color: Colors.blue,
+				textAlign: 'center',
+				padding: '5px'
+			};
+			if (that.state.currentSelected === gameCreator._id) {
+				listElementStyle['backgroundColor'] = Colors.blue;
+				listElementStyle['color'] = 'white';
+			}
+			return (
+				<div key={gameCreator._id}>
+					<div style={listElementStyle} onClick={that.onGameCreatorClicked.bind(that, gameCreator._id)}>
+						{name}
+					</div>
+					<hr />
+				</div>
+			);
 		});
 		return (
 			<div style={containerStyle}>
@@ -46,7 +64,7 @@ var GameCreatorList = React.createClass({
 	onActiveDataChanged: function () {
 		this.setState({
 			gameCreatorList: GameCreatorStore.getGameCreatorList(),
-			currentSelected: GameCreatorStore.getActiveGameCreatorId()
+			currentSelected: GameCreatorStore.getActiveGameCreator()._id
 		});
 	},
 	onListChanged: function () {

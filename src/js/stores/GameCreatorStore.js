@@ -20,7 +20,7 @@ var _staticPieces = [
 ];
 var _staticPiecesFolderStructure = {};
 var _fabricCanvas = null;
-var _loadedData = null;
+var _loadedData = {};
 var _currentGameId = null;
 var _gamecreatorList = [];
 
@@ -39,12 +39,12 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 			color: _fabricCanvas.freeDrawingBrush.color
 		};
 	},
-	getActiveGameCreatorId: function () {
+	getActiveGameCreator: function () {
 		if (!_loadedData) {
-			console.log('ERROR: Tried to get active gamecreator id, but active data was null');
+			console.log('ERROR: Tried to get active gamecreator, but active data was null');
 			return;
 		}
-		return _loadedData._id;
+		return _loadedData;
 	},
 	getGameCreatorList: function () {
 		return _gamecreatorList;
@@ -102,7 +102,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
-		saveGameAsJson(action.name);
+		saveGameAsJson();
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_PNG:
 		saveGameAsPng();
@@ -139,15 +139,24 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.SET_LOADED_DATA_TO_ID:
 		setCanvasToGameCreatorId(action.gameCreatorId);
 		break;
+	case GameCreatorConstants.SET_CREATOR_NAME:
+		if (!_loadedData) {
+			_loadedData = {};
+		}
+		_loadedData.title = action.creatorName;
+		saveGameAsJson();
+		break;
 	}
 });
 
 function setCanvasToGameCreatorId (gameCreatorId) {
+	if (_loadedData) {
+		if (_loadedData._id) saveGameAsJson();
+	}
 	_gamecreatorList.every(function (gamecreator) {
 		if (gameCreatorId === gamecreator._id) {
 			_fabricCanvas.clear();
-			_fabricCanvas.loadFromDatalessJSON(gamecreator.json, _fabricCanvas.renderAll.bind(_fabricCanvas));
-			// _fabricCanvas.renderAll();
+			_fabricCanvas.loadFromJSON(gamecreator.json, _fabricCanvas.renderAll.bind(_fabricCanvas));
 
 			setLoadedData(gamecreator);
 			return false;
@@ -299,7 +308,6 @@ function addPieceToCreator (piece) {
 		_fabricCanvas.add(imgInstance);
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
 		selectionChanged(quantity);
-		saveGameAsJson();
 	};
 	img.src = piece.url;
 }
@@ -338,15 +346,14 @@ function isOutsideBorder (object) {
 	else return false;
 }
 
-function saveGameAsJson (name) {
-	var jsonData = _fabricCanvas.toJSON();
+function saveGameAsJson () {
 	var requestAction = null;
 	var url = null;
 	if (_currentGameId === null) {
 		console.log('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
-	if (_loadedData === null) {
+	if (!_loadedData._id) {
 		requestAction = 'POST';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators';
 	}
@@ -354,12 +361,15 @@ function saveGameAsJson (name) {
 		requestAction = 'PUT';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators/' + _loadedData._id;
 	}
+	if (!_loadedData.title) {
+		_loadedData.title = 'Unnamed Creator';
+	}
 	$.ajax({
 		type: requestAction,
 		url: url,
 		data: JSON.stringify({
-			title: name,
-			json: jsonData
+			json: _fabricCanvas.toJSON(),
+			title: _loadedData.title
 		}),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -412,15 +422,20 @@ function onSaveJsonSuccessResponse (data) {
 	var isNew = _gamecreatorList.every(function (gamecreator, index) {
 		if (gamecreator._id === data._id) {
 			_gamecreatorList[index] = $.extend(true, {}, data);
-			setLoadedData(_gamecreatorList[index]);
+			if (!_loadedData._id) {
+				setLoadedData(_gamecreatorList[index]);
+			}
 			return false;
 		}
 		return true;
 	});
 	if (isNew) {
 		_gamecreatorList.unshift(data);
-		setLoadedData(_gamecreatorList[_gamecreatorList.length - 1]);
+		if (!_loadedData._id) {
+			setLoadedData(_gamecreatorList[0]);
+		}
 	}
+	GameCreatorStore.emitChange(GameCreatorConstants.FETCHED_GAMECREATOR_LIST_FROM_SERVER);
 }
 
 function onRequestSuccess (data) {
