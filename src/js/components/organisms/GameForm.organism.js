@@ -155,6 +155,7 @@ var GameForm = React.createClass({
 		});
 	},
 	onPublishClicked: function () {
+		GameAction.setHasPromptedSave(true);
 		if (this.gameIsValid()) {
 			GameAction.publishGameToServer();
 		}
