@@ -27,7 +27,7 @@ var GameCreatorList = React.createClass({
 	},
 	render: function () {
 		var that = this;
-		var creators = this.state.gameCreatorList.map(function (gameCreator) {
+		var creators = this.state.gameCreatorList.map(function (gameCreator, index) {
 			var name = gameCreator.title;
 			if (!name) {
 				name = 'No Title';
@@ -35,18 +35,25 @@ var GameCreatorList = React.createClass({
 			var listElementStyle = {
 				color: Colors.blue,
 				textAlign: 'center',
-				padding: '5px'
+				padding: '5px',
+				paddingTop: '15px',
+				paddingBottom: '15px',
+				borderRadius: '5',
+				cursor: 'pointer'
 			};
 			if (that.state.currentSelected === gameCreator._id) {
 				listElementStyle['backgroundColor'] = Colors.blue;
 				listElementStyle['color'] = 'white';
 			}
+			else if (that.state.hoveredElementIndex === index) {
+				listElementStyle['backgroundColor'] = Colors.blueTransparent;
+			}
 			return (
 				<div key={gameCreator._id}>
-					<div style={listElementStyle} onClick={that.onGameCreatorClicked.bind(that, gameCreator._id)}>
+					<div style={listElementStyle} onMouseLeave={that.onMouseLeaveElement} onMouseEnter={that.onMouseEnterElement.bind(that, index)} onClick={that.onGameCreatorClicked.bind(that, gameCreator._id)}>
 						{name}
 					</div>
-					<hr />
+					<hr style={{padding: '0', margin: '0'}}/>
 				</div>
 			);
 		});
@@ -55,6 +62,16 @@ var GameCreatorList = React.createClass({
 				{creators}
 			</div>
 		);
+	},
+	onMouseEnterElement: function (index) {
+		this.setState({
+			hoveredElementIndex: index
+		});
+	},
+	onMouseLeaveElement: function () {
+		this.setState({
+			hoveredElementIndex: -1
+		});
 	},
 	onGameCreatorClicked: function (gameCreatorId) {
 		GameCreatorAction.loadCreatorId({

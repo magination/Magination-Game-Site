@@ -45,8 +45,12 @@ var GameCreatorElement = React.createClass({
 			);
 		});
 		var Overlay = <Popover id='chooseImgVariation'>{images}</Popover>;
+		var containerStyle = {};
+		if (this.state.isPressingOnThis) {
+			containerStyle['backgroundColor'] = Color.blueTransparent;
+		}
 		return (
-			<div>
+			<div style={containerStyle} onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp} onMouseLeave={this.onMouseLeave}>
 				<div style={imgDivStyle} onClick={this.onPieceClick}>
 					<div style={{width: '80%'}}>
 						<img src={this.state.selectedImage} alt='' style={imgStyle}/>
@@ -59,6 +63,21 @@ var GameCreatorElement = React.createClass({
 				</div>
 			</div>
 		);
+	},
+	onMouseDown: function () {
+		this.setState({
+			isPressingOnThis: true
+		});
+	},
+	onMouseUp: function () {
+		this.setState({
+			isPressingOnThis: false
+		});
+	},
+	onMouseLeave: function () {
+		this.setState({
+			isPressingOnThis: false
+		});
 	},
 	onImageClick: function (url) {
 		this.setState({

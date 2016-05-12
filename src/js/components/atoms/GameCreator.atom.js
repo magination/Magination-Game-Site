@@ -137,12 +137,12 @@ var GameCreator = React.createClass({
 	},
 	onCounterClockwiseRotateClick: function () {
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: false
+			next: true
 		});
 	},
 	onClockwiseRotateClick: function () {
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: true
+			next: false
 		});
 	},
 	onPencilClick: function () {
@@ -222,12 +222,12 @@ function keyPressed (key) {
 		break;
 	case 69:
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: true
+			next: false
 		});
 		break;
 	case 81:
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: false
+			next: true
 		});
 		break;
 	}
