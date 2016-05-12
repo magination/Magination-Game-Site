@@ -66,13 +66,18 @@ var GameCreatorActions = {
 	},
 	saveCurrentToJson: function (data) {
 		Dispatcher.dispatch({
-			actionType: GameCreatorConstants.SAVE_GAMECREATOR_JSON,
-			name: data.name
+			actionType: GameCreatorConstants.SAVE_GAMECREATOR_JSON
 		});
 	},
 	clearStore: function () {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.CLEAR_GAMECREATOR_STORE
+		});
+	},
+	setActiveCreatorName: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.SET_CREATOR_NAME,
+			creatorName: data.creatorName
 		});
 	},
 	moveSelectedPieces: function (data) {
@@ -108,7 +113,7 @@ var GameCreatorActions = {
 			return;
 		}
 		isListening = true;
-		GameStore.addChangeListener(GameCreatorActions.fetchGameCreatorListFromServer, GameConstants.LOCAL_GAME_HAS_CHANGED);
+		GameStore.addChangeListener(onLocalGameHasChanged, GameConstants.LOCAL_GAME_HAS_CHANGED);
 	},
 	removeListeners: function () {
 		if (!isListening) {
@@ -116,7 +121,7 @@ var GameCreatorActions = {
 			return;
 		}
 		isListening = false;
-		GameStore.removeChangeListener(GameCreatorActions.fetchGameCreatorListFromServer, GameConstants.LOCAL_GAME_HAS_CHANGED);
+		GameStore.removeChangeListener(onLocalGameHasChanged, GameConstants.LOCAL_GAME_HAS_CHANGED);
 	},
 	loadCreatorId: function (data) {
 		Dispatcher.dispatch({
@@ -125,6 +130,10 @@ var GameCreatorActions = {
 		});
 	}
 };
+
+function onLocalGameHasChanged () {
+	GameCreatorActions.fetchGameCreatorListFromServer();
+}
 
 function onGetGameCreatorFullListSuccessResponse (data) {
 	Dispatcher.dispatch({

@@ -76,7 +76,7 @@ gulp.task('default', ['watch', 'server'], function () {
 	/* What happens after everything is build and server is running in dev mode */
 	browserSync({
 		proxy: {
-			target: 'http://localhost:8080'
+			target: 'https://localhost:8080'
 		}
 	});
 	browserSync.pause();
