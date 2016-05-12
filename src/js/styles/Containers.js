@@ -47,7 +47,10 @@ var ContainerStyles = {
 			textAlign: 'center',
 			paddingLeft: '5',
 			float: 'right',
-			display: 'inline-block'
+			top: '15%',
+			right: '0',
+			display: 'inline-block',
+			position: 'absolute'
 		}
 	},
 	imageContainer: {

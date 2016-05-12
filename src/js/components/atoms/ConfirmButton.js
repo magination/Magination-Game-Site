@@ -15,13 +15,13 @@ var ConfirmButton = React.createClass({
 		else {
 			customButton = <Button ref='button' style={this.props.style}> {this.props.buttonText}</Button>;
 		}
-		var popOver = <Popover title='Confirm'>
+		var popOver = <Popover title='Confirm' id={'Confirm action'}>
 						<Row>
 							<Col md={12}>{this.props.confirmationDialog}</Col>
 						</Row>
 						<Row>
-							<Col md={2}><Button style={ButtonStyles.confirmButton.yes} onClick={this.onYesClicked}>Yes</Button></Col>
-							<Col md={2} mdOffset={2}><Button style={ButtonStyles.confirmButton.no}>No</Button></Col>
+							<Col md={4}><Button style={ButtonStyles.confirmButton.yes} onClick={this.onYesClicked}>Yes</Button></Col>
+							<Col md={4} mdOffset={2} style={{position: 'absolute', right: 0}}><Button style={ButtonStyles.confirmButton.no}>No</Button></Col>
 						</Row>
 						</Popover>;
 		return (
