@@ -32,7 +32,7 @@ var MyGameListElement = React.createClass({
 					</Media.Left>
 					<Media.Body>
 						<h3>
-							{this.props.game.title}
+							{this.props.game.title ? this.props.game.title : 'No title'}
 						</h3>
 						<h4>
 							<Glyphicon style={TextStyles.blue} glyph='star'/> {toOneDecimal(this.props.game.rating)}
@@ -41,7 +41,7 @@ var MyGameListElement = React.createClass({
 						</h4>
 						<div>
 							<h4>Description:</h4>
-							<p>{this.props.game.shortDescription}</p>
+							<p>{this.props.game.shortDescription ? this.props.game.shortDescription : 'No description'}</p>
 						</div>
 					</Media.Body>
                     <Media.Right>
