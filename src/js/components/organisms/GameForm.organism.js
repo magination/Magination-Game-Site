@@ -21,8 +21,6 @@ var ConfirmButton = require('../atoms/ConfirmButton');
 var Images = require('../molecules/creategame/Images/Images.molecule.js');
 
 var GameStore = require('../../stores/GameStore');
-var GameCreatorStore = require('../../stores/GameCreatorStore'); // eslint-disable-line no-unused-vars
-var GameCreatorAction = require('../../actions/GameCreatorAction');
 var GameAction = require('../../actions/GameAction');
 var GameConstants = require('../../constants/GameConstants');
 var MyGamesAction = require('../../actions/MyGamesAction');
@@ -38,13 +36,11 @@ var GameForm = React.createClass({
 	},
 	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
-		GameCreatorAction.setListeners();
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
 		GameStore.removeChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
 		GameStore.emitChange(GameConstants.GAME_FORM_CLOSED);
-		GameCreatorAction.removeListeners();
 		GameAction.setHasSelectedGameToEdit(false);
 	},
 	render: function () {
