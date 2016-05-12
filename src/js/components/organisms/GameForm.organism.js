@@ -24,6 +24,7 @@ var GameStore = require('../../stores/GameStore');
 var GameCreatorStore = require('../../stores/GameCreatorStore'); // eslint-disable-line no-unused-vars
 var GameCreatorAction = require('../../actions/GameCreatorAction');
 var GameAction = require('../../actions/GameAction');
+var GameConstants = require('../../constants/GameConstants');
 var MyGamesAction = require('../../actions/MyGamesAction');
 var NavigationAction = require('../../actions/NavigationAction');
 
@@ -31,7 +32,8 @@ var GameForm = React.createClass({
 	getInitialState: function () {
 		return {
 			game: GameStore.getGame(),
-			userFeedback: undefined
+			isAvailableGameName: undefined,
+			showSaveGameModal: false
 		};
 	},
 	componentDidMount: function () {
@@ -40,6 +42,8 @@ var GameForm = React.createClass({
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
+		GameStore.removeChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
+		GameStore.emitChange(GameConstants.GAME_FORM_CLOSED);
 		GameCreatorAction.removeListeners();
 		GameAction.setHasSelectedGameToEdit(false);
 	},
@@ -51,7 +55,10 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={4}>
-							<Input value={this.state.game.title} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={AutoSave}/>
+							<Input value={this.state.game.title} bsStyle={this.state.isAvailableGameName ? 'success' : 'error'} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={this.onTitleUnfocused} hasFeedback/>
+						</Col>
+						<Col md={8} style={{paddingLeft: 0}}>
+							{<h5 style={this.state.isAvailableGameName ? TextStyle.green : TextStyle.red}>{this.getGameNameFeedbackMessage()}</h5>}
 						</Col>
 					</Row>
 					<h3>PLAYERS</h3>
@@ -135,6 +142,10 @@ var GameForm = React.createClass({
 			propertyValue: e.target.value
 		});
 	},
+	onTitleUnfocused: function () {
+		GameAction.checkNameAvailability(this.state.game.title);
+		AutoSave();
+	},
 	onSaveClicked: function () {
 		GameAction.saveGameToServer(true);
 	},
@@ -147,6 +158,7 @@ var GameForm = React.createClass({
 		});
 	},
 	onPublishClicked: function () {
+		GameAction.setHasPromptedSave(true);
 		if (this.gameIsValid()) {
 			GameAction.publishGameToServer();
 		}
@@ -173,6 +185,20 @@ var GameForm = React.createClass({
 			return false;
 		}
 		return true;
+	},
+	onGameNameAvailabilityChanged: function () {
+		this.setState({
+			isAvailableGameName: GameStore.isAvailableGameName()
+		});
+	},
+	getGameNameFeedbackMessage: function () {
+		if (this.state.isAvailableGameName === undefined) {
+			return '';
+		}
+		if (this.state.isAvailableGameName) {
+			return 'Name available!';
+		}
+		return 'Name already taken';
 	}
 });
 

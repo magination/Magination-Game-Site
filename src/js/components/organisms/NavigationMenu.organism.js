@@ -9,6 +9,7 @@ var Validator = require('../../service/Validator.service');
 var NavigationPaths = NavigationConstants.PATHS;
 
 var LoginForm = require('./LoginForm.organism');
+var SaveGameModal = require('./SaveGameModal');
 var Navbar = require('react-bootstrap').Navbar;
 var Nav = require('react-bootstrap').Nav;
 var MenuItem = require('react-bootstrap').MenuItem;
@@ -50,6 +51,7 @@ var Menu = React.createClass({
 		return (
 			<div>
 				<LoginForm ref='loginModal'/>
+				<SaveGameModal ref='saveGameModal'/>
 				<Navbar fixedTop activeKey={this.state.currentActive}>
 					<Navbar.Header>
 						<Navbar.Brand>

@@ -20,6 +20,9 @@ var TextStyles = {
 	red: {
 		color: Colors.red
 	},
+	green: {
+		color: Colors.green
+	},
 	RatingStarWhite: {
 		color: 'white',
 		fontSize: '30'

@@ -11,12 +11,20 @@ var FeedbackAction = require('../actions/FeedbackAction');
 var _game = null;
 var _hasSelectedGameToEdit = false;
 var _hasPromptedSave = false;
+var _isAvailableGameName = false;
+
 var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	getGame: function () {
 		return _game;
 	},
 	hasSelectedGameToEdit: function () {
 		return _hasSelectedGameToEdit;
+	},
+	hasPromptedSave: function () {
+		return _hasPromptedSave;
+	},
+	isAvailableGameName: function () {
+		return _isAvailableGameName;
 	},
 	addChangeListener: function (callback, specificEvent) {
 		if (specificEvent) {
@@ -55,7 +63,7 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.SAVE_GAME_TO_SERVER:
-		SaveGameToServer(action);
+		SaveGameToServer(action.hasPromptedSave);
 		break;
 	case GameConstants.ADD_NEW_RULE_TO_LOCAL_GAME:
 		AddRule(action);
@@ -75,7 +83,7 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameConstants.ADD_IMAGE_TO_LOCAL_GAME:
 		AddImageToLocalGame(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.REMOVE_IMAGE_FROM_LOCAL_GAME:
 		RemoveImageFromLocalGame(action);
@@ -89,6 +97,14 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		ChangeImagePrioritization(action);
 		GameStore.emitChange(CHANGE_EVENT);
 		break;
+	case GameConstants.CHECK_NAME_AVAILABILITY:
+		CheckNameAvailability(action);
+		break;
+	case GameConstants.SET_HAS_PROMPTED_SAVE:
+		_hasPromptedSave = action.hasPromptedSave;
+		break;
+	case GameConstants.DELETE_GAME_FROM_SERVER:
+		GameStore.emitChange();
 	}
 });
 function ChangeImagePrioritization (action) {
@@ -125,8 +141,8 @@ function PublishGameToServer () {
 		}
 	});
 };
-function SaveGameToServer (action) {
-	_hasPromptedSave = action.hasPromptedSave;
+function SaveGameToServer (hasPromptedSave) {
+	_hasPromptedSave = hasPromptedSave;
 	_game.id = undefined;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
@@ -157,6 +173,11 @@ function CreateNewGame () {
 		rules: [],
 		alternativeRules: []
 	};
+};
+
+function CheckNameAvailability (action) {
+	_isAvailableGameName = action.isAvailableGameName;
+	GameStore.emitChange(GameConstants.CHECK_NAME_AVAILABILITY);
 };
 function UpdateGame (action) {
 	if (action.propertyCollection) {
@@ -236,7 +257,6 @@ var onSaveGameSuccessResponse = function (data) {
 			header: 'Success.',
 			message: 'Game saved, you can leave and edit it later.'
 		});
-		_hasPromptedSave = false;
 	}
 };
 var onPostGameUnauthorizedResponse = function () {
