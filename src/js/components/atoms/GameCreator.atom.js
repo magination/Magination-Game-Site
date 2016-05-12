@@ -53,11 +53,13 @@ var GameCreator = React.createClass({
 		});
 		GameCreatorStore.addChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
+		GameCreatorStore.addChangeListener(this.onActiveDataChanged, GameCreatorConstants.ACTIVE_DATA_CHANGED);
 		GameCreatorAction.setStaticPiecesFromServer();
 		$(window).keydown(this.handleKeyDown);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
+		GameCreatorStore.removeChangeListener(this.onActiveDataChanged, GameCreatorConstants.ACTIVE_DATA_CHANGED);
 		GameCreatorStore.removeChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorAction.clearStore();
 		$(window).unbind('keydown');
@@ -93,17 +95,39 @@ var GameCreator = React.createClass({
 								<hr/>
 							</div>
 							<div>
+								<form onSubmit={this.onCreatorNameSubmit}>
+									<Input type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
+								</form>
 								<GameCreatorList />
 							</div>
 						</div>
 						<div style={{height: '15%'}}>
-							<Input type='text' value={this.state.name} placeholder='Image filename' onChange={this.onFilenameChange}/>
-							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onAddToGameClick}><strong>Add to game</strong></Button>
+						<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSaveClick}>SAVE</Button>
+							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onAddToGameClick}>ADD TO GAME</Button>
 						</div>
 					</div>
 				</Col>
 			</div>
 		);
+	},
+	onSaveClick: function () {
+		GameCreatorAction.saveCurrentToJson();
+	},
+	onActiveDataChanged: function () {
+		this.setState({
+			creatorName: GameCreatorStore.getActiveGameCreator().title
+		});
+	},
+	onCreatorNameSubmit: function (e) {
+		e.preventDefault();
+		GameCreatorAction.setActiveCreatorName({
+			creatorName: this.state.creatorName
+		});
+	},
+	onCreatorNameChange: function (e) {
+		this.setState({
+			creatorName: e.target.value
+		});
 	},
 	onMoveSelectedDeeperClick: function () {
 		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'in'});
@@ -135,11 +159,6 @@ var GameCreator = React.createClass({
 			e.preventDefault();
 		}
 	},
-	onFilenameChange: function (e) {
-		this.setState({
-			name: e.target.value.split('.')[0]
-		});
-	},
 	onGameCreatorStaticPiecesChange: function () {
 		this.setState({
 			staticPieces: GameCreatorStore.getStaticPieces()
@@ -151,9 +170,7 @@ var GameCreator = React.createClass({
 		});
 	},
 	onAddToGameClick: function () {
-		GameCreatorAction.saveCurrentToPng({
-			name: this.state.name
-		});
+		GameCreatorAction.saveCurrentToPng();
 	},
 	onDeleteClick: function () {
 		GameCreatorAction.deleteCurrentSelectedPiece();
