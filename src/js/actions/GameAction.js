@@ -10,10 +10,21 @@ var GameAction = {
 			actionType: GameConstants.PUBLISH_GAME_TO_SERVER
 		});
 	},
-	saveGameToServer: function (hasPromptedSave) {
+	autoSaveGameToServer: function (callback) {
 		Dispatcher.dispatch({
 			actionType: GameConstants.SAVE_GAME_TO_SERVER,
-			hasPromptedSave: hasPromptedSave
+			hasPromptedSave: false
+		});
+	},
+	manualSaveGameToServer: function () {
+		Dispatcher.dispatch({
+			actionType: GameConstants.SAVE_GAME_TO_SERVER,
+			hasPromptedSave: true
+		});
+	},
+	saveGameAndResetGameStore: function () {
+		Dispatcher.dispatch({
+			actionType: GameConstants.SAVE_GAME_AND_RESET_GAME_STORE
 		});
 	},
 	checkNameAvailability: function (name) {
@@ -23,12 +34,6 @@ var GameAction = {
 			contentType: 'application/json',
 			dataType: 'json',
 			success: onSearchResult
-		});
-	},
-	setHasPromptedSave: function (hasPromptedSave) {
-		Dispatcher.dispatch({
-			actionType: GameConstants.SET_HAS_PROMPTED_SAVE,
-			hasPromptedSave: false
 		});
 	},
 	deleteGameFromServer: function () {
@@ -49,10 +54,15 @@ var GameAction = {
 			}
 		});
 	},
-	changeGameLocally: function (data) {
+	changeGameLocally: function (game) {
 		Dispatcher.dispatch({
 			actionType: GameConstants.CHANGE_GAME_LOCALLY,
-			game: data
+			game: game
+		});
+	},
+	removeGameLocally: function () {
+		Dispatcher.dispatch({
+			actionType: GameConstants.REMOVE_GAME_LOCALLY
 		});
 	},
 	updateCurrentGameLocally: function (data) {
@@ -104,38 +114,11 @@ var GameAction = {
 			position: data.position
 		});
 	},
-	setHasSelectedGameToEdit: function (hasSelectedGameToEdit) {
-		Dispatcher.dispatch({
-			actionType: GameConstants.SET_HAS_SELECTED_GAME_TO_EDIT,
-			hasSelectedGameToEdit: hasSelectedGameToEdit
-		});
-	},
 	changeImagePrioritizationLocally: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameConstants.CHANGE_IMAGE_PRIORITIZATION_LOCALLY,
 			oldPosition: data.oldPosition,
 			newPosition: data.newPosition
-		});
-	},
-	createNewGameLocally: function () {
-		Dispatcher.dispatch({
-			actionType: GameConstants.CHANGE_GAME_LOCALLY,
-			game: {
-				title: '',
-				shortDescription: '',
-				numberOfPlayers: 0,
-				isPlayableWithMorePlayers: false,
-				isPlayableInTeams: false,
-				images: [],
-				parentGame: '',
-				pieces: {
-					singles: 0,
-					doubles: 0,
-					triples: 0
-				},
-				rules: [],
-				alternativeRules: []
-			}
 		});
 	}
 };

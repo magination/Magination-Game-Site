@@ -123,6 +123,13 @@ var ButtonStyles = {
 		borderWidth: '0',
 		backgroundColor: Colors.red
 	},
+	goBack: {
+		color: 'white',
+		paddingTop: '10',
+		paddingBottom: '10',
+		borderWidth: '0',
+		backgroundColor: Colors.blue
+	},
 	confirmButton: {
 		yes: {
 			color: 'white',

@@ -5,6 +5,9 @@ var Button = require('react-bootstrap').Button;
 var GameStore = require('../../stores/GameStore');
 var GameAction = require('../../actions/GameAction');
 var GameConstants = require('../../constants/GameConstants');
+var LoginStore = require('../../stores/LoginStore');
+var NavigationAction = require('../../actions/NavigationAction');
+var NavigationStore = require('../../stores/NavigationStore');
 
 var ButtonStyle = require('../../styles/Buttons');
 
@@ -32,6 +35,7 @@ var SaveGameModal = React.createClass({
 					</Modal.Body>
 					<Modal.Footer>
 						<Button style={ButtonStyle.submit} onClick={this.onSaveClicked}>Save</Button>
+						<Button style={ButtonStyle.goBack} onClick={this.onGoBackClicked}>Go back</Button>
 						<Button style={ButtonStyle.delete} onClick={this.onDeleteClicked}>Delete</Button>
 					</Modal.Footer>
 				</Modal>
@@ -40,15 +44,21 @@ var SaveGameModal = React.createClass({
 	},
 	onGameFormClosed: function () {
 		this.setState({
-			showModal: !GameStore.hasPromptedSave()
+			showModal: !GameStore.hasPromptedSave() && LoginStore.getLoginState().isLoggedIn
 		});
 	},
 	onSaveClicked: function () {
-		GameAction.saveGameToServer(true);
+		GameAction.saveGameAndResetGameStore();
 		this.setState({ showModal: false });
 	},
 	onDeleteClicked: function () {
 		GameAction.deleteGameFromServer();
+		this.setState({ showModal: false });
+	},
+	onGoBackClicked: function () {
+		NavigationAction.navigate({
+			destination: NavigationStore.getNavigationState().lastPath
+		});
 		this.setState({ showModal: false });
 	},
 	close: function () {

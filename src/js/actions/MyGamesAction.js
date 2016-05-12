@@ -17,7 +17,7 @@ var MyGamesAction = {
 			success: onGetPublishedGames
 		});
 	},
-	getUnpublishedGames: function () {
+	requestUnpublishedGames: function () {
 		if (!LoginStore.getLoginState().isLoggedIn) return;
 		$.ajax({
 			type: 'GET',
