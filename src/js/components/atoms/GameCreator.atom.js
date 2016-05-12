@@ -4,6 +4,8 @@ var ReactDOM = require('react-dom');
 var GameCreatorStore = require('../../stores/GameCreatorStore');
 var GameCreatorAction = require('../../actions/GameCreatorAction');
 var GameCreatorConstants = require('../../constants/GameCreatorConstants');
+
+var GameCreatorList = require('../molecules/gamecreator/GameCreatorList.molecule');
 var ButtonStyle = require('../../styles/Buttons');
 var Color = require('../../styles/Colors');
 var Glyphicon = require('react-bootstrap').Glyphicon;
@@ -81,17 +83,22 @@ var GameCreator = React.createClass({
 				<Col md={2}>
 					<div style={{height: height}}>
 						<div style={{height: '85%'}}>
-							<h4>Piece Tools</h4>
-							<Button style={toolButton} onClick={this.onMoveSelectedDeeperClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
-							<Button style={toolButton} onClick={this.onMoveSelectedShallowerClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
-							<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-left'/></Button>
-							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
-							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
-							<hr/>
+							<div>
+								<h4>Piece Tools</h4>
+								<Button style={toolButton} onClick={this.onMoveSelectedDeeperClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
+								<Button style={toolButton} onClick={this.onMoveSelectedShallowerClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
+								<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-left'/></Button>
+								<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
+								<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
+								<hr/>
+							</div>
+							<div>
+								<GameCreatorList />
+							</div>
 						</div>
 						<div style={{height: '15%'}}>
-							<Input type='text' value={this.state.filenameValue} placeholder='Image filename' onChange={this.onFilenameChange}/>
-							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSavePngClick}><strong>Add to game</strong></Button>
+							<Input type='text' value={this.state.name} placeholder='Image filename' onChange={this.onFilenameChange}/>
+							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onAddToGameClick}><strong>Add to game</strong></Button>
 						</div>
 					</div>
 				</Col>
@@ -130,7 +137,7 @@ var GameCreator = React.createClass({
 	},
 	onFilenameChange: function (e) {
 		this.setState({
-			filenameValue: e.target.value.split('.')[0]
+			name: e.target.value.split('.')[0]
 		});
 	},
 	onGameCreatorStaticPiecesChange: function () {
@@ -143,9 +150,9 @@ var GameCreator = React.createClass({
 			isPencilToggled: isFreedraw
 		});
 	},
-	onSavePngClick: function () {
+	onAddToGameClick: function () {
 		GameCreatorAction.saveCurrentToPng({
-			filename: this.state.filenameValue
+			name: this.state.name
 		});
 	},
 	onDeleteClick: function () {

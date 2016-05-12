@@ -1,6 +1,13 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameCreatorConstants = require('../constants/GameCreatorConstants');
+// var LoginStore = require('../stores/LoginStore');
+var GameStore = require('../stores/GameStore');
+var GameConstants = require('../constants/GameConstants');
+
 var URLS = require('../config/config').urls;
+
+var isListening = false;
+
 var GameCreatorActions = {
 	addPieceByUrl: function (data) {
 		Dispatcher.dispatch({
@@ -54,13 +61,13 @@ var GameCreatorActions = {
 	},
 	saveCurrentToPng: function (data) {
 		Dispatcher.dispatch({
-			actionType: GameCreatorConstants.SAVE_GAMECREATOR_PNG,
-			filename: data.filename
+			actionType: GameCreatorConstants.SAVE_GAMECREATOR_PNG
 		});
 	},
-	saveCurrentToJson: function () {
+	saveCurrentToJson: function (data) {
 		Dispatcher.dispatch({
-			actionType: GameCreatorConstants.SAVE_GAMECREATOR_JSON
+			actionType: GameCreatorConstants.SAVE_GAMECREATOR_JSON,
+			name: data.name
 		});
 	},
 	clearStore: function () {
@@ -79,8 +86,49 @@ var GameCreatorActions = {
 			actionType: GameCreatorConstants.ITERATE_SELECTED_PIECES_DEPTH,
 			direction: data.direction
 		});
+	},
+	fetchGameCreatorListFromServer: function (data) {
+		var gameId = GameStore.getGame()._id;
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.unpublishedGames + '/' + gameId + '/gameCreators',
+			dataType: 'json',
+			statusCode: {
+				200: onGetGameCreatorFullListSuccessResponse
+			}
+		});
+	},
+	setListeners: function () {
+		if (isListening) {
+			console.log('WARNING - Tried to set listeners of GameCreatorAction, but it is already listening - aborted');
+			return;
+		}
+		isListening = true;
+		GameStore.addChangeListener(GameCreatorActions.fetchGameCreatorListFromServer, GameConstants.LOCAL_GAME_HAS_CHANGED);
+	},
+	removeListeners: function () {
+		if (!isListening) {
+			console.log('WARNING - Tried to remove listeners of GameCreatorActions, but it is not listening (redundant action)');
+			return;
+		}
+		isListening = false;
+		GameStore.removeChangeListener(GameCreatorActions.fetchGameCreatorListFromServer, GameConstants.LOCAL_GAME_HAS_CHANGED);
+	},
+	loadCreatorId: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.SET_LOADED_DATA_TO_ID,
+			gameCreatorId: data.gameCreatorId
+		});
 	}
 };
+
+function onGetGameCreatorFullListSuccessResponse (data) {
+	Dispatcher.dispatch({
+		actionType: GameCreatorConstants.FETCHED_GAMECREATOR_LIST_FROM_SERVER,
+		list: data.gameCreators,
+		gameId: GameStore.getGame()._id
+	});
+}
 
 function onGetStaticPiecesSuccessResponse (data) {
 	var pieces = parseFolderStructureToPieces(data);

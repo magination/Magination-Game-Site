@@ -2,6 +2,7 @@ var URLS = require('../config/config').urls;
 var LoginStore = require('./LoginStore');
 var LoginAction = require('../actions/LoginAction');
 var GameAction = require('../actions/GameAction');
+
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameCreatorConstants = require('../constants/GameCreatorConstants');
 var EventEmitter = require('events').EventEmitter;
@@ -20,6 +21,8 @@ var _staticPieces = [
 var _staticPiecesFolderStructure = {};
 var _fabricCanvas = null;
 var _loadedData = null;
+var _currentGameId = null;
+var _gamecreatorList = [];
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
@@ -35,6 +38,9 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 			size: _fabricCanvas.freeDrawingBrush.width,
 			color: _fabricCanvas.freeDrawingBrush.color
 		};
+	},
+	getGameCreatorList: function () {
+		return _gamecreatorList;
 	},
 	getFabricCanvas: function () {
 		return _fabricCanvas;
@@ -88,10 +94,10 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
-		saveGameAsJson();
+		saveGameAsJson(action.name);
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_PNG:
-		saveGameAsPng(action.filename);
+		saveGameAsPng();
 		break;
 	case GameCreatorConstants.DELETE_SELECTED_PIECE_FROM_CREATOR:
 		deleteSelectedPiece();
@@ -112,8 +118,35 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.ITERATE_SELECTED_PIECES_DEPTH:
 		iterateSelectedPiecesDepth(action.direction);
 		break;
+	case GameCreatorConstants.FETCHED_GAMECREATOR_LIST_FROM_SERVER:
+		if (action.list) {
+			if (action.list.length > 0) _gamecreatorList = action.list;
+			else _gamecreatorList = [];
+		}
+		else break;
+		if (action.gameId) _currentGameId = action.gameId;
+		else _currentGameId = null;
+		GameCreatorStore.emitChange(GameCreatorConstants.FETCHED_GAMECREATOR_LIST_FROM_SERVER);
+		break;
+	case GameCreatorConstants.SET_LOADED_DATA_TO_ID:
+		setCanvasToGameCreatorId(action.gameCreatorId);
+		break;
 	}
 });
+
+function setCanvasToGameCreatorId (gameCreatorId) {
+	_gamecreatorList.every(function (gamecreator) {
+		if (gameCreatorId === gamecreator._id) {
+			_fabricCanvas.clear();
+			_fabricCanvas.loadFromDatalessJSON(gamecreator.json, _fabricCanvas.renderAll.bind(_fabricCanvas));
+			// _fabricCanvas.renderAll();
+
+			_loadedData = gamecreator;
+			return false;
+		}
+		return true;
+	});
+}
 
 function changeFreedrawState () {
 	_fabricCanvas.isDrawingMode = !_fabricCanvas.isDrawingMode;
@@ -292,22 +325,27 @@ function isOutsideBorder (object) {
 	else return false;
 }
 
-function saveGameAsJson () {
+function saveGameAsJson (name) {
 	var jsonData = _fabricCanvas.toJSON();
 	var requestAction = null;
 	var url = null;
+	if (_currentGameId === null) {
+		console.log('ERROR - Tried to save gamecreator to undefined game');
+		return;
+	}
 	if (_loadedData === null) {
 		requestAction = 'POST';
-		url = URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects';
+		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators';
 	}
 	else {
 		requestAction = 'PUT';
-		url = URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/gameCreatorObjects/' + _loadedData._id;
+		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators/' + _loadedData._id;
 	}
 	$.ajax({
 		type: requestAction,
 		url: url,
 		data: JSON.stringify({
+			title: name,
 			json: jsonData
 		}),
 		headers: {
@@ -320,21 +358,23 @@ function saveGameAsJson () {
 	});
 }
 
-function saveGameAsPng (filename) {
+function saveGameAsPng () {
 	if (!_loadedData) {
-		console.log('never saved');
+		console.log('WARNING - Saved game without loaded data');
+		return;
+	}
+	if (_currentGameId === null) {
+		console.log('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
 	_fabricCanvas.deactivateAll().renderAll();
 	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
 	var blob = b64toBlob(data, 'image/png');
 	var formData = new FormData();
-	formData.append('image', blob, filename);
-	formData.append('filename', filename);
-	formData.append('overwrite', 'true'); /* TODO SEND FALSE FIRST REQUEST, AND TRUE WHEN USER PROMPTS YES TO OVERWRITE*/
-	var url = URLS.api.users +
-		'/' + LoginStore.getLoginProfile()._id +
-		'/gameCreatorObjects/' +
+	formData.append('image', blob, 'gamecreatorimg');
+	var url = URLS.api.unpublishedGames +
+		'/' + _currentGameId +
+		'/gameCreators/' +
 		_loadedData._id +
 		'/image' +
 		'?' + $.param({overwrite: 'true'});

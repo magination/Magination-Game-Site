@@ -47,6 +47,7 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameConstants.CHANGE_GAME_LOCALLY:
 		_game = action.game;
+		GameStore.emitChange(GameConstants.LOCAL_GAME_HAS_CHANGED);
 		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.PUBLISH_GAME_TO_SERVER:
