@@ -11,6 +11,9 @@ var constants = {
 	REMOVE_IMAGE_FROM_LOCAL_GAME: 'remove_image_from_local_game',
 	CHANGE_IMAGE_PRIORITIZATION_LOCALLY: 'change_image_prioritization_locally',
 	SET_HAS_SELECTED_GAME_TO_EDIT: 'set_has_selected_game_to_edit',
-	CHECK_NAME_AVAILABILITY: 'check_name_availability'
+	CHECK_NAME_AVAILABILITY: 'check_name_availability',
+	GAME_FORM_CLOSED: 'game_form_closed',
+	SET_HAS_PROMPTED_SAVE: 'has_prompted_save',
+	DELETE_GAME_FROM_SERVER: 'delete_game_from_server'
 };
 module.exports = constants;

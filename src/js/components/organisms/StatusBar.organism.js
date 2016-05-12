@@ -24,11 +24,11 @@ var StatusBar = React.createClass({
 		FeedbackStore.removeChangeListener(this.onFeedbackChange);
 	},
 	render: function () {
-		var xButton = (this.state.statusType !== '') ? <a onClick={this.onCloseFeedbackClick} className='close'>&times;</a> : <a/>;
+		var xButton = (this.state.statusType !== '') ? <a style={{marginLeft: 5}} onClick={this.onCloseFeedbackClick} className='close'>&times;</a> : <a/>;
 		return (
 			<div className={this.state.statusType} style={ContainerStyles.feedback}>
 				{xButton}
-				<strong>{this.state.header}</strong> {this.state.message}
+				<strong>{this.state.header}</strong> {this.state.message + ' '}
 			</div>
 		);
 	},

@@ -1,6 +1,8 @@
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameConstants = require('../constants/GameConstants');
 var URLS = require('../config/config').urls;
+var LoginStore = require('../stores/LoginStore');
+var GameStore = require('../stores/GameStore');
 
 var GameAction = {
 	publishGameToServer: function () {
@@ -21,6 +23,30 @@ var GameAction = {
 			contentType: 'application/json',
 			dataType: 'json',
 			success: onSearchResult
+		});
+	},
+	setHasPromptedSave: function (hasPromptedSave) {
+		Dispatcher.dispatch({
+			actionType: GameConstants.SET_HAS_PROMPTED_SAVE,
+			hasPromptedSave: false
+		});
+	},
+	deleteGameFromServer: function () {
+		$.ajax({
+			type: 'DELETE',
+			url: URLS.api.unpublishedGames + '/' + GameStore.getGame()._id,
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			contentType: 'application/json',
+			dataType: 'json',
+			statusCode: {
+				200: function () {
+					Dispatcher.dispatch({
+						actionType: GameConstants.DELETE_GAME_FROM_SERVER
+					});
+				}
+			}
 		});
 	},
 	changeGameLocally: function (data) {

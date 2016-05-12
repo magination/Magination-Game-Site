@@ -30,7 +30,8 @@ var GameForm = React.createClass({
 	getInitialState: function () {
 		return {
 			game: GameStore.getGame(),
-			isAvailableGameName: undefined
+			isAvailableGameName: undefined,
+			showSaveGameModal: false
 		};
 	},
 	componentDidMount: function () {
@@ -40,6 +41,7 @@ var GameForm = React.createClass({
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
 		GameStore.removeChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
+		GameStore.emitChange(GameConstants.GAME_FORM_CLOSED);
 		GameAction.setHasSelectedGameToEdit(false);
 	},
 	render: function () {

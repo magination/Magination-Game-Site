@@ -116,6 +116,13 @@ var ButtonStyles = {
 		borderWidth: '0',
 		backgroundColor: Colors.yellowDark
 	},
+	delete: {
+		color: 'white',
+		paddingTop: '10',
+		paddingBottom: '10',
+		borderWidth: '0',
+		backgroundColor: Colors.red
+	},
 	confirmButton: {
 		yes: {
 			color: 'white',
