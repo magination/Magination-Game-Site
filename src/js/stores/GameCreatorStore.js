@@ -13,9 +13,7 @@ var apiRootUrl = require('../config/config').urls.server.root;
 var _pieces = [];
 var _staticPieces = [
 	[
-		[
-			'/public/img/magination-pieces/piece-black-single.png'
-		]
+		[]
 	]
 ];
 var _staticPiecesFolderStructure = {};

@@ -28,7 +28,7 @@ var GameCreator = React.createClass({
 	getInitialState: function () {
 		return {
 			canvas: null,
-			staticPieces: GameCreatorStore.getStaticPieces(),
+			staticPieces: [],
 			isPencilToggled: false
 		};
 	},

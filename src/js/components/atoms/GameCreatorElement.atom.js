@@ -34,13 +34,8 @@ var GameCreatorElement = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			selectedImage: this.props.piece.length > 0 ? this.props.piece[0][0].url : ''
+			selectedImage: this.props.piece[0][0].url
 		};
-	},
-	componentWillReceiveProps: function (nextProps) {
-		this.setState({
-			selectedImage: nextProps.piece[0][0].url
-		});
 	},
 	render: function () {
 		var that = this;
