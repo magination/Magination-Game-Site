@@ -43,7 +43,7 @@ var GameForm = React.createClass({
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
-					<h1 ref='header' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
+						<h1 ref='header' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
 					<hr/>
 					<Row>
 						<Col md={4}>
