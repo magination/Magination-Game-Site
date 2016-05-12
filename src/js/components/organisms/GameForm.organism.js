@@ -1,31 +1,35 @@
 var React = require('react');
-var URLS = require('../../config/config').urls;
-var ImageNumberPair = require('../molecules/creategame/ImageNumberPair.molecule.js');
-var GameStore = require('../../stores/GameStore');
-var GameAction = require('../../actions/GameAction');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
+
+var URLS = require('../../config/config').urls;
+var TextStyle = require('../../styles/Text');
+var ButtonStyle = require('../../styles/Buttons');
+var Colors = require('../../styles/Colors');
+var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
+
+var ImageNumberPair = require('../molecules/creategame/ImageNumberPair.molecule.js');
 var Checkbox = require('../atoms/game/Checkbox.atom');
 var HideableInput = require('../molecules/creategame/HideableInput.molecule.js');
 var GameDescriptionInput = require('../molecules/creategame/GameDescriptionInput.molecule.js');
 var RuleList = require('../molecules/creategame/RuleList');
 var AlternativeRuleList = require('../molecules/creategame/AlternativeRuleList');
-var TextStyle = require('../../styles/Text');
-var ButtonStyle = require('../../styles/Buttons');
-var Colors = require('../../styles/Colors');
-var Images = require('../molecules/creategame/Images.molecule');
-var MyGamesAction = require('../../actions/MyGamesAction');
-var NavigationAction = require('../../actions/NavigationAction');
-var NavigationPaths = require('../../constants/NavigationConstants').PATHS;
 var AutoSave = require('../../service/AutoSave.service.js');
 var ButtonWithTooltip = require('../atoms/ButtonWithTooltip');
 var ConfirmButton = require('../atoms/ConfirmButton');
+var Images = require('../molecules/creategame/Images/Images.molecule.js');
+
+var GameStore = require('../../stores/GameStore');
+var GameAction = require('../../actions/GameAction');
+var MyGamesAction = require('../../actions/MyGamesAction');
+var NavigationAction = require('../../actions/NavigationAction');
 
 var GameForm = React.createClass({
 	getInitialState: function () {
 		return {
-			game: GameStore.getGame()
+			game: GameStore.getGame(),
+			userFeedback: undefined
 		};
 	},
 	componentDidMount: function () {
@@ -39,7 +43,7 @@ var GameForm = React.createClass({
 		return (
 			<div>
 				<Col md={10} mdOffset={1}>
-					<h1 className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
+					<h1 ref='header' className='text-center' style={TextStyle.blueHeader}>CREATE YOUR OWN GAME</h1>
 					<hr/>
 					<Row>
 						<Col md={4}>
@@ -128,7 +132,7 @@ var GameForm = React.createClass({
 		});
 	},
 	onSaveClicked: function () {
-		GameAction.saveGameToServer();
+		GameAction.saveGameToServer(true);
 	},
 	onPreviewClicked: function () {
 		NavigationAction.navigate({

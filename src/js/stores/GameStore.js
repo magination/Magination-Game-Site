@@ -10,7 +10,7 @@ var FeedbackAction = require('../actions/FeedbackAction');
 
 var _game = null;
 var _hasSelectedGameToEdit = false;
-
+var _hasPromptedSave = false;
 var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	getGame: function () {
 		return _game;
@@ -18,14 +18,21 @@ var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	hasSelectedGameToEdit: function () {
 		return _hasSelectedGameToEdit;
 	},
-	addChangeListener: function (callback) {
+	addChangeListener: function (callback, specificEvent) {
+		if (specificEvent) {
+			this.on(specificEvent, callback);
+			return;
+		}
 		this.on(CHANGE_EVENT, callback);
 	},
 	emitChange: function () {
-		this.emit(CHANGE_EVENT);
+		this.emit.apply(this, arguments);
 	},
-	removeChangeListener: function (callback) {
-		this.removeListener(CHANGE_EVENT, callback);
+	removeChangeListener: function (callback, changeEvent) {
+		if (!changeEvent) {
+			changeEvent = CHANGE_EVENT;
+		}
+		this.removeListener(changeEvent, callback);
 	}
 });
 
@@ -36,34 +43,34 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 	switch (action.actionType) {
 	case GameConstants.UPDATE_GAME_LOCALLY:
 		UpdateGame(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.CHANGE_GAME_LOCALLY:
 		_game = action.game;
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.PUBLISH_GAME_TO_SERVER:
 		PublishGameToServer();
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.SAVE_GAME_TO_SERVER:
-		SaveGameToServer();
+		SaveGameToServer(action);
 		break;
 	case GameConstants.ADD_NEW_RULE_TO_LOCAL_GAME:
 		AddRule(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.UPDATE_RULE_IN_LOCAL_GAME:
 		UpdateRule(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.DELETE_RULE_FROM_LOCAL_GAME:
 		DeleteRule(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.CHANGE_RULE_PRIORITIZATION_LOCALLY:
 		ChangeRulePrioritization(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.ADD_IMAGE_TO_LOCAL_GAME:
 		AddImageToLocalGame(action);
@@ -71,15 +78,15 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameConstants.REMOVE_IMAGE_FROM_LOCAL_GAME:
 		RemoveImageFromLocalGame(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.SET_HAS_SELECTED_GAME_TO_EDIT:
 		_hasSelectedGameToEdit = action.hasSelectedGameToEdit;
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.CHANGE_IMAGE_PRIORITIZATION_LOCALLY:
 		ChangeImagePrioritization(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	}
 });
@@ -117,7 +124,8 @@ function PublishGameToServer () {
 		}
 	});
 };
-function SaveGameToServer () {
+function SaveGameToServer (action) {
+	_hasPromptedSave = action.hasPromptedSave;
 	_game.id = undefined;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
@@ -128,9 +136,7 @@ function SaveGameToServer () {
 		},
 		contentType: 'application/json',
 		dataType: 'json',
-		statusCode: {
-			201: onSaveGameResponse
-		}
+		success: onSaveGameSuccessResponse
 	});
 };
 function CreateNewGame () {
@@ -222,9 +228,15 @@ var onGamePostedSuccess = function (data) {
 	_game = null;
 	_hasSelectedGameToEdit = false;
 };
-var onSaveGameResponse = function (data) {
+var onSaveGameSuccessResponse = function (data) {
 	_game._id = data._id;
-	FeedbackAction.displaySuccessMessage({header: 'Success', message: 'Game saved'});
+	if (_hasPromptedSave) {
+		FeedbackAction.displaySuccessMessage({
+			header: 'Success.',
+			message: 'Game saved, you can leave and edit it later.'
+		});
+		_hasPromptedSave = false;
+	}
 };
 var onPostGameUnauthorizedResponse = function () {
 	FeedbackAction.displayWarningMessage({

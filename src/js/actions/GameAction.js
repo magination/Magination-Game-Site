@@ -7,9 +7,10 @@ var GameAction = {
 			actionType: GameConstants.PUBLISH_GAME_TO_SERVER
 		});
 	},
-	saveGameToServer: function () {
+	saveGameToServer: function (hasPromptedSave) {
 		Dispatcher.dispatch({
-			actionType: GameConstants.SAVE_GAME_TO_SERVER
+			actionType: GameConstants.SAVE_GAME_TO_SERVER,
+			hasPromptedSave: hasPromptedSave
 		});
 	},
 	changeGameLocally: function (data) {
