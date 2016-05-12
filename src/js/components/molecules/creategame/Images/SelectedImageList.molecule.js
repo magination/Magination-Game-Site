@@ -1,7 +1,7 @@
 var React = require('react');
-var ContainerStyle = require('../../../styles/Containers');
-var GameAction = require('../../../actions/GameAction');
-var GameStore = require('../../../stores/GameStore');
+var ContainerStyle = require('../../../../styles/Containers');
+var GameAction = require('../../../../actions/GameAction');
+var GameStore = require('../../../../stores/GameStore');
 
 var SelectedImageList = React.createClass({
 	getInitialState: function () {

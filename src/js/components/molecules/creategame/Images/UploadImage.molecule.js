@@ -1,11 +1,11 @@
 var React = require('react');
-var LoginStore = require('../../../stores/LoginStore');
-var ContainerStyle = require('../../../styles/Containers');
-var URLS = require('../../../config/config').urls;
+var LoginStore = require('../../../../stores/LoginStore');
+var ContainerStyle = require('../../../../styles/Containers');
+var URLS = require('../../../../config/config').urls;
 var Button = require('react-bootstrap').Button;
-var ButtonStyle = require('../../../styles/Buttons');
-var LoginAction = require('../../../actions/LoginAction');
-var Colors = require('../../../styles/Colors');
+var ButtonStyle = require('../../../../styles/Buttons');
+var LoginAction = require('../../../../actions/LoginAction');
+var Colors = require('../../../../styles/Colors');
 
 var Images = React.createClass({
 	getInitialState: function () {
