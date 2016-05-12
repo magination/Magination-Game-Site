@@ -18,7 +18,7 @@ var MyGamesAction = {
 		});
 	},
 	getUnpublishedGames: function () {
-		if (!LoginStore.getLoginProfile()._id) return;
+		if (!LoginStore.getLoginState().isLoggedIn) return;
 		$.ajax({
 			type: 'GET',
 			headers: {

@@ -36,6 +36,7 @@ var GameForm = React.createClass({
 	},
 	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
+		GameStore.addChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
@@ -154,7 +155,6 @@ var GameForm = React.createClass({
 		});
 	},
 	onPublishClicked: function () {
-		GameAction.setHasPromptedSave(true);
 		if (this.gameIsValid()) {
 			GameAction.publishGameToServer();
 		}
