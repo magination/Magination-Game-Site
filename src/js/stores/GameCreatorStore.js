@@ -149,13 +149,12 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 
 function setCanvasToGameCreatorId (gameCreatorId) {
 	if (_loadedData) {
+		if (gameCreatorId === _loadedData._id) return;
 		if (_loadedData._id) saveGameAsJson();
 	}
 	_gamecreatorList.every(function (gamecreator) {
 		if (gameCreatorId === gamecreator._id) {
 			_fabricCanvas.clear();
-			_fabricCanvas.loadFromJSON(gamecreator.json, _fabricCanvas.renderAll.bind(_fabricCanvas));
-
 			setLoadedData(gamecreator);
 			return false;
 		}
@@ -165,6 +164,34 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 
 function setLoadedData (gamecreator) {
 	_loadedData = gamecreator;
+	_fabricCanvas.clear();
+	var parsedJson = JSON.parse(gamecreator.json);
+	parsedJson.objects.forEach(function (object, index) {
+		var newImg = new Image();
+		newImg.crossOrigin = 'Anonymous';
+		newImg.onload = function () {
+			var imgInstance = new fabric.Image(newImg, {});
+			imgInstance.set({
+				left: object.left,
+				top: object.top,
+				imageUrl: object.src
+			});
+			var quantity = _fabricCanvas.getObjects().length;
+			imgInstance.scale(0.20);
+			imgInstance.perPixelTargetFind = true;
+			imgInstance.targetFindTolerance = 4;
+			imgInstance.on('selected', function () {
+				selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
+			});
+			_fabricCanvas.add(imgInstance);
+			_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
+			selectionChanged(quantity);
+			if (index === parsedJson.objects.length - 1) {
+				_fabricCanvas.renderAll();
+			}
+		};
+		newImg.src = object.src;
+	});
 	GameCreatorStore.emitChange(GameCreatorConstants.ACTIVE_DATA_CHANGED);
 }
 
@@ -420,7 +447,7 @@ function onSaveJsonSuccessResponse (data) {
 	var isNew = _gamecreatorList.every(function (gamecreator, index) {
 		if (gamecreator._id === data._id) {
 			_gamecreatorList[index] = $.extend(true, {}, data);
-			if (!_loadedData._id) {
+			if (!_loadedData._id || _loadedData._id === gamecreator._id) {
 				setLoadedData(_gamecreatorList[index]);
 			}
 			return false;
