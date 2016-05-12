@@ -173,7 +173,9 @@ var ContainerStyles = {
 			position: 'absolute',
 			top: '50%',
 			left: '50%',
-			transform: 'translateX(-50%) translateY(-50%)'
+			transform: 'translateX(-50%) translateY(-50%)',
+			msTransform: 'translateX(-50%) translateY(-50%)',
+			WebkitTransition: 'translateX(-50%) translateY(-50%)'
 		},
 		upperLeft: {
 			display: 'inline-block',
@@ -216,6 +218,12 @@ var ContainerStyles = {
 			border: '1px solid ' + Colors.gray,
 			marginTop: '10'
 		}
+	},
+	feedback: {
+		position: 'fixed',
+		right: 10,
+		bottom: 10,
+		zIndex: 9999999999 // always in front
 	}
 };
 module.exports = ContainerStyles;
