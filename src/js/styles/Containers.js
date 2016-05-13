@@ -145,6 +145,43 @@ var ContainerStyles = {
 				msUserSelect: 'none'
 			}
 		},
+		aspectTwoToOne: {
+			outer: {
+				height: '0',
+				paddingBottom: '50%',
+				width: '100%',
+				position: 'relative',
+				border: '2px solid ' + Colors.blueDark,
+				borderRadius: '5'
+			},
+			outerBorderLess: {
+				height: '0',
+				paddingBottom: '50%',
+				width: '100%',
+				position: 'relative'
+			},
+			inner: {
+				width: '100%',
+				height: '100%',
+				position: 'absolute',
+				top: '0',
+				left: '0'
+			},
+			img: {
+				maxHeight: '100%',
+				maxWidth: '100%',
+				padding: '10',
+				position: 'absolute',
+				top: '50%',
+				left: '50%',
+				transform: 'translateX(-50%) translateY(-50%)',
+				msTransform: 'translateX(-50%) translateY(-50%)',
+				WebkitTransition: 'translateX(-50%) translateY(-50%)',
+				userSelect: 'none',
+				WebkitUserSelect: 'none',
+				msUserSelect: 'none'
+			}
+		},
 		outer: {
 			height: '0',
 			paddingBottom: '50%',
@@ -224,6 +261,34 @@ var ContainerStyles = {
 		right: 10,
 		bottom: 10,
 		zIndex: 9999999999 // always in front
+	},
+	FrontPage: {
+		gameContainer: {
+			borderRadius: 10,
+			padding: 15,
+			width: '100%',
+			border: '2px solid ' + Colors.blue
+		},
+		FrontPageGame: {
+			container: {
+				padding: 10,
+				borderRadius: 5,
+				border: '2px solid ' + Colors.blue,
+				cursor: 'pointer'
+			},
+			containerHovered: {
+				padding: 10,
+				borderRadius: 5,
+				border: '2px solid ' + Colors.blue,
+				backgroundColor: Colors.blueTransparent,
+				cursor: 'pointer'
+			},
+			imageBorder: {
+				padding: 5,
+				border: '1px solid white',
+				borderRadius: 5
+			}
+		}
 	}
 };
 module.exports = ContainerStyles;
