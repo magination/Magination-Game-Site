@@ -341,6 +341,7 @@ function moveSelectedPieces (direction) {
 		}
 	});
 	_fabricCanvas.renderAll();
+	updateLocalJsonData();
 }
 
 function selectionChanged (index) {
@@ -374,6 +375,7 @@ function deleteSelectedPiece () {
 			deleteSelectedPiece();
 		}
 	});
+	updateLocalJsonData();
 }
 
 function rotateSelectedPiece (rotateToNext) {
@@ -403,6 +405,7 @@ function rotateSelectedPiece (rotateToNext) {
 			}
 		}
 	});
+	updateLocalJsonData();
 }
 
 function addPieceToCreator (piece) {
