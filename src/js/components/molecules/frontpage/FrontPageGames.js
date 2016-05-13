@@ -7,31 +7,9 @@ var FrontPageGameContainer = require('./FrontPageGameContainer');
 var FeaturedGames = React.createClass({
 	getInitialState: function () {
 		return {
-			featuredGames: [
-				{title: 'Game1', description: 'This isa atest'},
-				{title: 'Game2', description: 'This isa atest'},
-				{title: 'Game3', description: 'This isa atest'}
-			],
-			topGames: [
-				{title: 'Game1', description: 'This isa atest'},
-				{title: 'Game2', description: 'This isa atest'},
-				{title: 'Game3', description: 'This isa atest'},
-				{title: 'Game4', description: 'This isa atest'},
-				{title: 'Game5', description: 'This isa atest'},
-				{title: 'Game6', description: 'This isa atest'},
-				{title: 'Game7', description: 'This isa atest'},
-				{title: 'Game8', description: 'This isa atest'}
-			],
-			newGames: [
-				{title: 'Game1', description: 'This isa atest'},
-				{title: 'Game2', description: 'This isa atest'},
-				{title: 'Game3', description: 'This isa atest'},
-				{title: 'Game4', description: 'This isa atest'},
-				{title: 'Game5', description: 'This isa atest'},
-				{title: 'Game6', description: 'This isa atest'},
-				{title: 'Game7', description: 'This isa atest'},
-				{title: 'Game8', description: 'This isa atest'}
-			]
+			featuredGames: [],
+			topGames: [],
+			newGames: []
 		};
 	},
 	componentDidMount: function () {
