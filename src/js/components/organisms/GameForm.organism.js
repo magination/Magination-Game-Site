@@ -137,9 +137,9 @@ var GameForm = React.createClass({
 			propertyName: 'title',
 			propertyValue: e.target.value
 		});
+		GameAction.checkNameAvailability(this.state.game.title);
 	},
 	onTitleUnfocused: function () {
-		GameAction.checkNameAvailability(this.state.game.title);
 		AutoSave();
 	},
 	onSaveClicked: function () {
