@@ -13,9 +13,7 @@ var apiRootUrl = require('../config/config').urls.server.root;
 var _pieces = [];
 var _staticPieces = [
 	[
-		[
-			'/public/img/magination-pieces/piece-black-single.png'
-		]
+		[]
 	]
 ];
 var _staticPiecesFolderStructure = {};
@@ -96,9 +94,8 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		selectionChanged(action.index);
 		break;
 	case GameCreatorConstants.CLEAR_GAMECREATOR_STORE:
-		_fabricCanvas = new fabric.Canvas(action.id);
-		_fabricCanvas.on('selection:cleared', selectionChanged);
-		_loadedData = null;
+		_loadedData = {};
+		_fabricCanvas.clear();
 		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
@@ -151,13 +148,12 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 
 function setCanvasToGameCreatorId (gameCreatorId) {
 	if (_loadedData) {
+		if (gameCreatorId === _loadedData._id) return;
 		if (_loadedData._id) saveGameAsJson();
 	}
 	_gamecreatorList.every(function (gamecreator) {
 		if (gameCreatorId === gamecreator._id) {
 			_fabricCanvas.clear();
-			_fabricCanvas.loadFromJSON(gamecreator.json, _fabricCanvas.renderAll.bind(_fabricCanvas));
-
 			setLoadedData(gamecreator);
 			return false;
 		}
@@ -167,6 +163,34 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 
 function setLoadedData (gamecreator) {
 	_loadedData = gamecreator;
+	_fabricCanvas.clear();
+	var parsedJson = JSON.parse(gamecreator.json);
+	parsedJson.objects.forEach(function (object, index) {
+		var newImg = new Image();
+		newImg.crossOrigin = 'Anonymous';
+		newImg.onload = function () {
+			var imgInstance = new fabric.Image(newImg, {});
+			imgInstance.set({
+				left: object.left,
+				top: object.top,
+				imageUrl: object.src
+			});
+			var quantity = _fabricCanvas.getObjects().length;
+			imgInstance.scale(0.20);
+			imgInstance.perPixelTargetFind = true;
+			imgInstance.targetFindTolerance = 4;
+			imgInstance.on('selected', function () {
+				selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
+			});
+			_fabricCanvas.add(imgInstance);
+			_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
+			selectionChanged(quantity);
+			if (index === parsedJson.objects.length - 1) {
+				_fabricCanvas.renderAll();
+			}
+		};
+		newImg.src = object.src;
+	});
 	GameCreatorStore.emitChange(GameCreatorConstants.ACTIVE_DATA_CHANGED);
 }
 
@@ -268,16 +292,17 @@ function rotateSelectedPiece (rotateToNext) {
 				var newImg = new Image();
 				newImg.crossOrigin = 'Anonymous';
 				newImg.onload = function () {
-					var currentObj = object;
-					var oldWidth = currentObj.width;
-					var oldHeight = currentObj.height;
-					currentObj.setElement(newImg);
-					currentObj.setCoords();
-					var widthDiff = (oldWidth - currentObj.width) / 10;
-					var heightDiff = (oldHeight - currentObj.height) / 10;
-					currentObj.set({
-						left: currentObj.left + widthDiff,
-						top: currentObj.top + heightDiff,
+					var bounding = object.getBoundingRect();
+					var oldWidth = bounding.width;
+					var oldHeight = bounding.height;
+					object.setElement(newImg);
+					object.setCoords();
+					bounding = object.getBoundingRect();
+					var widthDiff = (oldWidth - bounding.width) / 2;
+					var heightDiff = (oldHeight - bounding.height) / 2;
+					object.set({
+						left: bounding.left + widthDiff,
+						top: bounding.top + heightDiff,
 						imageUrl: newSrc
 					});
 					_fabricCanvas.renderAll();
@@ -353,7 +378,7 @@ function saveGameAsJson () {
 		console.log('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
-	if (!_loadedData._id) {
+	if (!_loadedData || !_loadedData._id) {
 		requestAction = 'POST';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators';
 	}
@@ -422,7 +447,7 @@ function onSaveJsonSuccessResponse (data) {
 	var isNew = _gamecreatorList.every(function (gamecreator, index) {
 		if (gamecreator._id === data._id) {
 			_gamecreatorList[index] = $.extend(true, {}, data);
-			if (!_loadedData._id) {
+			if (!_loadedData._id || _loadedData._id === gamecreator._id) {
 				setLoadedData(_gamecreatorList[index]);
 			}
 			return false;

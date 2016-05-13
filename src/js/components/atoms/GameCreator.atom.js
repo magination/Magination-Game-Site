@@ -28,7 +28,7 @@ var GameCreator = React.createClass({
 	getInitialState: function () {
 		return {
 			canvas: null,
-			staticPieces: GameCreatorStore.getStaticPieces(),
+			staticPieces: [],
 			isPencilToggled: false
 		};
 	},
@@ -70,6 +70,10 @@ var GameCreator = React.createClass({
 				<GameCreatorElement key={index} piece={piece} />
 			);
 		});
+		var gamecreatorListStyle = {
+			height: ((height * 55) / 100) + 'px',
+			overflowY: 'auto'
+		};
 		var pencilPopover = <Popover id='pencilSettings'><PencilSettingsOverlay /></Popover>;
 		return (
 			<div ref='canvasParent' style={{height: height}}>
@@ -84,7 +88,7 @@ var GameCreator = React.createClass({
 				</Col>
 				<Col md={2}>
 					<div style={{height: height}}>
-						<div style={{height: '85%'}}>
+						<div style={{height: '30%'}}>
 							<div>
 								<h4>Piece Tools</h4>
 								<Button style={toolButton} onClick={this.onMoveSelectedDeeperClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
@@ -93,13 +97,13 @@ var GameCreator = React.createClass({
 								<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
 								<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
 								<hr/>
-							</div>
-							<div>
 								<form onSubmit={this.onCreatorNameSubmit}>
 									<Input type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
 								</form>
-								<GameCreatorList />
 							</div>
+						</div>
+						<div style={gamecreatorListStyle}>
+							<GameCreatorList />
 						</div>
 						<div style={{height: '15%'}}>
 						<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSaveClick}>SAVE</Button>
@@ -137,12 +141,12 @@ var GameCreator = React.createClass({
 	},
 	onCounterClockwiseRotateClick: function () {
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: false
+			next: true
 		});
 	},
 	onClockwiseRotateClick: function () {
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: true
+			next: false
 		});
 	},
 	onPencilClick: function () {
@@ -217,17 +221,23 @@ function keyPressed (key) {
 	case 189:
 		/* -*/
 		break;
+	case 90:
+		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'in'});
+		break;
+	case 88:
+		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'out'});
+		break;
 	case 46:
 		GameCreatorAction.deleteCurrentSelectedPiece();
 		break;
 	case 69:
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: true
+			next: false
 		});
 		break;
 	case 81:
 		GameCreatorAction.rotateCurrentSelectedPiece({
-			next: false
+			next: true
 		});
 		break;
 	}
