@@ -93,6 +93,9 @@ var GameCreatorActions = {
 		});
 	},
 	fetchGameCreatorListFromServer: function (data) {
+		if (!GameStore.getGame()) {
+			return;
+		}
 		var gameId = GameStore.getGame()._id;
 		if (!gameId) {
 			console.log('WARNING - Tried to fetch gamecreator list from server, but game id was undefined');
