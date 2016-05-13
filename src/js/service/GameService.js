@@ -13,7 +13,7 @@ var GameService = {
 				doubles: 0,
 				triples: 0
 			},
-			rules: [],
+			rules: ['', '', ''],
 			alternativeRules: []
 		};
 	}
