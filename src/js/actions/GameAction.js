@@ -30,7 +30,7 @@ var GameAction = {
 	checkNameAvailability: function (name) {
 		$.ajax({
 			type: 'GET',
-			url: URLS.api.games + '?' + 'title=' + name,
+			url: URLS.api.games + '?' + 'exactTitle=' + name,
 			contentType: 'application/json',
 			dataType: 'json',
 			success: onSearchResult
