@@ -7,7 +7,6 @@ var GameCreatorAction = require('../../../actions/GameCreatorAction');
 var Colors = require('../../../styles/Colors');
 
 var containerStyle = {
-	overflowY: 'scroll'
 };
 
 var GameCreatorList = React.createClass({

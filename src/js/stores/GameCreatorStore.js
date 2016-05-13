@@ -94,9 +94,8 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		selectionChanged(action.index);
 		break;
 	case GameCreatorConstants.CLEAR_GAMECREATOR_STORE:
-		_fabricCanvas = new fabric.Canvas(action.id);
-		_fabricCanvas.on('selection:cleared', selectionChanged);
-		_loadedData = null;
+		_loadedData = {};
+		_fabricCanvas.clear();
 		GameCreatorStore.emitChange(GameCreatorConstants.GAMECREATORE_STORE_CLEARED);
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_JSON:
@@ -379,7 +378,7 @@ function saveGameAsJson () {
 		console.log('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
-	if (!_loadedData._id) {
+	if (!_loadedData || !_loadedData._id) {
 		requestAction = 'POST';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators';
 	}
