@@ -1,22 +1,10 @@
 var React = require('react');
-var GameStore = require('../../../../stores/GameStore');
 var SelectImage = require('./SelectImage.molecule.js');
 var GameCreatorModal = require('../../../organisms/GameCreatorModal.organism.js');
 var DragAndDropImageList = require('./DragAndDropImageList');
 var Col = require('react-bootstrap').Col;
 
 var Images = React.createClass({
-	getInitialState: function () {
-		return {
-			images: GameStore.getGame().images
-		};
-	},
-	componentDidMount: function () {
-		GameStore.addChangeListener(this.onGameStateChanged);
-	},
-	componentWillUnmount: function () {
-		GameStore.removeChangeListener(this.onGameStateChanged);
-	},
 	render: function () {
 		return (
 			<div>
@@ -41,11 +29,6 @@ var Images = React.createClass({
 	},
 	onCreateYourOwnButtonClicked: function () {
 		this.refs.createImageModal.show = true;
-	},
-	onGameStateChanged: function () {
-		this.setState({
-			images: GameStore.getGame().images
-		});
 	}
 });
 module.exports = Images;

@@ -57,7 +57,7 @@ MyGamesStore.dispatchToken = Dispatcher.register(function (action) {
 		unPublishGameToServer(action.gameId);
 		break;
 	case MyGamesConstants.DELETE_GAME:
-		deleteGameFromServer(action.gameId, action.isPublished);
+		deleteGameFromServer(action.gameId);
 		break;
 	}
 });
@@ -112,8 +112,13 @@ function deleteGameFromServer (gameId) {
 		dataType: 'json',
 		statusCode: {
 			200: function () {
-				var game = findGameById(gameId, false);
-				_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
+				if (_unpublishedGames.length === 1) {
+					_unpublishedGames = [];
+				}
+				else {
+					var game = findGameById(gameId, false);
+					_unpublishedGames.splice(_unpublishedGames.indexOf(game), 1);
+				}
 				MyGamesStore.emitChange();
 			}
 		}

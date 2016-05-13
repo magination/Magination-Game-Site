@@ -43,9 +43,14 @@ var SaveGameModal = React.createClass({
 		);
 	},
 	onGameFormClosed: function () {
-		this.setState({
-			showModal: !GameStore.hasPromptedSave() && LoginStore.getLoginState().isLoggedIn
-		});
+		if (GameStore.hasPromptedSave() && LoginStore.getLoginState().isLoggedIn) {
+			GameAction.removeGameLocally();
+		}
+		else {
+			this.setState({
+				showModal: true
+			});
+		}
 	},
 	onSaveClicked: function () {
 		GameAction.saveGameAndResetGameStore();

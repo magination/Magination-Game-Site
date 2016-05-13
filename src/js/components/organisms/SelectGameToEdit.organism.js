@@ -3,6 +3,7 @@ var Button = require('react-bootstrap').Button;
 var Modal = require('react-bootstrap').Modal;
 var MyGamesStore = require('../../stores/MyGamesStore');
 var MyGamesAction = require('../../actions/MyGamesAction');
+var GameConstants = require('../../constants/GameConstants');
 var GameStore = require('../../stores/GameStore');
 var GameAction = require('../../actions/GameAction');
 var ButtonStyle = require('../../styles/Buttons');
@@ -12,6 +13,7 @@ var NavigationConstants = require('../../constants/NavigationConstants');
 var NavigationStore = require('../../stores/NavigationStore');
 var LoginStore = require('../../stores/LoginStore');
 var GameService = require('../../service/GameService');
+
 var SelectGameToEdit = React.createClass({
 	getInitialState: function () {
 		return {
@@ -24,13 +26,13 @@ var SelectGameToEdit = React.createClass({
 		}
 		MyGamesStore.addChangeListener(this.onMyGamesStateChanged);
 		LoginStore.addChangeListener(this.onLoginStateChanged);
-		GameStore.addChangeListener(this.onGameStoreStateChanged);
+		GameStore.addChangeListener(this.onGameStoreStateChanged, GameConstants.LOCAL_GAME_HAS_CHANGED);
 		MyGamesAction.requestUnpublishedGames();
 	},
 	componentWillUnmount: function () {
 		MyGamesStore.removeChangeListener(this.onMyGamesStateChanged);
 		LoginStore.removeChangeListener(this.onLoginStateChanged);
-		GameStore.removeChangeListener(this.onGameStoreStateChanged);
+		GameStore.removeChangeListener(this.onGameStoreStateChanged, GameConstants.LOCAL_GAME_HAS_CHANGED);
 	},
 	render: function () {
 		return (
@@ -65,22 +67,24 @@ var SelectGameToEdit = React.createClass({
 		this.createNewGame();
 	},
 	createNewGame: function () {
-		GameAction.changeGameLocally(GameService.createEmptyGame());
-		setTimeout(GameAction.autoSaveGameToServer(), 0);
-		this.setState({
-			showModal: false
-		});
+		GameAction.createNewGame(GameService.createEmptyGame());
 	},
 	shouldShowModal: function () {
-		if (MyGamesStore.getUnpublishedGames()) {
-			if (MyGamesStore.getUnpublishedGames().length === 0) {
-				this.createNewGame();
-			}
-			else {
-				this.setState({
-					showModal: ((MyGamesStore.getUnpublishedGames().length > 0) && !GameStore.hasSelectedGameToEdit())
-				});
-			}
+		if (GameStore.getGame() !== undefined) {
+			this.setState({
+				showModal: false
+			});
+		}
+		else if (!MyGamesStore.getUnpublishedGames()) {
+			MyGamesAction.requestUnpublishedGames();
+		}
+		else if (MyGamesStore.getUnpublishedGames().length === 0) {
+			this.createNewGame();
+		}
+		else {
+			this.setState({
+				showModal: ((MyGamesStore.getUnpublishedGames().length > 0) && !GameStore.hasSelectedGameToEdit())
+			});
 		}
 	},
 	onLoginStateChanged: function () {

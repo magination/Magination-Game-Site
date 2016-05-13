@@ -51,7 +51,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={4}>
-							<Input value={this.state.game.title} bsStyle={this.state.isAvailableGameName ? 'success' : 'error'} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={this.onTitleUnfocused} hasFeedback/>
+							<Input value={this.state.game ? this.state.game.title : ''} bsStyle={this.state.isAvailableGameName ? 'success' : 'error'} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={this.onTitleUnfocused} hasFeedback/>
 						</Col>
 						<Col md={8} style={{paddingLeft: 0}}>
 							{<h5 style={this.state.isAvailableGameName ? TextStyle.green : TextStyle.red}>{this.getGameNameFeedbackMessage()}</h5>}
@@ -70,9 +70,9 @@ var GameForm = React.createClass({
 					<h3 style={TextStyle.blueHeader}>PIECES</h3>
 					<Row>
 						<Col md={3}>
-							<ImageNumberPair value={this.state.game.pieces ? this.state.game.pieces.singles : 0} src={URLS.img.pieceSingleBlue} placeholder='No. singles' bindingCollection ='pieces' bindingProperty='singles'/>
-							<ImageNumberPair value={this.state.game.pieces ? this.state.game.pieces.doubles : 0} src={URLS.img.pieceDoubleBlue} placeholder='No. doubles' bindingCollection ='pieces' bindingProperty='doubles'/>
-							<ImageNumberPair value={this.state.game.pieces ? this.state.game.pieces.triples : 0} src={URLS.img.pieceTripleBlue} placeholder='No. triples' bindingCollection ='pieces' bindingProperty='triples'/>
+							<ImageNumberPair value={this.state.game ? this.state.game.pieces.singles : 0} src={URLS.img.pieceSingleBlue} placeholder='No. singles' bindingCollection ='pieces' bindingProperty='singles'/>
+							<ImageNumberPair value={this.state.game ? this.state.game.pieces.doubles : 0} src={URLS.img.pieceDoubleBlue} placeholder='No. doubles' bindingCollection ='pieces' bindingProperty='doubles'/>
+							<ImageNumberPair value={this.state.game ? this.state.game.pieces.triples : 0} src={URLS.img.pieceTripleBlue} placeholder='No. triples' bindingCollection ='pieces' bindingProperty='triples'/>
 						</Col>
 					</Row>
 					<Row>
@@ -159,7 +159,7 @@ var GameForm = React.createClass({
 		}
 	},
 	onCancelClicked () {
-		if (this.state.game_id) MyGamesAction.deleteGame(this.state.game._id);
+		MyGamesAction.deleteGame(this.state.game._id);
 		GameAction.removeGameLocally();
 		NavigationAction.navigate({
 			destination: NavigationPaths.discover
