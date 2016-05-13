@@ -32,7 +32,7 @@ var MyGamesList = React.createClass({
 		return (
 			<div>
 				<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={50}>
-					{games}
+					{this.state.games.length > 0 ? games : <h5>You have no {this.props.isPublished ? 'published' : 'unpublished'} games</h5>}
 				</ReactCSSTransitionGroup>
 			</div>
 		);
