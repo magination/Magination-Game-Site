@@ -43,7 +43,7 @@ var SaveGameModal = React.createClass({
 		);
 	},
 	onGameFormClosed: function () {
-		if (LoginStore.getLoginState().isLoggedIn) {
+		if (!LoginStore.getLoginState().isLoggedIn) {
 			this.setState({
 				showModal: false
 			});
