@@ -41,12 +41,12 @@ var FeaturedGames = React.createClass({
 	},
 	onNewGamesChanged: function () {
 		this.setState({
-			featuredGames: FrontPageStore.getNewGames()
+			newGames: FrontPageStore.getNewGames()
 		});
 	},
 	onTopGamesChanged: function () {
 		this.setState({
-			featuredGames: FrontPageStore.getTopGames()
+			topGames: FrontPageStore.getTopGames()
 		});
 	}
 });

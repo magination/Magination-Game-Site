@@ -16,7 +16,7 @@ var FrontPageGameContainer = React.createClass({
 		return (
 			<div style={this.state.gameContainerStyle} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onGameClick}>
 				<h4 style={TextStyles.blue}>{this.props.game.title}</h4>
-				<CenteredImage src={this.props.game.image} aspect='twoToOne'/>
+				<CenteredImage src={this.props.game.images[0]} aspect='twoToOne'/>
 				<h4 style={TextStyles.blue}>{this.props.game.shortDescription.length > 30 ? this.props.game.shortDescription.substring(0, 27) + '...' : this.props.game.shortDescription}</h4>
 			</div>
 		);
@@ -33,7 +33,7 @@ var FrontPageGameContainer = React.createClass({
 	},
 	onGameClick: function () {
 		NavigationAction.navigate({
-			destination: NavigationConstants.PATHS.game + '/' + this.props.game.id
+			destination: NavigationConstants.PATHS.game + '/' + this.props.game._id
 		});
 	}
 });
