@@ -83,16 +83,16 @@ var GameCreator = React.createClass({
 		var pencilPopover = <Popover id='pencilSettings'><PencilSettingsOverlay /></Popover>;
 		return (
 			<div ref='canvasParent' style={{height: height}}>
-				<Col md={2}>
+				<Col xs={2} md={2}>
 					{gamecreatorelements}
 					<div onClick={this.onPencilClick}>
 						<CustomGameCreatorElement glyph={'pencil'} isToggled={this.state.isPencilToggled} settingsComponent={pencilPopover}/>
 					</div>
 				</Col>
-				<Col md={8}>
+				<Col xs={8} md={8}>
 					<canvas ref='creatorCanvas' id='fabricCanvas'></canvas>
 				</Col>
-				<Col md={2}>
+				<Col xs={2} md={2}>
 					<div style={{height: height}}>
 						<div ref='pieceToolsDiv'>
 							<h4>Piece Tools</h4>
@@ -106,7 +106,7 @@ var GameCreator = React.createClass({
 						<div style={gamecreatorListStyle}>
 							<GameCreatorList />
 						</div>
-						<div style={{paddingTop: '20px'}} ref='saveButtonsDiv'>
+						<div style={{width: '100%', paddingTop: '20px'}} ref='saveButtonsDiv'>
 							<form onSubmit={this.onCreatorNameSubmit}>
 									<Input type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
 							</form>
