@@ -110,7 +110,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={2}>
-							<ConfirmButton confirmationDialog='This action will delete the game and any changes you have made to it, and exit the editor. Do you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked} placement='top' buttonText='CANCEL'/>
+							<ConfirmButton confirmationDialog='This action will delete the game, and is irreversible. Are you sure you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onDeleteClicked} placement='top' buttonText='DELETE'/>
 						</Col>
 						<Col md={2}>
 							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
@@ -158,7 +158,7 @@ var GameForm = React.createClass({
 			GameAction.publishGameToServer();
 		}
 	},
-	onCancelClicked () {
+	onDeleteClicked () {
 		MyGamesAction.deleteGame(this.state.game._id);
 		GameAction.removeGameLocally();
 		NavigationAction.navigate({
