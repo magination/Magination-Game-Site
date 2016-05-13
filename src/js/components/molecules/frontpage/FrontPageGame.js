@@ -17,7 +17,7 @@ var FrontPageGameContainer = React.createClass({
 			<div style={this.state.gameContainerStyle} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onGameClick}>
 				<h4 style={TextStyles.blue}>{this.props.game.title}</h4>
 				<CenteredImage src={this.props.game.image} aspect='twoToOne'/>
-				<h4 style={TextStyles.blue}>{this.props.game.description.length > 30 ? this.props.game.description.substring(0, 27) + '...' : this.props.game.description}</h4>
+				<h4 style={TextStyles.blue}>{this.props.game.shortDescription.length > 30 ? this.props.game.shortDescription.substring(0, 27) + '...' : this.props.game.shortDescription}</h4>
 			</div>
 		);
 	},
