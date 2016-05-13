@@ -32,7 +32,6 @@ var ReactRouter = React.createClass({
 			<div>
 				<Router history={browserHistory}>
 					<Route path='/' component={App}>
-						<Route path='/' component={FrontPage} />
 						<Route path='/login' component={LoginForm} />
 						<Route path='/register' component={RegisterForm} />
 						<Route path='/mygames' component={MyGames} />
