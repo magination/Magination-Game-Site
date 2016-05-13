@@ -93,7 +93,7 @@ var GameCreator = React.createClass({
 					<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
 				</Col>
 				<Col xs={2} md={2}>
-					<div style={{height: height}}>
+					<div style={{height: height, paddingLeft: 10}}>
 						<div ref='pieceToolsDiv'>
 							<h4>Piece Tools</h4>
 							<Button style={toolButton} onClick={this.onMoveSelectedDeeperClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
