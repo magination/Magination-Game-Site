@@ -74,7 +74,7 @@ var GameActionBar = React.createClass({
 		});
 	},
 	onGetGameForkSuccessResponse: function (data) {
-		GameAction.createNewGame(data);
+		GameAction.changeGameLocally(data);
 		NavigationAction.navigate({
 			destination: NavigationConstants.PATHS.creategame
 		});
