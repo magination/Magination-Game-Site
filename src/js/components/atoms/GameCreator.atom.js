@@ -102,6 +102,7 @@ var GameCreator = React.createClass({
 							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
 							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
 							<hr/>
+							<h4>Your Creators</h4>
 						</div>
 						<div style={gamecreatorListStyle}>
 							<GameCreatorList />
