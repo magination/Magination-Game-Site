@@ -53,6 +53,7 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameConstants.CHANGE_GAME_LOCALLY:
 		_game = action.game;
 		_hasSelectedGameToEdit = true;
+		_hasPromptedSave = !action.shouldPromptSaveOnExit;
 		GameStore.emitChange(GameConstants.LOCAL_GAME_HAS_CHANGED);
 		GameStore.emitChange(CHANGE_EVENT);
 		break;

@@ -55,6 +55,13 @@ var TextStyles = {
 			padding: '0',
 			color: Colors.blueDark
 		}
+	},
+	FrontPage: {
+		gameContainerTitle: {
+			color: 'white',
+			verticalAlign: 'middle',
+			width: '100%'
+		}
 	}
 };
 

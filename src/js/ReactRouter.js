@@ -12,6 +12,7 @@ var NavigationStore = require('./stores/NavigationStore');
 
 var App = require('./App');
 var LoginForm = require('./components/organisms/LoginForm.organism');
+var FrontPage = require('./components/organisms/FrontPage.organism');
 var RegisterForm = require('./components/organisms/RegisterForm.organism');
 var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
 var VerifyEmailChange = require('./components/organisms/VerifyEmailChange');
@@ -31,6 +32,7 @@ var ReactRouter = React.createClass({
 			<div>
 				<Router history={browserHistory}>
 					<Route path='/' component={App}>
+						<Route path='/' component={FrontPage} />
 						<Route path='/login' component={LoginForm} />
 						<Route path='/register' component={RegisterForm} />
 						<Route path='/mygames' component={MyGames} />
@@ -44,7 +46,7 @@ var ReactRouter = React.createClass({
 						<Route path={PATHS.forgotpassword} component={ForgotPassword}/>
 						<Route path={PATHS.confirmforgotpassword} component={ConfirmForgotPassword}/>
 						<Route path='/moderator' component={Moderator}/>
-						<Route path='*' component={BrowseGames} />
+						<Route path='*' component={FrontPage} />
 					</Route>
 				</Router>
 			</div>
