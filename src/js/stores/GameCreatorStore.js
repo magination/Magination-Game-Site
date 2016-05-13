@@ -160,6 +160,7 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 		saveIfChanged();
 		clearLocalJsonSave();
 		_loadedData = {};
+		saveGameAsJson();
 	}
 	if (_loadedData) {
 		if (gameCreatorId === _loadedData._id) return;
@@ -221,36 +222,52 @@ function setLoadedData (gamecreator) {
 	_loadedData = gamecreator;
 	_fabricCanvas.clear();
 	var parsedJson = gamecreator.json;
-	if (typeof parsedJson !== 'object') {
+	if (typeof parsedJson !== 'object' && parsedJson) {
 		parsedJson = JSON.parse(gamecreator.json);
 	}
-	parsedJson.objects.forEach(function (object, index) {
-		var newImg = new Image();
-		newImg.crossOrigin = 'Anonymous';
-		newImg.onload = function () {
-			var imgInstance = new fabric.Image(newImg, {});
-			imgInstance.set({
-				left: object.left,
-				top: object.top,
-				imageUrl: object.src,
-				scaleX: object.scaleX,
-				scaleY: object.scaleY
-			});
-			var quantity = _fabricCanvas.getObjects().length;
-			imgInstance.perPixelTargetFind = true;
-			imgInstance.targetFindTolerance = 4;
-			imgInstance.on('selected', function () {
-				selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
-			});
-			_fabricCanvas.add(imgInstance);
-			imgInstance.moveTo(index);
-			_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
-			selectionChanged(quantity);
-		};
-		newImg.src = object.src;
-	});
+	if (parsedJson) {
+		addObjectsToCanvas(parsedJson.objects);
+	}
+	saveCurrentJsonDataLocal();
 	_gameHasChanged = false;
 	GameCreatorStore.emitChange(GameCreatorConstants.ACTIVE_DATA_CHANGED);
+}
+
+function addObjectsToCanvas (objects) {
+	if (!objects) {
+		return;
+	}
+	objects.forEach(function (object, index) {
+		if (object.src) {
+			var newImg = new Image();
+			newImg.crossOrigin = 'Anonymous';
+			newImg.onload = function () {
+				var imgInstance = new fabric.Image(newImg, {});
+				imgInstance.set({
+					left: object.left,
+					top: object.top,
+					imageUrl: object.src,
+					scaleX: object.scaleX,
+					scaleY: object.scaleY
+				});
+				var quantity = _fabricCanvas.getObjects().length;
+				imgInstance.perPixelTargetFind = true;
+				imgInstance.targetFindTolerance = 4;
+				imgInstance.on('selected', function () {
+					selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
+				});
+				_fabricCanvas.add(imgInstance);
+				imgInstance.moveTo(index);
+				_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
+				selectionChanged(quantity);
+			};
+			newImg.src = object.src;
+		}
+		else {
+			_fabricCanvas.add(object);
+			object.moveTo(index);
+		}
+	});
 }
 
 function changeFreedrawState () {
@@ -455,7 +472,6 @@ function saveIfChanged () {
 
 function saveGameAsJson () {
 	_fabricCanvas.deactivateAll().renderAll();
-	updateLocalJsonData();
 	var requestAction = null;
 	var url = null;
 	if (_currentGameId === null) {
@@ -470,10 +486,13 @@ function saveGameAsJson () {
 		requestAction = 'PUT';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators/' + _loadedData._id;
 	}
-	if (!_loadedData.title) {
-		_loadedData.title = 'Unnamed Creator';
-	}
 	var localSave = loadLocalJsonSave();
+	if (!localSave) {
+		localSave = {};
+	}
+	if (!localSave.title) {
+		localSave.title = 'Unnamed Creator';
+	}
 	_gameHasChanged = false;
 	$.ajax({
 		type: requestAction,

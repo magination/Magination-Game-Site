@@ -103,6 +103,7 @@ var GameCreator = React.createClass({
 							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
 							<hr/>
 							<h4>Your Creators</h4>
+							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onCreateNewClick}>Create New</Button>
 						</div>
 						<div style={gamecreatorListStyle}>
 							<GameCreatorList />
@@ -118,6 +119,9 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onCreateNewClick: function () {
+		GameCreatorAction.loadCreatorId({gameCreatorId: null});
 	},
 	onSaveClick: function () {
 		GameCreatorAction.saveCurrentToJson();
