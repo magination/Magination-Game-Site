@@ -173,10 +173,11 @@ function setLoadedData (gamecreator) {
 			imgInstance.set({
 				left: object.left,
 				top: object.top,
-				imageUrl: object.src
+				imageUrl: object.src,
+				scaleX: object.scaleX,
+				scaleY: object.scaleY
 			});
 			var quantity = _fabricCanvas.getObjects().length;
-			imgInstance.scale(0.20);
 			imgInstance.perPixelTargetFind = true;
 			imgInstance.targetFindTolerance = 4;
 			imgInstance.on('selected', function () {
