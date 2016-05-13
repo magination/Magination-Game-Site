@@ -62,6 +62,17 @@ var TextStyles = {
 			verticalAlign: 'middle',
 			width: '100%'
 		}
+	},
+	CreateGame: {
+		error: {
+			color: Colors.red,
+			padding: 2,
+			verticalAlign: 'middle'
+		},
+		success: {
+			color: Colors.green,
+			padding: 2,
+			verticalAlign: 'middle'		}
 	}
 };
 
