@@ -38,7 +38,6 @@ var GameCreator = React.createClass({
 		var parent = ReactDOM.findDOMNode(this.refs.canvasParent);
 		var canvas = ReactDOM.findDOMNode(this.refs.creatorCanvas);
 		canvas.width = (parent.offsetWidth / 12) * 8;
-		canvas.height = parent.offsetHeight;
 		var browserHeight = 0;
 		if (typeof (window.innerHeight) === 'number') {
 		// Non-IE
@@ -49,6 +48,7 @@ var GameCreator = React.createClass({
 			browserHeight = document.documentElement.clientHeight;
 		}
 		height = (browserHeight * 90) / 100;
+		canvas.height = height;
 		var pieceToolsDivHeight = ReactDOM.findDOMNode(this.refs.pieceToolsDiv).offsetHeight;
 		var saveButtonsDiv = ReactDOM.findDOMNode(this.refs.saveButtonsDiv).offsetHeight;
 		this.setState({
@@ -90,7 +90,7 @@ var GameCreator = React.createClass({
 					</div>
 				</Col>
 				<Col xs={8} md={8}>
-					<canvas ref='creatorCanvas' id='fabricCanvas'></canvas>
+					<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
 				</Col>
 				<Col xs={2} md={2}>
 					<div style={{height: height}}>
@@ -102,6 +102,8 @@ var GameCreator = React.createClass({
 							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
 							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
 							<hr/>
+							<h4>Your Creators</h4>
+							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onCreateNewClick}>Create New</Button>
 						</div>
 						<div style={gamecreatorListStyle}>
 							<GameCreatorList />
@@ -118,6 +120,9 @@ var GameCreator = React.createClass({
 			</div>
 		);
 	},
+	onCreateNewClick: function () {
+		GameCreatorAction.loadCreatorId({gameCreatorId: null});
+	},
 	onSaveClick: function () {
 		GameCreatorAction.saveCurrentToJson();
 	},
@@ -128,12 +133,12 @@ var GameCreator = React.createClass({
 	},
 	onCreatorNameSubmit: function (e) {
 		e.preventDefault();
-		GameCreatorAction.setActiveCreatorName({
-			creatorName: this.state.creatorName
-		});
 	},
 	onCreatorNameChange: function (e) {
 		this.setState({
+			creatorName: e.target.value
+		});
+		GameCreatorAction.setActiveCreatorName({
 			creatorName: e.target.value
 		});
 	},

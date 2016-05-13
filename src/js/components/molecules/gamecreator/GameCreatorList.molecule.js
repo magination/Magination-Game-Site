@@ -41,7 +41,7 @@ var GameCreatorList = React.createClass({
 				cursor: 'pointer'
 			};
 			if (that.state.currentSelected === gameCreator._id) {
-				listElementStyle['backgroundColor'] = Colors.blue;
+				listElementStyle['backgroundColor'] = Colors.blueLight;
 				listElementStyle['color'] = 'white';
 			}
 			else if (that.state.hoveredElementIndex === index) {

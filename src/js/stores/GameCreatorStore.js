@@ -2,7 +2,7 @@ var URLS = require('../config/config').urls;
 var LoginStore = require('./LoginStore');
 var LoginAction = require('../actions/LoginAction');
 var GameAction = require('../actions/GameAction');
-
+var ParserService = require('../service/Parser.service');
 var Dispatcher = require('../dispatchers/Dispatcher');
 var GameCreatorConstants = require('../constants/GameCreatorConstants');
 var EventEmitter = require('events').EventEmitter;
@@ -21,6 +21,7 @@ var _fabricCanvas = null;
 var _loadedData = {};
 var _currentGameId = null;
 var _gamecreatorList = [];
+var _gameHasChanged = false;
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
@@ -87,6 +88,11 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.SET_CANVAS:
 		_fabricCanvas = new fabric.Canvas(action.id);
 		_fabricCanvas.on('selection:cleared', selectionChanged);
+		_fabricCanvas.on('object:moving', objectMoving);
+		var savedJsonData = loadLocalJsonSave();
+		if (savedJsonData) {
+			setLoadedData(savedJsonData);
+		}
 		break;
 	case GameCreatorConstants.SET_SELECTED_INDEX:
 		if (action.index < 0) _fabricCanvas.deactivateAll().renderAll();
@@ -138,18 +144,27 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameCreatorConstants.SET_CREATOR_NAME:
 		if (!_loadedData) {
+			console.log('WARNING: Loaded GameCreator data was undefined');
 			_loadedData = {};
 		}
-		_loadedData.title = action.creatorName;
-		saveGameAsJson();
+		var toBeSavedData = $.extend(null, {}, _loadedData);
+		toBeSavedData.title = action.creatorName;
+		toBeSavedData.json = _fabricCanvas.toJSON();
+		saveCurrentJsonDataLocal(toBeSavedData);
 		break;
 	}
 });
 
 function setCanvasToGameCreatorId (gameCreatorId) {
+	if (!gameCreatorId) {
+		saveIfChanged();
+		clearLocalJsonSave();
+		_loadedData = {};
+		saveGameAsJson();
+	}
 	if (_loadedData) {
 		if (gameCreatorId === _loadedData._id) return;
-		if (_loadedData._id) saveGameAsJson();
+		if (_loadedData._id) saveIfChanged();
 	}
 	_gamecreatorList.every(function (gamecreator) {
 		if (gameCreatorId === gamecreator._id) {
@@ -161,39 +176,98 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 	});
 }
 
+function saveCurrentJsonDataLocal (object) {
+	if (!object) {
+		object = _loadedData;
+	}
+	var dataToSave = $.extend(null, {}, object);
+	// dataToSave.json = _fabricCanvas.toJSON();
+	$.jStorage.set(_currentGameId, dataToSave);
+	setAccessIndex();
+}
+
+function clearLocalJsonSave () {
+	$.jStorage.deleteKey(_currentGameId);
+	setAccessIndex();
+}
+
+function updateLocalJsonData () {
+	_gameHasChanged = true;
+	var data = $.jStorage.get(_currentGameId);
+	if (!data) {
+		return;
+	}
+	data.json = _fabricCanvas.toJSON();
+	$.jStorage.set(_currentGameId, data);
+}
+
+function loadLocalJsonSave () {
+	var loadedData = $.jStorage.get(_currentGameId);
+	setAccessIndex();
+	return loadedData;
+}
+
+function setAccessIndex () {
+	var accessIndex = $.jStorage.get('accessIndex');
+	if (!accessIndex) accessIndex = [];
+	accessIndex[_currentGameId] = Date.now();
+	if (_currentGameId && !$.jStorage.get(_currentGameId)) {
+		accessIndex[_currentGameId] = undefined;
+	}
+	$.jStorage.set('accessIndex', accessIndex);
+}
+
 function setLoadedData (gamecreator) {
+	_isCheckingMovement = false;
 	_loadedData = gamecreator;
 	_fabricCanvas.clear();
-	var parsedJson = JSON.parse(gamecreator.json);
-	parsedJson.objects.forEach(function (object, index) {
-		var newImg = new Image();
-		newImg.crossOrigin = 'Anonymous';
-		newImg.onload = function () {
-			var imgInstance = new fabric.Image(newImg, {});
-			imgInstance.set({
-				left: object.left,
-				top: object.top,
-				imageUrl: object.src,
-				scaleX: object.scaleX,
-				scaleY: object.scaleY
-			});
-			var quantity = _fabricCanvas.getObjects().length;
-			imgInstance.perPixelTargetFind = true;
-			imgInstance.targetFindTolerance = 4;
-			imgInstance.on('selected', function () {
-				selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
-			});
-			_fabricCanvas.add(imgInstance);
-			imgInstance.moveTo(index);
-			_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
-			selectionChanged(quantity);
-			if (index === parsedJson.objects.length - 1) {
-				_fabricCanvas.renderAll();
-			}
-		};
-		newImg.src = object.src;
-	});
+	var parsedJson = gamecreator.json;
+	if (typeof parsedJson !== 'object' && parsedJson) {
+		parsedJson = JSON.parse(gamecreator.json);
+	}
+	if (parsedJson) {
+		addObjectsToCanvas(parsedJson.objects);
+	}
+	saveCurrentJsonDataLocal();
+	_gameHasChanged = false;
 	GameCreatorStore.emitChange(GameCreatorConstants.ACTIVE_DATA_CHANGED);
+}
+
+function addObjectsToCanvas (objects) {
+	if (!objects) {
+		return;
+	}
+	objects.forEach(function (object, index) {
+		if (object.src) {
+			var newImg = new Image();
+			newImg.crossOrigin = 'Anonymous';
+			newImg.onload = function () {
+				var imgInstance = new fabric.Image(newImg, {});
+				imgInstance.set({
+					left: object.left,
+					top: object.top,
+					imageUrl: object.src,
+					scaleX: object.scaleX,
+					scaleY: object.scaleY
+				});
+				var quantity = _fabricCanvas.getObjects().length;
+				imgInstance.perPixelTargetFind = true;
+				imgInstance.targetFindTolerance = 4;
+				imgInstance.on('selected', function () {
+					selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
+				});
+				_fabricCanvas.add(imgInstance);
+				imgInstance.moveTo(index);
+				_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
+				selectionChanged(quantity);
+			};
+			newImg.src = object.src;
+		}
+		else {
+			_fabricCanvas.add(object);
+			object.moveTo(index);
+		}
+	});
 }
 
 function changeFreedrawState () {
@@ -277,6 +351,22 @@ function selectionChanged (index) {
 	GameCreatorStore.emitChange(GameCreatorConstants.PIECE_WAS_SELECTED, index);
 }
 
+var _isCheckingMovement = false;
+function objectMoving () {
+	if (!_isCheckingMovement) {
+		setTimeout(movementCheck, 1000);
+		_isCheckingMovement = true;
+	}
+}
+
+function movementCheck () {
+	if (!_isCheckingMovement) {
+		return;
+	}
+	updateLocalJsonData();
+	_isCheckingMovement = false;
+}
+
 function deleteSelectedPiece () {
 	_fabricCanvas.getObjects().forEach(function (object) {
 		if (object.get('active')) {
@@ -326,7 +416,7 @@ function addPieceToCreator (piece) {
 			imageUrl: piece.url
 		});
 		var quantity = _fabricCanvas.getObjects().length;
-		imgInstance.scale(0.20);
+		imgInstance.scale(0.4);
 		imgInstance.perPixelTargetFind = true;
 		imgInstance.targetFindTolerance = 4;
 		imgInstance.on('selected', function () {
@@ -335,6 +425,7 @@ function addPieceToCreator (piece) {
 		_fabricCanvas.add(imgInstance);
 		_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
 		selectionChanged(quantity);
+		updateLocalJsonData();
 	};
 	img.src = piece.url;
 }
@@ -373,7 +464,14 @@ function isOutsideBorder (object) {
 	else return false;
 }
 
+function saveIfChanged () {
+	if (_gameHasChanged) {
+		saveGameAsJson();
+	}
+}
+
 function saveGameAsJson () {
+	_fabricCanvas.deactivateAll().renderAll();
 	var requestAction = null;
 	var url = null;
 	if (_currentGameId === null) {
@@ -388,15 +486,20 @@ function saveGameAsJson () {
 		requestAction = 'PUT';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators/' + _loadedData._id;
 	}
-	if (!_loadedData.title) {
-		_loadedData.title = 'Unnamed Creator';
+	var localSave = loadLocalJsonSave();
+	if (!localSave) {
+		localSave = {};
 	}
+	if (!localSave.title) {
+		localSave.title = 'Unnamed Creator';
+	}
+	_gameHasChanged = false;
 	$.ajax({
 		type: requestAction,
 		url: url,
 		data: JSON.stringify({
-			json: _fabricCanvas.toJSON(),
-			title: _loadedData.title
+			json: localSave.json,
+			title: localSave.title
 		}),
 		headers: {
 			'Authorization': LoginStore.getToken()
@@ -419,7 +522,7 @@ function saveGameAsPng () {
 	}
 	_fabricCanvas.deactivateAll().renderAll();
 	var data = _fabricCanvas.toDataURL().replace('data:image/png;base64,', '');
-	var blob = b64toBlob(data, 'image/png');
+	var blob = ParserService.b64toBlob(data, 'image/png');
 	var formData = new FormData();
 	formData.append('image', blob, 'gamecreatorimg');
 	var url = URLS.api.unpublishedGames +
@@ -475,30 +578,6 @@ function onRequestSuccess (data) {
 
 function onSavePngConflictResponse (data) {
 	console.log(data);
-}
-
-function b64toBlob (b64Data, contentType, sliceSize) {
-	contentType = contentType || '';
-	sliceSize = sliceSize || 512;
-
-	var byteCharacters = atob(b64Data);
-	var byteArrays = [];
-
-	for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-		var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-		var byteNumbers = new Array(slice.length);
-		for (var i = 0; i < slice.length; i++) {
-			byteNumbers[i] = slice.charCodeAt(i);
-		}
-
-		var byteArray = new Uint8Array(byteNumbers);
-
-		byteArrays.push(byteArray);
-	}
-
-	var blob = new Blob(byteArrays, {type: contentType});
-	return blob;
 }
 
 function findNextRotationImage (rotateToNext, object) {
