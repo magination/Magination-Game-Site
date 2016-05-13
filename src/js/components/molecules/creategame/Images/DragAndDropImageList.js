@@ -7,7 +7,7 @@ var AllowDropImageContainer = require('./AllowDropImageContainer');
 var DragAndDropImageList = React.createClass({
 	getInitialState: function () {
 		return {
-			images: GameStore.getGame().images
+			images: GameStore.getGame() ? GameStore.getGame().images : []
 		};
 	},
 	componentDidMount: function () {
@@ -41,7 +41,7 @@ var DragAndDropImageList = React.createClass({
 	},
 	onImageListChanged: function () {
 		this.setState({
-			images: GameStore.getGame().images
+			images: GameStore.getGame() ? GameStore.getGame().images : []
 		});
 	},
 	onDeleteClicked: function (position) {

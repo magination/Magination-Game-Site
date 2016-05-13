@@ -11,19 +11,14 @@ var AlternativeRuleList = React.createClass({
 	listElements: [],
 	getInitialState: function () {
 		return {
-			rules: []
+			rules: GameStore.getGame() ? GameStore.getGame().alternativeRules : []
 		};
+	},
+	componentDidMount: function () {
+		GameStore.addChangeListener(this.onGameStateChanged);
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
-	},
-	componentDidMount: function () {
-		if (GameStore.getGame() !== null) {
-			this.setState({
-				rules: GameStore.getGame().alternativeRules
-			});
-		}
-		GameStore.addChangeListener(this.onGameStateChanged);
 	},
 	render: function () {
 		var list = [];
@@ -46,7 +41,7 @@ var AlternativeRuleList = React.createClass({
 	},
 	onGameStateChanged: function () {
 		this.setState({
-			rules: GameStore.getGame().alternativeRules
+			rules: GameStore.getGame() ? GameStore.getGame().alternativeRules : []
 		});
 	},
 	onAddItemClicked: function () {

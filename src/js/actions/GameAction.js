@@ -48,13 +48,37 @@ var GameAction = {
 			statusCode: {
 				200: function () {
 					Dispatcher.dispatch({
-						actionType: GameConstants.DELETE_GAME_FROM_SERVER
+						actionType: GameConstants.REMOVE_GAME_LOCALLY
+					});
+				}
+			}
+		});
+	},
+	createNewGame: function (game) {
+		$.ajax({
+			type: 'POST',
+			url: URLS.api.unpublishedGames,
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			data: JSON.stringify(game),
+			contentType: 'application/json',
+			dataType: 'json',
+			statusCode: {
+				201: function (data) {
+					Dispatcher.dispatch({
+						actionType: GameConstants.CHANGE_GAME_LOCALLY,
+						game: data
 					});
 				}
 			}
 		});
 	},
 	changeGameLocally: function (game) {
+		if (!game._id) {
+			console.log('Change game called without game id');
+			return;
+		};
 		Dispatcher.dispatch({
 			actionType: GameConstants.CHANGE_GAME_LOCALLY,
 			game: game

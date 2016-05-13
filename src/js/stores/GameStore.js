@@ -8,7 +8,7 @@ var LoginStore = require('../stores/LoginStore');
 var NavigationAction = require('../actions/NavigationAction');
 var FeedbackAction = require('../actions/FeedbackAction');
 
-var _game = null;
+var _game;
 var _hasSelectedGameToEdit = false;
 var _hasPromptedSave = false;
 var _isAvailableGameName = false;
@@ -45,9 +45,6 @@ var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 });
 
 GameStore.dispatchToken = Dispatcher.register(function (action) {
-	if (_game === null) {
-		CreateNewGame();
-	};
 	switch (action.actionType) {
 	case GameConstants.UPDATE_GAME_LOCALLY:
 		UpdateGame(action);
@@ -101,25 +98,13 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameConstants.CHECK_NAME_AVAILABILITY:
 		CheckNameAvailability(action);
 		break;
-	case GameConstants.SET_HAS_PROMPTED_SAVE:
-		_hasPromptedSave = action.hasPromptedSave;
-		break;
-	case GameConstants.DELETE_GAME_FROM_SERVER:
-		CreateNewGame();
-		_hasSelectedGameToEdit = false;
-		GameStore.emitChange();
-		break;
-	case GameConstants.CLEAR_GAME_LOCALLY:
-		CreateNewGame();
-		_hasSelectedGameToEdit = false;
-		GameStore.emitChange();
-		break;
 	case GameConstants.SAVE_GAME_AND_RESET_GAME_STORE:
 		SaveGameAndResetGameStore();
 		GameStore.emitChange();
 		break;
 	case GameConstants.REMOVE_GAME_LOCALLY:
-		CreateNewGame();
+		_game = undefined;
+		_hasPromptedSave = true;
 		_hasSelectedGameToEdit = false;
 		GameStore.emitChange();
 		break;
@@ -161,7 +146,6 @@ function PublishGameToServer () {
 };
 function SaveGameToServer (hasPromptedSave) {
 	_hasPromptedSave = hasPromptedSave;
-	_hasSelectedGameToEdit = !hasPromptedSave;
 	_game.id = undefined;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
@@ -177,6 +161,7 @@ function SaveGameToServer (hasPromptedSave) {
 };
 function SaveGameAndResetGameStore () {
 	_hasPromptedSave = true;
+	_hasSelectedGameToEdit = false;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
 		url: _game._id ? URLS.api.unpublishedGames + '/' + _game._id : URLS.api.unpublishedGames,
@@ -191,28 +176,9 @@ function SaveGameAndResetGameStore () {
 				header: 'Success.',
 				message: 'Game saved, you can leave and edit it later.'
 			});
-			_hasSelectedGameToEdit = false;
-			CreateNewGame();
+			_game = undefined;
 		}
 	});
-};
-function CreateNewGame () {
-	_game = {
-		title: '',
-		shortDescription: '',
-		numberOfPlayers: 0,
-		isPlayableWithMorePlayers: false,
-		isPlayableInTeams: false,
-		images: [],
-		parentGame: '',
-		pieces: {
-			singles: 0,
-			doubles: 0,
-			triples: 0
-		},
-		rules: [],
-		alternativeRules: []
-	};
 };
 
 function CheckNameAvailability (action) {
@@ -287,7 +253,7 @@ var onGamePostedSuccess = function (data) {
 	NavigationAction.navigate({
 		destination: '/game/' + data._id
 	});
-	CreateNewGame();
+	_game = undefined;
 	_hasPromptedSave = true;
 	_hasSelectedGameToEdit = false;
 };
