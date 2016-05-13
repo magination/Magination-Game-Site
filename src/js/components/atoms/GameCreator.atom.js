@@ -17,8 +17,8 @@ var PencilSettingsOverlay = require('./gamecreator/PencilSettingsOverlay.atom');
 var Col = require('react-bootstrap').Col;
 var CustomGameCreatorElement = require('../molecules/gamecreator/CustomGameCreatorElement.molecule');
 var GameCreatorElement = require('./GameCreatorElement.atom');
-var height = '800px';
 
+var height = '800px'; /* only initial height to avoid big 'jumps', it is set dynamically in componentDidMount*/
 var toolButton = {
 	width: '50%',
 	backgroundColor: Color.blueDark
@@ -29,7 +29,8 @@ var GameCreator = React.createClass({
 		return {
 			canvas: null,
 			staticPieces: [],
-			isPencilToggled: false
+			isPencilToggled: false,
+			gamecreatorListHeight: '0px'
 		};
 	},
 	componentDidMount: function () {
@@ -48,6 +49,11 @@ var GameCreator = React.createClass({
 			browserHeight = document.documentElement.clientHeight;
 		}
 		height = (browserHeight * 90) / 100;
+		var pieceToolsDivHeight = ReactDOM.findDOMNode(this.refs.pieceToolsDiv).offsetHeight;
+		var saveButtonsDiv = ReactDOM.findDOMNode(this.refs.saveButtonsDiv).offsetHeight;
+		this.setState({
+			gamecreatorListHeight: height - pieceToolsDivHeight - saveButtonsDiv - ((height / 100) * 5)
+		});
 		GameCreatorAction.setCanvas({
 			id: 'fabricCanvas'
 		});
@@ -71,7 +77,7 @@ var GameCreator = React.createClass({
 			);
 		});
 		var gamecreatorListStyle = {
-			height: ((height * 55) / 100) + 'px',
+			height: this.state.gamecreatorListHeight,
 			overflowY: 'auto'
 		};
 		var pencilPopover = <Popover id='pencilSettings'><PencilSettingsOverlay /></Popover>;
@@ -88,25 +94,23 @@ var GameCreator = React.createClass({
 				</Col>
 				<Col md={2}>
 					<div style={{height: height}}>
-						<div style={{height: '30%'}}>
-							<div>
-								<h4>Piece Tools</h4>
-								<Button style={toolButton} onClick={this.onMoveSelectedDeeperClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
-								<Button style={toolButton} onClick={this.onMoveSelectedShallowerClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
-								<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-left'/></Button>
-								<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
-								<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
-								<hr/>
-								<form onSubmit={this.onCreatorNameSubmit}>
-									<Input type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
-								</form>
-							</div>
+						<div ref='pieceToolsDiv'>
+							<h4>Piece Tools</h4>
+							<Button style={toolButton} onClick={this.onMoveSelectedDeeperClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-down'/></Button>
+							<Button style={toolButton} onClick={this.onMoveSelectedShallowerClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
+							<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-left'/></Button>
+							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
+							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
+							<hr/>
 						</div>
 						<div style={gamecreatorListStyle}>
 							<GameCreatorList />
 						</div>
-						<div style={{height: '15%'}}>
-						<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSaveClick}>SAVE</Button>
+						<div style={{paddingTop: '20px'}} ref='saveButtonsDiv'>
+							<form onSubmit={this.onCreatorNameSubmit}>
+									<Input type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
+							</form>
+							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSaveClick}>SAVE</Button>
 							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onAddToGameClick}>ADD TO GAME</Button>
 						</div>
 					</div>
