@@ -67,7 +67,7 @@ var SelectGameToEdit = React.createClass({
 		this.createNewGame();
 	},
 	createNewGame: function () {
-		GameAction.createNewGame(GameService.createEmptyGame());
+		GameAction.createNewGame(GameService.createEmptyGame(), true);
 	},
 	shouldShowModal: function () {
 		if (GameStore.getGame() !== undefined) {
