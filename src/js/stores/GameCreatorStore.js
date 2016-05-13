@@ -183,6 +183,7 @@ function setLoadedData (gamecreator) {
 				selectionChanged(_fabricCanvas.getObjects().indexOf(imgInstance));
 			});
 			_fabricCanvas.add(imgInstance);
+			imgInstance.moveTo(index);
 			_fabricCanvas.setActiveObject(_fabricCanvas.item(quantity));
 			selectionChanged(quantity);
 			if (index === parsedJson.objects.length - 1) {
