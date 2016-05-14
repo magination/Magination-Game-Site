@@ -3,6 +3,7 @@ var GameCreatorConstants = require('../constants/GameCreatorConstants');
 // var LoginStore = require('../stores/LoginStore');
 var GameStore = require('../stores/GameStore');
 var GameConstants = require('../constants/GameConstants');
+var LoginStore = require('../stores/LoginStore');
 
 var URLS = require('../config/config').urls;
 
@@ -18,6 +19,19 @@ var GameCreatorActions = {
 	deleteCurrentSelectedPiece: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.DELETE_SELECTED_PIECE_FROM_CREATOR
+		});
+	},
+	deleteGameCreator: function (data) {
+		$.ajax({
+			type: 'DELETE',
+			url: URLS.api.unpublishedGames + '/' + GameStore.getGame()._id + '/gameCreators/' + data.gameCreatorId,
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			dataType: 'json',
+			statusCode: {
+				200: onDeleteSuccessResponse
+			}
 		});
 	},
 	setPencilOptions: function (options) {
@@ -133,6 +147,13 @@ var GameCreatorActions = {
 		});
 	}
 };
+
+function onDeleteSuccessResponse (data) {
+	Dispatcher.dispatch({
+		actionType: GameCreatorConstants.GAMECREATOR_WAS_DELETED_ON_SERVER,
+		gamecreator: data
+	});
+}
 
 function onLocalGameHasChanged () {
 	GameCreatorActions.fetchGameCreatorListFromServer();

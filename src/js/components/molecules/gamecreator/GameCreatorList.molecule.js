@@ -2,9 +2,8 @@ var React = require('react');
 
 var GameCreatorStore = require('../../../stores/GameCreatorStore');
 var GameCreatorConstants = require('../../../constants/GameCreatorConstants');
-var GameCreatorAction = require('../../../actions/GameCreatorAction');
 
-var Colors = require('../../../styles/Colors');
+var GameCreatorListElement = require('../../atoms/gamecreator/GameCreatorListElement.atom');
 
 var containerStyle = {
 };
@@ -27,55 +26,13 @@ var GameCreatorList = React.createClass({
 	render: function () {
 		var that = this;
 		var creators = this.state.gameCreatorList.map(function (gameCreator, index) {
-			var name = gameCreator.title;
-			if (!name) {
-				name = 'No Title';
-			}
-			var listElementStyle = {
-				color: Colors.blue,
-				textAlign: 'center',
-				padding: '5px',
-				paddingTop: '15px',
-				paddingBottom: '15px',
-				borderRadius: '5',
-				cursor: 'pointer'
-			};
-			if (that.state.currentSelected === gameCreator._id) {
-				listElementStyle['backgroundColor'] = Colors.blueLight;
-				listElementStyle['color'] = 'white';
-			}
-			else if (that.state.hoveredElementIndex === index) {
-				listElementStyle['backgroundColor'] = Colors.blueTransparent;
-			}
-			return (
-				<div key={gameCreator._id}>
-					<div style={listElementStyle} onMouseLeave={that.onMouseLeaveElement} onMouseEnter={that.onMouseEnterElement.bind(that, index)} onClick={that.onGameCreatorClicked.bind(that, gameCreator._id)}>
-						{name}
-					</div>
-					<hr style={{padding: '0', margin: '0'}}/>
-				</div>
-			);
+			return <GameCreatorListElement key={index} currentSelected={that.state.currentSelected} gameCreator={gameCreator} index={index}/>;
 		});
 		return (
 			<div style={containerStyle}>
 				{creators}
 			</div>
 		);
-	},
-	onMouseEnterElement: function (index) {
-		this.setState({
-			hoveredElementIndex: index
-		});
-	},
-	onMouseLeaveElement: function () {
-		this.setState({
-			hoveredElementIndex: -1
-		});
-	},
-	onGameCreatorClicked: function (gameCreatorId) {
-		GameCreatorAction.loadCreatorId({
-			gameCreatorId: gameCreatorId
-		});
 	},
 	onActiveDataChanged: function () {
 		this.setState({

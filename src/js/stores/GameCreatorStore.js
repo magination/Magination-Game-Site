@@ -95,9 +95,11 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		}
 		break;
 	case GameCreatorConstants.SET_SELECTED_INDEX:
-		if (action.index < 0) _fabricCanvas.deactivateAll().renderAll();
-		else _fabricCanvas.setActiveObject(_fabricCanvas.item(action.index));
-		selectionChanged(action.index);
+		_fabricCanvas.deactivateAll().renderAll();
+		if (!action.index < 0) {
+			_fabricCanvas.setActiveObject(_fabricCanvas.item(action.index));
+			selectionChanged(action.index);
+		}
 		break;
 	case GameCreatorConstants.CLEAR_GAMECREATOR_STORE:
 		_loadedData = {};
@@ -109,6 +111,9 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameCreatorConstants.SAVE_GAMECREATOR_PNG:
 		saveGameAsPng();
+		break;
+	case GameCreatorConstants.GAMECREATOR_WAS_DELETED_ON_SERVER:
+		removeGameCreatorFromList(action.gamecreator);
 		break;
 	case GameCreatorConstants.DELETE_SELECTED_PIECE_FROM_CREATOR:
 		deleteSelectedPiece();
@@ -230,6 +235,21 @@ function setLoadedData (gamecreator) {
 	}
 	saveCurrentJsonDataLocal();
 	_gameHasChanged = false;
+	GameCreatorStore.emitChange(GameCreatorConstants.ACTIVE_DATA_CHANGED);
+}
+
+function removeGameCreatorFromList (deletedGamecreator) {
+	if (deletedGamecreator._id === _loadedData._id) {
+		clearLocalJsonSave();
+		_loadedData = {};
+	}
+	_gamecreatorList.every(function (gamecreator, index) {
+		if (gamecreator._id === deletedGamecreator._id) {
+			_gamecreatorList.splice(index, 1);
+			return false;
+		}
+		return true;
+	});
 	GameCreatorStore.emitChange(GameCreatorConstants.ACTIVE_DATA_CHANGED);
 }
 
