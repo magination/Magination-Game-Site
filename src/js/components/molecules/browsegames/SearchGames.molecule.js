@@ -37,7 +37,6 @@ var SearchGames = React.createClass({
 			filter_general_search: '',
 			filter_rating: 0,
 			filter_players: 0,
-			hasImportedPieces: false,
 			currentActiveTeamButton: TEAMS_BUTTON_GROUP_VALUES.BOTH,
 			currentActiveOtherObjectsButton: OTHER_OBJECTS_BUTTON_GROUP_VALUES.BOTH
 		};
@@ -70,10 +69,10 @@ var SearchGames = React.createClass({
 					<Rating rating={this.state.filter_rating} glyphStyle={TextStyles.RatingStarWhite} maxRating='5' onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty'/>
 					<hr/>
 					<h4 style={TextStyles.white}>Pieces</h4>
-					<Input disabled={!LoginStore.getLoginState().isLoggedIn} value={this.state.hasImportedPieces} onChange={this.onImportPiecesCheckboxChange} type='checkbox' label={<span style={TextStyles.white}>Import pieces from My Profile</span>}/>
-					<Input value={this.state.filter_singles} enabled={this.state.hasImportedPieces} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}></Input>
+					<Input value={this.state.filter_singles} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}></Input>
 					<Input value={this.state.filter_doubles} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceDoubleBlue} alt='No img'/>}></Input>
 					<Input value={this.state.filter_triples} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceTripleBlue} alt='No img'/>}></Input>
+					<Button disabled={!LoginStore.getLoginState().isLoggedIn} onClick={this.onImportPiecesClick}>Import My Pieces</Button>
 					<h5 style={TextStyles.white}>Other Objects</h5>
 					<ButtonGroup>
 						<Button style={this.state.currentActiveOtherObjectsButton === OTHER_OBJECTS_BUTTON_GROUP_VALUES.YES ? ButtonStyles.ToggledButton : {}} onClick={this.onOtherObjectsButtonGroupClicked.bind(this, OTHER_OBJECTS_BUTTON_GROUP_VALUES.YES)} type='button'>Yes</Button>
@@ -128,23 +127,12 @@ var SearchGames = React.createClass({
 			that.onSubmit();
 		}, 0);
 	},
-	onImportPiecesCheckboxChange: function (e) {
-		if (e.target.value) {
-			this.setState({
-				filter_singles: LoginStore.getLoginProfile().pieces.singles,
-				filter_doubles: LoginStore.getLoginProfile().pieces.doubles,
-				filter_triples: LoginStore.getLoginProfile().pieces.triples,
-				hasImportedPieces: e.target.value
-			});
-		}
-		else {
-			this.setState({
-				filter_singles: 0,
-				filter_doubles: 0,
-				filter_triples: 0,
-				hasImportedPieces: e.target.value
-			});
-		}
+	onImportPiecesClick: function () {
+		this.setState({
+			filter_singles: LoginStore.getLoginProfile().pieces.singles,
+			filter_doubles: LoginStore.getLoginProfile().pieces.doubles,
+			filter_triples: LoginStore.getLoginProfile().pieces.triples
+		});
 	},
 	onGameListFilterChange: function () {
 		setTimeout(function () {
