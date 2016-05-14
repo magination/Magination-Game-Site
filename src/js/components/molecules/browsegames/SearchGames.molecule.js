@@ -133,6 +133,7 @@ var SearchGames = React.createClass({
 			filter_doubles: LoginStore.getLoginProfile().pieces.doubles,
 			filter_triples: LoginStore.getLoginProfile().pieces.triples
 		});
+		setTimeout(this.onSubmit);
 	},
 	onGameListFilterChange: function () {
 		setTimeout(function () {
