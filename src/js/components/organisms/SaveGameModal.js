@@ -56,7 +56,7 @@ var SaveGameModal = React.createClass({
 			});
 		}
 		else if (GameService.gameIsEmpty(GameStore.getGame())) {
-			GameAction.removeGameLocally();
+			GameAction.deleteGameFromServer();
 			this.setState({
 				showModal: false
 			});
