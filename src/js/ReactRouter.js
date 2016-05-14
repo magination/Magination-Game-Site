@@ -13,6 +13,7 @@ var NavigationStore = require('./stores/NavigationStore');
 var App = require('./App');
 var LoginForm = require('./components/organisms/LoginForm.organism');
 var FrontPage = require('./components/organisms/FrontPage.organism');
+var NotFoundPage = require('./components/organisms/NotFoundPage.organism');
 var RegisterForm = require('./components/organisms/RegisterForm.organism');
 var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
 var VerifyEmailChange = require('./components/organisms/VerifyEmailChange');
@@ -33,6 +34,7 @@ var ReactRouter = React.createClass({
 				<Router history={browserHistory}>
 					<Route path='/' component={App}>
 						<Route path='/login' component={LoginForm} />
+						<Route path='/home' component={FrontPage} />
 						<Route path='/register' component={RegisterForm} />
 						<Route path='/mygames' component={MyGames} />
 						<Route path={PATHS.creategame} component={CreateGame} />
@@ -45,7 +47,7 @@ var ReactRouter = React.createClass({
 						<Route path={PATHS.forgotpassword} component={ForgotPassword}/>
 						<Route path={PATHS.confirmforgotpassword} component={ConfirmForgotPassword}/>
 						<Route path='/moderator' component={Moderator}/>
-						<Route path='*' component={FrontPage} />
+						<Route path='*' component={NotFoundPage} />
 					</Route>
 				</Router>
 			</div>
