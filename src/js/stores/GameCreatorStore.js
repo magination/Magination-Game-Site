@@ -136,6 +136,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameCreatorConstants.FETCHED_GAMECREATOR_LIST_FROM_SERVER:
 		if (action.list) {
+			action.list.reverse();
 			if (action.list.length > 0) _gamecreatorList = action.list;
 			else _gamecreatorList = [];
 		}
@@ -161,11 +162,14 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 });
 
 function setCanvasToGameCreatorId (gameCreatorId) {
-	if (!gameCreatorId) {
-		saveIfChanged();
-		clearLocalJsonSave();
-		_loadedData = {};
+	if (!gameCreatorId) { /* create new*/
+		if (_loadedData._id) {
+			saveIfChanged();
+			clearLocalJsonSave();
+			_loadedData = {};
+		}
 		saveGameAsJson();
+		return;
 	}
 	if (_loadedData) {
 		if (gameCreatorId === _loadedData._id) return;
@@ -183,7 +187,7 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 
 function saveCurrentJsonDataLocal (object) {
 	if (!object) {
-		object = _loadedData;
+		object = $.extend(null, {}, _loadedData);
 	}
 	var dataToSave = $.extend(null, {}, object);
 	// dataToSave.json = _fabricCanvas.toJSON();
@@ -200,8 +204,9 @@ function updateLocalJsonData () {
 	_gameHasChanged = true;
 	var data = $.jStorage.get(_currentGameId);
 	if (!data) {
-		return;
+		data = {};
 	}
+	data._id = _loadedData._id;
 	data.json = _fabricCanvas.toJSON();
 	$.jStorage.set(_currentGameId, data);
 }
