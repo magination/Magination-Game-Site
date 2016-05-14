@@ -4,6 +4,7 @@ var NavigationStore = require('../../stores/NavigationStore');
 var Link = require('react-router').Link;
 var URLS = require('../../config/config').urls;
 var FeedbackAction = require('../../actions/FeedbackAction');
+var LoginAction = require('../../actions/LoginAction');
 
 function getLastUrlId () {
 	var url = NavigationStore.getNavigationState().currentPath;
@@ -37,7 +38,7 @@ var ConfirmEmail = React.createClass({
 	},
 	onConfirmationSuccessResponse: function (data) {
 		this.setState({
-			status: <div>The email was successfully confirmed. You can now <Link to='/login'>Log in here</Link> using your email or username</div>
+			status: <div>The email was successfully confirmed. You can now <a style={{cursor: 'pointer'}} onClick={LoginAction.requestLogin}>click here to log in</a> using your email or username</div>
 		});
 	},
 	onConfirmationBadRequestResponse: function (data) {
