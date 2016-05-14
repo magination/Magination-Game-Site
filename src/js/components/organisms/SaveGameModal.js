@@ -8,6 +8,7 @@ var GameConstants = require('../../constants/GameConstants');
 var LoginStore = require('../../stores/LoginStore');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
+var GameService = require('../../service/GameService');
 
 var ButtonStyle = require('../../styles/Buttons');
 
@@ -50,6 +51,15 @@ var SaveGameModal = React.createClass({
 		}
 		else if (GameStore.hasPromptedSave()) {
 			GameAction.removeGameLocally();
+			this.setState({
+				showModal: false
+			});
+		}
+		else if (GameService.gameIsEmpty(GameStore.getGame())) {
+			GameAction.removeGameLocally();
+			this.setState({
+				showModal: false
+			});
 		}
 		else {
 			this.setState({

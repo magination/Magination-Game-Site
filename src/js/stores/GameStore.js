@@ -10,7 +10,7 @@ var FeedbackAction = require('../actions/FeedbackAction');
 
 var _game;
 var _hasSelectedGameToEdit = false;
-var _hasPromptedSave = false;
+var _hasPromptedSave = true;
 var _isAvailableGameName = false;
 
 var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
