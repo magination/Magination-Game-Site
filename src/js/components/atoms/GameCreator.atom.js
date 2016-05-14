@@ -61,7 +61,6 @@ var GameCreator = React.createClass({
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.addChangeListener(this.onActiveDataChanged, GameCreatorConstants.ACTIVE_DATA_CHANGED);
 		GameCreatorAction.setStaticPiecesFromServer();
-		$(window).keydown(this.handleKeyDown);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
@@ -90,7 +89,9 @@ var GameCreator = React.createClass({
 					</div>
 				</Col>
 				<Col xs={8} md={8}>
-					<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
+					<div onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
+						<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
+					</div>
 				</Col>
 				<Col xs={2} md={2}>
 					<div style={{height: height}}>
@@ -119,6 +120,12 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onMouseLeaveCanvas: function () {
+		$(window).unbind('keydown');
+	},
+	onMouseEnterCanvas: function () {
+		$(window).keydown(this.handleKeyDown);
 	},
 	onCreateNewClick: function () {
 		GameCreatorAction.loadCreatorId({gameCreatorId: null});
