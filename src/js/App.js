@@ -8,6 +8,7 @@ var GameCreatorAction = require('./actions/GameCreatorAction');
 var GameStore = require('./stores/GameStore'); // eslint-disable-line no-unused-vars
 var MyGamesStore = require('./stores/MyGamesStore'); // eslint-disable-line no-unused-vars
 var URLS = require('./config/config').urls;
+var FrontPage = require('./components/organisms/FrontPage.organism');
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
@@ -60,7 +61,7 @@ var App = React.createClass({
 			<div className='container'>
 				<Menu></Menu>
 				<StatusBar />
-				<div className='row'>{this.props.children}</div>
+				<div className='row'>{this.props.children !== null ? this.props.children : <FrontPage/>}</div>
 			</div>
 		);
 	}

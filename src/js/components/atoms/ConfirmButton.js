@@ -20,8 +20,8 @@ var ConfirmButton = React.createClass({
 							<Col md={12}>{this.props.confirmationDialog}</Col>
 						</Row>
 						<Row>
-							<Col md={4}><Button style={ButtonStyles.confirmButton.yes} onClick={this.onYesClicked}>Yes</Button></Col>
-							<Col md={4} mdOffset={2} style={{position: 'absolute', right: 0}}><Button style={ButtonStyles.confirmButton.no}>No</Button></Col>
+							<Col md={6}><Button style={ButtonStyles.confirmButton.yes} onClick={this.onYesClicked}>Yes</Button></Col>
+							<Col md={6}><Button style={ButtonStyles.confirmButton.no}>No</Button></Col>
 						</Row>
 						</Popover>;
 		return (

@@ -54,7 +54,7 @@ var GameAction = {
 			}
 		});
 	},
-	createNewGame: function (game) {
+	createNewGame: function (game, shouldPromptSaveOnExit) {
 		$.ajax({
 			type: 'POST',
 			url: URLS.api.unpublishedGames,
@@ -68,7 +68,8 @@ var GameAction = {
 				201: function (data) {
 					Dispatcher.dispatch({
 						actionType: GameConstants.CHANGE_GAME_LOCALLY,
-						game: data
+						game: data,
+						shouldPromptSaveOnExit: shouldPromptSaveOnExit
 					});
 				}
 			}

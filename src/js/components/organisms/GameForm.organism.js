@@ -51,7 +51,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={4}>
-							<Input value={this.state.game ? this.state.game.title : ''} bsStyle={this.state.isAvailableGameName ? 'success' : 'error'} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={this.onTitleUnfocused} hasFeedback/>
+							<Input value={this.state.game ? this.state.game.title : ''} bsStyle={this.getTitleBsStyle()} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={this.onTitleUnfocused} hasFeedback/>
 						</Col>
 						<Col md={8} style={{paddingLeft: 0}}>
 							{<h5 style={this.state.isAvailableGameName ? TextStyle.green : TextStyle.red}>{this.getGameNameFeedbackMessage()}</h5>}
@@ -83,8 +83,8 @@ var GameForm = React.createClass({
 					<hr/>
 					<h3 style={TextStyle.blueHeader}>DESCRIPTION</h3>
 					<Row>
-						<Col md={8}>
-							<GameDescriptionInput ref='gameDescription' bindableTextProperty='shortDescription' placeholder='Describe your game!' maxLength={255} />
+						<Col md={12}>
+							<GameDescriptionInput ref='gameDescription' bsStyle={this.getGameDescriptionBsStyle()} bindableTextProperty='shortDescription' placeholder='Describe your game!' maxLength={255} />
 						</Col>
 					</Row>
 					<hr/>
@@ -110,7 +110,7 @@ var GameForm = React.createClass({
 					<hr/>
 					<Row>
 						<Col md={2}>
-							<ConfirmButton confirmationDialog='This action will delete the game and any changes you have made to it, and exit the editor. Do you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onCancelClicked} placement='top' buttonText='CANCEL'/>
+							<ConfirmButton confirmationDialog='This action will delete the game, and is irreversible. Are you sure you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onDeleteClicked} placement='top' buttonText='DELETE'/>
 						</Col>
 						<Col md={2}>
 							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
@@ -158,7 +158,7 @@ var GameForm = React.createClass({
 			GameAction.publishGameToServer();
 		}
 	},
-	onCancelClicked () {
+	onDeleteClicked () {
 		MyGamesAction.deleteGame(this.state.game._id);
 		GameAction.removeGameLocally();
 		NavigationAction.navigate({
@@ -183,6 +183,9 @@ var GameForm = React.createClass({
 		});
 	},
 	getGameNameFeedbackMessage: function () {
+		if (this.state.game && this.state.game.title.length === 0) {
+			return 'The game must have a name.';
+		}
 		if (this.state.isAvailableGameName === undefined) {
 			return '';
 		}
@@ -190,6 +193,14 @@ var GameForm = React.createClass({
 			return 'Name available!';
 		}
 		return 'Name already taken';
+	},
+	getTitleBsStyle: function () {
+		if (!this.state.game) return undefined;
+		return this.state.isAvailableGameName ? 'success' : 'error';
+	},
+	getGameDescriptionBsStyle: function () {
+		if (!this.state.game) return undefined;
+		return this.state.game.shortDescription.length > 0 ? 'success' : 'error';
 	}
 });
 

@@ -10,7 +10,7 @@ var FeedbackAction = require('../actions/FeedbackAction');
 
 var _game;
 var _hasSelectedGameToEdit = false;
-var _hasPromptedSave = false;
+var _hasPromptedSave = true;
 var _isAvailableGameName = false;
 
 var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
@@ -53,6 +53,7 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameConstants.CHANGE_GAME_LOCALLY:
 		_game = action.game;
 		_hasSelectedGameToEdit = true;
+		_hasPromptedSave = !action.shouldPromptSaveOnExit;
 		GameStore.emitChange(GameConstants.LOCAL_GAME_HAS_CHANGED);
 		GameStore.emitChange(CHANGE_EVENT);
 		break;

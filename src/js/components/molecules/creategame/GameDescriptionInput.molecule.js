@@ -1,5 +1,7 @@
 var React = require('react');
+var Col = require('react-bootstrap').Col;
 var Input = require('react-bootstrap').Input;
+
 var GameAction = require('../../../actions/GameAction');
 var GameStore = require('../../../stores/GameStore');
 var TextStyle = require('../../../styles/Text');
@@ -30,8 +32,13 @@ var GameDescription = React.createClass({
 		return (
 			<div>
 				<h5>Describe your game briefly.</h5>
-				<Input onChange={this.onTextChanged} onBlur={AutoSave} value={this.state.bindableTextProperty} ref='descriptionInput' type='textarea' placeholder={this.props.placeholder} />
-				<h5 style={TextStyle.alignRight}>{this.state.lengthString} characters</h5>
+				<div>
+					<Col md={8}>
+						<Input onChange={this.onTextChanged} bsStyle={this.props.bsStyle} onBlur={AutoSave} value={this.state.bindableTextProperty} ref='descriptionInput' type='textarea' placeholder={this.props.placeholder} />
+					</Col>
+					<Col md={4} style={{padding: 0}}><h5 style={this.props.bsStyle === 'error' ? TextStyle.CreateGame.error : TextStyle.CreateGame.success}>{this.getInputFeedback()}</h5></Col>
+				</div>
+				<Col md={8} style={{padding: 0}}><h5 style={TextStyle.alignRight}>{this.state.lengthString} characters</h5></Col>
 			</div>
 		);
 	},
@@ -57,6 +64,11 @@ var GameDescription = React.createClass({
 	},
 	focusInput: function () {
 		this.refs.descriptionInput.refs.input.focus();
+	},
+	getInputFeedback: function () {
+		if (!this.props.bsStyle) return '';
+		if (this.props.bsStyle !== 'success') return 'Game must have a description';
+		return '';
 	}
 });
 module.exports = GameDescription;
