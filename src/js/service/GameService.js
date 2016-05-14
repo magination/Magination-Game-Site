@@ -24,7 +24,7 @@ var GameService = {
 			console.log('Gameisempty in gameservice called without game parameter');
 			return;
 		}
-		var idLessGame = game;
+		var idLessGame = $.extend(true, {}, game);
 		delete idLessGame._id;
 		delete idLessGame.sumOfVotes;
 		delete idLessGame.numberOfVotes;
