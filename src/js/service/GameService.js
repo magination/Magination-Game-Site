@@ -34,9 +34,6 @@ var GameService = {
 		delete idLessGame.reviews;
 		delete idLessGame.__v;
 		delete idLessGame.parentGame;
-		console.log('Game comparision: ' + _.isEqual(idLessGame, this.createEmptyGame()));
-		console.log(idLessGame);
-		console.log(this.createEmptyGame());
 		return _.isEqual(idLessGame, this.createEmptyGame());
 	}
 };
