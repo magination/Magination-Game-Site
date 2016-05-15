@@ -8,7 +8,7 @@ var parser = {
 	decodeJWT: function (token) {
 		var splittedToken = token.split('.');
 		if (splittedToken.length !== 3) {
-			console.log('ERROR: token did not contain 3 fields (splitted by .)');
+			console.error('ERROR: token did not contain 3 fields (splitted by .)');
 			return;
 		}
 		var decodedHeaders = base64.decode(splittedToken[0]);

@@ -112,7 +112,7 @@ var GameCreatorActions = {
 		}
 		var gameId = GameStore.getGame()._id;
 		if (!gameId) {
-			console.log('WARNING - Tried to fetch gamecreator list from server, but game id was undefined');
+			console.warn('WARNING - Tried to fetch gamecreator list from server, but game id was undefined');
 			return;
 		}
 		$.ajax({
@@ -126,7 +126,7 @@ var GameCreatorActions = {
 	},
 	setListeners: function () {
 		if (isListening) {
-			console.log('WARNING - Tried to set listeners of GameCreatorAction, but it is already listening - aborted');
+			console.warn('WARNING - Tried to set listeners of GameCreatorAction, but it is already listening - aborted');
 			return;
 		}
 		isListening = true;
@@ -134,7 +134,7 @@ var GameCreatorActions = {
 	},
 	removeListeners: function () {
 		if (!isListening) {
-			console.log('WARNING - Tried to remove listeners of GameCreatorActions, but it is not listening (redundant action)');
+			console.warn('WARNING - Tried to remove listeners of GameCreatorActions, but it is not listening (redundant action)');
 			return;
 		}
 		isListening = false;

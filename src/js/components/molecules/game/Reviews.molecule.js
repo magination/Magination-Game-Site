@@ -154,7 +154,7 @@ var Reviews = React.createClass({
 	},
 	onGetReviewsSuccess: function (data) {
 		if (data.reviews === undefined) {
-			console.log('Got success from getReviews, but the data is malformed');
+			console.error('Got success from getReviews, but the data is malformed');
 			return;
 		}
 		var reviews = removeOwnReview(data.reviews);
