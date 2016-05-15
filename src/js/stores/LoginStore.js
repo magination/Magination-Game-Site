@@ -40,27 +40,13 @@ var LoginStore = _.extend({}, EventEmitter.prototype, {
 LoginStore.dispatchToken = Dispatcher.register(function (action) {
 	switch (action.actionType) {
 	case LoginConstants.LOGIN_SUCCESS:
-		// _loginState = true;
-		_token = action.token;
-		// LoginStore.emitChange();
+		loginSuccess(action.token);
 		break;
 	case LoginConstants.LOGOUT_SUCCESS:
-		_loginState.isLoggedIn = false;
-		_loginState.requestedLogin = false;
-		_profile = null;
-		_token = null;
-		LoginStore.emitChange();
+		logoutSuccess();
 		break;
 	case LoginConstants.SET_PROFILE:
-		_profile = action.profile;
-		_loginState.isLoggedIn = true;
-		_loginState.requestedLogin = false;
-		_lastUnsuccessfulRequestOptions.forEach(function (options) {
-			options.headers['Authorization'] = _token;
-			$.ajax(options);
-		});
-		_lastUnsuccessfulRequestOptions = [];
-		LoginStore.emitChange();
+		setProfileAndEmitLogin(action.profile);
 		break;
 	case LoginConstants.LOGIN_REQUEST:
 		_loginState.requestedLogin = true;
@@ -71,5 +57,31 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	}
 });
+
+function loginSuccess (token) {
+	// _loginState = true;
+	_token = token;
+	// LoginStore.emitChange();
+}
+
+function setProfileAndEmitLogin (profile) {
+	_profile = profile;
+	_loginState.isLoggedIn = true;
+	_loginState.requestedLogin = false;
+	_lastUnsuccessfulRequestOptions.forEach(function (options) {
+		options.headers['Authorization'] = _token;
+		$.ajax(options);
+	});
+	_lastUnsuccessfulRequestOptions = [];
+	LoginStore.emitChange();
+}
+
+function logoutSuccess () {
+	_loginState.isLoggedIn = false;
+	_loginState.requestedLogin = false;
+	_profile = null;
+	_token = null;
+	LoginStore.emitChange();
+}
 
 module.exports = LoginStore;
