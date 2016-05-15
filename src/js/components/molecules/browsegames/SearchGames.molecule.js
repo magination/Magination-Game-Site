@@ -119,13 +119,14 @@ var SearchGames = React.createClass({
 		});
 	},
 	onRatingClicked: function (rating) {
+		var newRating = rating;
+		if (newRating === this.state.filter_rating) {
+			newRating = 0;
+		}
 		this.setState({
-			filter_rating: rating
+			filter_rating: newRating
 		});
-		var that = this;
-		setTimeout(function () {
-			that.onSubmit();
-		}, 0);
+		setTimeout(this.onSubmit, 0);
 	},
 	onImportPiecesClick: function () {
 		this.setState({
