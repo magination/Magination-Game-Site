@@ -7,8 +7,8 @@ var GameCreatorStore = require('./stores/GameCreatorStore'); // eslint-disable-l
 var GameCreatorAction = require('./actions/GameCreatorAction');
 var GameStore = require('./stores/GameStore'); // eslint-disable-line no-unused-vars
 var MyGamesStore = require('./stores/MyGamesStore'); // eslint-disable-line no-unused-vars
-var URLS = require('./config/config').urls;
 var FrontPage = require('./components/organisms/FrontPage.organism');
+var URLS = require('./config/config').urls;
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');

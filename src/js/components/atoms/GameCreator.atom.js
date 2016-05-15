@@ -89,7 +89,7 @@ var GameCreator = React.createClass({
 					</div>
 				</Col>
 				<Col xs={8} md={8}>
-					<div onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
+					<div onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
 						<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
 					</div>
 				</Col>
@@ -120,6 +120,25 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onDragOverCanvas: function (e) {
+		e.preventDefault();
+	},
+	onDragLeaveCanvas: function (e) {
+
+	},
+	onDropElementOnCanvas: function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		var url = e.dataTransfer.getData('URL');
+		var canvasOffset = $('#fabricCanvas').offset();
+		GameCreatorAction.addPieceByUrl({
+			piece: {
+				url: url,
+				left: e.pageX - canvasOffset.left,
+				top: e.pageY - canvasOffset.top
+			}
+		});
 	},
 	onMouseLeaveCanvas: function () {
 		$(window).unbind('keydown');

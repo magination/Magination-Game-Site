@@ -438,13 +438,15 @@ function addPieceToCreator (piece) {
 	img.crossOrigin = 'Anonymous';
 	img.onload = function () {
 		var imgInstance = new fabric.Image(img, {});
+		var left = (piece.left) ? piece.left - (imgInstance.width * 0.3 * 0.5) : 200;
+		var top = (piece.top) ? piece.top - (imgInstance.width * 0.3 * 0.5) : 200;
 		imgInstance.set({
-			left: 200,
-			top: 200,
+			left: left,
+			top: top,
 			imageUrl: piece.url
 		});
 		var quantity = _fabricCanvas.getObjects().length;
-		imgInstance.scale(0.4);
+		imgInstance.scale(0.3);
 		imgInstance.perPixelTargetFind = true;
 		imgInstance.targetFindTolerance = 4;
 		imgInstance.on('selected', function () {
