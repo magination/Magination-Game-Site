@@ -216,6 +216,7 @@ var RegisterForm = React.createClass({
 		this.validConfirmPassword(this.state.passwordConfirm);
 	},
 	searchUsername: function (username) {
+		if (username === '') return;
 		$.ajax({
 			type: 'GET',
 			url: URLS.api.users + '?username=' + username,
@@ -228,13 +229,13 @@ var RegisterForm = React.createClass({
 				500: function () {
 					alert('Internal Server Error');
 				},
-				200: this.onUsernameResponse(username)
+				200: this.onUsernameResponse
 			}
 		});
 	},
-	onUsernameResponse: function (data, username) {
+	onUsernameResponse: function (data) {
 		this.setState({
-			usernameHint: username === '' ? 'You must enter a username' : data.users.length > 0 ? 'Username taken' : '',
+			usernameHint: data.users.length > 0 ? 'Username taken' : '',
 			usernameBsStyle: data.users.length > 0 ? 'error' : 'success'
 		});
 	}
