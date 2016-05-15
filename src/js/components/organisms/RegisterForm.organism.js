@@ -132,7 +132,7 @@ var RegisterForm = React.createClass({
 		this.setState({
 			username: e.target.value,
 			usernameBsStyle: this.validUsername(e.target.value) ? 'success' : 'error',
-			usernameHint: e.target.value.length > 0 ? '' : 'You must select a username'
+			usernameHint: e.target.value.length > 0 ? '' : 'You must enter a username'
 		});
 		this.searchUsername(e.target.value);
 	},
@@ -171,7 +171,7 @@ var RegisterForm = React.createClass({
 		return isEmail(email);
 	},
 	validConfirmEmail: function (email) {
-		return email === this.state.email;
+		return email === this.state.email && isEmail(email);
 	},
 	validPassword: function (password) {
 		return password.length >= minPasswordLength;
@@ -228,13 +228,13 @@ var RegisterForm = React.createClass({
 				500: function () {
 					alert('Internal Server Error');
 				},
-				200: this.onUsernameResponse
+				200: this.onUsernameResponse(username)
 			}
 		});
 	},
-	onUsernameResponse: function (data) {
+	onUsernameResponse: function (data, username) {
 		this.setState({
-			usernameHint: data.users.length > 0 ? 'Username taken' : '',
+			usernameHint: username === '' ? 'You must enter a username' : data.users.length > 0 ? 'Username taken' : '',
 			usernameBsStyle: data.users.length > 0 ? 'error' : 'success'
 		});
 	}
