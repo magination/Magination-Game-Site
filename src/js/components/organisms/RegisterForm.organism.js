@@ -132,7 +132,7 @@ var RegisterForm = React.createClass({
 		this.setState({
 			username: e.target.value,
 			usernameBsStyle: this.validUsername(e.target.value) ? 'success' : 'error',
-			usernameHint: e.target.value.length > 0 ? '' : 'You must select a username'
+			usernameHint: e.target.value.length > 0 ? '' : 'You must enter a username'
 		});
 		this.searchUsername(e.target.value);
 	},
@@ -140,6 +140,8 @@ var RegisterForm = React.createClass({
 		this.setState({
 			email: e.target.value,
 			emailBsStyle: this.validEmail(e.target.value) ? 'success' : 'error',
+			emailConfirmBsStyle: this.validConfirmEmail(this.state.emailConfirm, e.target.value) ? 'success' : 'error',
+			emailConfirmHint: e.target.value === this.state.emailConfirm ? '' : 'Emails does not match',
 			emailHint: isEmail(e.target.value) ? '' : 'Invalid email'
 		});
 	},
@@ -154,6 +156,8 @@ var RegisterForm = React.createClass({
 		this.setState({
 			password: e.target.value,
 			passwordBsStyle: this.validPassword(e.target.value) ? 'success' : 'error',
+			passwordConfirmBsStyle: this.validConfirmPassword(this.state.passwordConfirm, e.target.value) ? 'success' : 'error',
+			passwordConfirmHint: e.target.value === this.state.passwordConfirm ? '' : 'Passwords does not match',
 			passwordHint: e.target.value.length >= minPasswordLength ? '' : 'Password must contain at least 7 characters'
 		});
 	},
@@ -170,14 +174,16 @@ var RegisterForm = React.createClass({
 	validEmail: function (email) {
 		return isEmail(email);
 	},
-	validConfirmEmail: function (email) {
-		return email === this.state.email;
+	validConfirmEmail: function (confirmEmail, email) {
+		if (!email) return confirmEmail === this.state.email && isEmail(confirmEmail);
+		return confirmEmail === email && isEmail(confirmEmail);
 	},
 	validPassword: function (password) {
 		return password.length >= minPasswordLength;
 	},
-	validConfirmPassword: function (password) {
-		return password === this.state.password && password.length > 0;
+	validConfirmPassword: function (confirmPassword, password) {
+		if (!password) return confirmPassword === this.state.password && confirmPassword.length > 0;
+		return confirmPassword === password && confirmPassword.length > 0;
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();
@@ -216,6 +222,7 @@ var RegisterForm = React.createClass({
 		this.validConfirmPassword(this.state.passwordConfirm);
 	},
 	searchUsername: function (username) {
+		if (username === '') return;
 		$.ajax({
 			type: 'GET',
 			url: URLS.api.users + '?username=' + username,
