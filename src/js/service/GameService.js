@@ -21,7 +21,7 @@ var GameService = {
 	},
 	gameIsEmpty: function (game) {
 		if (!game) {
-			console.log('Gameisempty in gameservice called without game parameter');
+			console.error('Gameisempty in gameservice called without game parameter');
 			return;
 		}
 		var idLessGame = $.extend(true, {}, game);

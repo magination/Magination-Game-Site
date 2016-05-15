@@ -26,7 +26,7 @@ var LoginAction = {
 	},
 	loginSuccess: function (data) {
 		if (!data.token || !data.refreshToken) {
-			console.log('Error: missing token or refreshtoken, stop login');
+			console.error('Error: missing token or refreshtoken, stop login');
 			// loginError();
 			return;
 		}
@@ -57,7 +57,7 @@ var LoginAction = {
 	},
 	updateLoginProfile: function () {
 		if (!LoginStore.getLoginState().isLoggedIn) {
-			console.log('Tried to update LoginProfile while not being logged in');
+			console.error('Tried to update LoginProfile while not being logged in');
 			return;
 		}
 		$.ajax({
@@ -86,8 +86,7 @@ function onLoginNotFoundResponse (data) {
 	});
 };
 function onGetUserUnauthorizedResponse (data) {
-	alert('Error: see console');
-	console.log(data);
+	console.warn('Unauthorized user profile request');
 };
 function onGetUserSuccessResponse (data) {
 	LoginAction.setLoginProfile({

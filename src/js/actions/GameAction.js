@@ -77,7 +77,7 @@ var GameAction = {
 	},
 	changeGameLocally: function (game) {
 		if (!game._id) {
-			console.log('Change game called without game id');
+			console.warn('Change game called without game id');
 			return;
 		};
 		Dispatcher.dispatch({

@@ -30,13 +30,13 @@ var App = React.createClass({
 			options.error = function (_jqXHR, _textStatus, _errorThrown) {
 				if (_jqXHR.status === 401) {
 					if (originalOptions.url === URLS.api.refresh) {
-						console.log('Error fetching new accessToken with refreshToken, calling logout()');
+						console.error('Error fetching new accessToken with refreshToken, calling logout()');
 						LoginAction.logoutSuccess();
 						return;
 					}
 					if (LoginStore.getLoginState().isLoggedIn) {
-						console.log('401 while state indicated logged in status. Assuming token has expired; fetching new token');
-						LoginAction.appendLastUnsuccessfulRequestOptions(originalOptions);
+						console.info('401 while state indicated logged in status. Assuming token has expired; fetching new token');
+						LoginAction.appendLastUnsuccessfulRequestOptions({lastRequestOptions: originalOptions});
 					}
 					LoginAction.checkAutoLogin();
 				}

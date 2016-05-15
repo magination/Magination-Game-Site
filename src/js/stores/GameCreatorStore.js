@@ -40,7 +40,7 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	},
 	getActiveGameCreator: function () {
 		if (!_loadedData) {
-			console.log('ERROR: Tried to get active gamecreator, but active data was null');
+			console.error('ERROR: Tried to get active gamecreator, but active data was null');
 			return;
 		}
 		return _loadedData;
@@ -150,7 +150,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameCreatorConstants.SET_CREATOR_NAME:
 		if (!_loadedData) {
-			console.log('WARNING: Loaded GameCreator data was undefined');
+			console.warn('WARNING: Loaded GameCreator data was undefined');
 			_loadedData = {};
 		}
 		var toBeSavedData = $.extend(null, {}, _loadedData);
@@ -503,7 +503,7 @@ function saveGameAsJson () {
 	var requestAction = null;
 	var url = null;
 	if (_currentGameId === null) {
-		console.log('ERROR - Tried to save gamecreator to undefined game');
+		console.error('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
 	if (!_loadedData || !_loadedData._id) {
@@ -541,7 +541,7 @@ function saveGameAsJson () {
 
 function saveGameAsPng () {
 	if (!_loadedData) {
-		console.log('WARNING - Saved game without loaded data');
+		console.warn('WARNING - tried to save game without loaded data');
 		return;
 	}
 	if (_currentGameId === null) {
