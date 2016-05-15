@@ -56,6 +56,7 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 		_loginState.isLoggedIn = true;
 		_loginState.requestedLogin = false;
 		_lastUnsuccessfulRequestOptions.forEach(function (options) {
+			options.headers['Authorization'] = _token;
 			$.ajax(options);
 		});
 		_lastUnsuccessfulRequestOptions = [];

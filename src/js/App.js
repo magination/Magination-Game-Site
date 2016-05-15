@@ -35,8 +35,8 @@ var App = React.createClass({
 						return;
 					}
 					if (LoginStore.getLoginState().isLoggedIn) {
-						console.log('401 while state indicated logged in status. Assuming token has expired; fetching new token');
-						LoginAction.appendLastUnsuccessfulRequestOptions(originalOptions);
+						console.info('401 while state indicated logged in status. Assuming token has expired; fetching new token');
+						LoginAction.appendLastUnsuccessfulRequestOptions({lastRequestOptions: originalOptions});
 					}
 					LoginAction.checkAutoLogin();
 				}
