@@ -134,7 +134,6 @@ var RegisterForm = React.createClass({
 			usernameBsStyle: this.validUsername(e.target.value) ? 'success' : 'error',
 			usernameHint: e.target.value.length > 0 ? '' : 'You must select a username'
 		});
-		setTimeout(this.validateFormData(), 0);
 		this.searchUsername(e.target.value);
 	},
 	onEmailEntryChange: function (e) {
@@ -143,7 +142,6 @@ var RegisterForm = React.createClass({
 			emailBsStyle: this.validEmail(e.target.value) ? 'success' : 'error',
 			emailHint: isEmail(e.target.value) ? '' : 'Invalid email'
 		});
-		setTimeout(this.validateFormData(), 0);
 	},
 	onEmailConfirmEntryChange: function (e) {
 		this.setState({
@@ -151,7 +149,6 @@ var RegisterForm = React.createClass({
 			emailConfirmBsStyle: this.validConfirmEmail(e.target.value) ? 'success' : 'error',
 			emailConfirmHint: e.target.value === this.state.email ? '' : 'Emails does not match'
 		});
-		setTimeout(this.validateFormData(), 0);
 	},
 	onPasswordEntryChange: function (e) {
 		this.setState({
@@ -159,7 +156,6 @@ var RegisterForm = React.createClass({
 			passwordBsStyle: this.validPassword(e.target.value) ? 'success' : 'error',
 			passwordHint: e.target.value.length >= minPasswordLength ? '' : 'Password must contain at least 7 characters'
 		});
-		setTimeout(this.validateFormData(), 0);
 	},
 	onPasswordConfirmEntryChange: function (e) {
 		this.setState({
@@ -167,7 +163,6 @@ var RegisterForm = React.createClass({
 			passwordConfirmBsStyle: this.validConfirmPassword(e.target.value) ? 'success' : 'error',
 			passwordConfirmHint: e.target.value === this.state.password ? '' : 'Passwords does not match'
 		});
-		setTimeout(this.validateFormData(), 0);
 	},
 	validUsername: function (username) {
 		return username.length > 0;
@@ -186,9 +181,6 @@ var RegisterForm = React.createClass({
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();
-
-		/* TODO: check fields*/
-
 		$.ajax({
 			type: 'POST',
 			url: URLS.api.users,
@@ -245,7 +237,6 @@ var RegisterForm = React.createClass({
 			usernameHint: data.users.length > 0 ? 'Username taken' : '',
 			usernameBsStyle: data.users.length > 0 ? 'error' : 'success'
 		});
-		this.validateFormData();
 	}
 });
 
