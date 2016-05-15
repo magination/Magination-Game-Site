@@ -3,9 +3,12 @@ var NavigationAction = require('../../actions/NavigationAction');
 var URLS = require('../../config/config').urls;
 
 var Col = require('react-bootstrap').Col;
+var Row = require('react-bootstrap').Row;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
+var TextStyle = require('../../styles/Text');
 var ButtonStyle = require('../../styles/Buttons');
+var minPasswordLength = 7;
 
 function isEmail (email) {
 	var regex = /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -20,11 +23,7 @@ var RegisterForm = React.createClass({
 			emailConfirm: '',
 			password: '',
 			passwordConfirm: '',
-			bsStyleUsername: 'error',
-			bsStyleEmail: 'error',
-			bsStyleEmailConfirm: 'error',
-			bsStylePassword: 'error',
-			bsStylePasswordConfirm: 'error'
+			submitButtonIsActive: false
 		};
 	},
 	componentDidMount: function () {
@@ -33,71 +32,157 @@ var RegisterForm = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Col md={4} mdOffset={4}>
+				<Col md={8} mdOffset={4}>
 					<form className='form-signin' onSubmit={this.onSubmitForm}>
 						<h2 className='form-signin-heading'>Register</h2>
-						<Input ref='usernameEntry' value={this.state.username} bsStyle={this.state.bsStyleUsername} label='Username' type='text' placeholder='Enter your username' onChange={this.onUsernameEntryChange} hasFeedback/>
-						<Input value={this.state.email} bsStyle={this.state.bsStyleEmail} label='Email' type='text' placeholder='Enter your email address' onChange={this.onEmailEntryChange} hasFeedback/>
-						<Input value={this.state.emailConfirm} bsStyle={this.state.bsStyleEmailConfirm} type='text' placeholder='Confirm your email address' onChange={this.onEmailConfirmEntryChange} hasFeedback/>
-						<Input value={this.state.password} bsStyle={this.state.bsStylePassword} type='password' label='Password' placeholder='Password' onChange={this.onPasswordEntryChange} hasFeedback/>
-						<Input value={this.state.passwordConfirm} bsStyle={this.state.bsStylePasswordConfirm} type='password' placeholder='Confirm Password' onChange={this.onPasswordConfirmEntryChange} hasFeedback/>
-						<Button style={ButtonStyle.MaginationFillParent} type='submit'>Sign up</Button>
+						<Row>
+							<div>
+								<Col md={6}>
+									<Input
+										ref='usernameEntry'
+										value={this.state.username}
+										bsStyle={this.state.usernameBsStyle}
+										type='text'
+										placeholder='Enter your username'
+										onChange={this.onUsernameEntryChange}
+										hasFeedback
+									/>
+								</Col>
+								<Col md={6}>
+									<h5 style={TextStyle.Register.error}>{this.state.usernameHint}</h5>
+								</Col>
+							</div>
+						</Row>
+						<Row>
+							<Col md={6}>
+								<Input
+									value={this.state.email}
+									bsStyle={this.state.emailBsStyle}
+									type='text'
+									placeholder='Enter your email address'
+									onChange={this.onEmailEntryChange}
+									hasFeedback/>
+							</Col>
+							<Col md={6}>
+								<h5 style={TextStyle.Register.error}>{this.state.emailHint}</h5>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={6}>
+								<Input
+									value={this.state.emailConfirm}
+									bsStyle={this.state.emailConfirmBsStyle}
+									type='text'
+									placeholder='Confirm your email address'
+									onChange={this.onEmailConfirmEntryChange}
+									hasFeedback
+								/>
+							</Col>
+							<Col md={6} style={{height: '100%'}}>
+								<h5 style={TextStyle.Register.error}>{this.state.emailConfirmHint}</h5>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={6}>
+								<Input
+									value={this.state.password}
+									bsStyle={this.state.passwordBsStyle}
+									type='password'
+									placeholder='Password'
+									tooltip='Password must be atleast 7 characters'
+									onChange={this.onPasswordEntryChange}
+									hasFeedback
+								/>
+							</Col>
+							<Col md={6} style={{height: '100%'}}>
+								<h5 style={TextStyle.Register.error}>{this.state.passwordHint}</h5>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={6} >
+								<Input
+									value={this.state.passwordConfirm}
+									bsStyle={this.state.passwordConfirmBsStyle}
+									type='password' placeholder='Confirm Password'
+									onChange={this.onPasswordConfirmEntryChange}
+									hasFeedback
+								/>
+							</Col>
+							<Col md={6} style={{height: '100%'}}>
+								<h5 style={TextStyle.Register.error}>{this.state.passwordConfirmHint}</h5>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={6}>
+								<Button
+									disabled={!this.validateFormData()}
+									style={ButtonStyle.MaginationFillParent}
+									type='submit'
+								>
+									Sign up
+								</Button>
+							</Col>
+						</Row>
 					</form>
 				</Col>
 			</div>
 		);
 	},
-	onEmailEntryChange: function (e) {
-		/* TODO: CHECK IF EMAIL EXISTS (maybe on unfocus instead)*/
-		var successStatus = 'success';
-		if (!isEmail(e.target.value)) {
-			successStatus = 'error';
-		}
-		this.setState({
-			email: e.target.value,
-			bsStyleEmail: successStatus
-		});
-	},
-	onEmailConfirmEntryChange: function (e) {
-		var successStatus = 'error';
-		if (e.target.value === this.state.email) {
-			successStatus = 'success';
-		}
-		this.setState({
-			emailConfirm: e.target.value,
-			bsStyleEmailConfirm: successStatus
-		});
-	},
 	onUsernameEntryChange: function (e) {
-		/* TODO: CHECK IF USER EXISTS (maybe on unfocus instead)*/
-		var successStatus = 'error';
-		if (e.target.value !== '') {
-			successStatus = 'success';
-		}
 		this.setState({
 			username: e.target.value,
-			bsStyleUsername: successStatus
+			usernameBsStyle: this.validUsername(e.target.value) ? 'success' : 'error',
+			usernameHint: e.target.value.length > 0 ? '' : 'You must select a username'
 		});
+		setTimeout(this.validateFormData(), 0);
+		this.searchUsername(e.target.value);
+	},
+	onEmailEntryChange: function (e) {
+		this.setState({
+			email: e.target.value,
+			emailBsStyle: this.validEmail(e.target.value) ? 'success' : 'error',
+			emailHint: isEmail(e.target.value) ? '' : 'Invalid email'
+		});
+		setTimeout(this.validateFormData(), 0);
+	},
+	onEmailConfirmEntryChange: function (e) {
+		this.setState({
+			emailConfirm: e.target.value,
+			emailConfirmBsStyle: this.validConfirmEmail(e.target.value) ? 'success' : 'error',
+			emailConfirmHint: e.target.value === this.state.email ? '' : 'Emails does not match'
+		});
+		setTimeout(this.validateFormData(), 0);
 	},
 	onPasswordEntryChange: function (e) {
-		var successStatus = 'error';
-		if (e.target.value !== '') {
-			successStatus = 'success';
-		}
 		this.setState({
 			password: e.target.value,
-			bsStylePassword: successStatus
+			passwordBsStyle: this.validPassword(e.target.value) ? 'success' : 'error',
+			passwordHint: e.target.value.length >= minPasswordLength ? '' : 'Password must contain at least 7 characters'
 		});
+		setTimeout(this.validateFormData(), 0);
 	},
 	onPasswordConfirmEntryChange: function (e) {
-		var successStatus = 'error';
-		if (e.target.value === this.state.password) {
-			successStatus = 'success';
-		}
 		this.setState({
 			passwordConfirm: e.target.value,
-			bsStylePasswordConfirm: successStatus
+			passwordConfirmBsStyle: this.validConfirmPassword(e.target.value) ? 'success' : 'error',
+			passwordConfirmHint: e.target.value === this.state.password ? '' : 'Passwords does not match'
 		});
+		setTimeout(this.validateFormData(), 0);
+	},
+	validUsername: function (username) {
+		return username.length > 0;
+	},
+	validEmail: function (email) {
+		return isEmail(email);
+	},
+	validConfirmEmail: function (email) {
+		return email === this.state.email;
+	},
+	validPassword: function (password) {
+		return password.length >= minPasswordLength;
+	},
+	validConfirmPassword: function (password) {
+		return password === this.state.password && password.length > 0;
 	},
 	onSubmitForm: function (e) {
 		e.preventDefault();
@@ -130,6 +215,37 @@ var RegisterForm = React.createClass({
 			destination: '/verificationsent',
 			data: {email: this.state.email}
 		});
+	},
+	validateFormData: function () {
+		return this.validUsername(this.state.username) &&
+		this.validEmail(this.state.email) &&
+		this.validConfirmEmail(this.state.emailConfirm) &&
+		this.validPassword(this.state.password) &&
+		this.validConfirmPassword(this.state.passwordConfirm);
+	},
+	searchUsername: function (username) {
+		$.ajax({
+			type: 'GET',
+			url: URLS.api.users + '?username=' + username,
+			contentType: 'application/json',
+			dataType: 'json',
+			statusCode: {
+				409: function () {
+					alert('Username taken');
+				},
+				500: function () {
+					alert('Internal Server Error');
+				},
+				200: this.onUsernameResponse
+			}
+		});
+	},
+	onUsernameResponse: function (data) {
+		this.setState({
+			usernameHint: data.users.length > 0 ? 'Username taken' : '',
+			usernameBsStyle: data.users.length > 0 ? 'error' : 'success'
+		});
+		this.validateFormData();
 	}
 });
 

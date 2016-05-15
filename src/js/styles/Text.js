@@ -72,7 +72,13 @@ var TextStyles = {
 		success: {
 			color: Colors.green,
 			padding: 2,
-			verticalAlign: 'middle'		}
+			verticalAlign: 'middle'
+		}
+	},
+	Register: {
+		error: {
+			color: Colors.red
+		}
 	}
 };
 
