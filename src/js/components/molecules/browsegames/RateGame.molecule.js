@@ -10,7 +10,8 @@ var RateGame = React.createClass({
 	},
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({
-			rating: nextProps.rating
+			rating: nextProps.rating,
+			selectedRating: nextProps.rating
 		});
 	},
 	onIconHovered (id) {
