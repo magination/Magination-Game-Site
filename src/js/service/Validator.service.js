@@ -1,4 +1,3 @@
-var LoginStore = require('../stores/LoginStore');
 var Parser = require('./Parser.service');
 
 var validatorService = {
@@ -15,8 +14,7 @@ var validatorService = {
 		}
 		return true;
 	},
-	isModeratorPermission: function () {
-		var token = LoginStore.getToken();
+	isModeratorPermission: function (token) {
 		var decodedToken = Parser.decodeJWT(token);
 		return decodedToken && (parseInt(decodedToken.claims.privileges) > 0);
 	},
@@ -40,6 +38,10 @@ var validatorService = {
 			objectHasSamePropertiesWithSameValues(option1.body, option2.body);
 		}
 		return true;
+	},
+	isAdminPermission: function (token) {
+		var decodedToken = Parser.decodeJWT(token);
+		return decodedToken && (parseInt(decodedToken.claims.privileges) > 1);
 	}
 };
 
