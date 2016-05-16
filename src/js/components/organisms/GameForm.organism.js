@@ -60,7 +60,7 @@ var GameForm = React.createClass({
 					<h3>PLAYERS</h3>
 					<Row>
 						<Col md={3}>
-							<ImageNumberPair value={this.state.game ? this.state.game.numberOfPlayers : 0} src={URLS.img.peopleBlue} placeholder='No. players' bindingProperty='numberOfPlayers'/>
+							<ImageNumberPair value={this.state.game ? this.state.game.numberOfPlayers : 0} src={URLS.img.peopleBlue} placeholder='Players' bindingProperty='numberOfPlayers'/>
 						</Col>
 					</Row>
 					<Checkbox checked={false} description='Can be played with more players' bindingProperty='isPlayableWithMorePlayers'/>
@@ -70,9 +70,9 @@ var GameForm = React.createClass({
 					<h3 style={TextStyle.blueHeader}>PIECES</h3>
 					<Row>
 						<Col md={3}>
-							<ImageNumberPair value={this.state.game ? this.state.game.pieces.singles : 0} src={URLS.img.pieceSingleBlue} placeholder='No. singles' bindingCollection ='pieces' bindingProperty='singles'/>
-							<ImageNumberPair value={this.state.game ? this.state.game.pieces.doubles : 0} src={URLS.img.pieceDoubleBlue} placeholder='No. doubles' bindingCollection ='pieces' bindingProperty='doubles'/>
-							<ImageNumberPair value={this.state.game ? this.state.game.pieces.triples : 0} src={URLS.img.pieceTripleBlue} placeholder='No. triples' bindingCollection ='pieces' bindingProperty='triples'/>
+							<ImageNumberPair value={this.state.game ? this.state.game.pieces.singles : 0} src={URLS.img.pieceSingleBlue} placeholder='Singles' bindingCollection ='pieces' bindingProperty='singles'/>
+							<ImageNumberPair value={this.state.game ? this.state.game.pieces.doubles : 0} src={URLS.img.pieceDoubleBlue} placeholder='Doubles' bindingCollection ='pieces' bindingProperty='doubles'/>
+							<ImageNumberPair value={this.state.game ? this.state.game.pieces.triples : 0} src={URLS.img.pieceTripleBlue} placeholder='Triples' bindingCollection ='pieces' bindingProperty='triples'/>
 						</Col>
 					</Row>
 					<Row>

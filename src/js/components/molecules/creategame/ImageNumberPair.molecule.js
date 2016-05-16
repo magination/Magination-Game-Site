@@ -20,15 +20,21 @@ var ImageNumberPair = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Input onBlur={AutoSave} value={this.state.value} type='number' placeholder={this.props.placeholder} onChange={this.valueChanged} addonBefore={<img width={40} height={20} src={this.props.src}/>}>
-				</Input>
+				<Input
+					onBlur={AutoSave}
+					value={this.state.value}
+					type='number'
+					placeholder={this.props.placeholder}
+					onChange={this.valueChanged}
+					addonBefore={<img width={40} height={20} src={this.props.src}/>}
+				/>
 			</div>
 		);
 	},
 
 	valueChanged: function (e) {
 		var newValue = e.target.value;
-		if (!ValidatorService.isNumericAndNotNegative(newValue)) {
+		if (newValue.length > 0 && !ValidatorService.isNumericAndNotNegative(newValue)) {
 			newValue = 0;
 		}
 		GameAction.updateCurrentGameLocally({
