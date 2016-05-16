@@ -92,7 +92,6 @@ var GameCreator = React.createClass({
 					<div onClick={this.onPencilClick}>
 						<CustomGameCreatorElement glyph={'pencil'} isToggled={this.state.isPencilToggled} settingsComponent={pencilPopover}/>
 					</div>
-					<div style={{bottom: '5px'}}><ButtonWithTooltip buttonText='?' tooltip={'Lol'}/></div>
 				</Col>
 				<Col xs={8} md={8}>
 					<div onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
