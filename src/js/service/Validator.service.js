@@ -15,6 +15,9 @@ var validatorService = {
 		return true;
 	},
 	isModeratorPermission: function (token) {
+		if (!token) {
+			return false;
+		}
 		var decodedToken = Parser.decodeJWT(token);
 		return decodedToken && (parseInt(decodedToken.claims.privileges) > 0);
 	},
@@ -40,6 +43,9 @@ var validatorService = {
 		return true;
 	},
 	isAdminPermission: function (token) {
+		if (!token) {
+			return false;
+		}
 		var decodedToken = Parser.decodeJWT(token);
 		return decodedToken && (parseInt(decodedToken.claims.privileges) > 1);
 	}

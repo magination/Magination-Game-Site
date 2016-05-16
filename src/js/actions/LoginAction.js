@@ -16,10 +16,6 @@ var LoginAction = {
 		});
 	},
 	appendLastUnsuccessfulRequestOptions: function (data) {
-		var body = JSON.parse(data.lastRequestOptions.data);
-		if (body.password) { /* should not retry the request if the request sends password*/
-			return;
-		}
 		Dispatcher.dispatch({
 			actionType: LoginConstants.APPEND_LAST_REQUEST_OPTIONS,
 			lastRequestOptions: data.lastRequestOptions
