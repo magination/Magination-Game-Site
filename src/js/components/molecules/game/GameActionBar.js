@@ -1,6 +1,6 @@
 var React = require('react');
 var ButtonWithTooltip = require('../../atoms/ButtonWithTooltip');
-var Report = require('../report/Report.molecule');
+var Report = require('../moderator/Report.molecule');
 var Col = require('react-bootstrap').Col;
 var Collapse = require('react-bootstrap').Collapse;
 var LoginStore = require('../../../stores/LoginStore');
