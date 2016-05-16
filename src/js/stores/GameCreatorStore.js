@@ -87,7 +87,6 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		_staticPieces = action.pieces;
 		_staticPiecesFolderStructure = action.imageFolderStructure;
 		_otherObjects = action.otherObjects;
-		console.log(_otherObjects);
 		GameCreatorStore.emitChange(GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.emitChange(CHANGE_EVENT);
 		break;
@@ -556,7 +555,7 @@ function saveGameAsPng () {
 		return;
 	}
 	if (_currentGameId === null) {
-		console.log('ERROR - Tried to save gamecreator to undefined game');
+		console.error('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
 	_fabricCanvas.deactivateAll().renderAll();
@@ -659,7 +658,6 @@ function findNextRotationImage (rotateToNext, object) {
 		}
 	});
 	url = apiRootUrl + '' + url;
-	console.log(url);
 	return url;
 }
 
