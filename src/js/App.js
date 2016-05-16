@@ -34,6 +34,10 @@ var App = React.createClass({
 						LoginAction.logoutSuccess();
 						return;
 					}
+					if (!originalOptions.headers || !originalOptions.headers['Authorization']) {
+						/* this means fetching token will not help authorizing the request*/
+						return;
+					}
 					if (LoginStore.getLoginState().isLoggedIn) {
 						console.info('401 while state indicated logged in status. Assuming token has expired; fetching new token');
 						LoginAction.appendLastUnsuccessfulRequestOptions({lastRequestOptions: originalOptions});
