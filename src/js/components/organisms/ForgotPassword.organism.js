@@ -1,7 +1,9 @@
 var React = require('react');
-
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
+var Col = require('react-bootstrap').Col;
+
+var ButtonStyles = require('../../styles/Buttons');
 
 var FeedbackAction = require('../../actions/FeedbackAction');
 var ValidatorService = require('../../service/Validator.service');
@@ -17,11 +19,26 @@ var ForgotPassword = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<form onSubmit={this.onSubmit}>
-					<h2>Request new password</h2>
-					<Input bsStyle={this.state.emailEntryBsStyle} type='email' onChange={this.onEmailEntryChange} placeholder='Email Address' value={this.state.emailEntryValue} hasFeedback />
-					<Button type='submit'>Submit</Button>
-				</form>
+				<Col md={4} mdOffset={4}>
+					<form onSubmit={this.onSubmit}>
+						<h4>Request new password</h4>
+						<Input
+							bsStyle={this.state.emailEntryBsStyle}
+							type='email'
+							onChange={this.onEmailEntryChange}
+							placeholder='Email Address'
+							value={this.state.emailEntryValue}
+							hasFeedback
+						/>
+						<Button
+							type='submit'
+							style={ButtonStyles.MaginationFillParent}
+							disabled={!this.validateForm()}
+						>
+							Submit
+						</Button>
+					</form>
+				</Col>
 			</div>
 		);
 	},
@@ -58,11 +75,13 @@ var ForgotPassword = React.createClass({
 		});
 	},
 	onEmailEntryChange: function (e) {
-		var bsStyle = (ValidatorService.isEmail(e.target.value)) ? 'success' : 'error';
 		this.setState({
 			emailEntryValue: e.target.value,
-			emailEntryBsStyle: bsStyle
+			emailEntryBsStyle: ValidatorService.isEmail(e.target.value) ? 'success' : 'error'
 		});
+	},
+	validateForm: function () {
+		return ValidatorService.isEmail(this.state.emailEntryValue);
 	}
 });
 
