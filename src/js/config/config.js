@@ -17,7 +17,7 @@ var config = {
 			verifyEmail: restApiRoot + 'login/update',
 			unpublishedGames: restApiRoot + 'unpublishedGames',
 			gamecreator: {
-				staticimages: restApiRoot + 'public/pieces'
+				staticimages: restApiRoot + 'public/editor'
 			},
 			reports: restApiRoot + 'reports',
 			reviews: restApiRoot + 'reviews'

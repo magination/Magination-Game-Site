@@ -29,6 +29,7 @@ var GameCreator = React.createClass({
 		return {
 			canvas: null,
 			staticPieces: [],
+			otherObject: [],
 			isPencilToggled: false,
 			gamecreatorListHeight: '0px'
 		};
@@ -75,6 +76,9 @@ var GameCreator = React.createClass({
 				<GameCreatorElement key={index} piece={piece} />
 			);
 		});
+		if (this.state.otherObject.length > 0) {
+			gamecreatorelements.push(<GameCreatorElement key='otherobjects' piece={this.state.otherObject} noRotation={true} />);
+		}
 		var gamecreatorListStyle = {
 			height: this.state.gamecreatorListHeight,
 			overflowY: 'auto'
@@ -123,9 +127,6 @@ var GameCreator = React.createClass({
 	},
 	onDragOverCanvas: function (e) {
 		e.preventDefault();
-	},
-	onDragLeaveCanvas: function (e) {
-
 	},
 	onDropElementOnCanvas: function (e) {
 		e.preventDefault();
@@ -200,7 +201,8 @@ var GameCreator = React.createClass({
 	},
 	onGameCreatorStaticPiecesChange: function () {
 		this.setState({
-			staticPieces: GameCreatorStore.getStaticPieces()
+			staticPieces: GameCreatorStore.getStaticPieces(),
+			otherObject: GameCreatorStore.getOtherObjects()
 		});
 	},
 	onGameCreatorFreedrawStateChanged: function (isFreedraw) {

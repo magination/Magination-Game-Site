@@ -168,12 +168,33 @@ function onGetGameCreatorFullListSuccessResponse (data) {
 }
 
 function onGetStaticPiecesSuccessResponse (data) {
-	var pieces = parseFolderStructureToPieces(data);
+	var pieces = [];
+	var otherObjects = [];
+	var piecesFolderStructure = {};
+	data.children.forEach(function (type) {
+		if (type.name === 'objects') {
+			otherObjects = parseFolderStructureToOtherObjects(type);
+		}
+		else if (type.name === 'pieces') {
+			piecesFolderStructure = type;
+			pieces = parseFolderStructureToPieces(type);
+		}
+	});
 	Dispatcher.dispatch({
 		actionType: GameCreatorConstants.SET_STATIC_PIECES,
 		pieces: pieces,
-		imageFolderStructure: data
+		imageFolderStructure: piecesFolderStructure,
+		otherObjects: otherObjects
 	});
+}
+
+function parseFolderStructureToOtherObjects (folderStructure) {
+	var otherObjects = folderStructure.children.map(function (object) {
+		return {
+			url: ('' + URLS.server.root + '' + object.path)
+		};
+	});
+	return otherObjects;
 }
 
 function parseFolderStructureToPieces (folderStructure) { /* hardcoded against the public folder of the pieces on the api backend */

@@ -16,6 +16,7 @@ var _staticPieces = [
 		[]
 	]
 ];
+var _otherObjects = [];
 var _staticPiecesFolderStructure = {};
 var _fabricCanvas = null;
 var _loadedData = {};
@@ -37,6 +38,9 @@ var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 			size: _fabricCanvas.freeDrawingBrush.width,
 			color: _fabricCanvas.freeDrawingBrush.color
 		};
+	},
+	getOtherObjects: function () {
+		return _otherObjects;
 	},
 	getActiveGameCreator: function () {
 		if (!_loadedData) {
@@ -82,6 +86,8 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameCreatorConstants.SET_STATIC_PIECES:
 		_staticPieces = action.pieces;
 		_staticPiecesFolderStructure = action.imageFolderStructure;
+		_otherObjects = action.otherObjects;
+		console.log(_otherObjects);
 		GameCreatorStore.emitChange(GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.emitChange(CHANGE_EVENT);
 		break;
@@ -408,6 +414,9 @@ function rotateSelectedPiece (rotateToNext) {
 		if (object.get('active')) {
 			if (object.imageUrl) {
 				var newSrc = findNextRotationImage(rotateToNext, object);
+				if (!findNextRotationImage) {
+					return;
+				}
 				var newImg = new Image();
 				newImg.crossOrigin = 'Anonymous';
 				newImg.onload = function () {
@@ -439,7 +448,7 @@ function addPieceToCreator (piece) {
 	img.onload = function () {
 		var imgInstance = new fabric.Image(img, {});
 		var left = (piece.left) ? piece.left - (imgInstance.width * 0.3 * 0.5) : 200;
-		var top = (piece.top) ? piece.top - (imgInstance.width * 0.3 * 0.5) : 200;
+		var top = (piece.top) ? piece.top - (imgInstance.height * 0.3 * 0.5) : 200;
 		imgInstance.set({
 			left: left,
 			top: top,
@@ -612,11 +621,14 @@ function onSavePngConflictResponse (data) {
 
 function findNextRotationImage (rotateToNext, object) {
 	var currentSrc = object.imageUrl.replace(apiRootUrl, '');
+	if (currentSrc.indexOf('pieces') < 0) {
+		return;
+	}
 	var splittedSrc = currentSrc.split('/');
 	if (currentSrc.indexOf('\\') > -1) {
 		splittedSrc = currentSrc.split('\\');
 	}
-	splittedSrc.splice(0, 3);
+	splittedSrc.splice(0, 4);
 	var url = '';
 	_staticPiecesFolderStructure.children.forEach(function (piece) {
 		if (piece.name === splittedSrc[0]) {
@@ -647,6 +659,7 @@ function findNextRotationImage (rotateToNext, object) {
 		}
 	});
 	url = apiRootUrl + '' + url;
+	console.log(url);
 	return url;
 }
 

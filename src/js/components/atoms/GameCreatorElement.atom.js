@@ -32,16 +32,22 @@ var GameCreatorElement = React.createClass({
 	propTypes: {
 		piece: React.PropTypes.array
 	},
+	getDefaultProps: function () {
+		return {
+			noRotation: false
+		};
+	},
 	getInitialState: function () {
 		return {
-			selectedImage: this.props.piece[0][0].url
+			selectedImage: (this.props.noRotation) ? this.props.piece[0].url : this.props.piece[0][0].url
 		};
 	},
 	render: function () {
 		var that = this;
 		var images = this.props.piece.map(function (color, index) {
+			var url = (that.props.noRotation) ? color.url : color[0].url;
 			return (
-				<div key={color[0].url + '' + index}><img width={100} height={65} onClick={that.onImageClick.bind(that, color[0].url)} src={color[0].url}/></div>
+				<div key={url + '' + index}><img width={100} height={65} onClick={that.onImageClick.bind(that, url)} src={url}/></div>
 			);
 		});
 		var Overlay = <Popover id='chooseImgVariation'>{images}</Popover>;
@@ -55,7 +61,7 @@ var GameCreatorElement = React.createClass({
 					<div style={{width: '80%'}}>
 						<img src={this.state.selectedImage} alt='' style={imgStyle}/>
 					</div>
-					<div style={chevronDivStyle} onClick={function (e) { e.stopPropagation(); }}>
+					<div style={chevronDivStyle} onMouseDown={function (e) { e.stopPropagation(); }} onClick={function (e) { e.stopPropagation(); }}>
 						<OverlayTrigger trigger='click' rootClose placement='right' overlay={Overlay}>
 								<p style={{color: Color.blue, fontSize: '20px'}}><Glyphicon glyph='cog'/></p>
 						</OverlayTrigger>
