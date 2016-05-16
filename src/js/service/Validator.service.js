@@ -15,10 +15,13 @@ var validatorService = {
 		}
 		return true;
 	},
-	isModeratorPermission: function () {
-		var token = LoginStore.getToken();
+	isModeratorPermission: function (token) {
 		var decodedToken = Parser.decodeJWT(token);
 		return decodedToken && (parseInt(decodedToken.claims.privileges) > 0);
+	},
+	isAdminPermission: function (token) {
+		var decodedToken = Parser.decodeJWT(token);
+		return decodedToken && (parseInt(decodedToken.claims.privileges) > 1);
 	}
 };
 

@@ -5,15 +5,15 @@ var Col = require('react-bootstrap').Col;
 
 var LoginStore = require('../../stores/LoginStore');
 var LoginAction = require('../../actions/LoginAction');
-var GameReportList = require('../molecules/report/GameReportList');
-var ReviewReportList = require('../molecules/report/ReviewReportList');
-var UserReportList = require('../molecules/report/UserReportList');
+var GameReportList = require('../molecules/moderator//GameReportList');
+var ReviewReportList = require('../molecules/moderator//ReviewReportList');
+var UserReportList = require('../molecules/moderator/UserReportList');
 var Validator = require('../../service/Validator.service');
 
 var ModeratorPage = React.createClass({
 	getInitialState: function () {
 		return {
-			isModerator: LoginStore.getLoginState().isLoggedIn ? Validator.isModeratorPermission() : false
+			isModerator: LoginStore.getLoginState().isLoggedIn ? Validator.isModeratorPermission(LoginStore.getToken()) : false
 		};
 	},
 	componentDidMount: function () {
@@ -49,7 +49,7 @@ var ModeratorPage = React.createClass({
 	},
 	onLoginStateChanged: function () {
 		this.setState({
-			isModerator: LoginStore.getLoginState().isLoggedIn ? Validator.isModeratorPermission() : false
+			isModerator: LoginStore.getLoginState().isLoggedIn ? Validator.isModeratorPermission(LoginStore.getToken()) : false
 		});
 	}
 });
