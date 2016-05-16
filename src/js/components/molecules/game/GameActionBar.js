@@ -21,10 +21,10 @@ var GameActionBar = React.createClass({
 		return (
 			<div>
 				<Col md={6} style={{margin: '0', paddingLeft: 0, paddingRight: 5}}>
-					<ButtonWithTooltip onClick={this.onReportClicked} style={{width: '100%', margin: 0}} tooltip='Click to report the game if you feel it violates our terms of service.' buttonText='Report' glyph='flag'/>
+					<ButtonWithTooltip onClick={this.onReportClicked} style={{width: '100%', margin: 0}} tooltip='Report the game if you feel it violates our terms of service.' buttonText='Report' glyph='flag'/>
 				</Col>
 				<Col md={6} style={{margin: '0', paddingLeft: 5, paddingRight: 0}}>
-					<ButtonWithTooltip onClick={this.onShareGamesClicked} style={{width: '100%', margin: 0}} tooltip='Click to share this game on social media.' buttonText='Share' glyph='share'/>
+					<ButtonWithTooltip onClick={this.onShareGamesClicked} style={{width: '100%', margin: 0}} tooltip='Share this game on social media.' buttonText='Share' glyph='share'/>
 				</Col>
 				<Col md={12}>
 					<Collapse in={this.state.shareGameIsShowing}>
@@ -35,7 +35,7 @@ var GameActionBar = React.createClass({
 					<Report reportType='games' objectId={this.props.gameId} show={this.state.showReport} close={this.onReportHide}/>
 				</Col>
 				<Col md={12} style={{margin: '10px 0px 0px 0px', padding: 0}}>
-					<ButtonWithTooltip onClick={this.onForkClicked} style={{width: '100%', margin: 0}} tooltip='Click to create your own variaton of this game.' buttonText='Create variation' glyph='edit'/>
+					<ButtonWithTooltip onClick={this.onForkClicked} style={{width: '100%', margin: 0}} tooltip='Create your own variaton of this game.' buttonText='Create variation' glyph='edit'/>
 				</Col>
 			</div>
 		);
