@@ -13,7 +13,6 @@ var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
 var Popover = require('react-bootstrap').Popover;
 var PencilSettingsOverlay = require('./gamecreator/PencilSettingsOverlay.atom');
-var ButtonWithTooltip = require('./ButtonWithTooltip');
 // var PiecesOverview = require('../molecules/gamecreator/PiecesOverview.molecule');
 var Col = require('react-bootstrap').Col;
 var CustomGameCreatorElement = require('../molecules/gamecreator/CustomGameCreatorElement.molecule');
