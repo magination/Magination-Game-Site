@@ -83,6 +83,9 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		addPieceToCreator(action.piece);
 		GameCreatorStore.emitChange(GameCreatorConstants.ADD_PIECE_TO_CREATOR, action.piece);
 		break;
+	case GameCreatorConstants.ADD_SCALE_TO_SELECTED:
+		addScaleToSelectedPieces(action.value);
+		break;
 	case GameCreatorConstants.SET_STATIC_PIECES:
 		_staticPieces = action.pieces;
 		_staticPiecesFolderStructure = action.imageFolderStructure;
@@ -273,12 +276,14 @@ function addObjectsToCanvas (objects) {
 			newImg.crossOrigin = 'Anonymous';
 			newImg.onload = function () {
 				var imgInstance = new fabric.Image(newImg, {});
+				var hasControls = !(object.src.indexOf('/pieces/') > -1);
 				imgInstance.set({
 					left: object.left,
 					top: object.top,
 					imageUrl: object.src,
 					scaleX: object.scaleX,
-					scaleY: object.scaleY
+					scaleY: object.scaleY,
+					hasControls: hasControls
 				});
 				var quantity = _fabricCanvas.getObjects().length;
 				imgInstance.perPixelTargetFind = true;
@@ -453,6 +458,9 @@ function addPieceToCreator (piece) {
 			top: top,
 			imageUrl: piece.url
 		});
+		if (piece.hasControls === false) {
+			imgInstance.hasControls = false;
+		}
 		var quantity = _fabricCanvas.getObjects().length;
 		imgInstance.scale(0.3);
 		imgInstance.perPixelTargetFind = true;
@@ -466,6 +474,19 @@ function addPieceToCreator (piece) {
 		updateLocalJsonData();
 	};
 	img.src = piece.url;
+}
+
+function addScaleToSelectedPieces (value) {
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (object.get('active')) {
+			object.set({
+				scaleX: object.get('scaleX') + value,
+				scaleY: object.get('scaleY') + value
+			});
+			object.setCoords();
+		}
+	});
+	_fabricCanvas.renderAll();
 }
 
 function removeObjectsOutsideCanvas () {

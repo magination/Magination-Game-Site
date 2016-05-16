@@ -16,6 +16,12 @@ var GameCreatorActions = {
 			piece: data.piece
 		});
 	},
+	addScaleToCurrentSelected: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.ADD_SCALE_TO_SELECTED,
+			value: data.value
+		});
+	},
 	deleteCurrentSelectedPiece: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.DELETE_SELECTED_PIECE_FROM_CREATOR

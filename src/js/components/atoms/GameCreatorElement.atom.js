@@ -93,7 +93,8 @@ var GameCreatorElement = React.createClass({
 	onPieceClick: function () {
 		GameCreatorAction.addPieceByUrl({
 			piece: {
-				url: this.state.selectedImage
+				url: this.state.selectedImage,
+				hasControls: this.props.noRotation
 			}
 		});
 	}

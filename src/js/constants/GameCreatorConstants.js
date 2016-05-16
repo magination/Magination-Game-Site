@@ -1,6 +1,7 @@
 var constants = {
 	ACTIVE_DATA_CHANGED: 'active_data_changed',
 	ADD_PIECE_TO_CREATOR: 'add_piece_to_creator',
+	ADD_SCALE_TO_SELECTED: 'add_scale_to_selected',
 	CLEAR_GAMECREATOR_STORE: 'clear_gamecreator_store',
 	CHANGE_FREEDRAW_STATE: 'change_freedraw_state',
 	DELETE_SELECTED_PIECE_FROM_CREATOR: 'delete_selected_piece_from_creator',

@@ -13,6 +13,7 @@ var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
 var Popover = require('react-bootstrap').Popover;
 var PencilSettingsOverlay = require('./gamecreator/PencilSettingsOverlay.atom');
+var ButtonWithTooltip = require('./ButtonWithTooltip');
 // var PiecesOverview = require('../molecules/gamecreator/PiecesOverview.molecule');
 var Col = require('react-bootstrap').Col;
 var CustomGameCreatorElement = require('../molecules/gamecreator/CustomGameCreatorElement.molecule');
@@ -86,18 +87,19 @@ var GameCreator = React.createClass({
 		var pencilPopover = <Popover id='pencilSettings'><PencilSettingsOverlay /></Popover>;
 		return (
 			<div ref='canvasParent' style={{height: height}}>
-				<Col xs={2} md={2}>
+				<Col xs={1} md={1}>
 					{gamecreatorelements}
 					<div onClick={this.onPencilClick}>
 						<CustomGameCreatorElement glyph={'pencil'} isToggled={this.state.isPencilToggled} settingsComponent={pencilPopover}/>
 					</div>
+					<div style={{bottom: '5px'}}><ButtonWithTooltip buttonText='?' tooltip={'Lol'}/></div>
 				</Col>
 				<Col xs={8} md={8}>
 					<div onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
 						<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
 					</div>
 				</Col>
-				<Col xs={2} md={2}>
+				<Col xs={3} md={3}>
 					<div style={{height: height, paddingLeft: 10}}>
 						<div ref='pieceToolsDiv'>
 							<h4>Piece Tools</h4>
@@ -105,6 +107,8 @@ var GameCreator = React.createClass({
 							<Button style={toolButton} onClick={this.onMoveSelectedShallowerClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
 							<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-left'/></Button>
 							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
+							<Button style={toolButton} onClick={this.onPlusButtonClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='plus'/></Button>
+							<Button style={toolButton} onClick={this.onMinusButtonClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='minus'/></Button>
 							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
 							<hr/>
 							<h4>Your Creators</h4>
@@ -124,6 +128,16 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onPlusButtonClick: function (e) {
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: 0.1
+		});
+	},
+	onMinusButtonClick: function (e) {
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: -0.1
+		});
 	},
 	onDragOverCanvas: function (e) {
 		e.preventDefault();
@@ -254,9 +268,15 @@ function keyPressed (key) {
 		break;
 	case 187:
 		/* +*/
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: 0.1
+		});
 		break;
 	case 189:
 		/* -*/
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: -0.1
+		});
 		break;
 	case 90:
 		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'in'});
