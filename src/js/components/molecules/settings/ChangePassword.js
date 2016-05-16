@@ -3,37 +3,73 @@ var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var Collapse = require('react-bootstrap').Collapse;
 var Well = require('react-bootstrap').Well;
-var URLS = require('../../../config/config').urls;
-var LoginStore = require('../../../stores/LoginStore');
-var FeedbackAction = require('../../../actions/FeedbackAction');
 var Col = require('react-bootstrap').Col;
+
+var URLS = require('../../../config/config').urls;
 var ButtonStyles = require('../../../styles/Buttons');
 var Colors = require('../../../styles/Colors');
+
+var LoginStore = require('../../../stores/LoginStore');
+var FeedbackAction = require('../../../actions/FeedbackAction');
+
+var minPasswordLength = 7;
 
 var ChangePassword = React.createClass({
 	getInitialState () {
 		return {
 			newPassword: '',
 			confirmedPassword: '',
-			currentPassword: '',
-			bsStyleConfirmedPassword: 'error'
+			currentPassword: ''
 		};
 	},
 	render: function () {
 		return (
 			<div>
 				<Col md={12}>
-					<Button onClick={this.onChangePasswordClicked} style={ButtonStyles.MaginationFillParent}><strong>Change password</strong></Button>
+					<Button
+						onClick={this.onChangePasswordClicked}
+						style={ButtonStyles.MaginationFillParent}
+					>
+						Change password
+					</Button>
 				</Col>
 				<Collapse in={this.props.isShow}>
 					<Col md={12}>
 						<Well style={{marginBottom: '0'}}>
 							<div>
 								<form className='form-settings' onSubmit={this.storeChanges}>
-									<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordCHanged}/>
-									<Input value={this.state.newPassword} label='New password' placeholder='Enter new password' type='password' onChange={this.onNewPasswordChanged}/>
-									<Input value={this.state.confirmedPassword} bsStyle={this.state.bsStyleConfirmedPassword} label='Confirm new password' placeholder='Confirm new password' type='password' onChange={this.onConfirmedPasswordChanged}/>
-									<Button style={ButtonStyles.MaginationSettingsButton.customColor(Colors.green)} ref='submitButton' type='submit'><strong>Save changes</strong></Button>
+									<Input
+										value={this.state.currentPassword}
+										required='true'
+										placeholder='Enter your current password'
+										type='password'
+										onChange={this.onCurrentPasswordCHanged}
+									/>
+									<Input
+										value={this.state.newPassword}
+										placeholder='Enter new password'
+										type='password'
+										bsStyle={this.state.passwordBsStyle}
+										onChange={this.onNewPasswordChanged}
+										hasFeedback
+									/>
+									<Input
+										value={this.state.confirmedPassword}
+										bsStyle={this.state.bsStyleConfirmedPassword}
+										placeholder='Confirm new password'
+										type='password'
+										bsStyle={this.state.passwordConfirmBsStyle}
+										onChange={this.onConfirmedPasswordChanged}
+										hasFeedback
+									/>
+									<Button
+										style={ButtonStyles.MaginationSettingsButton.customColor(Colors.green)}
+										ref='submitButton'
+										type='submit'
+										disabled={!this.validateFormData()}
+									>
+										Save changes
+									</Button>
 								</form>
 							</div>
 						</Well>
@@ -47,23 +83,27 @@ var ChangePassword = React.createClass({
 	},
 	onCurrentPasswordCHanged: function (e) {
 		this.setState({
-			currentPassword: e.target.value
+			currentPassword: e.target.value,
+			currentPasswordBsStyle: e.target.value.length >= minPasswordLength ? 'success' : 'error'
 		});
 	},
 	onNewPasswordChanged: function (e) {
 		this.setState({
-			newPassword: e.target.value
+			newPassword: e.target.value,
+			passwordBsStyle: e.target.value.length >= minPasswordLength ? 'success' : 'error',
+			passwordConfirmBsStyle: e.target.value === this.state.confirmedPassword && e.target.value.length >= minPasswordLength ? 'success' : 'error'
 		});
 	},
 	onConfirmedPasswordChanged: function (e) {
-		var successStatus = 'error';
-		if (e.target.value === this.state.newPassword) {
-			successStatus = 'success';
-		}
 		this.setState({
 			confirmedPassword: e.target.value,
-			bsStyleConfirmedPassword: successStatus
+			passwordConfirmBsStyle: e.target.value === this.state.newPassword && e.target.value.length >= minPasswordLength ? 'success' : 'error'
 		});
+	},
+	validateFormData: function () {
+		return this.state.confirmedPassword === this.state.newPassword &&
+			this.state.currentPassword.length >= minPasswordLength &&
+			this.state.newPassword.length >= minPasswordLength;
 	},
 	storeChanges: function (e) {
 		e.preventDefault();
@@ -79,15 +119,23 @@ var ChangePassword = React.createClass({
 			},
 			contentType: 'application/json',
 			dataType: 'json',
-			success: this.onRequestSuccess
+			success: this.onRequestSuccess,
+			statusCode: {
+				401: this.onBadPasswordResponse
+			}
 		});
 	},
-	onRequestSuccess: function (e) {
+	onRequestSuccess: function (data) {
 		FeedbackAction.displaySuccessMessage({
 			header: 'Success',
 			message: 'Password updated'
 		});
+	},
+	onBadPasswordResponse: function (data) {
+		FeedbackAction.displayErrorMessage({
+			header: 'Error',
+			message: 'Old password is wrong'
+		});
 	}
-
 });
 module.exports = ChangePassword;
