@@ -29,6 +29,7 @@ var GameCreator = React.createClass({
 		return {
 			canvas: null,
 			staticPieces: [],
+			otherObject: [],
 			isPencilToggled: false,
 			gamecreatorListHeight: '0px'
 		};
@@ -75,6 +76,9 @@ var GameCreator = React.createClass({
 				<GameCreatorElement key={index} piece={piece} />
 			);
 		});
+		if (this.state.otherObject.length > 0) {
+			gamecreatorelements.push(<GameCreatorElement key='otherobjects' piece={this.state.otherObject} noRotation={true} />);
+		}
 		var gamecreatorListStyle = {
 			height: this.state.gamecreatorListHeight,
 			overflowY: 'auto'
@@ -89,7 +93,7 @@ var GameCreator = React.createClass({
 					</div>
 				</Col>
 				<Col xs={8} md={8}>
-					<div onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
+					<div onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
 						<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
 					</div>
 				</Col>
@@ -120,6 +124,22 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onDragOverCanvas: function (e) {
+		e.preventDefault();
+	},
+	onDropElementOnCanvas: function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		var url = e.dataTransfer.getData('URL');
+		var canvasOffset = $('#fabricCanvas').offset();
+		GameCreatorAction.addPieceByUrl({
+			piece: {
+				url: url,
+				left: e.pageX - canvasOffset.left,
+				top: e.pageY - canvasOffset.top
+			}
+		});
 	},
 	onMouseLeaveCanvas: function () {
 		$(window).unbind('keydown');
@@ -181,7 +201,8 @@ var GameCreator = React.createClass({
 	},
 	onGameCreatorStaticPiecesChange: function () {
 		this.setState({
-			staticPieces: GameCreatorStore.getStaticPieces()
+			staticPieces: GameCreatorStore.getStaticPieces(),
+			otherObject: GameCreatorStore.getOtherObjects()
 		});
 	},
 	onGameCreatorFreedrawStateChanged: function (isFreedraw) {

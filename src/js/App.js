@@ -7,8 +7,8 @@ var GameCreatorStore = require('./stores/GameCreatorStore'); // eslint-disable-l
 var GameCreatorAction = require('./actions/GameCreatorAction');
 var GameStore = require('./stores/GameStore'); // eslint-disable-line no-unused-vars
 var MyGamesStore = require('./stores/MyGamesStore'); // eslint-disable-line no-unused-vars
-var URLS = require('./config/config').urls;
 var FrontPage = require('./components/organisms/FrontPage.organism');
+var URLS = require('./config/config').urls;
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
@@ -32,6 +32,10 @@ var App = React.createClass({
 					if (originalOptions.url === URLS.api.refresh) {
 						console.error('Error fetching new accessToken with refreshToken, calling logout()');
 						LoginAction.logoutSuccess();
+						return;
+					}
+					if (!originalOptions.headers || !originalOptions.headers['Authorization']) {
+						/* this means fetching token will not help authorizing the request*/
 						return;
 					}
 					if (LoginStore.getLoginState().isLoggedIn) {

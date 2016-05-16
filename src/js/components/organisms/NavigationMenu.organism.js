@@ -55,7 +55,7 @@ var Menu = React.createClass({
 				<Navbar fixedTop activeKey={this.state.currentActive}>
 					<Navbar.Header>
 						<Navbar.Brand>
-							<a href='/' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>
+							<a onClick={this.onNavigationClick.bind(this, '/')} href='#' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>
 						</Navbar.Brand>
 						<Navbar.Toggle/>
 					</Navbar.Header>
