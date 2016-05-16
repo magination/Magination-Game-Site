@@ -42,6 +42,9 @@ var config = {
 		},
 		server: {
 			root: backendRoot
+		},
+		frontend: {
+			root: serverRoot
 		}
 	}
 };

@@ -3,6 +3,7 @@ var ButtonWithTooltip = require('../../atoms/ButtonWithTooltip');
 var Report = require('../moderator/Report.molecule');
 var Col = require('react-bootstrap').Col;
 var Collapse = require('react-bootstrap').Collapse;
+var ShareGame = require('./ShareGame.molecule');
 var LoginStore = require('../../../stores/LoginStore');
 var GameAction = require('../../../actions/GameAction');
 var LoginAction = require('../../../actions/LoginAction');
@@ -28,8 +29,8 @@ var GameActionBar = React.createClass({
 				</Col>
 				<Col md={12}>
 					<Collapse in={this.state.shareGameIsShowing}>
-						<div style={{border: '1px solid #000000'}}>
-							<h5 style={{textAlign: 'center'}}>Share game comes here</h5>
+						<div style={{width: '100%'}}>
+							<ShareGame game={this.props.game}/>
 						</div>
 					</Collapse>
 					<Report reportType='games' objectId={this.props.gameId} show={this.state.showReport} close={this.onReportHide}/>

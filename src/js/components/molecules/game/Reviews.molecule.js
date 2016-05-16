@@ -55,7 +55,7 @@ var Reviews = React.createClass({
 				reviewButtonNavigation.push(<Button key={i} onClick={this.onReviewNavigationClicked.bind(this, i)}>{i + 1}</Button>);
 			}
 		}
-		var ownReview = (this.state.ownReview) ? <Review data={this.state.ownReview}/> : <div></div>;
+		var ownReview = (this.state.ownReview) ? <div><h2 style={TextStyles.gameView.paddingLessHeader}>Your Review</h2><br/><Review data={this.state.ownReview}/></div> : <div></div>;
 		var editReviewButton = (this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/> EDIT REVIEW</Button> : <div/>;
 		var createNewReviewButton = (!this.state.ownReview) ? <Button onClick={this.onWriteReviewClicked} type='button' style={ButtonStyle.MaginationGameViewButton}><Glyphicon glyph='pencil'/> WRITE A REVIEW</Button> : <div/>;
 		return (
@@ -73,6 +73,7 @@ var Reviews = React.createClass({
 				<Row>
 					<Col md={this.props.leftWidth} mdOffset={this.props.offset}>
 						<h2 style={TextStyles.gameView.paddingLessHeader}>Reviews</h2>
+						<br/>
 					</Col>
 					<Col md={this.props.rightWidth} style={{textAlign: 'right'}}>
 						{createNewReviewButton}

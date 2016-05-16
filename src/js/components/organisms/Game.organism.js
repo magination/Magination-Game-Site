@@ -77,7 +77,7 @@ var Game = React.createClass({
 					<Col md={1}>
 					</Col>
 				</Row>
-				<Row style={{marginTop: '10'}}><Col md={4} mdOffset={1}><GameActionBar gameId={getLastUrlId()}/></Col></Row>
+				<Row style={{marginTop: '10'}}><Col md={4} mdOffset={1}><GameActionBar game={this.state.game} gameId={getLastUrlId()}/></Col></Row>
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 				<Row>
 					<Col md={leftWidth} mdOffset={offset}>
