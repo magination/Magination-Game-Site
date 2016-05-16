@@ -3,11 +3,8 @@
 // require('./testdom')('<html><body></body></html>'); MARK: this happens in mocha init instead
 var React = require('react'); // eslint-disable-line no-unused-vars
 var assert = require('assert');
-var ReactRouter = require('../src/js/ReactRouter');
-var ListElement = require('../src/js/components/atoms/ListLinkElement.atom');
-var TestUtils = require('react-addons-test-utils');
-
-var shallowRenderer = TestUtils.createRenderer();
+var fs = require('fs');
+var path = require('path');
 
 /*
 	LIST OF COMPONENTS THAT ARE TESTED:
@@ -20,38 +17,37 @@ var shallowRenderer = TestUtils.createRenderer();
 		ORGANISMS:
 */
 
-describe('General', function () {
-	before('Rendering Components', function () {
-		var renderedComponent = TestUtils.renderIntoDocument(
-			<ReactRouter />
-		);
-		var routerComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'container')[0];
-		this.routerComponent = routerComponent;
+describe('Flux Constants: ', function () {
+	var files = [];
+	var fluxConstantsPath = (path.join(__dirname, '../src/js/constants/'));
+	before('Finding constant files', function () {
+		files = fs.readdirSync(fluxConstantsPath);
 	});
-	it('React container must not be undefined, means it mounted', function () {
-		assert(this.routerComponent !== undefined);
-	});
-});
-
-describe('Navigation', function () {
-	before('Rendering Components', function () {
-		var renderedComponent = TestUtils.renderIntoDocument(<ReactRouter />);
-
-		var navbarComponent = TestUtils.scryRenderedDOMComponentsWithTag(renderedComponent, 'nav')[0];
-		this.navbarComponent = navbarComponent;
-	});
-	it('Navbar component exists', function () {
-		assert(this.navbarComponent !== undefined);
+	it('Looking for duplicate event constants', function () {
+		var constants = [];
+		assert(files.every(function (file) {
+			var fileConstants = require(fluxConstantsPath + file);
+			for (var property in fileConstants) {
+				if (constants.indexOf(fileConstants[property]) > -1) {
+					throw new Error(file + ' property "' + property + '" has the value "' + fileConstants[property] + '"\n' +
+						'\tThe same property value was found in ' + findFirstFileWithValue(fileConstants[property], files));
+					// return false;
+				}
+				constants.push(fileConstants[property]);
+			}
+			return true;
+		}));
 	});
 });
 
-describe('ListLinkElement(shallow)', function () {
-	before('Rendering Components', function () {
-	});
-	shallowRenderer.render(React.createElement(ListElement));
-	var ListLinkElement = shallowRenderer.getRenderOutput();
-	it('ListLinkElement should be of type <li>, it is used in a listing environment', function () {
-		assert(ListLinkElement.type === 'li');
-		console.log(ListLinkElement.props);
-	});
-});
+function findFirstFileWithValue (propertyValue, files) {
+	var fluxConstantsPath = (path.join(__dirname, '../src/js/constants/'));
+	for (var i = 0; i < files.length; i++) {
+		var fileConstants = require(fluxConstantsPath + files[i]);
+		for (var property in fileConstants) {
+			if (fileConstants[property] === propertyValue) {
+				return files[i] + ' property "' + property + '"';
+			}
+		}
+	}
+}
