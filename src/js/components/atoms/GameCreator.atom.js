@@ -69,6 +69,7 @@ var GameCreator = React.createClass({
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.addChangeListener(this.onActiveDataChanged, GameCreatorConstants.ACTIVE_DATA_CHANGED);
 		GameCreatorAction.setStaticPiecesFromServer();
+		$(window).keydown(this.handleKeyDown);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
@@ -124,7 +125,7 @@ var GameCreator = React.createClass({
 						</div>
 						<div style={{width: '100%', paddingTop: '20px'}} ref='saveButtonsDiv'>
 							<form onSubmit={this.onCreatorNameSubmit}>
-									<Input type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
+									<Input onFocus={function () { $(window).unbind('keydown'); }} onBlur={this.onNameEntryBlur} type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
 							</form>
 							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSaveClick}>SAVE</Button>
 							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onAddToGameClick}>ADD TO GAME</Button>
@@ -133,6 +134,9 @@ var GameCreator = React.createClass({
 				</Col>
 			</div>
 		);
+	},
+	onNameEntryBlur: function () {
+		$(window).keydown(this.handleKeyDown);
 	},
 	onPlusButtonClick: function (e) {
 		GameCreatorAction.addScaleToCurrentSelected({
@@ -162,10 +166,10 @@ var GameCreator = React.createClass({
 		});
 	},
 	onMouseLeaveCanvas: function () {
-		$(window).unbind('keydown');
+		// $(window).unbind('keydown');
 	},
 	onMouseEnterCanvas: function () {
-		$(window).keydown(this.handleKeyDown);
+		// $(window).keydown(this.handleKeyDown);
 	},
 	onCreateNewClick: function () {
 		GameCreatorAction.loadCreatorId({gameCreatorId: null});

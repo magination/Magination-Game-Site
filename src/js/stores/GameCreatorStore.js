@@ -23,7 +23,6 @@ var _loadedData = {};
 var _currentGameId = null;
 var _gamecreatorList = [];
 var _gameHasChanged = false;
-var _changeOverride = false;
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
@@ -168,19 +167,9 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		toBeSavedData.json = _fabricCanvas.toJSON();
 		saveCurrentJsonDataLocal(toBeSavedData);
 		_gameHasChanged = true;
-		doOverrideChanges(200);
 		break;
 	}
 });
-
-function doOverrideChanges (ms) {
-	_changeOverride = true;
-	setTimeout(function () {
-		if (_changeOverride) {
-			_changeOverride = false;
-		}
-	}, ms);
-}
 
 function setCanvasToGameCreatorId (gameCreatorId) {
 	if (!gameCreatorId) { /* create new*/
