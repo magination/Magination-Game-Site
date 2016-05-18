@@ -98,6 +98,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		_fabricCanvas = new fabric.Canvas(action.id);
 		_fabricCanvas.on('selection:cleared', selectionChanged);
 		_fabricCanvas.on('object:moving', objectMoving);
+		_fabricCanvas.on('path:created', updateLocalJsonData);
 		var savedJsonData = loadLocalJsonSave();
 		if (savedJsonData) {
 			setLoadedData(savedJsonData);
