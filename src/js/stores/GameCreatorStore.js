@@ -23,6 +23,7 @@ var _loadedData = {};
 var _currentGameId = null;
 var _gamecreatorList = [];
 var _gameHasChanged = false;
+var _changeOverride = false;
 
 var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
@@ -166,9 +167,19 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		toBeSavedData.json = _fabricCanvas.toJSON();
 		saveCurrentJsonDataLocal(toBeSavedData);
 		_gameHasChanged = true;
+		doOverrideChanges(200);
 		break;
 	}
 });
+
+function doOverrideChanges (ms) {
+	_changeOverride = true;
+	setTimeout(function () {
+		if (_changeOverride) {
+			_changeOverride = false;
+		}
+	}, ms);
+}
 
 function setCanvasToGameCreatorId (gameCreatorId) {
 	if (!gameCreatorId) { /* create new*/
@@ -300,8 +311,10 @@ function addObjectsToCanvas (objects) {
 			newImg.src = object.src;
 		}
 		else {
-			_fabricCanvas.add(object);
-			object.moveTo(index);
+			var obj = new fabric.Path();
+			obj.set(object);
+			_fabricCanvas.add(obj);
+			obj.moveTo(index);
 		}
 	});
 }
@@ -554,6 +567,10 @@ function saveGameAsJson () {
 		localSave.title = 'Unnamed Creator';
 	}
 	_gameHasChanged = false;
+	if (typeof localSave.json !== 'object') {
+		localSave.json = JSON.parse(localSave.json);
+	}
+	console.log(localSave.json);
 	$.ajax({
 		type: requestAction,
 		url: url,
