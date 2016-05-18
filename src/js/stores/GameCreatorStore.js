@@ -570,7 +570,6 @@ function saveGameAsJson () {
 	if (typeof localSave.json !== 'object') {
 		localSave.json = JSON.parse(localSave.json);
 	}
-	console.log(localSave.json);
 	$.ajax({
 		type: requestAction,
 		url: url,
