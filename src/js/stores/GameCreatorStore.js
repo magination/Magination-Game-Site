@@ -165,6 +165,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		toBeSavedData.title = action.creatorName;
 		toBeSavedData.json = _fabricCanvas.toJSON();
 		saveCurrentJsonDataLocal(toBeSavedData);
+		_gameHasChanged = true;
 		break;
 	}
 });

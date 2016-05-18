@@ -38,7 +38,6 @@ var GameCreator = React.createClass({
 		/* Manipulating domnodes directly, dangerous? */
 		var parent = ReactDOM.findDOMNode(this.refs.canvasParent);
 		var canvas = ReactDOM.findDOMNode(this.refs.creatorCanvas);
-		canvas.width = (parent.offsetWidth / 12) * 8;
 		var browserHeight = 0;
 		if (typeof (window.innerHeight) === 'number') {
 		// Non-IE
@@ -49,6 +48,14 @@ var GameCreator = React.createClass({
 			browserHeight = document.documentElement.clientHeight;
 		}
 		height = (browserHeight * 90) / 100;
+		var width = (parent.offsetWidth / 12) * 8;
+		if (height > width) {
+			height = width;
+		}
+		else if (width > height) {
+			width = height;
+		}
+		canvas.width = width;
 		canvas.height = height;
 		var pieceToolsDivHeight = ReactDOM.findDOMNode(this.refs.pieceToolsDiv).offsetHeight;
 		var saveButtonsDiv = ReactDOM.findDOMNode(this.refs.saveButtonsDiv).offsetHeight;
@@ -86,18 +93,18 @@ var GameCreator = React.createClass({
 		var pencilPopover = <Popover id='pencilSettings'><PencilSettingsOverlay /></Popover>;
 		return (
 			<div ref='canvasParent' style={{height: height}}>
-				<Col xs={1} md={1}>
+				<Col xs={2} md={1}>
 					{gamecreatorelements}
 					<div onClick={this.onPencilClick}>
 						<CustomGameCreatorElement glyph={'pencil'} isToggled={this.state.isPencilToggled} settingsComponent={pencilPopover}/>
 					</div>
 				</Col>
 				<Col xs={8} md={8}>
-					<div onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
+					<div style={{margin: 'auto'}} onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
 						<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
 					</div>
 				</Col>
-				<Col xs={3} md={3}>
+				<Col xs={2} md={3}>
 					<div style={{height: height, paddingLeft: 10}}>
 						<div ref='pieceToolsDiv'>
 							<h4>Piece Tools</h4>
@@ -149,7 +156,8 @@ var GameCreator = React.createClass({
 			piece: {
 				url: url,
 				left: e.pageX - canvasOffset.left,
-				top: e.pageY - canvasOffset.top
+				top: e.pageY - canvasOffset.top,
+				hasControls: !(url.indexOf('/pieces/') > -1)
 			}
 		});
 	},
