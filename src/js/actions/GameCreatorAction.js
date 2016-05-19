@@ -181,11 +181,10 @@ var GameCreatorActions = {
 
 function onExternalImageUploadSuccessResponse (data) {
 	var tempData = $.extend(true, {}, GameCreatorActions.tempData['uploadData']);
-	console.log(URLS.server.imgUpload + LoginStore.getLoginProfile()._id + '/' + tempData.file.name);
 	delete GameCreatorActions.tempData['uploadData'];
 	GameCreatorActions.addPieceByUrl({
 		piece: {
-			url: URLS.server.imgUpload + LoginStore.getLoginProfile()._id + '/' + tempData.file.name,
+			url: URLS.server.imgUpload + LoginStore.getLoginProfile()._id + '/' + tempData.file.name.replace(/\s+/g, '_'),
 			left: tempData.left,
 			top: tempData.top
 		}

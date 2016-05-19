@@ -176,6 +176,7 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 		if (_loadedData._id) {
 			saveIfChanged();
 			clearLocalJsonSave();
+			_fabricCanvas.clear();
 			_loadedData = {};
 		}
 		saveGameAsJson();
@@ -529,6 +530,7 @@ function isOutsideBorder (object) {
 
 function saveIfChanged () {
 	if (_gameHasChanged) {
+		updateLocalJsonData();
 		saveGameAsJson();
 	}
 }
@@ -541,7 +543,8 @@ function saveGameAsJson () {
 		console.error('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
-	if (!_loadedData || !_loadedData._id) {
+	var localSave = loadLocalJsonSave();
+	if (!localSave || !localSave._id) {
 		requestAction = 'POST';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators';
 	}
@@ -549,15 +552,17 @@ function saveGameAsJson () {
 		requestAction = 'PUT';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators/' + _loadedData._id;
 	}
-	var localSave = loadLocalJsonSave();
 	if (!localSave) {
 		localSave = {};
 	}
 	if (!localSave.title) {
 		localSave.title = 'Unnamed Creator';
 	}
+	if (!localSave.json) {
+		localSave.json = _fabricCanvas.toJSON();
+	}
 	_gameHasChanged = false;
-	if (typeof localSave.json !== 'object') {
+	if (typeof localSave.json !== 'object' && localSave.json) {
 		localSave.json = JSON.parse(localSave.json);
 	}
 	$.ajax({
