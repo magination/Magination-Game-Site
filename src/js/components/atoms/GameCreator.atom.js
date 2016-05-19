@@ -156,14 +156,24 @@ var GameCreator = React.createClass({
 		e.stopPropagation();
 		var url = e.dataTransfer.getData('URL');
 		var canvasOffset = $('#fabricCanvas').offset();
-		GameCreatorAction.addPieceByUrl({
-			piece: {
-				url: url,
+		var file = e.dataTransfer.files[0];
+		if (file) {
+			GameCreatorAction.uploadImageAndAddToCreator({
+				file: file,
 				left: e.pageX - canvasOffset.left,
-				top: e.pageY - canvasOffset.top,
-				hasControls: !(url.indexOf('/pieces/') > -1)
-			}
-		});
+				top: e.pageY - canvasOffset.top
+			});
+		}
+		else if (url !== '') {
+			GameCreatorAction.addPieceByUrl({
+				piece: {
+					url: url,
+					left: e.pageX - canvasOffset.left,
+					top: e.pageY - canvasOffset.top,
+					hasControls: !(url.indexOf('/pieces/') > -1)
+				}
+			});
+		}
 	},
 	onMouseLeaveCanvas: function () {
 		// $(window).unbind('keydown');
