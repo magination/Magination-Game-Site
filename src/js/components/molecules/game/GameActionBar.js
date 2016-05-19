@@ -47,6 +47,10 @@ var GameActionBar = React.createClass({
 		});
 	},
 	onReportClicked: function () {
+		if (!LoginStore.getLoginState().isLoggedIn) {
+			LoginAction.requestLogin();
+			return;
+		}
 		this.setState({
 			showReport: true
 		});
