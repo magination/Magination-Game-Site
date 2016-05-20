@@ -4,10 +4,10 @@ var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
 
 var LoginStore = require('../../../stores/LoginStore');
-
 var FeedbackAction = require('../../../actions/FeedbackAction');
-
 var URLS = require('../../../config/config').urls;
+
+var ModeratorListItem = require('./ModeratorListItem');
 
 var Moderators = React.createClass({
 	getInitialState: function () {
