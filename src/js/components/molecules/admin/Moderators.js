@@ -2,12 +2,12 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
+
 var LoginStore = require('../../../stores/LoginStore');
 
 var FeedbackAction = require('../../../actions/FeedbackAction');
 
 var URLS = require('../../../config/config').urls;
-var ButtonStyles = require('../../../styles/Buttons');
 
 var Moderators = React.createClass({
 	getInitialState: function () {
@@ -21,28 +21,27 @@ var Moderators = React.createClass({
 	},
 	render: function () {
 		var moderators = [];
-		this.state.moderators.forEach(function (item, index) {
-			var moderator = <ModeratorListItem username={item.name} userId={item._id} onClick={this.onDeleteModeratorClicked}/>;
-			moderators.push(moderator);
-		});
+		if (this.state.moderators && this.state.moderators.length > 0) {
+			this.state.moderators.forEach(function (item, index) {
+				var moderator = <ModeratorListItem username={item.name} userId={item._id} onClick={this.onDeleteModeratorClicked}/>;
+				moderators.push(moderator);
+			});
+		}
 		return (
 			<div>
-				<Row>
+				<Col md={12}>
 					<h5>Add moderator</h5>
-				</Row>
-				<Row>
-					<Col md={4}>
-						<Input type='text' placeholder='Enter user id' onChange={this.onModeratorNameChanged}/>
-					</Col>
-				</Row>
-				<Row>
-				<Col md={4}>
-					<Button style={ButtonStyles.MaginationFillParent}>Update featured games</Button>
 				</Col>
-				</Row>
-				<Row>
+				<Col md={4}>
+					<Input type='text' placeholder='Enter username' onChange={this.onModeratorNameChanged}/>
+				</Col>
+				<Col md={4}>
+					<Button onClick={this.onAddModeratorClicked}>Add moderator</Button>
+				</Col>
+				<Col md={4}><div></div></Col>
+				<Col md={12}>
 					<h5>Current moderators:</h5>
-				</Row>
+				</Col>
 				<Col md={12}>
 					{moderators}
 				</Col>
