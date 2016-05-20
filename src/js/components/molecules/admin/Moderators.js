@@ -99,7 +99,7 @@ var Moderators = React.createClass({
 						header: 'Success',
 						message: 'Moderator removed'
 					});
-					var newList = this.state.moderators;
+					var newList = that.state.moderators;
 					newList.splice(newList.indexOf(username), 1);
 					that.setState({
 						moderators: newList
