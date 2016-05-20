@@ -32,7 +32,7 @@ var Moderators = React.createClass({
 				</Row>
 				<Row>
 					<Col md={4}>
-						<Input type='text' placeholder='Enter user id'/>
+						<Input type='text' placeholder='Enter user id' onChange={this.onModeratorNameChanged}/>
 					</Col>
 				</Row>
 				<Row>
@@ -49,18 +49,38 @@ var Moderators = React.createClass({
 			</div>
 		);
 	},
+	onModeratorNameChanged: function (e) {
+		this.setState({
+			newModeratorUsername: e.target.value
+		});
+	},
 	onAddModeratorClicked: function () {
 		if (this.state.newModeratorUsername.length === 0) return;
 		$.ajax({
 			type: 'POST',
-			url: URLS.api.users + '/moderators/' + this.state.newModeratorUsername,
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			url: URLS.api.moderators + '/' + this.state.newModeratorUsername,
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
 				200: this.onPostSuccessResponse,
-				404: this.onPostNotFoundResponse,
-				422: this.onPostUnprocessableEntityResponse
+				404: this.onPostNotFoundResponse
 			}
+		});
+	},
+	onPostSuccessResponse: function () {
+		FeedbackAction.displayErrorMessage({
+			header: 'Success',
+			message: 'Moderator added'
+		});
+		this.requestModeratorList();
+	},
+	onPostNotFoundResponse: function () {
+		FeedbackAction.displayErrorMessage({
+			header: 'Error',
+			message: 'No user with given username found'
 		});
 	},
 	onDeleteModeratorClicked: function (username) {
@@ -83,30 +103,6 @@ var Moderators = React.createClass({
 			message: 'Moderator removed'
 		});
 	},
-	onGetModeratorsSuccessResponse: function (data) {
-		this.setState({
-			moderators: data
-		});
-	},
-	onPostSuccessResponse: function () {
-		FeedbackAction.displayErrorMessage({
-			header: 'Success',
-			message: 'Moderator added'
-		});
-		this.requestModeratorList();
-	},
-	onPostNotFoundResponse: function () {
-		FeedbackAction.displayErrorMessage({
-			header: 'Error',
-			message: 'At least one of the ids provided did not link to a game'
-		});
-	},
-	onPostUnprocessableEntityResponse: function () {
-		FeedbackAction.displayErrorMessage({
-			header: 'Error',
-			message: 'At least one of the provided ids are not valid game ids'
-		});
-	},
 	requestModeratorList: function () {
 		$.ajax({
 			type: 'GET',
@@ -119,6 +115,11 @@ var Moderators = React.createClass({
 			statusCode: {
 				200: this.onGetModeratorsSuccessResponse
 			}
+		});
+	},
+	onGetModeratorsSuccessResponse: function (data) {
+		this.setState({
+			moderators: data
 		});
 	}
 });
