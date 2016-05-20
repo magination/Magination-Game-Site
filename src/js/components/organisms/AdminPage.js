@@ -38,9 +38,6 @@ var AdminPage = React.createClass({
 						<Tab eventKey={2} title='Moderators' style={{padding: '10'}}>
 							Manage moderators
 						</Tab>
-						<Tab eventKey={3} title='Add administrator' style={{padding: '10'}}>
-							Add administrator
-						</Tab>
 					</Tabs>
 				</Col>
 			</div>

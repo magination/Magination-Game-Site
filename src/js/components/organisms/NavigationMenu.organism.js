@@ -116,6 +116,11 @@ var Menu = React.createClass({
 			destination: '/moderator'
 		});
 	},
+	onAdminClicked: function () {
+		NavigationAction.navigate({
+			destination: '/admin'
+		});
+	},
 	makeNavigationStatefulElement: function () {
 		var navigationStateElement;
 		if (this.state.isLoggedIn && getProfile() !== null) {
@@ -125,8 +130,11 @@ var Menu = React.createClass({
 						<MenuItem eventKey={'profile'}><Glyphicon glyph='user'/> My Profile</MenuItem>
 						<MenuItem onClick={this.onMyGamesClicked}eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
 						<MenuItem divider />
-						{Validator.isModeratorPermission()
-							? <MenuItem onClick={this.onModerateClicked}eventKey={'settings'}><Glyphicon glyph='flag'/> Moderate</MenuItem>
+						{Validator.isAdminPermission(LoginStore.getToken())
+							? <MenuItem onClick={this.onAdminClicked}eventKey={'admin'}><Glyphicon glyph='list-alt'/> Admin</MenuItem>
+							: null}
+						{Validator.isModeratorPermission(LoginStore.getToken())
+							? <MenuItem onClick={this.onModerateClicked}eventKey={'moderator'}><Glyphicon glyph='flag'/> Moderate</MenuItem>
 							: null}
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />

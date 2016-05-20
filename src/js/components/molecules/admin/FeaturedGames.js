@@ -11,26 +11,32 @@ var ButtonStyles = require('../../../styles/Buttons');
 var FeaturedGames = React.createClass({
 	getInitialState: function () {
 		return {
+			gameOneId: '',
+			gameTwoId: '',
+			gameThreeId: ''
 		};
 	},
 	render: function () {
 		return (
 			<div>
+				<Col md={12}>
+					<h5>Enter up to three game ids to set them as featured games. Leaving fields empty causes the featured game list to include less games.</h5>
+				</Col>
                 <Col md={4}>
                     <h5>Featured game 1</h5>
                     <Input type='text' placeholder='Enter game id'/>
-                    <Button style={ButtonStyles.MaginationFillParent}>Update game 1</Button>
                 </Col>
                 <Col md={4}>
                     <h5>Featured game 2</h5>
                     <Input type='text' placeholder='Enter game id'/>
-                    <Button style={ButtonStyles.MaginationFillParent}>Update game 2</Button>
                 </Col>
                 <Col md={4}>
                     <h5>Featured game 3</h5>
                     <Input type='text' placeholder='Enter game id'/>
-                    <Button style={ButtonStyles.MaginationFillParent}>Update game 3</Button>
                 </Col>
+				<Col md={12}>
+					<Button style={ButtonStyles.MaginationFillParent} onClick={this.onUpdateClicked}>Update featured games</Button>
+				</Col>
 			</div>
 		);
 	},
@@ -46,32 +52,42 @@ var FeaturedGames = React.createClass({
 		});
 		this.validateForm();
 	},
-	onSubmit: function (e) {
-		e.preventDefault();
+	onUpdateClicked: function () {
+		var games = [];
+		if (this.state.gameOneId !== '') games.push(this.state.gameOneId);
+		if (this.state.gameTwoId !== '') games.push(this.state.gameTwoId);
+		if (this.state.gameThreeId !== '') games.push(this.state.gameThreeId);
 		$.ajax({
-			type: 'POST',
-			url: URLS.api.forgotpassword,
+			type: 'PUT',
+			url: URLS.api.games + '/featured',
 			data: JSON.stringify({
-				password: this.state.passwordEntryValue
+				games: games
 			}),
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
 				200: this.onSubmitSuccessResponse,
-				404: this.onSubmitNotFoundResponse
+				404: this.onSubmitNotFoundResponse,
+				422: this.onSubmitUnprocessableEntityResponse
 			}
 		});
 	},
 	onSubmitSuccessResponse: function (data) {
 		FeedbackAction.displaySuccessMessage({
-			header: 'Changed Password!',
-			message: 'Your password has now been changed'
+			header: 'Success',
+			message: 'Featured games updated'
 		});
 	},
 	onSubmitNotFoundResponse: function () {
 		FeedbackAction.displayErrorMessage({
 			header: 'Error',
-			message: 'The request url is either expired or does not exist, please request a new email'
+			message: 'Atleast one of the ids provided did not link to a game'
+		});
+	},
+	onSubmitUnprocessableEntityResponse: function () {
+		FeedbackAction.displayErrorMessage({
+			header: 'Error',
+			message: 'Atleast one of the provided ids are not valid game ids'
 		});
 	}
 });
