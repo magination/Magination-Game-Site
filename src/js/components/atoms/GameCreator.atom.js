@@ -38,7 +38,6 @@ var GameCreator = React.createClass({
 		/* Manipulating domnodes directly, dangerous? */
 		var parent = ReactDOM.findDOMNode(this.refs.canvasParent);
 		var canvas = ReactDOM.findDOMNode(this.refs.creatorCanvas);
-		canvas.width = (parent.offsetWidth / 12) * 8;
 		var browserHeight = 0;
 		if (typeof (window.innerHeight) === 'number') {
 		// Non-IE
@@ -49,6 +48,14 @@ var GameCreator = React.createClass({
 			browserHeight = document.documentElement.clientHeight;
 		}
 		height = (browserHeight * 90) / 100;
+		var width = (parent.offsetWidth / 12) * 8;
+		if (height > width) {
+			height = width;
+		}
+		else if (width > height) {
+			width = height;
+		}
+		canvas.width = width;
 		canvas.height = height;
 		var pieceToolsDivHeight = ReactDOM.findDOMNode(this.refs.pieceToolsDiv).offsetHeight;
 		var saveButtonsDiv = ReactDOM.findDOMNode(this.refs.saveButtonsDiv).offsetHeight;
@@ -62,6 +69,7 @@ var GameCreator = React.createClass({
 		GameCreatorStore.addChangeListener(this.onGameCreatorStaticPiecesChange, GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.addChangeListener(this.onActiveDataChanged, GameCreatorConstants.ACTIVE_DATA_CHANGED);
 		GameCreatorAction.setStaticPiecesFromServer();
+		$(window).keydown(this.handleKeyDown);
 	},
 	componentWillUnmount: function () {
 		GameCreatorStore.removeChangeListener(this.onGameCreatorFreedrawStateChanged, GameCreatorConstants.FREEDRAW_STATE_CHANGED);
@@ -86,18 +94,18 @@ var GameCreator = React.createClass({
 		var pencilPopover = <Popover id='pencilSettings'><PencilSettingsOverlay /></Popover>;
 		return (
 			<div ref='canvasParent' style={{height: height}}>
-				<Col xs={2} md={2}>
+				<Col xs={2} md={1}>
 					{gamecreatorelements}
 					<div onClick={this.onPencilClick}>
 						<CustomGameCreatorElement glyph={'pencil'} isToggled={this.state.isPencilToggled} settingsComponent={pencilPopover}/>
 					</div>
 				</Col>
 				<Col xs={8} md={8}>
-					<div onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
+					<div style={{margin: 'auto'}} onDragOver={this.onDragOverCanvas} onDragLeave={this.onDragLeaveCanvas} onDrop={this.onDropElementOnCanvas} onMouseEnter={this.onMouseEnterCanvas} onMouseLeave={this.onMouseLeaveCanvas}>
 						<canvas style={{border: '1px solid ' + Color.blue}} ref='creatorCanvas' id='fabricCanvas'></canvas>
 					</div>
 				</Col>
-				<Col xs={2} md={2}>
+				<Col xs={2} md={3}>
 					<div style={{height: height, paddingLeft: 10}}>
 						<div ref='pieceToolsDiv'>
 							<h4>Piece Tools</h4>
@@ -105,6 +113,8 @@ var GameCreator = React.createClass({
 							<Button style={toolButton} onClick={this.onMoveSelectedShallowerClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='arrow-up'/></Button>
 							<Button style={toolButton} onClick={this.onCounterClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-left'/></Button>
 							<Button style={toolButton} onClick={this.onClockwiseRotateClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='chevron-right'/></Button>
+							<Button style={toolButton} onClick={this.onPlusButtonClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='plus'/></Button>
+							<Button style={toolButton} onClick={this.onMinusButtonClick}><Glyphicon style={{color: 'white', fontSize: '25px'}} glyph='minus'/></Button>
 							<Button style={{width: '100%', backgroundColor: Color.redLight}} onClick={this.onDeleteClick}><Glyphicon style={{fontSize: '25px', color: 'white'}} glyph='trash'/></Button>
 							<hr/>
 							<h4>Your Creators</h4>
@@ -115,7 +125,7 @@ var GameCreator = React.createClass({
 						</div>
 						<div style={{width: '100%', paddingTop: '20px'}} ref='saveButtonsDiv'>
 							<form onSubmit={this.onCreatorNameSubmit}>
-									<Input type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
+									<Input onFocus={function () { $(window).unbind('keydown'); }} onBlur={this.onNameEntryBlur} type='text' onChange={this.onCreatorNameChange} value={this.state.creatorName} placeholder='Game Creator Name'/>
 							</form>
 							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSaveClick}>SAVE</Button>
 							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onAddToGameClick}>ADD TO GAME</Button>
@@ -125,6 +135,19 @@ var GameCreator = React.createClass({
 			</div>
 		);
 	},
+	onNameEntryBlur: function () {
+		$(window).keydown(this.handleKeyDown);
+	},
+	onPlusButtonClick: function (e) {
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: 0.1
+		});
+	},
+	onMinusButtonClick: function (e) {
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: -0.1
+		});
+	},
 	onDragOverCanvas: function (e) {
 		e.preventDefault();
 	},
@@ -133,19 +156,30 @@ var GameCreator = React.createClass({
 		e.stopPropagation();
 		var url = e.dataTransfer.getData('URL');
 		var canvasOffset = $('#fabricCanvas').offset();
-		GameCreatorAction.addPieceByUrl({
-			piece: {
-				url: url,
+		var file = e.dataTransfer.files[0];
+		if (file) {
+			GameCreatorAction.uploadImageAndAddToCreator({
+				file: file,
 				left: e.pageX - canvasOffset.left,
 				top: e.pageY - canvasOffset.top
-			}
-		});
+			});
+		}
+		else if (url !== '') {
+			GameCreatorAction.addPieceByUrl({
+				piece: {
+					url: url,
+					left: e.pageX - canvasOffset.left,
+					top: e.pageY - canvasOffset.top,
+					hasControls: !(url.indexOf('/pieces/') > -1)
+				}
+			});
+		}
 	},
 	onMouseLeaveCanvas: function () {
-		$(window).unbind('keydown');
+		// $(window).unbind('keydown');
 	},
 	onMouseEnterCanvas: function () {
-		$(window).keydown(this.handleKeyDown);
+		// $(window).keydown(this.handleKeyDown);
 	},
 	onCreateNewClick: function () {
 		GameCreatorAction.loadCreatorId({gameCreatorId: null});
@@ -254,9 +288,15 @@ function keyPressed (key) {
 		break;
 	case 187:
 		/* +*/
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: 0.1
+		});
 		break;
 	case 189:
 		/* -*/
+		GameCreatorAction.addScaleToCurrentSelected({
+			value: -0.1
+		});
 		break;
 	case 90:
 		GameCreatorAction.iterateSelectedPiecesDepth({direction: 'in'});

@@ -83,11 +83,13 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		addPieceToCreator(action.piece);
 		GameCreatorStore.emitChange(GameCreatorConstants.ADD_PIECE_TO_CREATOR, action.piece);
 		break;
+	case GameCreatorConstants.ADD_SCALE_TO_SELECTED:
+		addScaleToSelectedPieces(action.value);
+		break;
 	case GameCreatorConstants.SET_STATIC_PIECES:
 		_staticPieces = action.pieces;
 		_staticPiecesFolderStructure = action.imageFolderStructure;
 		_otherObjects = action.otherObjects;
-		console.log(_otherObjects);
 		GameCreatorStore.emitChange(GameCreatorConstants.SET_STATIC_PIECES);
 		GameCreatorStore.emitChange(CHANGE_EVENT);
 		break;
@@ -95,6 +97,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		_fabricCanvas = new fabric.Canvas(action.id);
 		_fabricCanvas.on('selection:cleared', selectionChanged);
 		_fabricCanvas.on('object:moving', objectMoving);
+		_fabricCanvas.on('path:created', updateLocalJsonData);
 		var savedJsonData = loadLocalJsonSave();
 		if (savedJsonData) {
 			setLoadedData(savedJsonData);
@@ -163,6 +166,7 @@ GameCreatorStore.dispatchToken = Dispatcher.register(function (action) {
 		toBeSavedData.title = action.creatorName;
 		toBeSavedData.json = _fabricCanvas.toJSON();
 		saveCurrentJsonDataLocal(toBeSavedData);
+		_gameHasChanged = true;
 		break;
 	}
 });
@@ -172,6 +176,7 @@ function setCanvasToGameCreatorId (gameCreatorId) {
 		if (_loadedData._id) {
 			saveIfChanged();
 			clearLocalJsonSave();
+			_fabricCanvas.clear();
 			_loadedData = {};
 		}
 		saveGameAsJson();
@@ -274,12 +279,14 @@ function addObjectsToCanvas (objects) {
 			newImg.crossOrigin = 'Anonymous';
 			newImg.onload = function () {
 				var imgInstance = new fabric.Image(newImg, {});
+				var hasControls = !(object.src.indexOf('/pieces/') > -1);
 				imgInstance.set({
 					left: object.left,
 					top: object.top,
 					imageUrl: object.src,
 					scaleX: object.scaleX,
-					scaleY: object.scaleY
+					scaleY: object.scaleY,
+					hasControls: hasControls
 				});
 				var quantity = _fabricCanvas.getObjects().length;
 				imgInstance.perPixelTargetFind = true;
@@ -295,8 +302,10 @@ function addObjectsToCanvas (objects) {
 			newImg.src = object.src;
 		}
 		else {
-			_fabricCanvas.add(object);
-			object.moveTo(index);
+			var obj = new fabric.Path();
+			obj.set(object);
+			_fabricCanvas.add(obj);
+			obj.moveTo(index);
 		}
 	});
 }
@@ -454,6 +463,9 @@ function addPieceToCreator (piece) {
 			top: top,
 			imageUrl: piece.url
 		});
+		if (piece.hasControls === false) {
+			imgInstance.hasControls = false;
+		}
 		var quantity = _fabricCanvas.getObjects().length;
 		imgInstance.scale(0.3);
 		imgInstance.perPixelTargetFind = true;
@@ -467,6 +479,19 @@ function addPieceToCreator (piece) {
 		updateLocalJsonData();
 	};
 	img.src = piece.url;
+}
+
+function addScaleToSelectedPieces (value) {
+	_fabricCanvas.getObjects().forEach(function (object) {
+		if (object.get('active')) {
+			object.set({
+				scaleX: object.get('scaleX') + value,
+				scaleY: object.get('scaleY') + value
+			});
+			object.setCoords();
+		}
+	});
+	_fabricCanvas.renderAll();
 }
 
 function removeObjectsOutsideCanvas () {
@@ -505,6 +530,7 @@ function isOutsideBorder (object) {
 
 function saveIfChanged () {
 	if (_gameHasChanged) {
+		updateLocalJsonData();
 		saveGameAsJson();
 	}
 }
@@ -517,7 +543,8 @@ function saveGameAsJson () {
 		console.error('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
-	if (!_loadedData || !_loadedData._id) {
+	var localSave = loadLocalJsonSave();
+	if (!localSave || !localSave._id) {
 		requestAction = 'POST';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators';
 	}
@@ -525,14 +552,19 @@ function saveGameAsJson () {
 		requestAction = 'PUT';
 		url = URLS.api.unpublishedGames + '/' + _currentGameId + '/gameCreators/' + _loadedData._id;
 	}
-	var localSave = loadLocalJsonSave();
 	if (!localSave) {
 		localSave = {};
 	}
 	if (!localSave.title) {
 		localSave.title = 'Unnamed Creator';
 	}
+	if (!localSave.json) {
+		localSave.json = _fabricCanvas.toJSON();
+	}
 	_gameHasChanged = false;
+	if (typeof localSave.json !== 'object' && localSave.json) {
+		localSave.json = JSON.parse(localSave.json);
+	}
 	$.ajax({
 		type: requestAction,
 		url: url,
@@ -556,7 +588,7 @@ function saveGameAsPng () {
 		return;
 	}
 	if (_currentGameId === null) {
-		console.log('ERROR - Tried to save gamecreator to undefined game');
+		console.error('ERROR - Tried to save gamecreator to undefined game');
 		return;
 	}
 	_fabricCanvas.deactivateAll().renderAll();
@@ -659,7 +691,6 @@ function findNextRotationImage (rotateToNext, object) {
 		}
 	});
 	url = apiRootUrl + '' + url;
-	console.log(url);
 	return url;
 }
 

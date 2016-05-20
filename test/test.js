@@ -6,17 +6,6 @@ var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
 
-/*
-	LIST OF COMPONENTS THAT ARE TESTED:
-
-	FLUX STRUCTURES:
-
-	COMPONENTS TESTED SHALLOW: (Should test in ascending hierarchy, small components first, large last to quicker localize bugs)
-		ATOMS:
-		MOLECULES:
-		ORGANISMS:
-*/
-
 describe('Flux Constants: ', function () {
 	var files = [];
 	var fluxConstantsPath = (path.join(__dirname, '../src/js/constants/'));

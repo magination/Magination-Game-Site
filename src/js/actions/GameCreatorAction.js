@@ -10,10 +10,17 @@ var URLS = require('../config/config').urls;
 var isListening = false;
 
 var GameCreatorActions = {
+	tempData: {},
 	addPieceByUrl: function (data) {
 		Dispatcher.dispatch({
 			actionType: GameCreatorConstants.ADD_PIECE_TO_CREATOR,
 			piece: data.piece
+		});
+	},
+	addScaleToCurrentSelected: function (data) {
+		Dispatcher.dispatch({
+			actionType: GameCreatorConstants.ADD_SCALE_TO_SELECTED,
+			value: data.value
 		});
 	},
 	deleteCurrentSelectedPiece: function (data) {
@@ -145,8 +152,44 @@ var GameCreatorActions = {
 			actionType: GameCreatorConstants.SET_LOADED_DATA_TO_ID,
 			gameCreatorId: data.gameCreatorId
 		});
+	},
+	uploadImageAndAddToCreator: function (data) {
+		var file = data.file;
+		var formData = new FormData();
+		formData.append('image', file);
+		if (this.tempData['uploadData']) {
+			console.error('ERROR - It seems like an image is already being uploaded');
+			return;
+		}
+		this.tempData['uploadData'] = data;
+		$.ajax({
+			type: 'POST',
+			url: URLS.api.users + '/' + LoginStore.getLoginProfile()._id + '/images',
+			data: formData,
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			contentType: false,
+			processData: false,
+			success: onExternalImageUploadSuccessResponse,
+			error: function () {
+				console.error('ERROR - Could not upload image');
+			}
+		});
 	}
 };
+
+function onExternalImageUploadSuccessResponse (data) {
+	var tempData = $.extend(true, {}, GameCreatorActions.tempData['uploadData']);
+	delete GameCreatorActions.tempData['uploadData'];
+	GameCreatorActions.addPieceByUrl({
+		piece: {
+			url: URLS.server.imgUpload + LoginStore.getLoginProfile()._id + '/' + tempData.file.name.replace(/\s+/g, '_'),
+			left: tempData.left,
+			top: tempData.top
+		}
+	});
+}
 
 function onDeleteSuccessResponse (data) {
 	Dispatcher.dispatch({

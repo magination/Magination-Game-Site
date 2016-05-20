@@ -4,8 +4,10 @@ var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
+var uglify = require('gulp-uglify');
 var babel = require('babelify');
 var nodemon = require('gulp-nodemon');
+var rename = require('gulp-rename');
 var del = require('del');
 var browserSync = require('browser-sync');
 
@@ -49,6 +51,13 @@ gulp.task('server', ['clean', 'build', 'moveDepencies'], function () {
 	}).on('restart', function () {
 		reloadBrowser(1000);
 	});
+});
+
+gulp.task('compress', function () {
+	return gulp.src('./build/app.js')
+		.pipe(uglify())
+		.pipe(rename('app.min.js'))
+		.pipe(gulp.dest('./build'));
 });
 
 gulp.task('lint', function () {

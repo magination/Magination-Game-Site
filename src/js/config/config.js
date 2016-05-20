@@ -41,7 +41,11 @@ var config = {
 			peopleBlue: imgRoot + 'people.png'
 		},
 		server: {
-			root: backendRoot
+			root: backendRoot,
+			imgUpload: backendRoot + 'public/img/upload/'
+		},
+		frontend: {
+			root: serverRoot
 		}
 	}
 };
