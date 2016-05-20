@@ -9,16 +9,12 @@ var NavigationAction = require('../actions/NavigationAction');
 var FeedbackAction = require('../actions/FeedbackAction');
 
 var _game;
-var _hasSelectedGameToEdit = false;
 var _hasPromptedSave = true;
 var _isAvailableGameName = false;
 
 var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	getGame: function () {
 		return _game;
-	},
-	hasSelectedGameToEdit: function () {
-		return _hasSelectedGameToEdit;
 	},
 	hasPromptedSave: function () {
 		return _hasPromptedSave;
@@ -52,7 +48,6 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	case GameConstants.CHANGE_GAME_LOCALLY:
 		_game = action.game;
-		_hasSelectedGameToEdit = true;
 		_hasPromptedSave = !action.shouldPromptSaveOnExit;
 		GameStore.emitChange(GameConstants.LOCAL_GAME_HAS_CHANGED);
 		GameStore.emitChange(CHANGE_EVENT);
@@ -88,10 +83,6 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		RemoveImageFromLocalGame(action);
 		GameStore.emitChange(CHANGE_EVENT);
 		break;
-	case GameConstants.SET_HAS_SELECTED_GAME_TO_EDIT:
-		_hasSelectedGameToEdit = action.hasSelectedGameToEdit;
-		GameStore.emitChange(CHANGE_EVENT);
-		break;
 	case GameConstants.CHANGE_IMAGE_PRIORITIZATION_LOCALLY:
 		ChangeImagePrioritization(action);
 		GameStore.emitChange(CHANGE_EVENT);
@@ -106,7 +97,6 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 	case GameConstants.REMOVE_GAME_LOCALLY:
 		_game = undefined;
 		_hasPromptedSave = true;
-		_hasSelectedGameToEdit = false;
 		GameStore.emitChange();
 		break;
 	}
@@ -162,7 +152,6 @@ function SaveGameToServer (hasPromptedSave) {
 };
 function SaveGameAndResetGameStore () {
 	_hasPromptedSave = true;
-	_hasSelectedGameToEdit = false;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
 		url: _game._id ? URLS.api.unpublishedGames + '/' + _game._id : URLS.api.unpublishedGames,
@@ -256,7 +245,6 @@ var onGamePostedSuccess = function (data) {
 	});
 	_game = undefined;
 	_hasPromptedSave = true;
-	_hasSelectedGameToEdit = false;
 };
 var onSaveGameSuccessResponse = function (data) {
 	_game._id = data._id;
