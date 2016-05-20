@@ -73,21 +73,22 @@ var SelectGameToEdit = React.createClass({
 		GameAction.createNewGame(newGame, true);
 	},
 	shouldShowModal: function () {
+		if (!LoginStore.getLoginState().isLoggedIn) return;
 		if (GameStore.getGame() !== undefined) {
 			this.setState({
 				showModal: false
 			});
 		}
-		else if (!MyGamesStore.getUnpublishedGames()) {
+		else if (MyGamesStore.getUnpublishedGames() === undefined) {
 			MyGamesAction.requestUnpublishedGames();
 		}
-		else if (MyGamesStore.getUnpublishedGames().length === 0) {
-			this.createNewGame();
+		else if (MyGamesStore.getUnpublishedGames().length > 0) {
+			this.setState({
+				showModal: true
+			});
 		}
 		else {
-			this.setState({
-				showModal: ((MyGamesStore.getUnpublishedGames().length > 0) && !GameStore.hasSelectedGameToEdit())
-			});
+			this.createNewGame();
 		}
 	},
 	onLoginStateChanged: function () {
