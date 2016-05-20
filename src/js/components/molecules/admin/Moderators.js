@@ -84,6 +84,7 @@ var Moderators = React.createClass({
 		});
 	},
 	onDeleteModeratorClicked: function (username) {
+		var that = this;
 		$.ajax({
 			type: 'DELETE',
 			headers: {
@@ -93,14 +94,18 @@ var Moderators = React.createClass({
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
-				200: this.onDeleteSuccessResponse
+				200: function () {
+					FeedbackAction.displaySuccessMessage({
+						header: 'Success',
+						message: 'Moderator removed'
+					});
+					var newList = this.state.moderators;
+					newList.splice(newList.indexOf(username), 1);
+					that.setState({
+						moderators: newList
+					});
+				}
 			}
-		});
-	},
-	onDeleteSuccessResponse: function (data) {
-		FeedbackAction.displaySuccessMessage({
-			header: 'Success',
-			message: 'Moderator removed'
 		});
 	},
 	requestModeratorList: function () {
