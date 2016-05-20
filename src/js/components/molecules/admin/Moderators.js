@@ -66,7 +66,10 @@ var Moderators = React.createClass({
 	onDeleteModeratorClicked: function (username) {
 		$.ajax({
 			type: 'DELETE',
-			url: URLS.api.users + '/moderators/' + username,
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			url: URLS.api.moderators + '/' + username,
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
@@ -107,7 +110,7 @@ var Moderators = React.createClass({
 	requestModeratorList: function () {
 		$.ajax({
 			type: 'GET',
-			url: URLS.api.users + '/moderators',
+			url: URLS.api.moderators,
 			headers: {
 				'Authorization': LoginStore.getToken()
 			},
