@@ -66,9 +66,11 @@ var GameAction = {
 			dataType: 'json',
 			statusCode: {
 				201: function (data) {
+					var newGame = data;
+					newGame.rules = ['', '', ''];
 					Dispatcher.dispatch({
 						actionType: GameConstants.CHANGE_GAME_LOCALLY,
-						game: data,
+						game: newGame,
 						shouldPromptSaveOnExit: shouldPromptSaveOnExit
 					});
 				}
