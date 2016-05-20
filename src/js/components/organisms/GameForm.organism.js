@@ -37,6 +37,9 @@ var GameForm = React.createClass({
 	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
 		GameStore.addChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
+		if (GameStore.getGame() && GameStore.getGame().title.length > 0) {
+			GameAction.checkNameAvailability(GameStore.getGame().title);
+		}
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
@@ -108,18 +111,17 @@ var GameForm = React.createClass({
 					</Row>
 					<br/>
 					<hr/>
-					<Row>
-						<Col md={2}>
-							<ConfirmButton confirmationDialog='This action will delete the game, and is irreversible. Are you sure you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onDeleteClicked} placement='top' buttonText='DELETE'/>
-						</Col>
-						<Col md={2}>
-							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
-						</Col>
-						<Col md={2}>
-							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.yellow)} onClick={this.onPreviewClicked} tooltip='See how your game will look once published!' buttonText='PREVIEW'/>
-						</Col>
-						<Col md={2}>
-							<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked} tooltip='Publish your game for everyone to see!' buttonText='PUBLISH'/>
+					<Row style={{margin: 0, padding: 0}}>
+						<Col md={8} style={{margin: 0, padding: 0}}>
+							<Col md={4} style={{margin: 0, paddingRight: 10, paddingLeft: 0}}>
+								<ConfirmButton confirmationDialog='This action will delete the game, and is irreversible. Are you sure you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onDeleteClicked} placement='top' buttonText='DELETE'/>
+							</Col>
+							<Col md={4} style={{margin: 0, paddingRight: 5, paddingLeft: 5}}>
+								<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
+							</Col>
+							<Col md={4} style={{margin: 0, paddingLeft: 10}}>
+								<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked} tooltip='Publish your game for everyone to see!' buttonText='PUBLISH'/>
+							</Col>
 						</Col>
 					</Row>
 					<hr/>

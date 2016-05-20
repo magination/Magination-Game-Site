@@ -78,8 +78,6 @@ var ButtonStyles = {
 				width: '100%',
 				paddingTop: '10',
 				paddingBottom: '10',
-				paddingLeft: '20',
-				paddingRight: '20',
 				borderWidth: '0',
 				borderRadius: '10',
 				backgroundColor: !customColor ? Colors.blueDark : customColor
