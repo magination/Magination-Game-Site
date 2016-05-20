@@ -1,4 +1,3 @@
-var LoginStore = require('../stores/LoginStore');
 var Parser = require('./Parser.service');
 
 var validatorService = {
