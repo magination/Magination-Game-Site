@@ -1,17 +1,19 @@
 var React = require('react');
 var Button = require('react-bootstrap').Button;
 var Modal = require('react-bootstrap').Modal;
-var MyGamesStore = require('../../stores/MyGamesStore');
+
+var MyGameList = require('../molecules/mygames/MyGamesList.molecule');
+
 var MyGamesAction = require('../../actions/MyGamesAction');
+var MyGamesStore = require('../../stores/MyGamesStore');
 var GameConstants = require('../../constants/GameConstants');
 var GameStore = require('../../stores/GameStore');
 var GameAction = require('../../actions/GameAction');
-var ButtonStyle = require('../../styles/Buttons');
-var MyGameList = require('../molecules/mygames/MyGamesList.molecule');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationConstants = require('../../constants/NavigationConstants');
 var NavigationStore = require('../../stores/NavigationStore');
 var LoginStore = require('../../stores/LoginStore');
+var ButtonStyle = require('../../styles/Buttons');
 var GameService = require('../../service/GameService');
 
 var SelectGameToEdit = React.createClass({
@@ -67,7 +69,8 @@ var SelectGameToEdit = React.createClass({
 		this.createNewGame();
 	},
 	createNewGame: function () {
-		GameAction.createNewGame(GameService.createEmptyGame(), true);
+		var newGame = GameService.createEmptyGame();
+		GameAction.createNewGame(newGame, true);
 	},
 	shouldShowModal: function () {
 		if (GameStore.getGame() !== undefined) {
