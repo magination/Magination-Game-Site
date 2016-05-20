@@ -2,7 +2,7 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
-var LoginStore = require('../../stores/LoginStore');
+var LoginStore = require('../../../stores/LoginStore');
 
 var FeedbackAction = require('../../../actions/FeedbackAction');
 
