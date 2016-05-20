@@ -5,6 +5,7 @@ var Input = require('react-bootstrap').Input;
 var GameAction = require('../../../actions/GameAction');
 var TextStyle = require('../../../styles/Text');
 var ContainerStyle = require('../../../styles/Containers');
+var AutoSave = require('../../../service/AutoSave.service.js');
 
 var Rule = React.createClass({
 	componentDidMount: function () {
@@ -18,10 +19,10 @@ var Rule = React.createClass({
 					<Row><Glyphicon style={TextStyle.glyphIcon.alignCenterBlue} glyph={this.props.hasDownButton ? 'glyphicon glyphicon-arrow-down' : ''} onClick={this.onDownClicked}/></Row>
 				</div>
 				<div style={ContainerStyle.ruleList.rightIcon}>
-					<Glyphicon style={TextStyle.glyphIcon.alignCenterBlue} glyph='glyphicon glyphicon-remove' onClick={this.onDeleteClicked}/>
+					<Glyphicon style={TextStyle.red} glyph='glyphicon glyphicon-remove' onClick={this.onDeleteClicked}/>
 				</div>
 				<div style={ContainerStyle.ruleList.input}>
-					<Input ref='input' value={this.props.value} type='text' onInput={this.onListItemChanged} placeholder={this.props.placeholder}/>
+					<Input onBlur={AutoSave} ref='input' value={this.props.value} type='text' onChange={this.onListItemChanged} placeholder={this.props.placeholder}/>
 				</div>
 			</div>
 		);

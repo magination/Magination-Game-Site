@@ -35,7 +35,9 @@
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
     "gulp-nodemon": "^2.0.6",
+    "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
     "lodash": "^4.9.0",
     "mocha": "^2.4.5",
     "node-jsx": "^0.13.3",
@@ -51,6 +53,9 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "fs": "0.0.2",
+    "jsdom": "^9.1.0"
+  },
   "description": ""
 }

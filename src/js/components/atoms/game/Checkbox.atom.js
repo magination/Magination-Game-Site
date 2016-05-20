@@ -4,16 +4,9 @@ var GameAction = require('../../../actions/GameAction');
 
 var Checkbox = React.createClass({
 	getInitialState: function () {
-		if (GameStore.getGame() !== null) {
-			return {
-				isChecked: GameStore.getGame()[this.props.bindingProperty]
-			};
-		}
-		else {
-			return {
-				isChecked: false
-			};
-		}
+		return {
+			isChecked: GameStore.getGame() ? GameStore.getGame()[this.props.bindingProperty] : false
+		};
 	},
 	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
@@ -35,16 +28,9 @@ var Checkbox = React.createClass({
 		});
 	},
 	onGameStateChanged: function () {
-		if (!GameStore.getGame()) {
-			this.setState({
-				isChecked: false
-			});
-		}
-		else {
-			this.setState({
-				isChecked: GameStore.getGame()[this.props.bindingProperty]
-			});
-		}
+		this.setState({
+			isChecked: GameStore.getGame() ? GameStore.getGame()[this.props.bindingProperty] : false
+		});
 	}
 });
 module.exports = Checkbox;

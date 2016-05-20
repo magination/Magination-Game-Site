@@ -1,4 +1,4 @@
-var serverRoot = 'http://localhost:8080/';
+var serverRoot = 'https://localhost:8080/';
 var backendRoot = 'https://localhost:8000/';
 var restApiRoot = backendRoot + 'api/';
 var imgRoot = serverRoot + 'public/img/';
@@ -9,12 +9,18 @@ var config = {
 			users: restApiRoot + 'users',
 			games: restApiRoot + 'games',
 			login: restApiRoot + 'login',
+			refresh: restApiRoot + 'login/refresh',
 			confirmation: restApiRoot + 'confirmation',
 			resendEmail: restApiRoot + 'resendVerificationEmail',
 			forgotpassword: restApiRoot + 'login' + '/forgot',
 			comments: restApiRoot + 'comments',
 			verifyEmail: restApiRoot + 'login/update',
-			saveGame: restApiRoot + 'unpublishedGames'
+			unpublishedGames: restApiRoot + 'unpublishedGames',
+			gamecreator: {
+				staticimages: restApiRoot + 'public/editor'
+			},
+			reports: restApiRoot + 'reports',
+			reviews: restApiRoot + 'reviews'
 		},
 		img: {
 			starWhite: imgRoot + 'starWhiteTransparent100x100.png',
@@ -35,7 +41,11 @@ var config = {
 			peopleBlue: imgRoot + 'people.png'
 		},
 		server: {
-			root: backendRoot
+			root: backendRoot,
+			imgUpload: backendRoot + 'public/img/upload/'
+		},
+		frontend: {
+			root: serverRoot
 		}
 	}
 };

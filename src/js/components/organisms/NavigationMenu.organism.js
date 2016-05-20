@@ -5,10 +5,11 @@ var LoginAction = require('../../actions/LoginAction');
 var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
 var NavigationConstants = require('../../constants/NavigationConstants');
-
+var Validator = require('../../service/Validator.service');
 var NavigationPaths = NavigationConstants.PATHS;
 
 var LoginForm = require('./LoginForm.organism');
+var SaveGameModal = require('./SaveGameModal');
 var Navbar = require('react-bootstrap').Navbar;
 var Nav = require('react-bootstrap').Nav;
 var MenuItem = require('react-bootstrap').MenuItem;
@@ -50,10 +51,11 @@ var Menu = React.createClass({
 		return (
 			<div>
 				<LoginForm ref='loginModal'/>
+				<SaveGameModal ref='saveGameModal'/>
 				<Navbar fixedTop activeKey={this.state.currentActive}>
 					<Navbar.Header>
 						<Navbar.Brand>
-							<a href='/' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>
+							<a onClick={this.onNavigationClick.bind(this, '/')} href='#' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>
 						</Navbar.Brand>
 						<Navbar.Toggle/>
 					</Navbar.Header>
@@ -72,6 +74,7 @@ var Menu = React.createClass({
 		if (!NavigationConstants.isLegalDestination(getLoginState().isLoggedIn, destination)) {
 			this.refs.loginModal.open();
 		}
+		window.location.href = '#';
 		NavigationAction.navigate({
 			destination: destination
 		});
@@ -103,6 +106,21 @@ var Menu = React.createClass({
 			destination: '/settings'
 		});
 	},
+	onMyGamesClicked: function () {
+		NavigationAction.navigate({
+			destination: '/mygames'
+		});
+	},
+	onModerateClicked: function () {
+		NavigationAction.navigate({
+			destination: '/moderator'
+		});
+	},
+	onAdminClicked: function () {
+		NavigationAction.navigate({
+			destination: '/admin'
+		});
+	},
 	makeNavigationStatefulElement: function () {
 		var navigationStateElement;
 		if (this.state.isLoggedIn && getProfile() !== null) {
@@ -110,8 +128,14 @@ var Menu = React.createClass({
 				<Nav pullRight activeKey={this.state.currentActive}>
 					<NavDropdown title={getProfile().username} id='nav-dropdown'>
 						<MenuItem eventKey={'profile'}><Glyphicon glyph='user'/> My Profile</MenuItem>
-						<MenuItem eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
+						<MenuItem onClick={this.onMyGamesClicked}eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
 						<MenuItem divider />
+						{Validator.isAdminPermission(LoginStore.getToken())
+							? <MenuItem onClick={this.onAdminClicked}eventKey={'admin'}><Glyphicon glyph='list-alt'/> Admin</MenuItem>
+							: null}
+						{Validator.isModeratorPermission(LoginStore.getToken())
+							? <MenuItem onClick={this.onModerateClicked}eventKey={'moderator'}><Glyphicon glyph='flag'/> Moderate</MenuItem>
+							: null}
 						<MenuItem onClick={this.onSettingsClicked}eventKey={'settings'}><Glyphicon glyph='cog'/> Settings</MenuItem>
 						<MenuItem divider />
 						<MenuItem href='#' onClick={this.onLogoutClicked}><Glyphicon glyph='log-out'/> Log out</MenuItem>

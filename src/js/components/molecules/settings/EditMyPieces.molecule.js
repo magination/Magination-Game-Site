@@ -10,30 +10,19 @@ var Col = require('react-bootstrap').Col;
 var ImgUrls = require('../../../config/config').urls.img;
 var ButtonStyles = require('../../../styles/Buttons');
 var LoginAction = require('../../../actions/LoginAction');
-// var ContainerStyle = require('../../../styles/Containers');
+var Colors = require('../../../styles/Colors');
+var ValidatorService = require('../../../service/Validator.service');
 
 var ChangePassword = React.createClass({
 	getInitialState () {
-		var pieces = {
-			singles: 0,
-			doubles: 0,
-			triples: 0
+		return {
+			singles: (LoginStore.getLoginState().isLoggedIn) ? LoginStore.getLoginProfile().pieces.singles : 0,
+			doubles: (LoginStore.getLoginState().isLoggedIn) ? LoginStore.getLoginProfile().pieces.doubles : 0,
+			triples: (LoginStore.getLoginState().isLoggedIn) ? LoginStore.getLoginProfile().pieces.triples : 0
 		};
-		if (!LoginStore.getLoginState().isLoggedIn) {
-			return pieces;
-		}
-		pieces = {
-			singles: LoginStore.getLoginProfile().pieces.singles,
-			doubles: LoginStore.getLoginProfile().pieces.doubles,
-			triples: LoginStore.getLoginProfile().pieces.triples
-		};
-		return pieces;
 	},
 	componentDidMount: function () {
 		LoginStore.addChangeListener(this.onLoginChange);
-		if (!LoginStore.getLoginState().isLoggedIn) {
-			LoginAction.requestLogin();
-		}
 	},
 	componentWillUnmount: function () {
 		LoginStore.removeChangeListener(this.onLoginChange);
@@ -52,7 +41,7 @@ var ChangePassword = React.createClass({
 									<Input value={this.state.singles} placeholder='Singles' type='number' onChange={this.onSinglesChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}/>
 									<Input value={this.state.doubles} placeholder='Doubles' type='number' onChange={this.onDoublesChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceDoubleBlue} alt='No img'/>}/>
 									<Input value={this.state.triples} placeholder='Triples' type='number' onChange={this.onTriplesChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceTripleBlue} alt='No img'/>}/>
-									<Button style={ButtonStyles.Magination} type='submit'><strong>Save changes</strong></Button>
+									<Button style={ButtonStyles.MaginationSettingsButton.customColor(Colors.green)} type='submit'><strong>Save changes</strong></Button>
 								</form>
 							</div>
 						</Well>
@@ -74,19 +63,25 @@ var ChangePassword = React.createClass({
 		this.props.onExpandChanged(this.props.isShow ? '' : 'myPieces');
 	},
 	onSinglesChanged: function (e) {
-		this.setState({
-			singles: e.target.value
-		});
+		if (ValidatorService.isNumericAndNotNegative(e.target.value) || e.target.value === '') {
+			this.setState({
+				singles: e.target.value
+			});
+		}
 	},
 	onDoublesChanged: function (e) {
-		this.setState({
-			doubles: e.target.value
-		});
+		if (ValidatorService.isNumericAndNotNegative(e.target.value) || e.target.value === '') {
+			this.setState({
+				doubles: e.target.value
+			});
+		}
 	},
 	onTriplesChanged: function (e) {
-		this.setState({
-			triples: e.target.value
-		});
+		if (ValidatorService.isNumericAndNotNegative(e.target.value) || e.target.value === '') {
+			this.setState({
+				triples: e.target.value
+			});
+		}
 	},
 	onSubmit: function (e) {
 		e.preventDefault();

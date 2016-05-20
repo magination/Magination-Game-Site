@@ -36,11 +36,11 @@ var GameInformation = React.createClass({
 				</Row>
 				<Row>
 					<Col md={12} style={ContainerStyles.numberOfPlayersContainer}>
-						<h4 style={TextStyles.white}>{this.props.game.numberOfPlayers} Players</h4>
+						<h3 style={TextStyles.white}><Glyphicon glyph='user'/> {this.props.game.numberOfPlayers}{this.props.game.isPlayableWithMorePlayers ? '+' : ''}</h3>
 					</Col>
 				</Row>
 				<Row>
-					<h3 style={TextStyles.white}><Glyphicon glyph='star'/>{rating}</h3>
+					<h3 style={TextStyles.white}><Glyphicon glyph='star'/> {rating}</h3>
 				</Row>
 				<Row>
 					<h4 style={TextStyles.white}><img width={50} height={19} src={imgUrls.pieceSingleWhiteNoPadding} alt='a'/>	x{this.props.game.pieces.singles}</h4>
@@ -52,7 +52,7 @@ var GameInformation = React.createClass({
 					<h4 style={TextStyles.white}><img width={50} height={25} src={imgUrls.pieceTripleWhiteNoPadding} alt='a'/>	x{this.props.game.pieces.triples}</h4>
 				</Row>
 				<Row>
-					<h5 style={TextStyles.white}>{(this.props.game.otherObjects.length > 0) ? <a onClick={this.onShowObjectsOfChoice} style={TextStyles.white}>+ Objects of choise</a> : 'No Other Objects'}</h5>
+					<h5 style={TextStyles.white}>{(this.props.game.otherObjects.length > 0) ? <a onClick={this.onShowObjectsOfChoice} style={{color: 'white', cursor: 'pointer'}}>+ Objects of choice</a> : 'No Other Objects'}</h5>
 				</Row>
 				<Collapse in={this.state.isShowingObjectsOfChoice} onExited={this.onCollapseFinished}>
 					<Row>{otherObjects}</Row>

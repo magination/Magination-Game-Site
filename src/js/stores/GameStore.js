@@ -7,130 +7,173 @@ var URLS = require('../config/config').urls;
 var LoginStore = require('../stores/LoginStore');
 var NavigationAction = require('../actions/NavigationAction');
 var FeedbackAction = require('../actions/FeedbackAction');
-var _game = null;
+
+var _game;
+var _hasPromptedSave = true;
+var _isAvailableGameName = false;
 
 var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	getGame: function () {
 		return _game;
 	},
-	addChangeListener: function (callback) {
+	hasPromptedSave: function () {
+		return _hasPromptedSave;
+	},
+	isAvailableGameName: function () {
+		return _isAvailableGameName;
+	},
+	addChangeListener: function (callback, specificEvent) {
+		if (specificEvent) {
+			this.on(specificEvent, callback);
+			return;
+		}
 		this.on(CHANGE_EVENT, callback);
 	},
 	emitChange: function () {
-		this.emit(CHANGE_EVENT);
+		this.emit.apply(this, arguments);
 	},
-	removeChangeListener: function (callback) {
-		this.removeListener(CHANGE_EVENT, callback);
+	removeChangeListener: function (callback, changeEvent) {
+		if (!changeEvent) {
+			changeEvent = CHANGE_EVENT;
+		}
+		this.removeListener(changeEvent, callback);
 	}
 });
 
 GameStore.dispatchToken = Dispatcher.register(function (action) {
-	if (_game === null) {
-		CreateNewGame();
-	};
 	switch (action.actionType) {
 	case GameConstants.UPDATE_GAME_LOCALLY:
 		UpdateGame(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.CHANGE_GAME_LOCALLY:
 		_game = action.game;
-		GameStore.emitChange();
+		_hasPromptedSave = !action.shouldPromptSaveOnExit;
+		GameStore.emitChange(GameConstants.LOCAL_GAME_HAS_CHANGED);
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.PUBLISH_GAME_TO_SERVER:
 		PublishGameToServer();
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.SAVE_GAME_TO_SERVER:
-		SaveGameToServer();
-		GameStore.emitChange();
+		SaveGameToServer(action.hasPromptedSave);
 		break;
 	case GameConstants.ADD_NEW_RULE_TO_LOCAL_GAME:
 		AddRule(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.UPDATE_RULE_IN_LOCAL_GAME:
 		UpdateRule(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.DELETE_RULE_FROM_LOCAL_GAME:
 		DeleteRule(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.CHANGE_RULE_PRIORITIZATION_LOCALLY:
 		ChangeRulePrioritization(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.ADD_IMAGE_TO_LOCAL_GAME:
 		AddImageToLocalGame(action);
-		GameStore.emitChange();
+		GameStore.emitChange(CHANGE_EVENT);
 		break;
 	case GameConstants.REMOVE_IMAGE_FROM_LOCAL_GAME:
 		RemoveImageFromLocalGame(action);
+		GameStore.emitChange(CHANGE_EVENT);
+		break;
+	case GameConstants.CHANGE_IMAGE_PRIORITIZATION_LOCALLY:
+		ChangeImagePrioritization(action);
+		GameStore.emitChange(CHANGE_EVENT);
+		break;
+	case GameConstants.CHECK_NAME_AVAILABILITY:
+		CheckNameAvailability(action);
+		break;
+	case GameConstants.SAVE_GAME_AND_RESET_GAME_STORE:
+		SaveGameAndResetGameStore();
 		GameStore.emitChange();
+		break;
+	case GameConstants.REMOVE_GAME_LOCALLY:
+		_game = undefined;
+		_hasPromptedSave = true;
+		GameStore.emitChange();
+		break;
 	}
 });
+function ChangeImagePrioritization (action) {
+	var images = _game.images;
+	let selectedItem = images[action.oldPosition];
+	images[action.oldPosition] = images[action.newPosition];
+	images[action.newPosition] = selectedItem;
+	_game.images = images;
+};
 function AddImageToLocalGame (action) {
 	_game.images.push(action.image);
+	SaveGameToServer();
 };
 function RemoveImageFromLocalGame (action) {
 	_game.images.splice(action.position, 1);
+	SaveGameToServer();
 }
 function PublishGameToServer () {
 	$.ajax({
 		type: 'POST',
-		url: URLS.api.games,
-		data: JSON.stringify(_game),
+		url: URLS.api.unpublishedGames + '/' + _game._id + '/publish',
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
 		contentType: 'application/json',
 		dataType: 'json',
 		statusCode: {
-			201: onGamePostedSuccess,
-			401: onPostGameUnauthorizedResponse,
-			500: function () {
-				alert('Server Error: see console');
+			200: function (data) {
+				onGamePostedSuccess(data);
+			},
+			401: function (data) {
+				onPostGameUnauthorizedResponse(data);
 			}
 		}
 	});
 };
-function SaveGameToServer () {
+function SaveGameToServer (hasPromptedSave) {
+	_hasPromptedSave = hasPromptedSave;
+	_game.id = undefined;
 	$.ajax({
-		type: 'POST',
-		url: URLS.api.saveGame,
+		type: _game._id ? 'PUT' : 'POST',
+		url: _game._id ? URLS.api.unpublishedGames + '/' + _game._id : URLS.api.unpublishedGames,
 		data: JSON.stringify(_game),
 		headers: {
 			'Authorization': LoginStore.getToken()
 		},
 		contentType: 'application/json',
 		dataType: 'json',
-		statusCode: {
-			201: onGamePostedSuccess,
-			401: onPostGameUnauthorizedResponse,
-			500: function () {
-				alert('Server Error: see console');
-			}
+		success: onSaveGameSuccessResponse
+	});
+};
+function SaveGameAndResetGameStore () {
+	_hasPromptedSave = true;
+	$.ajax({
+		type: _game._id ? 'PUT' : 'POST',
+		url: _game._id ? URLS.api.unpublishedGames + '/' + _game._id : URLS.api.unpublishedGames,
+		data: JSON.stringify(_game),
+		headers: {
+			'Authorization': LoginStore.getToken()
+		},
+		contentType: 'application/json',
+		dataType: 'json',
+		success: function () {
+			FeedbackAction.displaySuccessMessage({
+				header: 'Success.',
+				message: 'Game saved, you can leave and edit it later.'
+			});
+			_game = undefined;
 		}
 	});
 };
-function CreateNewGame () {
-	_game = {
-		title: '',
-		shortDescription: '',
-		numberOfPlayers: 0,
-		isPlayableWithMorePlayers: false,
-		isPlayableInTeams: false,
-		images: [],
-		parentGame: '',
-		pieces: {
-			singles: 0,
-			doubles: 0,
-			triples: 0
-		},
-		rules: [],
-		alternativeRules: []
-	};
+
+function CheckNameAvailability (action) {
+	_isAvailableGameName = action.isAvailableGameName;
+	GameStore.emitChange(GameConstants.CHECK_NAME_AVAILABILITY);
 };
 function UpdateGame (action) {
 	if (action.propertyCollection) {
@@ -193,17 +236,24 @@ function ChangeRulePrioritization (action) {
 	}
 };
 var onGamePostedSuccess = function (data) {
-	console.log(data);
 	FeedbackAction.displaySuccessMessage({
 		header: 'Success.',
-		message: 'Game uploaded!'
+		message: 'Game published!'
 	});
 	NavigationAction.navigate({
-		destination: '/game/' + data._id,
-		data: {
-			game: data
-		}
+		destination: '/game/' + data._id
 	});
+	_game = undefined;
+	_hasPromptedSave = true;
+};
+var onSaveGameSuccessResponse = function (data) {
+	_game._id = data._id;
+	if (_hasPromptedSave) {
+		FeedbackAction.displaySuccessMessage({
+			header: 'Success.',
+			message: 'Game saved, you can leave and edit it later.'
+		});
+	}
 };
 var onPostGameUnauthorizedResponse = function () {
 	FeedbackAction.displayWarningMessage({

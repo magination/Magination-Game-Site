@@ -4,8 +4,10 @@ var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
+var uglify = require('gulp-uglify');
 var babel = require('babelify');
 var nodemon = require('gulp-nodemon');
+var rename = require('gulp-rename');
 var del = require('del');
 var browserSync = require('browser-sync');
 
@@ -44,11 +46,18 @@ gulp.task('server', ['clean', 'build', 'moveDepencies'], function () {
 	nodemon({
 		script: './server/server.js',
 		ext: 'js html',
-		ignore: ['src/**, gulpfile.js'],
+		ignore: ['./src/**, gulpfile.js'],
 		env: { 'NODE_ENV': 'development' }
 	}).on('restart', function () {
 		reloadBrowser(1000);
 	});
+});
+
+gulp.task('compress', function () {
+	return gulp.src('./build/app.js')
+		.pipe(uglify())
+		.pipe(rename('app.min.js'))
+		.pipe(gulp.dest('./build'));
 });
 
 gulp.task('lint', function () {
@@ -76,7 +85,7 @@ gulp.task('default', ['watch', 'server'], function () {
 	/* What happens after everything is build and server is running in dev mode */
 	browserSync({
 		proxy: {
-			target: 'http://localhost:8080'
+			target: 'https://localhost:8080'
 		}
 	});
 	browserSync.pause();

@@ -9,6 +9,7 @@ var LoginAction = require('../../actions/LoginAction');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
+var ButtonStyle = require('../../styles/Buttons');
 
 var LoginForm = React.createClass({
 	getInitialState: function () {
@@ -35,7 +36,7 @@ var LoginForm = React.createClass({
 							<form onSubmit={this.onSubmitForm}>
 								<Input value={this.state.username} type='text' label='Username / Email' placeholder='Username / Email' onChange={this.onUsernameChange}/>
 								<Input value={this.state.password} type='password' label='Password' placeholder='Password' onChange={this.onPasswordChange}/>
-								<Button type='submit'>Log in</Button>
+								<Button type='submit' style={ButtonStyle.MaginationFillParent}>Log in</Button>
 							</form>
 					</Modal.Body>
 					<Modal.Footer>
@@ -47,6 +48,10 @@ var LoginForm = React.createClass({
 	},
 	onLoginStateChanged: function () {
 		if (LoginStore.getLoginState().requestedLogin) {
+			if (LoginStore.getRefreshTokenCookie()) {
+				LoginAction.checkAutoLogin();
+				return;
+			}
 			this.open();
 		}
 	},

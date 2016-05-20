@@ -1,11 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var GameAction = require('../../actions/GameAction');
-var NavigationAction = require('../../actions/NavigationAction');
 var NavigationStore = require('../../stores/NavigationStore');
-var NavigationConstants = require('../../constants/NavigationConstants');
-var LoginAction = require('../../actions/LoginAction');
-var LoginStore = require('../../stores/LoginStore');
 var URLS = require('../../config/config.js').urls;
 var Reviews = require('../molecules/game/Reviews.molecule');
 var GameInformation = require('../molecules/game/GameInformation.molecule');
@@ -13,13 +8,8 @@ var ImageCarousel = require('../molecules/game/ImageCarousel.molecule');
 var CustomList = require('../molecules/lists/CustomList.molecule');
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
-var Glyphicon = require('react-bootstrap').Glyphicon;
-var Button = require('react-bootstrap').Button;
-var Collapse = require('react-bootstrap').Collapse;
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-var ShareGame = require('../molecules/game/ShareGame.molecule');
 var TextStyles = require('../../styles/Text');
-var ButtonStyles = require('../../styles/Buttons');
+var GameActionBar = require('../molecules/game/GameActionBar');
 
 var Game = React.createClass({
 	getInitialState: function () {
@@ -66,14 +56,17 @@ var Game = React.createClass({
 		}
 	},
 	componentDidUpdate: function () {
-		/* Dangerous implementation.. should be reconsidered. It may be infinite recursive if the height of gameinformation
+		/* Dangerous implementation.. should be reconsidered. It may be infinitely recursive if the height of gameinformation
 			changes at every render.
 		*/
 		setTimeout(this.onGameInformationRendered, 0);
 	},
 	render: function () {
+		var offset = 1;
+		var leftWidth = 7;
+		var rightWidth = 3;
 		return (
-			<ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+			<div>
 				<Row>
 					<Col md={4} mdOffset={1}>
 						<GameInformation ref='gameinformation' game={this.state.game} onCollapseFinished={this.onGameInformationRendered}/>
@@ -84,42 +77,36 @@ var Game = React.createClass({
 					<Col md={1}>
 					</Col>
 				</Row>
-				<hr />
+				<Row style={{marginTop: '10'}}><Col md={4} mdOffset={1}><GameActionBar game={this.state.game} gameId={getLastUrlId()}/></Col></Row>
+				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 				<Row>
-					<Col md={6} mdOffset={1}>
-						<h2 style={TextStyles.blueHeader}>Description</h2>
+					<Col md={leftWidth} mdOffset={offset}>
+						<h2 style={TextStyles.gameView.paddingLessHeader}>Description</h2>
 						<h4>{this.state.game.shortDescription}</h4>
 					</Col>
-					<Col md={4}>
-						<div style={{textAlign: 'right', width: '100%'}}>
-							<Button onClick={this.onShareButtonClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='share'/><strong> Share this game</strong></Button>
-						</div>
-						<Collapse in={this.state.shareGameIsShowing}>
-							<div><ShareGame title={this.state.game.title} description={this.state.game.shortDescription} url={NavigationStore.getNavigationState().currentPath}/></div>
-						</Collapse>
+					<Col md={rightWidth}>
 					</Col>
-					<Col md={1}>
+					<Col md={offset}>
 					</Col>
 				</Row>
 				<Row>
-					<Col md={11} mdOffset={1}>
+					<Col md={leftWidth + rightWidth} mdOffset={offset}>
 						<CustomList title='Rules' listElements={this.state.game.rules}/>
 					</Col>
 				</Row>
 				<Row>
-					<Col md={6} mdOffset={1}>
-						<CustomList title='Alternative Rules' listElements={this.state.game.alternativeRules}/>
+					<Col md={leftWidth} mdOffset={offset}>
+						<CustomList title='Alternative rules' listElements={this.state.game.alternativeRules}/>
 					</Col>
-					<Col md={4} style={{textAlign: 'right'}}>
-						<Button onClick={this.onForkGameClicked} style={ButtonStyles.MaginationGameViewButton}><Glyphicon glyph='paste'/><strong> Create your own variation</strong></Button>
+					<Col md={rightWidth} style={{textAlign: 'right'}}>
 					</Col>
-					<Col md={1}>
+					<Col md={offset}>
 					</Col>
 				</Row>
-				<hr />
-				<Reviews id={this.state.game._id} reviews={this.state.game.reviews}/>
-				<hr />
-			</ReactCSSTransitionGroup>
+				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
+				<Reviews id={this.state.game._id} reviews={this.state.game.reviews} offset={offset} leftWidth={leftWidth} rightWidth={rightWidth}/>
+				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
+			</div>
 		);
 	},
 	onGameInformationRendered: function () {
@@ -131,31 +118,6 @@ var Game = React.createClass({
 				gameInformationHeight: informationDivHeight
 			});
 		}
-	},
-	onForkGameClicked: function () {
-		if (!LoginStore.getLoginState().isLoggedIn) {
-			LoginAction.requestLogin();
-			return;
-		}
-		$.ajax({
-			type: 'GET',
-			url: URLS.api.games + '/' + this.state.game._id + '/fork',
-			dataType: 'json',
-			statusCode: {
-				200: this.onGetGameForkSuccessResponse
-			}
-		});
-	},
-	onShareButtonClicked: function () {
-		this.setState({
-			shareGameIsShowing: !this.state.shareGameIsShowing
-		});
-	},
-	onGetGameForkSuccessResponse: function (data) {
-		GameAction.changeGameLocally(data);
-		NavigationAction.navigate({
-			destination: NavigationConstants.PATHS.creategame
-		});
 	},
 	onGetGameSuccessResponse: function (data) {
 		this.setState({
@@ -174,7 +136,7 @@ function shouldRequestGame () {
 	if (data.game === undefined) {
 		return true;
 	}
-	return true; /* always returns true */
+	return false; /* always returns true */
 }
 
 function getLastUrlId () {

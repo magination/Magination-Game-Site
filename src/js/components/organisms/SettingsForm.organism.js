@@ -2,12 +2,19 @@ var React = require('react');
 var ChangePassword = require('../molecules/settings/ChangePassword');
 var ChangeEmail = require('../molecules/settings/ChangeEmail');
 var EditMyPieces = require('../molecules/settings/EditMyPieces.molecule');
+var LoginStore = require('../../stores/LoginStore');
+var LoginAction = require('../../actions/LoginAction');
 
 var Settings = React.createClass({
 	getInitialState () {
 		return {
 			currentExpanded: ''
 		};
+	},
+	componentDidMount: function () {
+		if (!LoginStore.getLoginState().isLoggedIn) {
+			LoginAction.requestLogin();
+		}
 	},
 	render: function () {
 		return (

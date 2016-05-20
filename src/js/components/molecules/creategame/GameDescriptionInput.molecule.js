@@ -1,8 +1,11 @@
 var React = require('react');
+var Col = require('react-bootstrap').Col;
 var Input = require('react-bootstrap').Input;
+
 var GameAction = require('../../../actions/GameAction');
 var GameStore = require('../../../stores/GameStore');
 var TextStyle = require('../../../styles/Text');
+var AutoSave = require('../../../service/AutoSave.service.js');
 
 var GameDescription = React.createClass({
 	getInitialState () {
@@ -29,16 +32,18 @@ var GameDescription = React.createClass({
 		return (
 			<div>
 				<h5>Describe your game briefly.</h5>
-				<Input onChange={this.onTextChanged} value={this.state.bindableTextProperty} type='textarea' placeholder={this.props.placeholder} />
-				<h5 style={TextStyle.alignRight}>{this.state.lengthString} characters</h5>
+				<div>
+					<Col md={8}>
+						<Input onChange={this.onTextChanged} bsStyle={this.props.bsStyle} onBlur={AutoSave} value={this.state.bindableTextProperty} ref='descriptionInput' type='textarea' placeholder={this.props.placeholder} />
+					</Col>
+					<Col md={4} style={{padding: 0}}><h5 style={this.props.bsStyle === 'error' ? TextStyle.CreateGame.error : TextStyle.CreateGame.success}>{this.getInputFeedback()}</h5></Col>
+				</div>
+				<Col md={8} style={{padding: 0}}><h5 style={TextStyle.alignRight}>{this.state.lengthString} characters</h5></Col>
 			</div>
 		);
 	},
 	onTextChanged: function (e) {
 		if (e.target.value.length > this.props.maxLength) return;
-		this.setState({
-			lengthString: e.target.value.length + '/' + this.props.maxLength
-		});
 		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindableTextProperty,
 			propertyValue: e.target.value
@@ -52,9 +57,18 @@ var GameDescription = React.createClass({
 		}
 		else {
 			this.setState({
-				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty]
+				bindableTextProperty: GameStore.getGame()[this.props.bindableTextProperty],
+				lengthString: GameStore.getGame()[this.props.bindableTextProperty].length + '/' + this.props.maxLength
 			});
 		}
+	},
+	focusInput: function () {
+		this.refs.descriptionInput.refs.input.focus();
+	},
+	getInputFeedback: function () {
+		if (!this.props.bsStyle) return '';
+		if (this.props.bsStyle !== 'success') return 'Game must have a description';
+		return '';
 	}
 });
 module.exports = GameDescription;

@@ -11,19 +11,14 @@ var RuleList = React.createClass({
 	listElements: [],
 	getInitialState: function () {
 		return {
-			rules: []
+			rules: GameStore.getGame() ? GameStore.getGame().rules : []
 		};
+	},
+	componentDidMount: function () {
+		GameStore.addChangeListener(this.onGameStateChanged);
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
-	},
-	componentDidMount: function () {
-		if (GameStore.getGame() !== null) {
-			this.setState({
-				rules: GameStore.getGame().rules
-			});
-		}
-		GameStore.addChangeListener(this.onGameStateChanged);
 	},
 	render: function () {
 		var list = [];
@@ -40,13 +35,13 @@ var RuleList = React.createClass({
 		return (
 			<div>
 				{list}
-				<Row><Col md={6}><Button onClick={this.onAddItemClicked} style={ButtonStyle.MaginationFillParent}>+ Add rule</Button></Col></Row>
+				<Row><Col md={6}><Button onClick={this.onAddItemClicked} style={ButtonStyle.MaginationFillParent}>+ ADD RULE</Button></Col></Row>
 			</div>
 		);
 	},
 	onGameStateChanged: function () {
 		this.setState({
-			rules: GameStore.getGame().rules
+			rules: GameStore.getGame() ? GameStore.getGame().rules : []
 		});
 	},
 	onAddItemClicked: function () {
