@@ -4,7 +4,7 @@ var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
 
 var FeedbackAction = require('../../../actions/FeedbackAction');
-
+var LoginStore = require('../../../stores/LoginStore');
 var URLS = require('../../../config/config').urls;
 var ButtonStyles = require('../../../styles/Buttons');
 
@@ -63,6 +63,9 @@ var FeaturedGames = React.createClass({
 			data: JSON.stringify({
 				games: games
 			}),
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
