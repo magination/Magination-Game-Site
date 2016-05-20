@@ -75,7 +75,8 @@ var ChangePassword = React.createClass({
 			},
 			contentType: 'application/json',
 			dataType: 'json',
-			success: this.onRequestSuccess
+			success: this.onRequestSuccess,
+			error: this.onRequestError
 		});
 	},
 	onRequestSuccess: function (e) {
@@ -83,7 +84,12 @@ var ChangePassword = React.createClass({
 			header: 'Success',
 			message: 'Verification email sent'
 		});
+	},
+	onRequestError: function (e) {
+		FeedbackAction.displaySuccessMessage({
+			header: 'Error',
+			message: 'Could not change email, try again.'
+		});
 	}
-
 });
 module.exports = ChangePassword;
