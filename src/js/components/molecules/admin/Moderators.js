@@ -24,7 +24,7 @@ var Moderators = React.createClass({
 		var that = this;
 		if (this.state.moderators && this.state.moderators.length > 0) {
 			this.state.moderators.forEach(function (item, index) {
-				var moderator = <ModeratorListItem username={item.name} userId={item._id} onClick={that.onDeleteModeratorClicked}/>;
+				var moderator = <ModeratorListItem key={index} username={item.username} onDeleteModeratorClicked={that.onDeleteModeratorClicked}/>;
 				moderators.push(moderator);
 			});
 		}
