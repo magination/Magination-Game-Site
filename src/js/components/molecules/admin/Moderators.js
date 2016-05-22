@@ -2,12 +2,12 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
-var LoginStore = require('../../stores/LoginStore');
 
+var LoginStore = require('../../../stores/LoginStore');
 var FeedbackAction = require('../../../actions/FeedbackAction');
-
 var URLS = require('../../../config/config').urls;
-var ButtonStyles = require('../../../styles/Buttons');
+
+var ModeratorListItem = require('./ModeratorListItem');
 
 var Moderators = React.createClass({
 	getInitialState: function () {
@@ -21,68 +21,53 @@ var Moderators = React.createClass({
 	},
 	render: function () {
 		var moderators = [];
-		this.state.moderators.forEach(function (item, index) {
-			var moderator = <ModeratorListItem username={item.name} userId={item._id} onClick={this.onDeleteModeratorClicked}/>;
-			moderators.push(moderator);
-		});
+		var that = this;
+		if (this.state.moderators && this.state.moderators.length > 0) {
+			this.state.moderators.forEach(function (item, index) {
+				var moderator = <ModeratorListItem key={index} username={item.username} userId={item._id} onDeleteModeratorClicked={that.onDeleteModeratorClicked}/>;
+				moderators.push(moderator);
+			});
+		}
 		return (
 			<div>
-				<Row>
+				<Col md={12}>
 					<h5>Add moderator</h5>
-				</Row>
-				<Row>
-					<Col md={4}>
-						<Input type='text' placeholder='Enter user id'/>
-					</Col>
-				</Row>
-				<Row>
-				<Col md={4}>
-					<Button style={ButtonStyles.MaginationFillParent}>Update featured games</Button>
 				</Col>
-				</Row>
-				<Row>
+				<Col md={4}>
+					<Input type='text' placeholder='Enter username' onChange={this.onModeratorNameChanged}/>
+				</Col>
+				<Col md={4}>
+					<Button onClick={this.onAddModeratorClicked}>Add moderator</Button>
+				</Col>
+				<Col md={4}><div></div></Col>
+				<Col md={12}>
 					<h5>Current moderators:</h5>
-				</Row>
+				</Col>
 				<Col md={12}>
 					{moderators}
 				</Col>
 			</div>
 		);
 	},
+	onModeratorNameChanged: function (e) {
+		this.setState({
+			newModeratorUsername: e.target.value
+		});
+	},
 	onAddModeratorClicked: function () {
 		if (this.state.newModeratorUsername.length === 0) return;
 		$.ajax({
 			type: 'POST',
-			url: URLS.api.users + '/moderators/' + this.state.newModeratorUsername,
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			url: URLS.api.moderators + '/' + this.state.newModeratorUsername,
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {
 				200: this.onPostSuccessResponse,
-				404: this.onPostNotFoundResponse,
-				422: this.onPostUnprocessableEntityResponse
+				404: this.onPostNotFoundResponse
 			}
-		});
-	},
-	onDeleteModeratorClicked: function (username) {
-		$.ajax({
-			type: 'DELETE',
-			url: URLS.api.users + '/moderators/' + username,
-			contentType: 'application/json',
-			dataType: 'json',
-			statusCode: {
-				200: this.onDeleteSuccessResponse
-			}
-		});
-	},
-	onDeleteSuccessResponse: function (data) {
-		FeedbackAction.displaySuccessMessage({
-			header: 'Success',
-			message: 'Moderator removed'
-		});
-	},
-	onGetModeratorsSuccessResponse: function (data) {
-		this.setState({
-			moderators: data
 		});
 	},
 	onPostSuccessResponse: function () {
@@ -95,19 +80,38 @@ var Moderators = React.createClass({
 	onPostNotFoundResponse: function () {
 		FeedbackAction.displayErrorMessage({
 			header: 'Error',
-			message: 'At least one of the ids provided did not link to a game'
+			message: 'No user with given username found'
 		});
 	},
-	onPostUnprocessableEntityResponse: function () {
-		FeedbackAction.displayErrorMessage({
-			header: 'Error',
-			message: 'At least one of the provided ids are not valid game ids'
+	onDeleteModeratorClicked: function (username) {
+		var that = this;
+		$.ajax({
+			type: 'DELETE',
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
+			url: URLS.api.moderators + '/' + username,
+			contentType: 'application/json',
+			dataType: 'json',
+			statusCode: {
+				200: function () {
+					FeedbackAction.displaySuccessMessage({
+						header: 'Success',
+						message: 'Moderator removed'
+					});
+					var newList = that.state.moderators;
+					newList.splice(newList.indexOf(username), 1);
+					that.setState({
+						moderators: newList
+					});
+				}
+			}
 		});
 	},
 	requestModeratorList: function () {
 		$.ajax({
 			type: 'GET',
-			url: URLS.api.users + '/moderators',
+			url: URLS.api.moderators,
 			headers: {
 				'Authorization': LoginStore.getToken()
 			},
@@ -116,6 +120,11 @@ var Moderators = React.createClass({
 			statusCode: {
 				200: this.onGetModeratorsSuccessResponse
 			}
+		});
+	},
+	onGetModeratorsSuccessResponse: function (data) {
+		this.setState({
+			moderators: data
 		});
 	}
 });

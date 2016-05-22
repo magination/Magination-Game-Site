@@ -4,7 +4,7 @@ var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
 
 var FeedbackAction = require('../../../actions/FeedbackAction');
-
+var LoginStore = require('../../../stores/LoginStore');
 var URLS = require('../../../config/config').urls;
 var ButtonStyles = require('../../../styles/Buttons');
 
@@ -24,21 +24,36 @@ var FeaturedGames = React.createClass({
 				</Col>
                 <Col md={4}>
                     <h5>Featured game 1</h5>
-                    <Input type='text' placeholder='Enter game id'/>
+                    <Input type='text' placeholder='Enter game id' onChange={this.onGameOneChanged}/>
                 </Col>
                 <Col md={4}>
                     <h5>Featured game 2</h5>
-                    <Input type='text' placeholder='Enter game id'/>
+                    <Input type='text' placeholder='Enter game id' onChange={this.onGameTwoChanged}/>
                 </Col>
                 <Col md={4}>
                     <h5>Featured game 3</h5>
-                    <Input type='text' placeholder='Enter game id'/>
+                    <Input type='text' placeholder='Enter game id' onChange={this.onGameThreeChanged}/>
                 </Col>
 				<Col md={12}>
 					<Button style={ButtonStyles.MaginationFillParent} onClick={this.onUpdateClicked}>Update featured games</Button>
 				</Col>
 			</div>
 		);
+	},
+	onGameOneChanged: function (e) {
+		this.setState({
+			gameOneId: e.target.value
+		});
+	},
+	onGameTwoChanged: function (e) {
+		this.setState({
+			gameTwoId: e.target.value
+		});
+	},
+	onGameThreeChanged: function (e) {
+		this.setState({
+			gameThreeId: e.target.value
+		});
 	},
 	onPasswordEntryChanged: function (e) {
 		this.setState({
@@ -63,6 +78,9 @@ var FeaturedGames = React.createClass({
 			data: JSON.stringify({
 				games: games
 			}),
+			headers: {
+				'Authorization': LoginStore.getToken()
+			},
 			contentType: 'application/json',
 			dataType: 'json',
 			statusCode: {

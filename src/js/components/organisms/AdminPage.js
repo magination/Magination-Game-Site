@@ -6,7 +6,7 @@ var Col = require('react-bootstrap').Col;
 var LoginStore = require('../../stores/LoginStore');
 var LoginAction = require('../../actions/LoginAction');
 var FeaturedGames = require('../molecules/admin/FeaturedGames');
-
+var Moderators = require('../molecules/admin/Moderators');
 var Validator = require('../../service/Validator.service');
 
 var AdminPage = React.createClass({
@@ -36,7 +36,7 @@ var AdminPage = React.createClass({
 							<FeaturedGames />
 						</Tab>
 						<Tab eventKey={2} title='Moderators' style={{padding: '10'}}>
-							Manage moderators
+							<Moderators/>
 						</Tab>
 					</Tabs>
 				</Col>

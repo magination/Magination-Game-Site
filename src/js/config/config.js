@@ -20,7 +20,8 @@ var config = {
 				staticimages: restApiRoot + 'public/editor'
 			},
 			reports: restApiRoot + 'reports',
-			reviews: restApiRoot + 'reviews'
+			reviews: restApiRoot + 'reviews',
+			moderators: restApiRoot + 'moderators'
 		},
 		img: {
 			starWhite: imgRoot + 'starWhiteTransparent100x100.png',

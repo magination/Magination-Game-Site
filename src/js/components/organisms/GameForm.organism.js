@@ -37,9 +37,6 @@ var GameForm = React.createClass({
 	componentDidMount: function () {
 		GameStore.addChangeListener(this.onGameStateChanged);
 		GameStore.addChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
-		if (GameStore.getGame() && GameStore.getGame().title.length > 0) {
-			GameAction.checkNameAvailability(GameStore.getGame().title);
-		}
 	},
 	componentWillUnmount: function () {
 		GameStore.removeChangeListener(this.onGameStateChanged);
@@ -133,6 +130,9 @@ var GameForm = React.createClass({
 		this.setState({
 			game: GameStore.getGame()
 		});
+		if (GameStore.getGame() && GameStore.getGame().title.length > 0) {
+			GameAction.checkNameAvailability(GameStore.getGame().title);
+		}
 	},
 	onTitleChanged: function (e) {
 		GameAction.updateCurrentGameLocally({
