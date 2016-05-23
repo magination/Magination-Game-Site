@@ -5,6 +5,8 @@ var ImgSrc = require('../../../config/config').urls.img;
 var Rating = require('../browsegames/RateGame.molecule');
 var ButtonStyles = require('../../../styles/Buttons');
 
+var CenteredImage = require('../../atoms/CenteredImage.atom');
+
 var Review = React.createClass({
 	propTypes: {
 		data: React.PropTypes.any.isRequired
@@ -14,7 +16,9 @@ var Review = React.createClass({
 			<div>
 				<Media>
 					<Media.Left>
-						<img width={64} height={64} src={ImgSrc.pieceSingleBlue} alt='Profile Pic'/>
+						<div style={{width: 128, height: 128}}>
+							<CenteredImage src={ImgSrc.person_male} alt='Profile Pic'/>
+						</div>
 					</Media.Left>
 					<Media.Body>
 						<Media.Heading>{this.props.data.owner.username}</Media.Heading>

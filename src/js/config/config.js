@@ -39,7 +39,8 @@ var config = {
 			pieceSingleBlue: imgRoot + 'magination-pieces/piece-blue-single.png',
 			pieceDoubleBlue: imgRoot + 'magination-pieces/piece-blue-double.png',
 			pieceTripleBlue: imgRoot + 'magination-pieces/piece-blue-triple.png',
-			peopleBlue: imgRoot + 'people.png'
+			peopleBlue: imgRoot + 'people.png',
+			person_male: imgRoot + 'person_male.jpg'
 		},
 		server: {
 			root: backendRoot,
