@@ -21,6 +21,10 @@ var ButtonStyles = {
 		color: Colors.blue,
 		fontSize: '25'
 	},
+	RatingStarWhite: {
+		color: 'white',
+		fontSize: '25'
+	},
 	MaginationFillParent: {
 		backgroundColor: Colors.blueDark,
 		color: 'white',

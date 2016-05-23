@@ -272,21 +272,21 @@ var ContainerStyles = {
 		FrontPageGame: {
 			container: {
 				padding: 10,
+				border: '2px solid white',
+				backgroundColor: Colors.blueDark,
 				borderRadius: 5,
-				border: '2px solid ' + Colors.blue,
 				cursor: 'pointer'
 			},
 			containerHovered: {
 				padding: 10,
 				borderRadius: 5,
-				border: '2px solid ' + Colors.blue,
-				backgroundColor: Colors.blueTransparent,
+				backgroundColor: Colors.blueLight,
 				cursor: 'pointer'
 			},
-			imageBorder: {
-				padding: 5,
+			imageContainer: {
 				border: '1px solid white',
-				borderRadius: 5
+				borderRadius: 5,
+				backgroundColor: 'white'
 			}
 		}
 	}

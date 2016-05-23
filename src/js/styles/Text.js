@@ -17,6 +17,9 @@ var TextStyles = {
 	blue: {
 		color: Colors.blue
 	},
+	blueDark: {
+		color: Colors.blueDark
+	},
 	red: {
 		color: Colors.red
 	},
