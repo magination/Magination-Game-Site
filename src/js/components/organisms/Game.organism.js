@@ -96,7 +96,7 @@ var Game = React.createClass({
 				</Row>
 				<Row>
 					<Col md={leftWidth} mdOffset={offset}>
-						<CustomList title='Alternative rules' listElements={this.state.game.alternativeRules}/>
+						{this.gameHasAlternativeRules() ? <CustomList title='Alternative rules' listElements={this.state.game.alternativeRules}/> : null}
 					</Col>
 					<Col md={rightWidth} style={{textAlign: 'right'}}>
 					</Col>
@@ -125,6 +125,9 @@ var Game = React.createClass({
 		});
 	},
 	onGetGameNotFoundResponse: function (data) {
+	},
+	gameHasAlternativeRules: function () {
+		return this.state.alternativeRules && this.state.alternativeRules.length > 0;
 	}
 });
 

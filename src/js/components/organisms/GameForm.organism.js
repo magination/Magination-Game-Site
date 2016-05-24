@@ -35,6 +35,7 @@ var GameForm = React.createClass({
 		};
 	},
 	componentDidMount: function () {
+		this.onGameStateChanged();
 		GameStore.addChangeListener(this.onGameStateChanged);
 		GameStore.addChangeListener(this.onGameNameAvailabilityChanged, GameConstants.CHECK_NAME_AVAILABILITY);
 	},
@@ -127,6 +128,7 @@ var GameForm = React.createClass({
 		);
 	},
 	onGameStateChanged: function () {
+		if (!GameStore.getGame()) return;
 		this.setState({
 			game: GameStore.getGame()
 		});
