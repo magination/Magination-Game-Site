@@ -10,6 +10,7 @@ var ButtonStyles = require('../../../styles/Buttons');
 var Colors = require('../../../styles/Colors');
 
 var LoginStore = require('../../../stores/LoginStore');
+var LoginAction = require('../../../actions/LoginAction');
 var FeedbackAction = require('../../../actions/FeedbackAction');
 
 var minPasswordLength = 7;
@@ -35,7 +36,7 @@ var ChangePassword = React.createClass({
 				</Col>
 				<Collapse in={this.props.isShow}>
 					<Col md={12}>
-						<Well style={{marginBottom: '0'}}>
+						<Well style={{marginBottom: '0px'}}>
 							<div>
 								<form className='form-settings' onSubmit={this.storeChanges}>
 									<Input
@@ -130,6 +131,9 @@ var ChangePassword = React.createClass({
 			header: 'Success',
 			message: 'Password updated'
 		});
+		if (data.token && data.refreshToken) {
+			LoginAction.loginSuccess(data);
+		}
 	},
 	onBadPasswordResponse: function (data) {
 		FeedbackAction.displayErrorMessage({
