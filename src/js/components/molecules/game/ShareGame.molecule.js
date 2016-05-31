@@ -26,7 +26,7 @@ var ShareGame = React.createClass({
 	componentDidMount: function () {
 		window.fbAsyncInit = function () {
 			FB.init({// eslint-disable-line no-undef
-				appId: '1729344223947397',
+				appId: '288671844806887',
 				xfbml: true,
 				version: 'v2.6'
 			});

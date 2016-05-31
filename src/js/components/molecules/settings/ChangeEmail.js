@@ -6,6 +6,7 @@ var Well = require('react-bootstrap').Well;
 var Col = require('react-bootstrap').Col;
 var URLS = require('../../../config/config').urls;
 var LoginStore = require('../../../stores/LoginStore');
+var LoginAction = require('../../../actions/LoginAction');
 var FeedbackAction = require('../../../actions/FeedbackAction');
 var ValidatorService = require('../../../service/Validator.service');
 var ButtonStyles = require('../../../styles/Buttons');
@@ -29,7 +30,7 @@ var ChangePassword = React.createClass({
 				</Col>
 				<Collapse in={this.props.isShow}>
 					<Col md={12}>
-						<Well style={{marginBottom: '0'}}>
+						<Well style={{marginBottom: '0px'}}>
 							<div>
 								<form className='form-settings' onSubmit={this.storeChanges}>
 									<Input value={this.state.currentPassword} required='true' label='Current password' placeholder='Enter your current password' type='password' onChange={this.onCurrentPasswordChanged}/>
@@ -79,11 +80,14 @@ var ChangePassword = React.createClass({
 			error: this.onRequestError
 		});
 	},
-	onRequestSuccess: function (e) {
+	onRequestSuccess: function (data) {
 		FeedbackAction.displaySuccessMessage({
 			header: 'Success',
 			message: 'Verification email sent'
 		});
+		if (data.token && data.refreshToken) {
+			LoginAction.loginSuccess(data);
+		}
 	},
 	onRequestError: function (e) {
 		FeedbackAction.displaySuccessMessage({
