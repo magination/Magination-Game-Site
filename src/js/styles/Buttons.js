@@ -22,7 +22,7 @@ var ButtonStyles = {
 		fontSize: '25'
 	},
 	RatingStarWhite: {
-		color: 'white',
+		color: Colors.yellow,
 		fontSize: '25'
 	},
 	MaginationFillParent: {

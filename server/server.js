@@ -10,13 +10,6 @@ app.get('*', function (req, res) {
 	res.sendFile('index.html', { root: path.join(__dirname, '../src') });
 });
 
-var options = {
-	key: fs.readFileSync('./server/https/key.pem'),
-	cert: fs.readFileSync('./server/https/cert.pem')
-};
-
-https.createServer(options, app).listen(8080, function (err) {
-	if (err) console.log(err);
-	else console.log('Server listening...');
+app.listen(8080, function() {
+	console.log('Running on port:8080');
 });
-

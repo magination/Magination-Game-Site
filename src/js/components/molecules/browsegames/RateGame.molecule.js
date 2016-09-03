@@ -1,5 +1,6 @@
 var React = require('react');
 var RatingIcon = require('../../atoms/RatingIcon');
+var TextStyles = require('../../../styles/Text');
 
 var RateGame = React.createClass({
 	getInitialState () {
@@ -60,7 +61,7 @@ var RateGame = React.createClass({
 			}
 		}
 		return (
-			<div>
+			<div style={TextStyles.FrontPage.gamePreviewStarContainer}>
 				{ratingIcons}
 			</div>
 		);

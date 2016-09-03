@@ -52,7 +52,7 @@ var Menu = React.createClass({
 			<div>
 				<LoginForm ref='loginModal'/>
 				<SaveGameModal ref='saveGameModal'/>
-				<Navbar fixedTop activeKey={this.state.currentActive}>
+				<Navbar fixedTop activeKey={this.state.currentActive} style={{backgroundColor: 'white', margin: '0px'}}>
 					<Navbar.Header>
 						<Navbar.Brand>
 							<a onClick={this.onNavigationClick.bind(this, '/')} href='#' ><img style={imgStyle} src='/public/img/magination-logo.png'/></a>

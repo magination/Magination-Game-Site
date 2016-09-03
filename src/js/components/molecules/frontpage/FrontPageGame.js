@@ -20,8 +20,8 @@ var FrontPageGameContainer = React.createClass({
 				<div style={ContainerStyles.FrontPage.FrontPageGame.imageContainer}>
 					<CenteredImage src={this.props.game.images[0]} aspect='oneToOne'/>
 				</div>
-				<h3 style={TextStyles.white}>{this.props.game.title}</h3>
-				<h4 style={TextStyles.white}>By: {this.props.game.owner.username}</h4>
+				<h3 style={TextStyles.FrontPage.gamePreviewTitle}>{this.props.game.title}</h3>
+				<h4 style={TextStyles.FrontPage.gamePreviewAuthor}>by {this.props.game.owner.username}</h4>
 				<Rating isStatic maxRating={5} rating={this.props.game.rating} glyphStyle={ButtonStyles.RatingStarWhite} selectedImage='star' unselectedImage='star-empty'/>
 			</div>
 		);

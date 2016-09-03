@@ -27,7 +27,7 @@ var TextStyles = {
 		color: Colors.green
 	},
 	RatingStarWhite: {
-		color: 'white',
+		color: Colors.yellow,
 		fontSize: '30'
 	},
 	textArea: {
@@ -57,6 +57,12 @@ var TextStyles = {
 			margin: '0',
 			padding: '0',
 			color: Colors.blueDark
+		},
+		reviewHeader: {
+			margin: '0',
+			padding: '0',
+			color: Colors.blueDark,
+			textAlign: 'center'
 		}
 	},
 	FrontPage: {
@@ -64,6 +70,18 @@ var TextStyles = {
 			color: 'white',
 			verticalAlign: 'middle',
 			width: '100%'
+		},
+		gamePreviewTitle: {
+			color: 'white',
+			fontSize: '20px',
+			margin: '15px 0px'
+		},
+		gamePreviewAuthor: {
+			color: 'white',
+			fontSize: '14px',
+		},
+		gamePreviewStarContainer: {
+			marginBottom: '10px'
 		}
 	},
 	CreateGame: {
