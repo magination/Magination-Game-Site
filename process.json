@@ -1,0 +1,9 @@
+{
+  "apps" : [{
+    "name"        : "Magination-Game-Site",
+    "script"      : "./server/server.js",
+    "env": {
+      "NODE_ENV": "production",
+    }
+  }
+}
