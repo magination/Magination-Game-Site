@@ -1,0 +1,10 @@
+{
+  "apps" : [{
+    "name"        : "Magination-Game-Site",
+    "script"      : "./server/server.js",
+    "env": {
+      "NODE_ENV": "production",
+    },
+    "post-deploy": "npm run build:prod && pm2 startOrRestart process.json"
+  }]
+}
