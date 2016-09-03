@@ -90,3 +90,18 @@ gulp.task('default', ['watch', 'server'], function () {
 	});
 	browserSync.pause();
 });
+
+gulp.task('build:prod', ['clean', 'moveDepencies'], function () {
+	process.env.NODE_ENV = 'production';
+	var bundler = browserify('./src/js/RenderApp.js')
+	.transform(babel.configure({
+		presets: ['react']
+	}));
+
+	return bundler.bundle()
+		.on('error', function (err) { console.error(err); this.emit('end'); })
+		.pipe(source('app.js'))
+		.pipe(buffer())
+		.pipe(uglify())
+		.pipe(gulp.dest('./build'));
+});
