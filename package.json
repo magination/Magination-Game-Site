@@ -4,7 +4,7 @@
   "main": "./server/server.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js",
-    "build:prod": "./node_modules/gulp/bin/gulp.js build:prod",
+    "build:prod": "./node_modules/gulp/bin/gulp.js build:prod"
   },
   "repository": {
     "type": "git",
