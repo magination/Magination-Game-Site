@@ -263,29 +263,30 @@ var ContainerStyles = {
 		zIndex: 9999999999 // always in front
 	},
 	FrontPage: {
+		gamePreviewContainer: {
+			marginTop: '20px'
+		},
 		gameContainer: {
-			borderRadius: 10,
-			padding: 15,
 			width: '100%',
 			border: '2px solid ' + Colors.blue
 		},
 		FrontPageGame: {
 			container: {
-				padding: 10,
+				padding: '5px',
+				textAlign: 'center',
 				border: '2px solid white',
-				backgroundColor: Colors.blueDark,
-				borderRadius: 5,
+				backgroundColor: Colors.blue,
 				cursor: 'pointer'
 			},
 			containerHovered: {
-				padding: 10,
-				borderRadius: 5,
+				padding: '5px',
+				textAlign: 'center',
+				border: '2px solid white',
 				backgroundColor: Colors.blueLight,
 				cursor: 'pointer'
 			},
 			imageContainer: {
 				border: '1px solid white',
-				borderRadius: 5,
 				backgroundColor: 'white'
 			}
 		}

@@ -71,16 +71,17 @@ var Reviews = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<Col md={this.props.leftWidth} mdOffset={this.props.offset}>
+					<Col md={3} mdOffset={1} xs={4} xsOffset={5}>
 						<h2 style={TextStyles.gameView.paddingLessHeader}>Reviews</h2>
 						<br/>
 					</Col>
-					<Col md={this.props.rightWidth} style={{textAlign: 'right'}}>
+					<Col md={3} mdOffset={3} style={{textAlign: 'right'}}>
 						{createNewReviewButton}
 					</Col>
 					<Col md={this.props.offset}>
 					</Col>
 				</Row>
+				<Col md={10} mdOffset={1}><hr/></Col>
 				<Row>
 					<Col md={this.props.leftWidth} mdOffset={this.props.offset}>
 						{reviews}

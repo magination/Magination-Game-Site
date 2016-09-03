@@ -110,14 +110,14 @@ var GameForm = React.createClass({
 					<br/>
 					<hr/>
 					<Row style={{margin: 0, padding: 0}}>
-						<Col md={8} style={{margin: 0, padding: 0}}>
-							<Col md={4} style={{margin: 0, paddingRight: 10, paddingLeft: 0}}>
+						<Col md={8} style={{padding: 0}}>
+							<Col md={4} style={{marginLeft: 0, marginBottom: '10px', paddingLeft: 0}} >
 								<ConfirmButton confirmationDialog='This action will delete the game, and is irreversible. Are you sure you want to continue?' style={ButtonStyle.Game.gameButton(Colors.red)} onClick={this.onDeleteClicked} placement='top' buttonText='DELETE'/>
 							</Col>
-							<Col md={4} style={{margin: 0, paddingRight: 5, paddingLeft: 5}}>
+							<Col md={4} style={{marginLeft: 0, marginBottom: '10px', paddingLeft: 0}} >
 								<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.blue)} onClick={this.onSaveClicked} tooltip='Save your game so you can come back later and finish it.' buttonText='SAVE'/>
 							</Col>
-							<Col md={4} style={{margin: 0, paddingLeft: 10}}>
+							<Col md={4} style={{marginLeft: 0, paddingLeft: 0}} >
 								<ButtonWithTooltip style={ButtonStyle.Game.gameButton(Colors.green)} onClick={this.onPublishClicked} tooltip='Publish your game for everyone to see!' buttonText='PUBLISH'/>
 							</Col>
 						</Col>

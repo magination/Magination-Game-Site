@@ -80,7 +80,7 @@ var Game = React.createClass({
 				<Row style={{marginTop: '10'}}><Col md={4} mdOffset={1}><GameActionBar game={this.state.game} gameId={getLastUrlId()}/></Col></Row>
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
 				<Row>
-					<Col md={leftWidth} mdOffset={offset}>
+					<Col xs={leftWidth} xsOffset={offset}>
 						<h2 style={TextStyles.gameView.paddingLessHeader}>Description</h2>
 						<h4>{this.state.game.shortDescription}</h4>
 					</Col>
@@ -90,17 +90,17 @@ var Game = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<Col md={leftWidth + rightWidth} mdOffset={offset}>
+					<Col xs={leftWidth + rightWidth} xsOffset={offset}>
 						<CustomList title='Rules' listElements={this.state.game.rules}/>
 					</Col>
 				</Row>
 				<Row>
-					<Col md={leftWidth} mdOffset={offset}>
+					<Col xs={leftWidth} xsOffset={offset}>
 						{this.gameHasAlternativeRules() ? <CustomList title='Alternative rules' listElements={this.state.game.alternativeRules}/> : null}
 					</Col>
-					<Col md={rightWidth} style={{textAlign: 'right'}}>
+					<Col xs={rightWidth} style={{textAlign: 'right'}}>
 					</Col>
-					<Col md={offset}>
+					<Col xs={offset}>
 					</Col>
 				</Row>
 				<Col md={leftWidth + rightWidth} mdOffset={offset}><hr/></Col>
