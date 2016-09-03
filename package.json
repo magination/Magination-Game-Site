@@ -1,9 +1,10 @@
 {
   "name": "magination",
   "version": "1.0.0",
-  "main": "gulpfile.js",
+  "main": "./server/server.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js"
+    "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js",
+    "build:prod": "./node_modules/gulp/bin/gulp.js build:prod",
   },
   "repository": {
     "type": "git",
