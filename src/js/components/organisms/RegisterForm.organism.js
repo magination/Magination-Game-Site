@@ -8,7 +8,7 @@ var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var TextStyle = require('../../styles/Text');
 var ButtonStyle = require('../../styles/Buttons');
-var minPasswordLength = 7;
+var minPasswordLength = 6;
 
 function isEmail (email) {
 	var regex = /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
