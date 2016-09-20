@@ -24,7 +24,7 @@
     "node-jsx": "^0.13.3",
     "path": "^0.12.7",
     "react": "^15.1.0",
-    "react-addons-css-transition-group": "^15.0.2",
+    "react-addons-css-transition-group": "^15.3.2",
     "react-addons-test-utils": "^15.3.1",
     "react-bootstrap": "^0.30.3",
     "react-cookie": "^0.4.5",
