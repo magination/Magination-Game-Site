@@ -78,7 +78,7 @@ var TextStyles = {
 		},
 		gamePreviewAuthor: {
 			color: 'white',
-			fontSize: '14px',
+			fontSize: '14px'
 		},
 		gamePreviewStarContainer: {
 			marginBottom: '10px'
