@@ -26,17 +26,19 @@ var OTHER_OBJECTS_BUTTON_GROUP_VALUES = {
 	BOTH: 3
 };
 
+var ISNUMBER = /^[0-9]+$/;
+
 var SearchGames = React.createClass({
 	getInitialState: function () {
 		return {
 			filter_title: '',
 			filter_author: '',
-			filter_singles: '0',
-			filter_doubles: '0',
-			filter_triples: '0',
+			filter_singles: '',
+			filter_doubles: '',
+			filter_triples: '',
 			filter_general_search: '',
 			filter_rating: 0,
-			filter_players: 0,
+			filter_players: '',
 			currentActiveTeamButton: TEAMS_BUTTON_GROUP_VALUES.BOTH,
 			currentActiveOtherObjectsButton: OTHER_OBJECTS_BUTTON_GROUP_VALUES.BOTH
 		};
@@ -69,9 +71,9 @@ var SearchGames = React.createClass({
 					<Rating rating={this.state.filter_rating} glyphStyle={TextStyles.RatingStarWhite} maxRating='5' onRatingClicked={this.onRatingClicked} selectedImage='star' unselectedImage='star-empty'/>
 					<hr/>
 					<h4 style={TextStyles.white}>Pieces</h4>
-					<Input value={this.state.filter_singles} type='number' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}></Input>
-					<Input value={this.state.filter_doubles} type='number' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceDoubleBlue} alt='No img'/>}></Input>
-					<Input value={this.state.filter_triples} type='number' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceTripleBlue} alt='No img'/>}></Input>
+					<Input value={this.state.filter_singles} type='text' placeholder='Singles' onChange={this.singlesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceSingleBlue} alt='No img'/>}></Input>
+					<Input value={this.state.filter_doubles} type='text' placeholder='Doubles' onChange={this.doublesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceDoubleBlue} alt='No img'/>}></Input>
+					<Input value={this.state.filter_triples} type='text' placeholder='Triples' onChange={this.triplesFilterChanged} addonBefore={<img width={39} height={19} src={ImgUrls.pieceTripleBlue} alt='No img'/>}></Input>
 					<Button disabled={!LoginStore.getLoginState().isLoggedIn} onClick={this.onImportPiecesClick}>Import My Pieces</Button>
 					<h5 style={TextStyles.white}>Other Objects</h5>
 					<ButtonGroup>
@@ -81,7 +83,7 @@ var SearchGames = React.createClass({
 					</ButtonGroup>
 					<hr/>
 					<h4 style={TextStyles.white}>Players</h4>
-					<Input value={this.state.filter_players} type='number' placeholder='Players' onChange={this.playersFilterChanged}></Input>
+					<Input value={this.state.filter_players} type='text' placeholder='Players' onChange={this.playersFilterChanged}></Input>
 					<h5 style={TextStyles.white}>Teams</h5>
 					<ButtonGroup>
 						<Button style={(this.state.currentActiveTeamButton === TEAMS_BUTTON_GROUP_VALUES.TEAMS) ? ButtonStyles.ToggledButton : {}} onClick={this.onTeamButtonGroupClicked.bind(this, TEAMS_BUTTON_GROUP_VALUES.TEAMS)} type='button'>Yes</Button>
@@ -114,9 +116,13 @@ var SearchGames = React.createClass({
 		}, 0);
 	},
 	playersFilterChanged: function (e) {
-		this.setState({
-			filter_players: e.target.value
-		});
+		var value = e.target.value;
+		console.log(value);
+		if (ISNUMBER.test(value) || value.length === 0) {
+			this.setState({
+				filter_players: e.target.value
+			});
+		}
 	},
 	onRatingClicked: function (rating) {
 		var newRating = rating;
@@ -207,19 +213,28 @@ var SearchGames = React.createClass({
 		});
 	},
 	singlesFilterChanged: function (e) {
-		this.setState({
-			filter_singles: e.target.value
-		});
+		var value = e.target.value;
+		if (ISNUMBER.test(value) || value.length === 0) {
+			this.setState({
+				filter_singles: e.target.value
+			});
+		}
 	},
 	doublesFilterChanged: function (e) {
-		this.setState({
-			filter_doubles: e.target.value
-		});
+		var value = e.target.value;
+		if (ISNUMBER.test(value) || value.length === 0) {
+			this.setState({
+				filter_doubles: e.target.value
+			});
+		}
 	},
 	triplesFilterChanged: function (e) {
-		this.setState({
-			filter_triples: e.target.value
-		});
+		var value = e.target.value;
+		if (ISNUMBER.test(value) || value.length === 0) {
+			this.setState({
+				filter_triples: e.target.value
+			});
+		}
 	}
 });
 
