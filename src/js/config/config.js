@@ -1,5 +1,5 @@
-var serverRoot = 'http://localhost:3004/';
-var backendRoot = 'http://localhost:8000/';
+var serverRoot = 'https://game.maginationgame.com/';
+var backendRoot = 'https://api.maginationgame.com/';
 
 var restApiRoot = backendRoot + 'api/';
 var imgRoot = serverRoot + 'public/img/';
