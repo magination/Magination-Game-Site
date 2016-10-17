@@ -32,7 +32,7 @@ function compile (src, dst) {
 		.pipe(gulp.dest(dst));
 }
 
-gulp.task('build', ['lint'], function () {
+gulp.task('build', function () {
 	return compile('./src/js/RenderApp.js', './build');
 });
 

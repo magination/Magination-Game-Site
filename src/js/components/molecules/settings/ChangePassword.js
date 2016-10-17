@@ -44,7 +44,7 @@ var ChangePassword = React.createClass({
 										required='true'
 										placeholder='Enter your current password'
 										type='password'
-										onChange={this.onCurrentPasswordCHanged}
+										onChange={this.onCurrentPasswordChanged}
 									/>
 									<Input
 										value={this.state.newPassword}
@@ -82,7 +82,7 @@ var ChangePassword = React.createClass({
 	onChangePasswordClicked: function (e) {
 		this.props.onExpandChanged(this.props.isShow ? '' : 'password');
 	},
-	onCurrentPasswordCHanged: function (e) {
+	onCurrentPasswordChanged: function (e) {
 		this.setState({
 			currentPassword: e.target.value,
 			currentPasswordBsStyle: e.target.value.length >= minPasswordLength ? 'success' : 'error'
