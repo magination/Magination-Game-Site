@@ -28,11 +28,19 @@ var ConfirmForgotPassword = require('./components/organisms/ConfirmForgotPasswor
 var PATHS = require('./constants/NavigationConstants').PATHS;
 var Moderator = require('./components/organisms/ModeratorPage.organism');
 var Admin = require('./components/organisms/AdminPage');
+var ReactGA = require('react-ga');
+ReactGA.initialize('UA-44245810-5');
+
+function logPageView() {
+  ReactGA.set({ page: window.location.pathname });
+  ReactGA.pageview(window.location.pathname);
+}
+
 var ReactRouter = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Router history={browserHistory}>
+				<Router history={browserHistory} onUpdate={logPageView}>
 					<Route path='/' component={App}>
 						<Route path='/login' component={LoginForm} />
 						<Route path='/home' component={FrontPage} />
