@@ -29,16 +29,11 @@ var PATHS = require('./constants/NavigationConstants').PATHS;
 var Moderator = require('./components/organisms/ModeratorPage.organism');
 var Admin = require('./components/organisms/AdminPage');
 
-function logPageView() {
-  ga('set', 'page', window.location.pathname);
-  ga('send', 'pageview');
-}
-
 var ReactRouter = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<Router history={browserHistory} onUpdate={logPageView}>
+				<Router history={browserHistory}>
 					<Route path='/' component={App}>
 						<Route path='/login' component={LoginForm} />
 						<Route path='/home' component={FrontPage} />

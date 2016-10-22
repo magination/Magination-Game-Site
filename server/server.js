@@ -1,6 +1,8 @@
 var express = require('express');
 var path = require('path');
 var app = express();
+var ua = require('universal-analytics');
+var visitor = ua('UA-44245810-5');
 
 app.use(function (req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -11,7 +13,14 @@ app.use(function (req, res, next) {
 
 app.use('/public', express.static(path.join(__dirname, '../build')));
 
+app.get('/analytics', function(req, res) {
+	visitor.pageview(req.query.path).send();
+})
+
+app.get
+
 app.get('*', function (req, res) {
+	visitor.pageview(req.path).send();
 	res.sendFile('index.html', { root: path.join(__dirname, '../src') });
 });
 

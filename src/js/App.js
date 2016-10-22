@@ -12,7 +12,6 @@ var URLS = require('./config/config').urls;
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
-var GoogleAnalytics = require('react-g-analytics');
 var Footer = require('./components/organisms/Footer');
 
 var App = React.createClass({
@@ -61,13 +60,13 @@ var App = React.createClass({
 		NavigationAction.setCurrentPath({
 			destination: nextProps.location.pathname
 		});
+		$.get('/analytics?path='+nextProps.location.pathname);
 	},
 	render: function () {
 		return (
 			<div className='container'>
 				<Menu></Menu>
 				<StatusBar />
-				<GoogleAnalytics id="UA-44245810-5" />
 				<div className='row' style={{'minHeight': '500px'}}>{this.props.children !== null ? this.props.children : <FrontPage/>}</div>
 				<Footer />
 			</div>

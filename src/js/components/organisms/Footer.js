@@ -14,7 +14,6 @@ var FooterContainer = {
 
 var Footer = React.createClass({
 	render: function () {
-		console.log('asdasd');
 		return (
 			<div style={FooterContainer}>
 				<hr style={Hr} />
