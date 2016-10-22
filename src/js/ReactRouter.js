@@ -32,6 +32,8 @@ var ReactGA = require('react-ga');
 ReactGA.initialize('UA-44245810-5');
 
 function logPageView() {
+	console.log('Hei');
+	console.log({ page: window.location.pathname });
   ReactGA.set({ page: window.location.pathname });
   ReactGA.pageview(window.location.pathname);
 }
