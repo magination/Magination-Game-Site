@@ -12,6 +12,7 @@ var URLS = require('./config/config').urls;
 
 var Menu = require('./components/organisms/NavigationMenu.organism');
 var StatusBar = require('./components/organisms/StatusBar.organism');
+var GoogleAnalytics = require('react-g-analytics');
 
 var App = React.createClass({
 	componentWillMount: function () {
@@ -65,6 +66,7 @@ var App = React.createClass({
 			<div className='container'>
 				<Menu></Menu>
 				<StatusBar />
+				<GoogleAnalytics id="UA-44245810-5" />
 				<div className='row'>{this.props.children !== null ? this.props.children : <FrontPage/>}</div>
 			</div>
 		);
