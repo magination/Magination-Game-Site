@@ -30,7 +30,7 @@ var Footer = React.createClass({
 				<a href="mailto:contact@maginationgame.com" target="_blank">
 					&nbsp;Mail
 				</a>
-				<br>
+				<br />
 				<p>Copyright © 2016 Magination. All Rights Reserved.</p>
 			</div>
 		);

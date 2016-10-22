@@ -127,7 +127,6 @@ var Menu = React.createClass({
 			navigationStateElement =
 				<Nav pullRight activeKey={this.state.currentActive}>
 					<NavDropdown title={getProfile().username} id='nav-dropdown'>
-						<MenuItem eventKey={'profile'}><Glyphicon glyph='user'/> My Profile</MenuItem>
 						<MenuItem onClick={this.onMyGamesClicked}eventKey={'games'}><Glyphicon glyph='knight'/> My Games</MenuItem>
 						<MenuItem divider />
 						{Validator.isAdminPermission(LoginStore.getToken())

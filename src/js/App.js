@@ -68,7 +68,7 @@ var App = React.createClass({
 				<Menu></Menu>
 				<StatusBar />
 				<GoogleAnalytics id="UA-44245810-5" />
-				<div className='row'>{this.props.children !== null ? this.props.children : <FrontPage/>}</div>
+				<div className='row' style={{'minHeight': '500px'}}>{this.props.children !== null ? this.props.children : <FrontPage/>}</div>
 				<Footer />
 			</div>
 		);
