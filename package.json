@@ -29,7 +29,6 @@
     "react-cookie": "^0.4.5",
     "react-dom": "^15.1.0",
     "react-g-analytics": "^0.2.6",
-    "react-ga": "^2.1.2",
     "react-router": "^2.0.1"
   },
   "devDependencies": {

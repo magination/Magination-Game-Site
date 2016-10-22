@@ -28,14 +28,10 @@ var ConfirmForgotPassword = require('./components/organisms/ConfirmForgotPasswor
 var PATHS = require('./constants/NavigationConstants').PATHS;
 var Moderator = require('./components/organisms/ModeratorPage.organism');
 var Admin = require('./components/organisms/AdminPage');
-var ReactGA = require('react-ga');
-ReactGA.initialize('UA-44245810-5');
 
 function logPageView() {
-	console.log('Hei');
-	console.log({ page: window.location.pathname });
-  ReactGA.set({ page: window.location.pathname });
-  ReactGA.pageview(window.location.pathname);
+  ga('set', 'page', window.location.pathname);
+  ga('send', 'pageview');
 }
 
 var ReactRouter = React.createClass({
