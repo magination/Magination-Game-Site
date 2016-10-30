@@ -54,9 +54,6 @@ var GameForm = React.createClass({
 						<Col md={4}>
 							<Input value={this.state.game ? this.state.game.title : ''} bsStyle={this.getTitleBsStyle()} type='text' ref='gameTitle' placeholder='TITLE' onChange={this.onTitleChanged} onBlur={this.onTitleUnfocused} hasFeedback/>
 						</Col>
-						<Col md={8} style={{paddingLeft: 0}}>
-							{<h5 style={this.state.isAvailableGameName ? TextStyle.green : TextStyle.red}>{this.getGameNameFeedbackMessage()}</h5>}
-						</Col>
 					</Row>
 					<h3>PLAYERS</h3>
 					<Row>
@@ -141,7 +138,7 @@ var GameForm = React.createClass({
 			propertyName: 'title',
 			propertyValue: e.target.value
 		});
-		GameAction.checkNameAvailability(this.state.game.title);
+		//GameAction.checkNameAvailability(this.state.game.title);
 	},
 	onTitleUnfocused: function () {
 		AutoSave();
