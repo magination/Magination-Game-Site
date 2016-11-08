@@ -31,6 +31,7 @@ var Footer = React.createClass({
 				</a>
 				<br />
 				<p>Copyright © 2016 Magination. All Rights Reserved.</p>
+				<a href="www.maginationgame.com/terms">Terms & agreements</a>
 			</div>
 		);
 	}
