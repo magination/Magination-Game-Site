@@ -84,9 +84,9 @@ var GameCreator = React.createClass({
 				<GameCreatorElement key={index} piece={piece} />
 			);
 		});
-		if (this.state.otherObject.length > 0) {
+		/*if (this.state.otherObject.length > 0) {
 			gamecreatorelements.push(<GameCreatorElement key='otherobjects' piece={this.state.otherObject} noRotation={true} />);
-		}
+		}*/
 		var gamecreatorListStyle = {
 			height: this.state.gamecreatorListHeight,
 			overflowY: 'auto'
@@ -129,6 +129,11 @@ var GameCreator = React.createClass({
 							</form>
 							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onSaveClick}>SAVE</Button>
 							<Button style={ButtonStyle.MaginationFillParent} onClick={this.onAddToGameClick}>ADD TO GAME</Button>
+							<Button
+								style={{width: '100%', backgroundColor: Color.gray, color: '#fff', marginTop: '10px'}}
+								onClick={this.props.close}>
+								CLOSE
+							</Button>
 						</div>
 					</div>
 				</Col>

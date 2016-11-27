@@ -28,7 +28,7 @@ var GameCreatorModal = React.createClass({
 				<Button onClick={this.onCreateYourOwnClicked} type='button' style={ButtonStyle.MaginationFillParent}>CREATE YOUR OWN</Button>
 				<Modal enforceFocus={false} show={this.state.show} onHide={this.onHide} dialogClassName='gamecreator-modal'>
 					<Modal.Body>
-						<GameCreator />
+						<GameCreator close={this.onHide}/>
 					</Modal.Body>
 				</Modal>
 			</div>

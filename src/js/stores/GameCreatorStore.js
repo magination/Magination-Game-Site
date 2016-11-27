@@ -642,7 +642,7 @@ function onSaveJsonSuccessResponse (data) {
 function onRequestSuccess (data) {
 	LoginAction.updateLoginProfile();
 	GameAction.addImageToLocalGame({
-		image: data.image
+		image: data.images[data.images.length - 1]
 	});
 	GameCreatorStore.emitChange(GameCreatorConstants.PNG_ADDED_TO_GAME);
 }
