@@ -2,19 +2,25 @@
 
 const webpack = require("webpack");
 const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 
 module.exports = {
   context: __dirname + "/src",
-  target: 'node',
-  externals: [nodeExternals()],
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         use: [{
           loader: "babel-loader",
           options: { presets: ["es2015"] }
         }],
+        include: [
+          path.resolve(__dirname, "src"),
+        ],
+        query: {
+          plugins: ['transform-runtime'],
+          presets: ['es2015', 'stage-0', 'react'],
+        }
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,

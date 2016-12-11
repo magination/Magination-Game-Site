@@ -1,13 +1,13 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var GameListConstants = require('../constants/GameListConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-gamelist';
+import Dispatcher from '../dispatchers/Dispatcher';
+import GameListConstants from '../constants/GameListConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+const CHANGE_EVENT = 'change-gamelist';
 
-var _games = [];
-var _filters = {};
+let _games = [];
+let _filters = {};
 
-var GameListStore = _.extend({}, EventEmitter.prototype, {
+const GameListStore = _.extend({}, EventEmitter.prototype, {
 	getGames: function () {
 		return _games;
 	},

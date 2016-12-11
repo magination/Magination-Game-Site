@@ -1,9 +1,10 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var GameListConstants = require('../constants/GameListConstants');
-var GameListStore = require('../stores/GameListStore');
-var URLS = require('../config/config').urls;
+import Dispatcher from '../dispatchers/Dispatcher';
+import GameListConstants from '../constants/GameListConstants';
+import GameListStore from '../stores/GameListStore';
+import config from '../config/config';
+const URLS = config.urls;
 
-var GameListActions = {
+const GameListActions = {
 	getGamesSpecificInterval: function (start, quantity) {
 		var searchfilter = GameListStore.getSearchFilters();
 		searchfilter.start = start;

@@ -1,8 +1,8 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var ReportConstants = require('../constants/ReportConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-reportStore';
+import Dispatcher from '../dispatchers/Dispatcher';
+import ReportConstants from '../constants/ReportConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+const CHANGE_EVENT = 'change-reportStore';
 
 var _gameReports = [];
 var _userReports = [];

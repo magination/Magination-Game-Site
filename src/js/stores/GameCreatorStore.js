@@ -1,30 +1,31 @@
-var URLS = require('../config/config').urls;
-var LoginStore = require('./LoginStore');
-var LoginAction = require('../actions/LoginAction');
-var GameAction = require('../actions/GameAction');
-var ParserService = require('../service/Parser.service');
-var Dispatcher = require('../dispatchers/Dispatcher');
-var GameCreatorConstants = require('../constants/GameCreatorConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'default_creator_event';
-var apiRootUrl = require('../config/config').urls.server.root;
+import config from '../config/config';
+const URLS = config.urls;
+import LoginStore from './LoginStore';
+import LoginAction from '../actions/LoginAction';
+import GameAction from '../actions/GameAction';
+import ParserService from '../service/Parser.service';
+import Dispatcher from '../dispatchers/Dispatcher';
+import GameCreatorConstants from '../constants/GameCreatorConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+const CHANGE_EVENT = 'default_creator_event';
+const apiRootUrl = URLS.server.root;
 
-var _pieces = [];
-var _staticPieces = [
+let _pieces = [];
+let _staticPieces = [
 	[
 		[]
 	]
 ];
-var _otherObjects = [];
-var _staticPiecesFolderStructure = {};
-var _fabricCanvas = null;
-var _loadedData = {};
-var _currentGameId = null;
-var _gamecreatorList = [];
-var _gameHasChanged = false;
+let _otherObjects = [];
+let _staticPiecesFolderStructure = {};
+let _fabricCanvas = null;
+let _loadedData = {};
+let _currentGameId = null;
+let _gamecreatorList = [];
+let _gameHasChanged = false;
 
-var GameCreatorStore = _.extend({}, EventEmitter.prototype, {
+const GameCreatorStore = _.extend({}, EventEmitter.prototype, {
 	getPieces: function () {
 		_pieces = _fabricCanvas.getObjects().map(function (object) {
 			return {

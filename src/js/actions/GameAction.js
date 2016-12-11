@@ -1,16 +1,17 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var GameConstants = require('../constants/GameConstants');
-var URLS = require('../config/config').urls;
-var LoginStore = require('../stores/LoginStore');
-var GameStore = require('../stores/GameStore');
+import Dispatcher from '../dispatchers/Dispatcher';
+import GameConstants from '../constants/GameConstants';
+import LoginStore from '../stores/LoginStore';
+import GameStore from '../stores/GameStore';
+import config from '../config/config';
+const URLS = config.urls;
 
-var GameAction = {
+const GameAction = {
 	publishGameToServer: function () {
 		Dispatcher.dispatch({
 			actionType: GameConstants.PUBLISH_GAME_TO_SERVER
 		});
 	},
-	autoSaveGameToServer: function (callback) {
+	autoSaveGameToServer: function () {
 		Dispatcher.dispatch({
 			actionType: GameConstants.SAVE_GAME_TO_SERVER,
 			hasPromptedSave: false
@@ -150,7 +151,7 @@ var GameAction = {
 	}
 };
 
-function onSearchResult (data) {
+const onSearchResult = (data) => {
 	Dispatcher.dispatch({
 		actionType: GameConstants.CHECK_NAME_AVAILABILITY,
 		isAvailableGameName: data.games.length === 0

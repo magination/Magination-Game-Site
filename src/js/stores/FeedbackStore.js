@@ -1,8 +1,8 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var FeedbackConstants = require('../constants/FeedbackConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-feedback';
+import Dispatcher from '../dispatchers/Dispatcher';
+import FeedbackConstants from '../constants/FeedbackConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+const CHANGE_EVENT = 'change-feedback';
 
 var _feedback = {
 	statusType: '',

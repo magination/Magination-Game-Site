@@ -1,27 +1,25 @@
-var React = require('react');
+import React, { Component, PropTypes } from 'react';
+import NavigationAction from './actions/NavigationAction';
+import LoginAction from './actions/LoginAction';
+import LoginStore from './stores/LoginStore'// eslint-disable-line no-unused-vars
+import GameCreatorAction from'./actions/GameCreatorAction';
+import FrontPage from './components/organisms/FrontPage.organism';
+import config from './config/config';
+const URLS = config.urls;
 
-var NavigationAction = require('./actions/NavigationAction');
-var LoginAction = require('./actions/LoginAction');
-var LoginStore = require('./stores/LoginStore');// eslint-disable-line no-unused-vars
-var GameCreatorStore = require('./stores/GameCreatorStore'); // eslint-disable-line no-unused-vars
-var GameCreatorAction = require('./actions/GameCreatorAction');
-var GameStore = require('./stores/GameStore'); // eslint-disable-line no-unused-vars
-var MyGamesStore = require('./stores/MyGamesStore'); // eslint-disable-line no-unused-vars
-var FrontPage = require('./components/organisms/FrontPage.organism');
-var URLS = require('./config/config').urls;
+import Menu from './components/organisms/NavigationMenu.organism';
+import StatusBar from './components/organisms/StatusBar.organism';
+import Footer from './components/organisms/Footer';
 
-var Menu = require('./components/organisms/NavigationMenu.organism');
-var StatusBar = require('./components/organisms/StatusBar.organism');
-var Footer = require('./components/organisms/Footer');
-
-var App = React.createClass({
-	componentWillMount: function () {
+class App extends Component {
+	componentWillMount() {
 		NavigationAction.setCurrentPath({
 			destination: this.props.location.pathname
 		});
 		LoginAction.checkAutoLogin();
-	},
-	componentDidMount: function () {
+	}
+
+	componentDidMount() {
 		$.ajaxSetup({
 			timeout: (1000 * 10) /* milliseconds*/
 		});
@@ -48,11 +46,13 @@ var App = React.createClass({
 			};
 		});
 		GameCreatorAction.setListeners();
-	},
-	componentWillUnmount: function () {
+	}
+
+	componentWillUnmount() {
 		GameCreatorAction.removeListeners();
-	},
-	componentWillReceiveProps: function (nextProps) {
+	}
+
+	componentWillReceiveProps(nextProps) {
 		/* 	TODO: should be done in another way. componentWillReceiveProps happens every time a navigation in react-router is done.
 			Redundant action with NavigationAction.navigate()
 			Maybe figure a way to make react-router call NavigationAction.navigate() on back button press(?)
@@ -61,17 +61,18 @@ var App = React.createClass({
 			destination: nextProps.location.pathname
 		});
 		$.get('/analytics?path='+nextProps.location.pathname);
-	},
-	render: function () {
+	}
+
+	render() {
 		return (
 			<div className='container'>
-				<Menu></Menu>
+				<Menu />
 				<StatusBar />
-				<div className='row' style={{'minHeight': '500px'}}>{this.props.children !== null ? this.props.children : <FrontPage/>}</div>
+				<div className='row' style={{'minHeight': '500px'}}>{this.props.children !== null ? this.props.children : <FrontPage />}</div>
 				<Footer />
 			</div>
 		);
 	}
-});
+}
 
 module.exports = App;

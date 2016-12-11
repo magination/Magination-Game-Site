@@ -1,11 +1,10 @@
+import Dispatcher from '../dispatchers/Dispatcher';
+import TestConstants from '../constants/TestConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+const CHANGE_EVENT = 'change-test';
 
-var Dispatcher = require('../dispatchers/Dispatcher');
-var TestConstants = require('../constants/TestConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-test';
-
-var _feedback = 'default';
+let _feedback = 'default';
 
 var TestStore = _.extend({}, EventEmitter.prototype, {
 	getFeedback: function () {

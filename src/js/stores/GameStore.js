@@ -1,18 +1,19 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var GameConstants = require('../constants/GameConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-game';
-var URLS = require('../config/config').urls;
-var LoginStore = require('../stores/LoginStore');
-var NavigationAction = require('../actions/NavigationAction');
-var FeedbackAction = require('../actions/FeedbackAction');
+import Dispatcher from '../dispatchers/Dispatcher';
+import GameConstants from '../constants/GameConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+import config from '../config/config';
+const URLS = config.urls;
+import LoginStore from '../stores/LoginStore';
+import NavigationAction from '../actions/NavigationAction';
+import FeedbackAction from '../actions/FeedbackAction';
+const CHANGE_EVENT = 'change-game';
 
-var _game;
-var _hasPromptedSave = true;
-var _isAvailableGameName = false;
+let _game;
+let _hasPromptedSave = true;
+let _isAvailableGameName = false;
 
-var GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
+const GameStore = _.extend({}, EventEmitter.prototype.setMaxListeners(25), {
 	getGame: function () {
 		return _game;
 	},
@@ -101,22 +102,22 @@ GameStore.dispatchToken = Dispatcher.register(function (action) {
 		break;
 	}
 });
-function ChangeImagePrioritization (action) {
+const ChangeImagePrioritization = (action) => {
 	var images = _game.images;
 	let selectedItem = images[action.oldPosition];
 	images[action.oldPosition] = images[action.newPosition];
 	images[action.newPosition] = selectedItem;
 	_game.images = images;
 };
-function AddImageToLocalGame (action) {
+const AddImageToLocalGame = (action) => {
 	_game.images.push(action.image);
 	SaveGameToServer();
 };
-function RemoveImageFromLocalGame (action) {
+const RemoveImageFromLocalGame  = (action) => {
 	_game.images.splice(action.position, 1);
 	SaveGameToServer();
-}
-function PublishGameToServer () {
+};
+const PublishGameToServer = () => {
 	$.ajax({
 		type: 'POST',
 		url: URLS.api.unpublishedGames + '/' + _game._id + '/publish',
@@ -135,7 +136,8 @@ function PublishGameToServer () {
 		}
 	});
 };
-function SaveGameToServer (hasPromptedSave) {
+
+const SaveGameToServer = (hasPromptedSave) => {
 	_hasPromptedSave = hasPromptedSave;
 	_game.id = undefined;
 	$.ajax({
@@ -150,7 +152,8 @@ function SaveGameToServer (hasPromptedSave) {
 		success: onSaveGameSuccessResponse
 	});
 };
-function SaveGameAndResetGameStore () {
+
+const SaveGameAndResetGameStore = () => {
 	_hasPromptedSave = true;
 	$.ajax({
 		type: _game._id ? 'PUT' : 'POST',
@@ -171,11 +174,12 @@ function SaveGameAndResetGameStore () {
 	});
 };
 
-function CheckNameAvailability (action) {
+const CheckNameAvailability = (action) => {
 	_isAvailableGameName = action.isAvailableGameName;
 	GameStore.emitChange(GameConstants.CHECK_NAME_AVAILABILITY);
 };
-function UpdateGame (action) {
+
+const UpdateGame = (action) => {
 	if (action.propertyCollection) {
 		_game[action.propertyCollection][action.propertyName.toString()] = action.propertyValue;
 	}
@@ -183,7 +187,8 @@ function UpdateGame (action) {
 		_game[action.propertyName.toString()] = action.propertyValue;
 	}
 };
-function AddRule (action) {
+
+const AddRule = (action) => {
 	if (action.isOptional) {
 		_game.alternativeRules.push('');
 	}
@@ -191,7 +196,8 @@ function AddRule (action) {
 		_game.rules.push('');
 	}
 };
-function UpdateRule (action) {
+
+const UpdateRule = (action) => {
 	if (action.isOptional) {
 		_game.alternativeRules[action.position] = action.rule;
 	}
@@ -199,7 +205,8 @@ function UpdateRule (action) {
 		_game.rules[action.position] = action.rule;
 	}
 };
-function DeleteRule (action) {
+
+const DeleteRule = (action) => {
 	if (action.isOptional) {
 		_game.alternativeRules.splice(action.position, 1);
 	}
@@ -207,7 +214,8 @@ function DeleteRule (action) {
 		_game.rules.splice(action.position, 1);
 	}
 };
-function ChangeRulePrioritization (action) {
+
+const ChangeRulePrioritization = (action) => {
 	if (action.isOptional) {
 		var alternativeRules = _game.alternativeRules;
 		let selectedItem = alternativeRules[action.position];
@@ -235,7 +243,8 @@ function ChangeRulePrioritization (action) {
 		_game.rules = rules;
 	}
 };
-var onGamePostedSuccess = function (data) {
+
+const onGamePostedSuccess = (data) => {
 	FeedbackAction.displaySuccessMessage({
 		header: 'Success.',
 		message: 'Game published!'
@@ -246,7 +255,8 @@ var onGamePostedSuccess = function (data) {
 	_game = undefined;
 	_hasPromptedSave = true;
 };
-var onSaveGameSuccessResponse = function (data) {
+
+const onSaveGameSuccessResponse = (data) => {
 	_game._id = data._id;
 	if (_hasPromptedSave) {
 		FeedbackAction.displaySuccessMessage({
@@ -255,10 +265,12 @@ var onSaveGameSuccessResponse = function (data) {
 		});
 	}
 };
-var onPostGameUnauthorizedResponse = function () {
+
+const onPostGameUnauthorizedResponse = () => {
 	FeedbackAction.displayWarningMessage({
 		header: 'Not signed in.',
 		message: 'Please sign in to upload a game.'
 	});
 };
+
 module.exports = GameStore;

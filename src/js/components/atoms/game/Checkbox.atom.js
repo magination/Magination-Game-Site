@@ -1,36 +1,45 @@
-var React = require('react');
-var GameStore = require('../../../stores/GameStore');
-var GameAction = require('../../../actions/GameAction');
+import React, { Component, PropTypes } from 'react';
+import GameStore from '../../../stores/GameStore';
+import GameAction from '../../../actions/GameAction';
 
-var Checkbox = React.createClass({
-	getInitialState: function () {
-		return {
+class Checkbox extends Component {
+	constructor(props) {
+		super(props);
+		this.onGameStateChanged = this.onGameStateChanged.bind(this);
+
+		this.state = {
 			isChecked: GameStore.getGame() ? GameStore.getGame()[this.props.bindingProperty] : false
-		};
-	},
-	componentDidMount: function () {
+		}
+	}
+
+	componentDidMount() {
 		GameStore.addChangeListener(this.onGameStateChanged);
-	},
-	componentWillUnmount: function () {
+	}
+
+	componentWillUnmount() {
 		GameStore.removeChangeListener(this.onGameStateChanged);
-	},
-	render: function () {
+	}
+
+	render() {
 		return (
 			<div>
 				<input ref='checkbox' type='checkbox' onChange={this.onPropertyChanged} checked={this.props.isChecked} /> {this.props.description}
 			</div>
 		);
-	},
-	onPropertyChanged: function (e) {
+	}
+
+	onPropertyChanged(e) {
 		GameAction.updateCurrentGameLocally({
 			propertyName: this.props.bindingProperty,
 			propertyValue: e.target.checked
 		});
-	},
-	onGameStateChanged: function () {
+	}
+
+	onGameStateChanged() {
 		this.setState({
 			isChecked: GameStore.getGame() ? GameStore.getGame()[this.props.bindingProperty] : false
 		});
 	}
-});
+}
+
 module.exports = Checkbox;

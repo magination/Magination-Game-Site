@@ -1,7 +1,7 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var TestConstants = require('../constants/TestConstants');
+import Dispatcher from '../dispatchers/Dispatcher';
+import TestConstants from '../constants/TestConstants';
 
-var TestActions = {
+const TestActions = {
 	test: function (text) {
 		console.log('dispatching');
 		Dispatcher.dispatch({

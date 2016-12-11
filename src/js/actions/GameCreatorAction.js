@@ -1,15 +1,15 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var GameCreatorConstants = require('../constants/GameCreatorConstants');
-// var LoginStore = require('../stores/LoginStore');
-var GameStore = require('../stores/GameStore');
-var GameConstants = require('../constants/GameConstants');
-var LoginStore = require('../stores/LoginStore');
+import Dispatcher from '../dispatchers/Dispatcher';
+import GameCreatorConstants from '../constants/GameCreatorConstants';
+import GameStore from '../stores/GameStore';
+import GameConstants from '../constants/GameConstants';
+import LoginStore from '../stores/LoginStore';
 
-var URLS = require('../config/config').urls;
+import config from '../config/config';
+const URLS = config.urls;
 
 var isListening = false;
 
-var GameCreatorActions = {
+const GameCreatorActions = {
 	tempData: {},
 	addPieceByUrl: function (data) {
 		Dispatcher.dispatch({
@@ -179,7 +179,7 @@ var GameCreatorActions = {
 	}
 };
 
-function onExternalImageUploadSuccessResponse (data) {
+function onExternalImageUploadSuccessResponse () {
 	var tempData = $.extend(true, {}, GameCreatorActions.tempData['uploadData']);
 	delete GameCreatorActions.tempData['uploadData'];
 	GameCreatorActions.addPieceByUrl({
@@ -241,8 +241,7 @@ function parseFolderStructureToOtherObjects (folderStructure) {
 }
 
 function parseFolderStructureToPieces (folderStructure) { /* hardcoded against the public folder of the pieces on the api backend */
-	var pieces = [];
-	pieces = folderStructure.children.map(function (piece) {
+	var pieces = folderStructure.children.map(function (piece) {
 		var aPiece = piece.children.map(function (color) {
 			var aColor = color.children.map(function (rotation) {
 				var img = new Image();

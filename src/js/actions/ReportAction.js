@@ -1,9 +1,10 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var ReportConstants = require('../constants/ReportConstants');
-var URLS = require('../config/config').urls;
-var LoginStore = require('../stores/LoginStore');
+import Dispatcher from '../dispatchers/Dispatcher';
+import ReportConstants from '../constants/ReportConstants';
+import LoginStore from '../stores/LoginStore';
+import config from '../config/config';
+const URLS = config.urls;
 
-var MyGamesAction = {
+const MyGamesAction = {
 	getReports: function (reportType) {
 		if (!LoginStore.getLoginProfile()._id) return;
 		$.ajax({
@@ -63,32 +64,35 @@ var MyGamesAction = {
 	}
 };
 
-function onGetReportsSuccess (data) {
+const onGetReportsSuccess = (data) => {
 	Dispatcher.dispatch({
 		actionType: ReportConstants.UPDATE_LOCAL_REPORTS,
 		response: data
 	});
-}
-function onUnpublishSuccess (gameId) {
+};
+
+const onUnpublishSuccess = (gameId) => {
 	Dispatcher.dispatch({
 		actionType: ReportConstants.REMOVE_LOCAL_REPORT,
 		type: 'games',
 		id: gameId
 	});
-}
-function onDismissSuccess (objectType, objectId) {
+};
+
+const onDismissSuccess = (objectType, objectId) => {
 	Dispatcher.dispatch({
 		actionType: ReportConstants.DISMISS_REPORTS,
 		type: objectType,
 		id: objectId
 	});
-}
-function onRemoveReviewSuccess (reviewId) {
+};
+
+const onRemoveReviewSuccess = (reviewId) => {
 	Dispatcher.dispatch({
 		actionType: ReportConstants.REMOVE_LOCAL_REPORT,
 		type: 'reviews',
 		id: reviewId
 	});
-}
+};
 
 module.exports = MyGamesAction;

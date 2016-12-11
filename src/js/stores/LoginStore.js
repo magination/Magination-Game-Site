@@ -1,12 +1,12 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var LoginConstants = require('../constants/LoginConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-login';
-var Cookie = require('react-cookie');
-var Validator = require('../service/Validator.service');
+import Dispatcher from '../dispatchers/Dispatcher';
+import LoginConstants from '../constants/LoginConstants';
+import _ from 'lodash';
+import Cookie from 'react-cookie';
+import Validator from '../service/Validator.service';
+import { EventEmitter } from 'events';
+const CHANGE_EVENT = 'change-login';
 
-var _loginState = {
+const _loginState = {
 	isLoggedIn: false,
 	requestedLogin: false
 };
@@ -15,7 +15,7 @@ var _token = null;
 var _lastUnsuccessfulRequestOptions = [];
 var _recentAutoReRequest = [];
 
-var LoginStore = _.extend({}, EventEmitter.prototype, {
+const LoginStore = _.extend({}, EventEmitter.prototype, {
 	getToken: function () {
 		return _token;
 	},
@@ -69,17 +69,15 @@ LoginStore.dispatchToken = Dispatcher.register(function (action) {
 	}
 });
 
-function popRecentAutoReRequest () {
+const popRecentAutoReRequest = () => {
 	_recentAutoReRequest.splice(0, 1);
-}
+};
 
-function loginSuccess (token) {
-	// _loginState = true;
+const loginSuccess = (token) => {
 	_token = token;
-	// LoginStore.emitChange();
-}
+};
 
-function setProfileAndEmitLogin (profile) {
+const setProfileAndEmitLogin = (profile) => {
 	_profile = profile;
 	_loginState.isLoggedIn = true;
 	_loginState.requestedLogin = false;
@@ -89,14 +87,14 @@ function setProfileAndEmitLogin (profile) {
 	});
 	_lastUnsuccessfulRequestOptions = [];
 	LoginStore.emitChange();
-}
+};
 
-function logoutSuccess () {
+const logoutSuccess = () => {
 	_loginState.isLoggedIn = false;
 	_loginState.requestedLogin = false;
 	_profile = null;
 	_token = null;
 	LoginStore.emitChange();
-}
+};
 
 module.exports = LoginStore;

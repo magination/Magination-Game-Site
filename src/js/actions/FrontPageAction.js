@@ -1,6 +1,7 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var FrontPageConstants = require('../constants/FrontPageConstants');
-var URLS = require('../config/config').urls;
+import Dispatcher from '../dispatchers/Dispatcher';
+import FrontPageConstants from '../constants/FrontPageConstants';
+import config from '../config/config';
+const URLS = config.urls;
 
 var TestActions = {
 	requestFeaturedGames: function () {

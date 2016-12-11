@@ -1,9 +1,10 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var MyGamesConstants = require('../constants/MyGamesConstants');
-var URLS = require('../config/config').urls;
-var LoginStore = require('../stores/LoginStore');
+import Dispatcher from '../dispatchers/Dispatcher';
+import MyGamesConstants from '../constants/MyGamesConstants';
+import LoginStore from '../stores/LoginStore';
+import config from '../config/config';
+const URLS = config.urls;
 
-var MyGamesAction = {
+const MyGamesAction = {
 	getPublishedGames: function () {
 		if (!LoginStore.getLoginProfile()._id) return;
 		$.ajax({

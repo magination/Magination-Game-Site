@@ -26,12 +26,12 @@ var FeedbackActions = {
 			header: data.header
 		});
 	},
-	displayInternalServerError: function (data) {
+	displayInternalServerError: function () {
 		Dispatcher.dispatch({
 			actionType: FeedbackConstants.DISPLAY_SERVER_ERROR
 		});
 	},
-	removeMessage: function (data) {
+	removeMessage: function () {
 		Dispatcher.dispatch({
 			actionType: FeedbackConstants.REMOVE_MESSAGE
 		});

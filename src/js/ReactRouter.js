@@ -1,8 +1,6 @@
-var React = require('react');
+import React, { Component, PropTypes } from 'react';
 
-var Router = require('react-router').Router;
-var Route = require('react-router').Route;
-var browserHistory = require('react-router').browserHistory;
+import {Router, Route, browserHistory} from 'react-router';
 
 /*
 var FeedbackStore = require('./stores/FeedbackStore');
@@ -10,27 +8,27 @@ var LoginStore = require('./stores/LoginStore');
 var NavigationStore = require('./stores/NavigationStore');
 */
 
-var App = require('./App');
-var LoginForm = require('./components/organisms/LoginForm.organism');
-var FrontPage = require('./components/organisms/FrontPage.organism');
-var NotFoundPage = require('./components/organisms/NotFoundPage.organism');
-var RegisterForm = require('./components/organisms/RegisterForm.organism');
-var ConfirmEmail = require('./components/organisms/ConfirmEmail.organism');
-var VerifyEmailChange = require('./components/organisms/VerifyEmailChange');
-var VerificationSent = require('./components/organisms/VerificationSent.organism');
-var CreateGame = require('./components/organisms/CreateGame.organism');
-var BrowseGames = require('./components/organisms/BrowseGames.organism');
-var Game = require('./components/organisms/Game.organism');
-var SettingsForm = require('./components/organisms/SettingsForm.organism');
-var ForgotPassword = require('./components/organisms/ForgotPassword.organism');
-var MyGames = require('./components/organisms/MyGames.organism');
-var ConfirmForgotPassword = require('./components/organisms/ConfirmForgotPassword.organism');
-var PATHS = require('./constants/NavigationConstants').PATHS;
-var Moderator = require('./components/organisms/ModeratorPage.organism');
-var Admin = require('./components/organisms/AdminPage');
+import App from './App';
+import LoginForm from './components/organisms/LoginForm.organism';
+import FrontPage from './components/organisms/FrontPage.organism';
+import NotFoundPage from './components/organisms/NotFoundPage.organism';
+import RegisterForm from'./components/organisms/RegisterForm.organism';
+import ConfirmEmail from './components/organisms/ConfirmEmail.organism';
+import VerifyEmailChange from './components/organisms/VerifyEmailChange';
+import VerificationSent from './components/organisms/VerificationSent.organism';
+import CreateGame from './components/organisms/CreateGame.organism';
+import BrowseGames from './components/organisms/BrowseGames.organism';
+import Game from './components/organisms/Game.organism';
+import SettingsForm from './components/organisms/SettingsForm.organism';
+import ForgotPassword from './components/organisms/ForgotPassword.organism';
+import MyGames from './components/organisms/MyGames.organism';
+import ConfirmForgotPassword from'./components/organisms/ConfirmForgotPassword.organism';
+import { PATHS } from './constants/NavigationConstants';
+import Moderator from './components/organisms/ModeratorPage.organism';
+import Admin from './components/organisms/AdminPage';
 
-var ReactRouter = React.createClass({
-	render: function () {
+class ReactRouter extends Component {
+	render() {
 		return (
 			<div>
 				<Router history={browserHistory}>
@@ -56,6 +54,6 @@ var ReactRouter = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
 module.exports = ReactRouter;

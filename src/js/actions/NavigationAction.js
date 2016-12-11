@@ -1,6 +1,6 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var NavigationConstants = require('../constants/NavigationConstants');
-var NavigationActions = {
+import Dispatcher from '../dispatchers/Dispatcher';
+import NavigationConstants from '../constants/NavigationConstants';
+const NavigationActions = {
 	navigate: function (data) {
 		Dispatcher.dispatch({
 			actionType: NavigationConstants.NAVIGATE,

@@ -1,14 +1,14 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var FrontPageConstants = require('../constants/FrontPageConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-frontpage';
+import Dispatcher from '../dispatchers/Dispatcher';
+import FrontPageConstants from '../constants/FrontPageConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+const CHANGE_EVENT = 'change-frontpage';
 
 var _featuredGames;
 var _topGames;
 var _newGames;
 
-var TestStore = _.extend({}, EventEmitter.prototype, {
+const FrontPageStore = _.extend({}, EventEmitter.prototype, {
 	getFeaturedGames: function () {
 		return _featuredGames;
 	},
@@ -36,21 +36,21 @@ var TestStore = _.extend({}, EventEmitter.prototype, {
 	}
 });
 
-TestStore.dispatchToken = Dispatcher.register(function (action) {
+FrontPageStore.dispatchToken = Dispatcher.register(function (action) {
 	switch (action.actionType) {
 	case FrontPageConstants.UPDATE_FEATURED_GAMES:
 		_featuredGames = action.games;
-		TestStore.emitChange(FrontPageConstants.UPDATE_FEATURED_GAMES);
+		FrontPageStore.emitChange(FrontPageConstants.UPDATE_FEATURED_GAMES);
 		break;
 	case FrontPageConstants.UPDATE_NEW_GAMES:
 		_newGames = action.games;
-		TestStore.emitChange(FrontPageConstants.UPDATE_NEW_GAMES);
+		FrontPageStore.emitChange(FrontPageConstants.UPDATE_NEW_GAMES);
 		break;
 	case FrontPageConstants.UPDATE_TOP_GAMES:
 		_topGames = action.games;
-		TestStore.emitChange(FrontPageConstants.UPDATE_TOP_GAMES);
+		FrontPageStore.emitChange(FrontPageConstants.UPDATE_TOP_GAMES);
 		break;
 	}
 });
 
-module.exports = TestStore;
+module.exports = FrontPageStore;

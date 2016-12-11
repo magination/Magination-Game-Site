@@ -1,15 +1,16 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var MyGamesConstants = require('../constants/MyGamesConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var CHANGE_EVENT = 'change-myGames';
-var URLS = require('../config/config').urls;
-var LoginStore = require('../stores/LoginStore');
+import Dispatcher from '../dispatchers/Dispatcher';
+import MyGamesConstants from '../constants/MyGamesConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+import LoginStore from '../stores/LoginStore';
+import config from '../config/config';
+const URLS = config.urls;
 
+const CHANGE_EVENT = 'change-myGames';
 var _publishedGames;
 var _unpublishedGames;
 
-var MyGamesStore = _.extend({}, EventEmitter.prototype, {
+const MyGamesStore = _.extend({}, EventEmitter.prototype, {
 	getPublishedGames: function () {
 		return _publishedGames;
 	},

@@ -1,12 +1,13 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var LoginConstants = require('../constants/LoginConstants');
-var FeedbackAction = require('./FeedbackAction');
-var LoginStore = require('../stores/LoginStore');
-var ParserService = require('../service/Parser.service');
-var Cookie = require('react-cookie');
-var URLS = require('../config/config').urls;
+import Dispatcher from '../dispatchers/Dispatcher';
+import LoginConstants from '../constants/LoginConstants';
+import FeedbackAction from './FeedbackAction';
+import LoginStore from '../stores/LoginStore';
+import ParserService from '../service/Parser.service';
+import Cookie from 'react-cookie';
+import config from '../config/config';
+const URLS = config.urls;
 
-var LoginAction = {
+const LoginAction = {
 	doLogin: function (username, password) {
 		LoginService.doLogin(username, password, this.loginSuccess);
 	},
@@ -79,20 +80,24 @@ function onLoginUnauthorizedResponse (data) {
 	});
 	LoginAction.logoutSuccess();
 };
+
 function onLoginNotFoundResponse (data) {
 	FeedbackAction.displayErrorMessage({
 		header: 'User does not exist!',
 		message: 'The user you tried to log in with does not exist'
 	});
 };
+
 function onGetUserUnauthorizedResponse (data) {
 	console.warn('Unauthorized user profile request');
 };
+
 function onGetUserSuccessResponse (data) {
 	LoginAction.setLoginProfile({
 		profile: data
 	});
 };
+
 function onLoginSuccessResponse (data) {
 	LoginAction.loginSuccess({
 		token: data.token,
@@ -119,8 +124,9 @@ function onLoginSuccessResponse (data) {
 		header: 'Login Successful!',
 		message: 'You are now logged in'
 	});
-};
-var LoginService = {
+}
+
+const LoginService = {
 	doLogin: function (username, password) {
 		$.ajax({
 			type: 'POST',

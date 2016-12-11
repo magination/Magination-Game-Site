@@ -1,10 +1,10 @@
-var Dispatcher = require('../dispatchers/Dispatcher');
-var NavigationConstants = require('../constants/NavigationConstants');
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var browserHistory = require('react-router').browserHistory;
-var CHANGE_EVENT = 'change-login';
-var LoginStore = require('../stores/LoginStore');
+import Dispatcher from '../dispatchers/Dispatcher';
+import NavigationConstants from '../constants/NavigationConstants';
+import { EventEmitter } from 'events';
+import _ from 'lodash';
+import { browserHistory } from 'react-router';
+import LoginStore from '../stores/LoginStore';
+const CHANGE_EVENT = 'change-login';
 
 var _navigationState = {
 	lastPath: '/',

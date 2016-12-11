@@ -1,17 +1,23 @@
-var React = require('react');
+import React, { Component, PropTypes } from 'react';
+import Colors from '../../../styles/Colors';
+import GameCreatorAction from '../../../actions/GameCreatorAction';
 
-var Colors = require('../../../styles/Colors');
-
-var GameCreatorAction = require('../../../actions/GameCreatorAction');
-
-var GameCreatorListElement = React.createClass({
-	getInitialState: function () {
-		return {
+class GameCreatorListElement extends Component {
+	constructor(props) {
+		super(props);
+		this.onMouseLeaveX = this.onMouseLeaveX.bind(this);
+		this.onMouseEnterX = this.onMouseEnterX.bind(this);
+		this.onMouseClickX = this.onMouseClickX.bind(this);
+		this.onMouseEnterElement = this.onMouseEnterElement.bind(this);
+		this.onMouseLeaveElement = this.onMouseLeaveElement.bind(this);
+		this.onGameCreatorClicked = this.onGameCreatorClicked.bind(this);
+		this.state = {
 			xIsHovered: false,
 			isHovered: false
 		};
-	},
-	render: function () {
+	}
+
+	render() {
 		var name = this.props.gameCreator.title;
 		if (!name) {
 			name = 'No Title';
@@ -52,38 +58,44 @@ var GameCreatorListElement = React.createClass({
 				<hr style={{padding: '0', margin: '0'}}/>
 			</div>
 		);
-	},
-	onMouseLeaveX: function () {
+	}
+
+	onMouseLeaveX() {
 		this.setState({
 			xIsHovered: false
 		});
-	},
-	onMouseEnterX: function () {
+	}
+
+	onMouseEnterX() {
 		this.setState({
 			xIsHovered: true
 		});
-	},
-	onMouseClickX: function (e) {
+	}
+
+	onMouseClickX(e) {
 		GameCreatorAction.deleteGameCreator({
 			gameCreatorId: this.props.gameCreator._id
 		});
 		e.stopPropagation();
-	},
-	onMouseEnterElement: function () {
+	}
+
+	onMouseEnterElement() {
 		this.setState({
 			isHovered: true
 		});
-	},
-	onMouseLeaveElement: function () {
+	}
+
+	onMouseLeaveElement() {
 		this.setState({
 			isHovered: false
 		});
-	},
-	onGameCreatorClicked: function () {
+	}
+
+	onGameCreatorClicked() {
 		GameCreatorAction.loadCreatorId({
 			gameCreatorId: this.props.gameCreator._id
 		});
 	}
-});
+}
 
 module.exports = GameCreatorListElement;
