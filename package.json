@@ -17,7 +17,7 @@
   "homepage": "https://github.com/magination/Magination-Game-Site#readme",
   "dependencies": {
     "del": "^2.2.0",
-    "express": "^4.13.4",
+    "express": "^4.15.3",
     "flux": "^2.1.1",
     "lodash": "^4.9.0",
     "node-jsx": "^0.13.3",
